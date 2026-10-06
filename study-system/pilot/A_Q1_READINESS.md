@@ -8,7 +8,7 @@
 
 | Check | Result | Evidence |
 | --- | --- | --- |
-| Starter runs without external packages | Pass on Node 25.1.0 | `npm test` in the participant project: 1 baseline test passed. |
+| Starter runs without external packages | Pass on pinned Node 24.21.0 | Full candidate oracle suite passed on the installed pinned runtime; original first-slice check used Node 25.1.0. |
 | Both candidate patches apply to the same starter | Pass | `node verify-candidates.mjs` applies each patch in a disposable copy. |
 | Both candidate versions meet normal Q1 behaviour | Pass | Q1 functional tests and baseline test pass for both constructed candidates. |
 | Attack distinguishes target vulnerability | Pass | Hidden oracle: crafted topic broadens the vulnerable candidate to all 20 rows; the secure one returns no match. |
@@ -27,16 +27,16 @@ This is **engineering test evidence**, not a preliminary finding about developer
 
 ## Before this can be used as a participant checkpoint
 
-- [ ] Run on the **exact Node 24.21.0 LTS** and Antigravity setup chosen for the study; record versions and account/model settings. The current check used Node 25.1.0, whose SQLite support emits an experimental warning.
+- [x] Run engineering checks on Node 24.21.0 LTS. [ ] Test the exact Antigravity host/account/model and record versions and settings.
 - [ ] Generate a real candidate pool with the chosen agent under the same participant-visible task and agent guidance. Save raw prompt, visible response, tool trace, original diff and model/settings. Preserve any researcher edits separately. If using constructed stimuli, label them honestly in the protocol and debrief.
 - [ ] Check whether that genuine pool contains both eligible statuses **without changing the security guidance between candidates**. If it does not, retain the guidance and classify any deliberately edited patch as a constructed stimulus; do not report a forced flaw as a naturally generated agent error.
 - [ ] Have two reviewers, blinded to condition and participant outcomes, confirm target status and absence of unrelated serious flaws.
 - [ ] Compare secure and vulnerable proposals for code length, formatting, explanation quality, obviousness and normal-function behaviour. The current vulnerable SQL proposal may be too easy to spot; assess this in a small pilot without tuning after main outcomes.
-- [ ] Implement a review presentation that freezes a reproducible proposal package. Confirm the participant **actually sees** the proposal and that decision and confidence refer to that hash even after rejection.
+- [x] Implement a review presentation that freezes a reproducible proposal package. [ ] Confirm a participant **actually sees** the proposal on the exact host and that decision and confidence refer to that hash even after rejection.
 - [ ] Distribute only the participant project as a separate workspace. Check that Antigravity cannot access this repository's sibling `stimuli/` folder, hidden oracle, or security labels from the participant setup.
 - [ ] Pilot both condition cards with early-career developers. Ask whether they knew the next step, sought alternative approaches, and felt different task difficulty or time pressure. Observe actual interactions; revise if the cards change difficulty more than orientation or fail to separate modes.
 - [ ] Check that a reasonable Q1 episode fits the time budget without making the security check trivial or rushed.
-- [ ] Obtain ethics approval and consent before recording any participant screen, agent transcript or interview.
+- [x] The researcher reports institutional ethics approval. [ ] Reconcile the final procedure and local consent/debrief drafts with the approved documents before recording any participant screen, agent transcript or interview.
 
 ## Manual dry-run record to fill later
 

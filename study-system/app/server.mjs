@@ -68,17 +68,50 @@ document.getElementById('study-form').addEventListener('submit', async (event) =
   return page(form.title, content, script);
 }
 
-function reviewPage(session, review, token) {
+function practicePage() {
+  const example = `-export function label(name) { return name; }\n+export function label(name) { return name.trim(); }`;
+  return page('Practice review', `<h1>Practice review</h1>
+  <p>This short example teaches the review controls. It does not save an answer or change an IDE file.</p>
+  <p>Requirement: remove spaces at the beginning and end of a name before displaying it.</p>
+  <button id="practice-reveal">Show proposed change</button>
+  <section id="practice-proposal" hidden><pre id="practice-patch"></pre>
+  <label for="practice-decision">Would you provisionally keep or reject this change?</label>
+  <select id="practice-decision"><option value="">Select one</option><option>Keep</option><option>Reject</option></select>
+  <label for="practice-confidence">What is the chance (0–100%) that it meets the requirement?</label>
+  <input id="practice-confidence" type="number" min="0" max="100" step="1">
+  <button id="practice-record">Record practice answer</button></section>
+  <p id="practice-message" role="status"></p>`, `<script>
+const sample=${JSON.stringify(example)};
+document.getElementById('practice-reveal').addEventListener('click',()=>{
+  document.getElementById('practice-patch').textContent=sample;
+  document.getElementById('practice-proposal').hidden=false;
+  document.getElementById('practice-reveal').hidden=true;
+});
+document.getElementById('practice-record').addEventListener('click',()=>{
+  const decision=document.getElementById('practice-decision').value;
+  const raw=document.getElementById('practice-confidence').value;
+  const number=Number(raw);
+  const message=document.getElementById('practice-message');
+  if(!decision||raw===''||!Number.isInteger(number)||number<0||number>100){
+    message.textContent='Choose a decision and a whole-number estimate from 0 to 100.';return;
+  }
+  message.textContent='Practice complete. No answer was saved. In the real task, the proposed change also appears in the IDE workspace.';
+  document.getElementById('practice-record').disabled=true;
+});</script>`);
+}
+
+function reviewPage(session, review, token, skipped) {
   const task = ownedTask(session, review.task_id);
   const project = task.project_id === 'A' ? 'resource-catalogue' : 'support-archive';
   const sheet = readFileSync(resolve(root, 'instruments', project, `${review.checkpoint_id}_TASK.md`), 'utf8');
-  const locked = review.decision_at ? '<p>This review has already been recorded.</p>' : '';
+  const locked = skipped ? '<p>This checkpoint was stopped by the researcher. Return to the task workspace.</p>' :
+    review.decision_at ? '<p>This review has already been recorded.</p>' : '';
   const content = `<h1>Review proposed change</h1><p>Task ${escapeHtml(task.task_id)}, checkpoint ${escapeHtml(review.checkpoint_id)}</p>
   <h2>Requirement</h2><pre>${escapeHtml(sheet)}</pre><p>The proposal below is a frozen code snapshot. You may inspect it, ask the agent questions, and run checks. Do not edit it until you submit your first decision and confidence rating.</p>
-  <button id="reveal"${review.exposed_at ? ' hidden' : ''}>Show proposed change</button>
+  ${skipped ? locked : ''}<button id="reveal"${review.exposed_at || skipped ? ' hidden' : ''}>Show proposed change</button>
   <section id="proposal"${review.exposed_at ? '' : ' hidden'}><h2>Proposed change</h2><pre id="patch">${review.exposed_at ? escapeHtml(review.patch_text) : ''}</pre>
   <small>Snapshot: ${escapeHtml(review.proposal_sha256)}</small>
-  ${locked}<form id="review-form"${review.decision_at ? ' hidden' : ''}>
+  ${skipped ? '' : locked}<form id="review-form"${review.decision_at || skipped ? ' hidden' : ''}>
   <label for="decision">Will you provisionally keep or reject this exact proposed change?</label><select id="decision" required><option value="">Select one</option><option value="keep">Keep</option><option value="reject">Reject</option></select>
   <label for="confidence">What is the chance (0–100%) that this exact proposed code meets the security requirement above?</label><input id="confidence" type="number" min="0" max="100" step="1" required>
   <label for="reason">What evidence led to that estimate? (optional)</label><textarea id="reason" maxlength="500"></textarea>
@@ -120,6 +153,8 @@ const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://127.0.0.1:${port}`);
     if (req.method === 'GET' && url.pathname === '/health') return respond(res, 200, { ok: true });
+    if (req.method === 'GET' && url.pathname === '/practice') return respond(res, 200,
+      practicePage(), 'text/html; charset=utf-8');
     if (req.method === 'GET' && url.pathname === '/') return respond(res, 200,
       page('Study local app', '<h1>Study local app</h1><p>Use the private session link supplied by the researcher.</p>'), 'text/html; charset=utf-8');
 
@@ -137,7 +172,9 @@ const server = createServer(async (req, res) => {
       const session = tokenSession(token);
       const review = reviewFor(store, url.searchParams.get('review'));
       if (!review) throw new Error('Unknown review');
-      return respond(res, 200, reviewPage(session, review, token), 'text/html; charset=utf-8');
+      const skipped = Boolean(store.db.prepare('SELECT 1 FROM skips WHERE task_id = ? AND checkpoint_id = ?')
+        .get(review.task_id, review.checkpoint_id));
+      return respond(res, 200, reviewPage(session, review, token, skipped), 'text/html; charset=utf-8');
     }
 
     if (req.method === 'POST' && url.pathname === '/api/form') {
@@ -160,6 +197,8 @@ const server = createServer(async (req, res) => {
       const review = reviewFor(store, body.review_id);
       if (!review) throw new Error('Unknown review');
       ownedTask(session, review.task_id);
+      if (store.db.prepare('SELECT 1 FROM skips WHERE task_id = ? AND checkpoint_id = ?')
+        .get(review.task_id, review.checkpoint_id)) throw new Error('Checkpoint was skipped');
       if (!review.exposed_at) {
         if (!review.baseline_sha256 || hashTree(review.workspace_path) !== review.baseline_sha256) {
           throw new Error('Workspace changed before exposure; ask researcher to reset');
@@ -188,6 +227,8 @@ const server = createServer(async (req, res) => {
       const review = reviewFor(store, body.review_id);
       if (!review) throw new Error('Unknown review');
       ownedTask(session, review.task_id);
+      if (store.db.prepare('SELECT 1 FROM skips WHERE task_id = ? AND checkpoint_id = ?')
+        .get(review.task_id, review.checkpoint_id)) throw new Error('Checkpoint was skipped');
       if (!review.exposed_at || review.decision_at) throw new Error('Review is not open');
       if (!['keep', 'reject'].includes(body.decision) || !Number.isInteger(body.security_probability_pct) ||
           body.security_probability_pct < 0 || body.security_probability_pct > 100 ||

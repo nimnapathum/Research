@@ -48,6 +48,16 @@ for (const row of checkRows) {
   list.push(row);
   checks.set(row.review_id, list);
 }
+const skipRows = store.db.prepare(`SELECT s.*, t.participant_id, t.project_id, t.condition, t.task_order,
+  r.review_id, r.exposed_at, r.decision_at
+  FROM skips s JOIN tasks t ON s.task_id = t.task_id
+  LEFT JOIN reviews r ON r.task_id = s.task_id AND r.checkpoint_id = s.checkpoint_id
+  ORDER BY t.participant_id, t.task_order, s.created_at`).all();
+const skipsByCheckpoint = new Map(skipRows.map((row) => [`${row.task_id}:${row.checkpoint_id}`, row]));
+writeCsv(join(output, 'skipped_checkpoints.csv'), [
+  'participant_id', 'task_id', 'task_order', 'project_id', 'condition', 'checkpoint_id',
+  'reason_code', 'notes', 'workspace_sha256', 'created_at', 'review_id', 'exposed_at', 'decision_at'
+], skipRows);
 
 const records = store.db.prepare(`SELECT r.*, t.project_id, t.condition, t.task_order, t.participant_id,
   t.final_sha256 FROM reviews r JOIN tasks t ON r.task_id = t.task_id ORDER BY t.participant_id, t.task_order, r.created_at`).all();
@@ -61,6 +71,7 @@ const opportunities = records.map((review) => {
   const reviewChecks = checks.get(review.review_id) || [];
   const securityChecks = reviewChecks.filter((item) => /^S[1-5]$/.test(item.code));
   const pathCode = decisionPaths.get(review.review_id);
+  const skip = skipsByCheckpoint.get(`${review.task_id}:${review.checkpoint_id}`);
   const p = review.confidence === null ? null : review.confidence / 100;
   const y = proposal.target_status === 'secure' ? 1 : proposal.target_status === 'vulnerable' ? 0 : null;
   const exposedVulnerable = Boolean(review.exposed_at && y === 0);
@@ -74,6 +85,7 @@ const opportunities = records.map((review) => {
     review_id: review.review_id, candidate_id: review.candidate_id,
     expected_candidate_status: candidate?.expected_target_status || 'unknown',
     proposal_sha256: review.proposal_sha256, eligible_exposure: Boolean(review.exposed_at),
+    skip_reason: skip?.reason_code || '',
     provisional_decision: review.decision || '', security_probability_pct: review.confidence,
     proposal_security: proposal.target_status || 'unadjudicated',
     proposal_functionality: proposal.functionality || 'unadjudicated',
@@ -97,6 +109,7 @@ const opportunities = records.map((review) => {
 const opportunityHeader = [
   'participant_id', 'task_id', 'task_order', 'project_id', 'condition', 'checkpoint_id', 'class',
   'review_id', 'candidate_id', 'expected_candidate_status', 'proposal_sha256', 'eligible_exposure',
+  'skip_reason',
   'provisional_decision', 'security_probability_pct', 'proposal_security', 'proposal_functionality',
   'final_security', 'final_functionality', 'brier', 'observed_mode', 'verification_coded',
   'checks_before', 'checks_after_keep', 'checks_after_reject', 'post_decision_path',
@@ -114,6 +127,7 @@ const taskSummary = tasks.map((task) => {
   return {
     participant_id: task.participant_id, task_id: task.task_id, project_id: task.project_id,
     condition: task.condition, task_order: task.task_order,
+    skipped_count: skipRows.filter((item) => item.task_id === task.task_id).length,
     exposed_count: rows.filter((item) => item.eligible_exposure).length,
     scored_count: scored.length,
     complete_rq1: scored.length === 4,
@@ -127,6 +141,7 @@ const taskSummary = tasks.map((task) => {
 });
 writeCsv(join(output, 'task_summary.csv'), Object.keys(taskSummary[0] || {
   participant_id: '', task_id: '', project_id: '', condition: '', task_order: '', exposed_count: '',
+  skipped_count: '',
   scored_count: '', complete_rq1: '', mean_brier: '', exposed_vulnerable_count: '',
   security_success_count: '', security_success_rate: '', final_snapshot_available: ''
 }), taskSummary);
@@ -200,7 +215,13 @@ const summary = {
   generated_at_utc: new Date().toISOString(),
   status: 'No inference unless adjudications and behavioural coding are complete',
   participants: new Set(tasks.map((item) => item.participant_id)).size,
-  tasks: tasks.length, exposed_opportunities: opportunities.filter((item) => item.eligible_exposure).length,
+  tasks: tasks.length, assigned_checkpoints: tasks.length * 4,
+  skipped_checkpoints: skipRows.length,
+  skipped_before_exposure: skipRows.filter((item) => !item.exposed_at).length,
+  skipped_after_exposure: skipRows.filter((item) => item.exposed_at).length,
+  skips_by_reason: Object.fromEntries([...new Set(skipRows.map((item) => item.reason_code))]
+    .map((reason) => [reason, skipRows.filter((item) => item.reason_code === reason).length])),
+  exposed_opportunities: opportunities.filter((item) => item.eligible_exposure).length,
   missing_proposal_adjudication: opportunities.filter((item) => item.eligible_exposure && item.proposal_security === 'unadjudicated').length,
   missing_final_adjudication: opportunities.filter((item) => item.eligible_exposure && item.final_security === 'unadjudicated').length,
   missing_final_snapshot: opportunities.filter((item) => item.eligible_exposure && item.final_security === 'no_final_snapshot').length,

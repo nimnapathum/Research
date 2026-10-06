@@ -28,6 +28,16 @@ function taskAndWorkspace(taskId, workspaceText) {
   return { task, workspace };
 }
 function shellQuote(value) { return `'${String(value).replaceAll("'", "'\\''")}'`; }
+function checkpointProgress(taskId, task) {
+  const sequence = JSON.parse(task.checkpoint_order_json);
+  const reviews = store.db.prepare('SELECT * FROM reviews WHERE task_id = ?').all(taskId);
+  const skips = store.db.prepare('SELECT * FROM skips WHERE task_id = ?').all(taskId);
+  const accounted = new Set([
+    ...reviews.filter((row) => row.decision_at).map((row) => row.checkpoint_id),
+    ...skips.map((row) => row.checkpoint_id)
+  ]);
+  return { sequence, reviews, skips, next: sequence.find((item) => !accounted.has(item)) };
+}
 
 if (command === 'create') {
   const [participantId] = args;
@@ -60,15 +70,10 @@ if (command === 'create') {
   if (!['Q1', 'Q2', 'F1', 'F2'].includes(checkpoint) || !workspaceText) fail('Usage: prepare TASK_ID Q1|Q2|F1|F2 WORKSPACE');
   const { task, workspace } = taskAndWorkspace(taskId, workspaceText);
   if (task.final_sha256) fail('Task already finalized');
-  const sequence = JSON.parse(task.checkpoint_order_json);
+  const { sequence, reviews, next } = checkpointProgress(taskId, task);
   if (!sequence.includes(checkpoint)) fail('Checkpoint not assigned');
-  const completed = new Set(store.db.prepare('SELECT checkpoint_id FROM reviews WHERE task_id = ?').all(taskId).map((row) => row.checkpoint_id));
-  const unfinished = store.db.prepare('SELECT checkpoint_id FROM reviews WHERE task_id = ? AND decision_at IS NULL').all(taskId);
-  if (unfinished.length) fail(`Finish the review for ${unfinished[0].checkpoint_id} before preparing another`);
-  const nextCheckpoint = sequence.find((item) => !completed.has(item));
-  if (checkpoint !== nextCheckpoint) fail(`Next assigned checkpoint is ${nextCheckpoint || 'none'}`);
-  const prior = store.db.prepare('SELECT 1 FROM reviews WHERE task_id = ? AND checkpoint_id = ?').get(taskId, checkpoint);
-  if (prior) fail('Checkpoint already prepared');
+  if (checkpoint !== next) fail(`Next assigned checkpoint is ${next || 'none'}`);
+  if (reviews.some((row) => row.checkpoint_id === checkpoint)) fail('Checkpoint already prepared; finish or skip it');
   const status = JSON.parse(task.status_json)[checkpoint];
   const project = task.project_id === 'A' ? 'resource-catalogue' : 'support-archive';
   const folder = resolve(root, 'stimuli', project, `${task.project_id}-${checkpoint}`);
@@ -114,15 +119,44 @@ if (command === 'create') {
   const token = store.db.prepare('SELECT token FROM sessions WHERE participant_id = ?').get(task.participant_id).token;
   console.log(`Review ready. Participant URL: http://127.0.0.1:4175/review?token=${token}&review=${reviewId}`);
   console.log(`Proposal hash: ${proposalSha}`);
+} else if (command === 'skip') {
+  const [taskId, checkpoint, workspaceText, reasonCode, ...notesParts] = args;
+  const allowedReasons = ['early_edit', 'patch_failure', 'capture_failure', 'participant_declined', 'time_limit', 'other'];
+  if (!['Q1', 'Q2', 'F1', 'F2'].includes(checkpoint) || !workspaceText || !allowedReasons.includes(reasonCode)) {
+    fail('Usage: skip TASK_ID Q1|Q2|F1|F2 WORKSPACE early_edit|patch_failure|capture_failure|participant_declined|time_limit|other [NOTES]');
+  }
+  const { task, workspace } = taskAndWorkspace(taskId, workspaceText);
+  if (task.final_sha256) fail('Task already finalized');
+  if (task.workspace_path && resolve(task.workspace_path) !== workspace) fail('Use the same workspace as the reviews');
+  const { next, reviews } = checkpointProgress(taskId, task);
+  if (checkpoint !== next) fail(`Next assigned checkpoint is ${next || 'none'}`);
+  const review = reviews.find((row) => row.checkpoint_id === checkpoint);
+  if (review?.decision_at) fail('Checkpoint has a recorded decision and cannot be skipped');
+  const notes = notesParts.join(' ').trim();
+  if (!notes) fail('Add a short factual note explaining the skip');
+  const hash = hashTree(workspace);
+  store.db.prepare('UPDATE tasks SET workspace_path = ? WHERE task_id = ?').run(workspace, taskId);
+  store.db.prepare('INSERT INTO skips VALUES (?, ?, ?, ?, ?, ?)').run(
+    taskId, checkpoint, reasonCode, notes, hash, new Date().toISOString()
+  );
+  logEvent(store, taskId, 'checkpoint_skipped', {
+    checkpoint_id: checkpoint, candidate_id: review?.candidate_id,
+    proposal_sha256: review?.proposal_sha256,
+    data: { reason_code: reasonCode, notes, review_id: review?.review_id || null,
+      exposed: Boolean(review?.exposed_at), workspace_sha256: hash }
+  });
+  console.log(`Skipped ${checkpoint}. Exposure and decision remain exactly as recorded. Workspace hash: ${hash}`);
 } else if (command === 'finalize') {
   const [taskId, workspaceText] = args;
   if (!workspaceText) fail('Usage: finalize TASK_ID WORKSPACE');
   const { task, workspace } = taskAndWorkspace(taskId, workspaceText);
   if (task.final_sha256) fail('Task already finalized');
   if (task.workspace_path && resolve(task.workspace_path) !== workspace) fail('Use the same workspace as the reviews');
-  const reviews = store.db.prepare('SELECT * FROM reviews WHERE task_id = ?').all(taskId);
-  if (reviews.length !== 4) fail('Complete all four assigned checkpoints before finalizing');
-  if (reviews.some((row) => !row.decision_at)) fail('A prepared review has no decision yet');
+  const { reviews, next, skips } = checkpointProgress(taskId, task);
+  if (next) fail(`Complete or skip ${next} before finalizing`);
+  if (reviews.some((row) => !row.decision_at && !skips.some((skip) => skip.checkpoint_id === row.checkpoint_id))) {
+    fail('A prepared review has no decision or documented skip');
+  }
   const finalId = randomUUID();
   const finalPath = join(store.dir, 'snapshots', `final-${finalId}`);
   cpSync(workspace, finalPath, { recursive: true, filter: (path) => !['.git', 'node_modules', '.DS_Store'].includes(basename(path)) });
@@ -184,7 +218,9 @@ if (command === 'create') {
   const rawPath = join(store.dir, 'raw/events.jsonl');
   const raw = existsSync(rawPath) ? readFileSync(rawPath, 'utf8').split('\n').filter(Boolean).length : 0;
   const reviews = store.db.prepare('SELECT task_id, checkpoint_id, exposed_at, decision_at, proposal_sha256 FROM reviews').all();
-  const incomplete = reviews.filter((row) => !row.exposed_at || !row.decision_at);
+  const skips = store.db.prepare('SELECT * FROM skips ORDER BY task_id, created_at').all();
+  const incomplete = reviews.filter((row) => (!row.exposed_at || !row.decision_at) &&
+    !skips.some((skip) => skip.task_id === row.task_id && skip.checkpoint_id === row.checkpoint_id));
   const taskRows = store.db.prepare('SELECT task_id, final_sha256 FROM tasks').all();
   const sessions = store.db.prepare('SELECT participant_id FROM sessions').all();
   const missingSessionForms = sessions.map((session) => ({
@@ -197,17 +233,23 @@ if (command === 'create') {
     const taskReviews = reviews.filter((row) => row.task_id === task.task_id);
     const afterTask = store.db.prepare("SELECT 1 FROM forms WHERE task_id = ? AND kind = 'after_task'").get(task.task_id);
     return { task_id: task.task_id, missing_final_snapshot: !task.final_sha256,
-      missing_checkpoints: ['Q1', 'Q2', 'F1', 'F2'].filter((id) => !taskReviews.some((row) => row.checkpoint_id === id)),
+      missing_checkpoints: ['Q1', 'Q2', 'F1', 'F2'].filter((id) =>
+        !taskReviews.some((row) => row.checkpoint_id === id && row.decision_at) &&
+        !skips.some((skip) => skip.task_id === task.task_id && skip.checkpoint_id === id)),
+      skipped_checkpoints: skips.filter((skip) => skip.task_id === task.task_id).map((skip) =>
+        ({ checkpoint_id: skip.checkpoint_id, reason_code: skip.reason_code,
+          exposed: Boolean(taskReviews.find((row) => row.checkpoint_id === skip.checkpoint_id)?.exposed_at) })),
       exposed_reviews: taskReviews.filter((row) => row.exposed_at).length,
       missing_video: !evidence.includes('video'), missing_agent_transcript: !evidence.includes('agent-transcript'),
       missing_after_task_form: !afterTask };
   });
   console.log(JSON.stringify({ indexed_events: events, raw_events: raw, event_stream_match: events === raw,
-    tasks: taskRows.length, reviews: reviews.length, incomplete_reviews: incomplete,
+    tasks: taskRows.length, reviews: reviews.length, skips: skips.length,
+    skipped_checkpoints: skips, incomplete_reviews: incomplete,
     missing_session_forms: missingSessionForms, missing_by_task: missingByTask }, null, 2));
-  if (events !== raw || incomplete.length) process.exitCode = 1;
+  if (events !== raw || incomplete.length || missingByTask.some((row) => row.missing_checkpoints.length)) process.exitCode = 1;
 } else {
-  console.log('Commands: create P001 | configure-capture TASK_ID WORKSPACE | prepare TASK_ID CHECKPOINT WORKSPACE | finalize TASK_ID WORKSPACE | attach TASK_ID KIND FILE [NOTES] | ingest-fallback TASK_ID WORKSPACE | audit');
+  console.log('Commands: create P001 | configure-capture TASK_ID WORKSPACE | prepare TASK_ID CHECKPOINT WORKSPACE | skip TASK_ID CHECKPOINT WORKSPACE REASON NOTES | finalize TASK_ID WORKSPACE | attach TASK_ID KIND FILE [NOTES] | ingest-fallback TASK_ID WORKSPACE | audit');
   if (command) process.exitCode = 1;
 }
 

@@ -43,6 +43,11 @@ export function openStore() {
       decision TEXT, confidence REAL, confidence_reason TEXT, planned_check TEXT,
       decision_at TEXT, UNIQUE(task_id, checkpoint_id)
     );
+    CREATE TABLE IF NOT EXISTS skips (
+      task_id TEXT NOT NULL REFERENCES tasks(task_id), checkpoint_id TEXT NOT NULL,
+      reason_code TEXT NOT NULL, notes TEXT NOT NULL, workspace_sha256 TEXT NOT NULL,
+      created_at TEXT NOT NULL, PRIMARY KEY(task_id, checkpoint_id)
+    );
     CREATE TABLE IF NOT EXISTS forms (
       form_id TEXT PRIMARY KEY, participant_id TEXT NOT NULL REFERENCES sessions(participant_id),
       task_id TEXT, kind TEXT NOT NULL, version TEXT NOT NULL, answers_json TEXT NOT NULL,

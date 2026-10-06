@@ -23,15 +23,22 @@ function rng(seed) {
 
 function shuffledBlock(seed, block) {
   const result = [];
-  for (let sequence = 0; sequence < 4; sequence++) {
-    for (let profile = 0; profile < 4; profile++) {
-      result.push({ sequence, profile, order: (sequence + profile + block) % 4 });
-    }
-  }
   const random = rng(`${seed}:${block}`);
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
+  function shuffle(items) {
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+    return items;
+  }
+  // Each consecutive group of four covers every project/condition/order sequence,
+  // candidate-status profile and checkpoint-order rotation once. A full block
+  // still contains every sequence × profile combination exactly once.
+  for (const round of shuffle([0, 1, 2, 3])) {
+    for (const sequence of shuffle([0, 1, 2, 3])) {
+      const profile = (sequence + round) % 4;
+      result.push({ sequence, profile, order: (profile + 2 * sequence + block) % 4 });
+    }
   }
   return result;
 }

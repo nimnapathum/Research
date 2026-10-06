@@ -1,6 +1,6 @@
 # Resource catalogue starter project
 
-A tiny local API over 20 synthetic learning resources. There are no external packages, remote services, accounts, or real user data. The planned study runtime is Node.js 24.21.0 LTS; this prototype has so far been checked on Node 25.1.0.
+A tiny local API over 20 synthetic learning resources. There are no external packages, remote services, accounts, or real user data. The planned study runtime is Node.js 24.21.0 LTS; the candidate oracle suite has passed on that version.
 
 ## Run
 

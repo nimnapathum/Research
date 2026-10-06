@@ -7,11 +7,15 @@ Copy this template for each pilot session. Store it in restricted researcher dat
 | Participant code / pilot date |  |
 | Node / Antigravity / model / extension / hook versions |  |
 | Candidate provenance type and manifest version |  |
+| Ethics approval reference / approved document versions used |  |
+| Consent, recording and debrief completed under approved procedure |  |
 | Assignment: project, condition and order |  |
+| Neutral practice completed; extra procedural help, if any |  |
 | Start/end and checkpoint times |  |
 | Pre-task, after-task, final forms received |  |
 | All eight proposals visibly exposed? Which failed? |  |
 | Any target edits before reveal or during frozen review? |  |
+| Skipped checkpoints: code, reason, before/after reveal, workspace state |  |
 | Video, agent transcript, extension/hook and final snapshots complete? |  |
 | Confidence wording or task-sheet confusion |  |
 | Condition orientation and observed-mode notes |  |

@@ -55,6 +55,9 @@ try {
     catch { await new Promise((resolveWait) => setTimeout(resolveWait, 100)); }
   }
   if (!ready) throw new Error(`Local server did not start: ${serverLog}`);
+  const practiceHtml = await (await fetch(`http://127.0.0.1:${port}/practice`)).text();
+  assert.ok(practiceHtml.includes('Practice review') && practiceHtml.includes('No answer was saved'),
+    'The unscored practice page must be available before measured tasks');
   await post('/api/form', { token: session.token, kind: 'pre_task', answers: answersFor('pre_task') });
 
   for (const task of session.assignment.tasks) {

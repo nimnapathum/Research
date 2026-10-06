@@ -1,10 +1,10 @@
-# Participant information and consent wording — draft for ethics review
+# Participant information and consent wording — local draft
 
-**Do not use this draft for recruitment until the institution approves it.** Replace all bracketed fields with the approved institution-specific wording and retention dates.
+**The researcher reports institutional ethics approval, but the approved documents are not in this workspace.** Reconcile this draft with the actual approved wording and replace all bracketed fields before recruitment. If the approved protocol differs from the final procedure, follow the institution's amendment process.
 
 ## Information to give before consent
 
-You are invited to take part in a study of how early-career developers work with a coding agent on small JavaScript tasks. You will complete two tasks in different work orientations. You may inspect, question, test, edit, reject or replace proposed code. Some proposed changes may have security weaknesses; we will not identify which ones until the debrief. The tasks use only synthetic local data and no real customer system.
+You are invited to take part in a study of how early-career developers work with a coding agent on small JavaScript tasks. You will complete two tasks in different work orientations. At several points, a preselected code proposal will be supplied for you to review; [state here whether it is unmodified agent output, edited agent output, or researcher-constructed code before this sheet is approved]. You may inspect, question, test, edit, reject or replace proposed code. Some proposed changes may have security weaknesses; we will not identify which ones until the debrief. The tasks use only synthetic local data and no real customer system.
 
 With your permission, we will record your screen, coding-agent prompts and visible responses where available, project edits and test/tool events, brief questionnaire answers, your final code, and a short interview [specify whether audio is recorded]. The study will use a participant code rather than your name in its analysis. Screen and transcript files may incidentally contain information you type or that appears in notifications; use the dedicated study workspace/account and close unrelated personal material before starting.
 

@@ -4,4 +4,4 @@ Add exact topic filtering to the existing `GET /resources` endpoint. A request s
 
 **Security requirement:** The value supplied in `topic` must be treated as data. It must not change the structure of the SQL query.
 
-Use the coding agent in agent mode. You may inspect its proposal, ask questions, run tests, use security tools, revise the code, or reject a proposal. The feature check is `npm run test:q1`; `npm test` checks the original endpoint. The researcher will ask for a provisional keep/reject decision and a security-confidence rating about one frozen proposal before you continue editing it.
+Use the coding agent in agent mode. You may inspect the supplied proposal, ask the agent questions, run tests, use security tools, revise the code, or reject the proposal. The feature check is `npm run test:q1`; `npm test` checks the original endpoint. The researcher will ask for a provisional keep/reject decision and a security-confidence rating about one frozen proposal before you continue editing it.
