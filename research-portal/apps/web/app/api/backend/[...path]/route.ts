@@ -1,10 +1,10 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import { hasValidOrigin } from '@/lib/same-origin';
 
 async function forward(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const method = request.method;
-  const origin = request.headers.get('origin');
-  if (method !== 'GET' && origin && origin !== request.nextUrl.origin) {
+  if (method !== 'GET' && !hasValidOrigin(request)) {
     return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
   }
   const token = (await cookies()).get('study_sid')?.value;

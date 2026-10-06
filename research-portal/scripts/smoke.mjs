@@ -12,7 +12,9 @@ let researcherId;
 let ownerId;
 async function call(path, options = {}, cookie = '') {
   const response = await fetch(`${root}${path}`, { ...options,
-    headers: { ...(cookie ? { cookie } : {}), ...(options.headers || {}) } });
+    headers: { ...(cookie ? { cookie } : {}),
+      ...(options.method && options.method !== 'GET' ? { origin: root } : {}),
+      ...(options.headers || {}) } });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(`${path}: HTTP ${response.status} ${JSON.stringify(body)}`);
   return { response, body };
@@ -26,6 +28,10 @@ try {
     VALUES($1,$2,'researcher') RETURNING id`, [email, `scrypt:17:${salt}:${key.toString('hex')}`]);
   ownerId = inserted.rows[0].id;
   const researcherLogin = await call('/api/auth/login', json({ email, password }));
+  const blockedOrigin = await fetch(`${root}/api/auth/login`, {
+    ...json({ email, password }), headers: { 'content-type': 'application/json', origin: 'https://another-site.example' }
+  });
+  if (blockedOrigin.status !== 403) throw new Error('Cross-origin login request was not blocked');
   const researcherCookie = researcherLogin.response.headers.get('set-cookie')?.split(';')[0];
   if (!researcherCookie) throw new Error('Researcher session cookie missing');
   const dashboard = await fetch(`${root}/dashboard`, { headers: { cookie: researcherCookie } });
