@@ -1,0 +1,17 @@
+export type StudyUser = { id: string; email: string; role: 'researcher' | 'participant';
+  participant_code: string | null; display_name: string | null };
+export type StudyTask = { id: string; external_task_id: string; project_id: 'A' | 'B';
+  condition: 'acceleration' | 'exploration'; task_order: number; checkpoint_order: string[];
+  status: 'not_started' | 'in_progress' | 'paused' | 'submitted'; started_at: string | null; submitted_at: string | null };
+export type FormItem = { id: string; label: string; type: 'choice' | 'number' | 'scale' | 'text';
+  required?: boolean; options?: string[]; min?: number; max?: number; maxLength?: number; anchors?: Record<string,string> };
+export type Questionnaire = { id: string; title: string; stage: string; version: number; status?: string;
+  schema_json: { items: FormItem[] }; response_id?: string | null; response_task_id?: string | null;
+  submitted_at?: string | null; responses?: { task_id: string | null; answers: Record<string,unknown>; submitted_at: string }[] };
+export type ParticipantDashboard = { user: StudyUser; tasks: StudyTask[]; questionnaires: Questionnaire[];
+  uploads: { id: string; kind: string; original_filename: string; imported_count: number; created_at: string }[] };
+export type ResearcherOverview = { counts: { participants: number; tasks: number; responses: number; imports: number; events: number };
+  progress: { status: string; count: number }[]; eventTypes: { event_type: string; count: number }[];
+  recentImports: { id: string; kind: string; original_filename: string; imported_count: number;
+    created_at: string; participant_code: string | null }[];
+  latestAnalysis: { summary: Record<string, unknown>; created_at: string } | null };
