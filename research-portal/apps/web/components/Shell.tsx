@@ -9,11 +9,13 @@ export function Shell({ user, children }: { user: StudyUser; children: React.Rea
     <nav className="nav" aria-label="Main navigation">
       <Link href="/dashboard">Overview</Link>
       {researcher ? <>
+        <Link href="/researcher/research">Research</Link>
         <Link href="/researcher/participants">Participants</Link>
         <Link href="/researcher/questionnaires">Questionnaires</Link>
         <Link href="/researcher/imports">Imports</Link>
         <Link href="/researcher/analytics">Analytics</Link>
         <Link href="/researcher/responses">Responses</Link>
+        <Link href="/researcher/accounts">Researchers</Link>
       </> : <Link href="/participant/upload">Upload events</Link>}
       <Link href="/account">Account</Link><LogoutButton />
     </nav></div></header><main className="page">{children}

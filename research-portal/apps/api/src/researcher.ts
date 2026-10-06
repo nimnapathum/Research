@@ -15,6 +15,42 @@ export class ResearcherController {
   constructor(private readonly db: DbService, private readonly imports: ImportService) {}
   private require(request: StudyRequest) { researcherOnly(request.studyUser); }
 
+  @Get('accounts')
+  async accounts(@Req() request: StudyRequest) {
+    this.require(request);
+    const result = await this.db.query(`SELECT id,email,display_name,created_at,disabled_at
+      FROM users WHERE role='researcher' ORDER BY created_at`);
+    return result.rows;
+  }
+
+  @Post('accounts')
+  async createResearcher(@Req() request: StudyRequest,
+    @Body() body: { email?: string; displayName?: string }) {
+    this.require(request);
+    const email = String(body?.email || '').trim().toLowerCase();
+    const displayName = String(body?.displayName || '').trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 ||
+      displayName.length > 120) throw new BadRequestException('Provide a valid email and a name of at most 120 characters');
+    const password = randomBytes(18).toString('base64url');
+    const hash = await hashPassword(password);
+    try {
+      const account = await this.db.transaction(async (client) => {
+        const inserted = await client.query<{ id: string; email: string; display_name: string | null }>(
+          `INSERT INTO users(email,password_hash,role,display_name)
+           VALUES($1,$2,'researcher',$3) RETURNING id,email,display_name`,
+          [email, hash, displayName || null]);
+        await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id,details)
+          VALUES($1,'create_researcher','user',$2,$3::jsonb)`,
+          [request.studyUser.id, inserted.rows[0].id, JSON.stringify({ email })]);
+        return inserted.rows[0];
+      });
+      return { ...account, temporary_password: password };
+    } catch (error) {
+      if ((error as { code?: string }).code === '23505') throw new ConflictException('An account with this email already exists');
+      throw error;
+    }
+  }
+
   @Get('overview')
   async overview(@Req() request: StudyRequest) {
     this.require(request);
