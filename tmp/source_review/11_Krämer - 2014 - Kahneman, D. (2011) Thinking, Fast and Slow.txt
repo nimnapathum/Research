@@ -1,0 +1,36 @@
+--- PDF PAGE 1 ---
+Stat Papers
+DOI 10.1007/s00362-013-0533-y
+BOOK REVIEW
+Kahneman, D. (2011): Thinking, Fast and Slow
+Penguin, 496 pp., e 10.50, ISBN 978-0141033570
+Walter Krämer
+© Springer-Verlag Berlin Heidelberg 2013
+This book is an eye-opener in various ways. From the viewpoint of statistics, it demon-
+strates once more that real progress in this ﬁeld does not derive from advanced math-
+ematics, but from asking the right questions and from setting up clever experiments.
+From the viewpoint of economics, it adds additional doubts to the usefulness of the
+homo oeconomicus as a proper model of human decision making, and from the view-
+point of psychology, it summarizes numerous surprising insights into the way the
+human brain is actually working which Kahneman has accumulated – often together
+with Amos Tversky – over the course of his brilliant career.
+The most far-reaching of these insights concerns the mechanics of the human brain,
+which Kahneman views as two coexisting modes of thinking (“fast and slow”, as the
+title says). The ﬁrst, the fast one, is System 1: System 1 is always working in the
+background, without our conscious mind being actively involved, trying to make sense
+of the myriads of information items rushing in at any interval of time. This it does
+surprisingly well, but sometimes various shortcuts are compromising its efﬁciency.
+It is this ﬁeld of cognitive heuristics and biases that Kahneman and Tverski have
+dominated over the last decades, two of their most inﬂuential papers are reprinted here
+in full. System 2, on the other hand, requires active participation by the owner of the
+brain and is therefore much more demanding and much slower. And much of the book
+is then devoted to showing how System 1 und System 2 cooperate (most of the time)
+or obstruct each other (sometimes). While most of the pioneering work in this area has
+been done by Kahneman and coauthors himself, lots of credit is also given to other
+contributors, so if one is looking for an authoritative survey of this ﬁeld, at the same
+time superbly written and intelligible also to non-experts, there is no better book than
+this.
+W. Krämer (B)
+Fakultät Statistik, Technische Universität Dortmund, Dortmund, Germany
+e-mail: walterk@statistik.uni-dortmund.de
+123

@@ -1,0 +1,1588 @@
+--- PDF PAGE 1 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Mind the Confidence Gap: Overconfidence, Calibration, and
+Distractor Effects in Large Language Models
+Prateek Chhikara pchhikar@usc.edu
+University of Southern California, Los Angeles, USA
+Reviewed on OpenReview:https: // openreview. net/ forum? id= lyaHnHDdZl
+Abstract
+Large Language Models (LLMs) show remarkable proficiency in natural language tasks,
+yet their frequent overconfidence—misalignment between predicted confidence and true
+correctness—poses significant risks in critical decision-making applications. We present
+a comprehensive analysis on calibration in LLMs across nine LLMs and three factual
+Question-Answering (QA) datasets, systematically comparing standard free-generation set-
+tings against structured distractor-augmented prompts. Our evaluation reveals that ex-
+plicitly incorporating distractors can substantially mitigate miscalibration, achieving rel-
+ative accuracy improvements up to 460% and ECE reductions up to 90%. Despite gen-
+eral trends, we uncover nuanced findings: large RLHF-tuned models display inherent cal-
+ibration strengths but can paradoxically suffer increased miscalibration on easier queries,
+whereas smaller models benefit disproportionately from distractor prompts but remain sig-
+nificantly miscalibrated. Through detailed analyses across question types, we identify per-
+sistent calibration failures, particularly in person-based queries. We conclude with con-
+crete recommendations—targeted fine-tuning, structured prompting, and strategic model
+choice—to ensure reliable, trustworthy LLM deployments. Code is publicly available at:
+https://github.com/prateekchhikara/llms-calibration
+Poorly Calibrated Model
+1.0
+0.8
+0.6
+0.4
+0.2
+0.0
+0 50
+Predicted Confidence (%)
+100
+1.0
+0.8
+0.6
+0.4
+0.2
+0.0
+0 50
+Predicted Confidence (%)
+100
+Perfectly Calibrated Model
+Actual Accuracy
+Actual Accuracy
+y=x 
+Perfectly Calibrated
+y=x 
+Poorly Calibrated
+LLM
+User
+I am 93% sure that it is Geoffrey Hinton.
+Correct Answer: Michio Sugeno
+Who received the IEEE Frank Rosenblatt
+Award in 2010?
+overconfidence
+Figure 1: An instance from SimpleQA dataset where an LLM assigns high confidence to an incorrect answer.
+1
+arXiv:2502.11028v3  [cs.CL]  12 Dec 2025
+
+--- PDF PAGE 2 ---
+Published in Transactions on Machine Learning Research (12/2025)
+1 Introduction
+Large LanguageModels(LLMs) havesignificantly advanced naturallanguage understanding, achieving state-
+of-the-art results across tasks including conversational AI (Skjuve et al., 2024; Zhang, 2024), scientific dis-
+covery (Kumar, 2024), and multimodal systems (Zhang et al., 2023; Chhikara et al., 2024; Zhang et al.). As
+LLMs increasingly guide critical decisions in sensitive domains—such as healthcare, finance, and law—the
+reliability of their confidence estimates becomes paramount. Misalignment between model confidence and ac-
+tual correctness, known asmiscalibration, poses severe risks, potentially eroding user trust and causing costly
+or hazardous errors (Dhuliawala et al., 2023; Geng et al., 2024). For example, as illustrated in Figure 1, when
+asked“Who received the IEEE Frank Rosenblatt Award in 2010?”, a leading LLM confidently but incorrectly
+answers“Geoffrey Hinton”with a confidence of 93%, despite the correct answer being“Michio Sugeno”.
+Such pronounced overconfidence can lead users to mistakenly trust erroneous outputs—particularly prob-
+lematic in high-stakes applications such as medical diagnoses or financial decisions. Well-calibrated models,
+on the other hand, report confidence scores accurately reflecting their true reliability, thus enabling systems
+to flag uncertain predictions for human oversight and significantly mitigating real-world risks.
+Modern Question-Answering (QA) pipelines adopt “one-right+several-wrong” format — whether through
+retrieval-augmented candidate spans, knowledge-graph sibling entities, self-consistency checks, or ensemble
+methods—to improve answer selection. However, these structured, distractor-rich settings introduce novel
+challenges for confidence estimation—challenges that classical post-hoc calibration methods (temperature
+scaling, Plattscaling, isotonicregression(Guoetal.,2017))werenotoriginallydesignedtoaddress. Although
+such methods have proven effective on small- to medium-scale neural networks, their applicability to today’s
+large-scale LLMs under real-world, distractor-heavy conditions remains unclear. Prior work has examined
+isolated factors—model scale, architecture (dense vs. mixture of experts (MoE)), and fine-tuning regime
+(supervised fine-tuning (SFT) vs. reinforcement learning from human feedback (RLHF)) (Leng et al., 2024;
+Li et al., 2024)—but has not extensively examined how explicit distractors, ubiquitous in deployed QA
+systems, affect calibration accuracy and confidence ranking for modern LLMs.
+Mitigating overconfidence through distractorsResearch in cognitive psychology demonstrates that
+human overconfidence can be reduced by explicitly considering alternative answers before making decisions
+(Lord et al., 1984; Mussweiler et al., 2000). Inspired by this “consider-the-opposite” strategy, we investi-
+gate whether presenting LLMs with plausible distractors similarly mitigates their systematic overconfidence
+and enhances calibration. To be specific, we conduct the first large-scale empirical study of LLM cali-
+bration, comparing performance under standard (free-generation) and distractor-augmented settings. Our
+contributions are fourfold:(1)we introduce a unified calibration benchmark evaluating nine state-of-the-art
+LLMs—spanning model sizes (8B–70B to greater than 1T), architectures (dense vs. MoE), and fine-tuning
+methods (SFT vs. RLHF)—across three factual QA datasets (SimpleQA, FaVIQ, TriviaQA);(2)we pro-
+pose a structured distractor-augmented evaluation paradigm, where models select answers from one correct
+and multiple plausible incorrect options, enabling simultaneous assessment of accuracy improvements and
+Expected Calibration Error (ECE);(3)we perform fine-grained analyses across question types (e.g., person,
+date) to identify conditions of severe miscalibration; and(4)we systematically disentangle how scale, tuning
+regime, and architecture independently influence model calibration and responsiveness to distractors.
+2 Related Work
+Intrinsic calibrationMethods directly elicit uncertainty from LLMs. Prompt-based approaches that
+verbalize confidence (Tian et al., 2023; Mielke et al., 2022; Lin et al.) or aggregate multiple outputs (Xiong
+et al.) have demonstrated effectiveness, particularly for black-box models.
+Fine-tuning strategiesApproaches such as calibration-aware RLHF (Leng et al., 2024) and Mixup-style
+data augmentation (Park & Caragea, 2022) aim to optimize calibration during training. While these methods
+reduce ECE, they remain sensitive to distribution shifts (Liu et al.).
+2
+
+--- PDF PAGE 3 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Calibration during pre-training and alignmentChen et al. (2023) show that calibration emerges early
+in self-supervised pre-training, and Zhu et al. (2023) demonstrate that instruction tuning and RLHF can
+preserve or even enhance these gains. Jiang et al. (2021) find that post-hoc methods like temperature scaling
+often fail to align confidence with accuracy in factual QA. However, the effects of explicit distractor-based
+prompting on LLM calibration remain unexplored.
+Post-hoc calibrationTechniques adjust predictions after training, with classical approaches like tempera-
+ture scaling (Guo et al., 2017) still underexplored for contemporary LLMs. Recent studies indicate persistent
+overconfidence even at larger scales, highlighting a potential degradation in calibration performance with
+increased model size (Zhou et al., 2024a;b).
+Despite extensive research, existing literature lacks a systematic exploration of structured distractor effects
+on calibration. Motivated by psychological findings that considering alternative answers can reduce human
+overconfidence, our work introduces a structured distractor-augmented evaluation framework. Unlike prior
+methods, we empirically investigate how explicit distractor scenarios—common in practical applications such
+as retrieval-augmented generation and multiple-choice contexts—impact LLM calibration. Additionally, we
+conduct detailed, fine-grained analyses across different question types (e.g., person, date, place), uncovering
+context-dependent calibration challenges previously overlooked. Our findings thus address critical gaps
+in calibration research, offering practical insights to enhance the reliability and trustworthiness of LLM
+deployments.
+3 Experimental Setup
+3.1 Evaluation Datasets:
+SimpleQAWe use the SimpleQA dataset (Wei et al., 2024), which provides a reliable benchmark for
+evaluating LLM factual accuracy and calibration. Comprising short, fact-seeking queries with clearly defined
+correct answers, SimpleQA enables precise measurement of model confidence and alignment with factual
+correctness. Its high-quality annotations, verified by multiple independent AI trainers, ensure accuracy and
+unambiguity, making it well-suited for calibration assessment. The dataset contains 4326 question-answer
+pairs.
+FaVIQ(Park etal.,2022)Weselectdatapointsfromtest subset oftheR-set. Thedatasetinitiallycontains
+5877 data points, out of which we focus exclusively on the 2922 data points labeled as “supports,” indicating
+that the provided answer is correct. FaVIQ is particularly appropriate for our experiments due to its con-
+struction methodology derived from real-world information-seeking questions. This design inherently reduces
+strong lexical biases found in other crowdsourced datasets, promoting nuanced semantic understanding.
+TriviaQAWeusetheTriviaQAdataset(Joshietal.,2017), forevaluatingopen-domainquestionanswering
+and factual knowledge retrieval. For our experiments, we select first 1000 question-answer pairs from the
+validation split of therc.web.no_contentsubset, ensuring a diverse yet controlled evaluation set. By
+restricting our selection to the no-content class, we focus on settings where models must rely purely on
+prior knowledge without the assistance of retrieved supporting context, isolating intrinsic model calibration
+behavior.
+3.2 Evaluation Methods
+Let our evaluation set be
+S=
+{
+(qi,a i)
+}n
+i=1,
+whereq i is thei-th question anda i its ground-truth answer. We compare two prompting regimes:
+3
+
+--- PDF PAGE 4 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Free-generation baseline (N)We prepend eachq i with a fixed prompt templateπN and let model
+generate a completion answer and the confidence:
+y(N)
+i ,c (N)
+i = LLM
+(
+πN∥qi
+)
+,
+where the model’s final answer isy(N)
+i and the associated confidence isc(N)
+i .
+Distractor-augmented setting (D)For each(q i,a i)we sample three distractors{di,1,d i,2,d i,3}and
+form the choice list
+Ci = shuffle
+(
+{ai}∪{di,j}3
+j=1
+)
+.
+We then feed the model:
+y(D)
+i ,c (D)
+i = LLM
+(
+πD∥qi∥Ci
+)
+,
+and extract the model’s final answery(D)
+i and record the associated confidencec (D)
+i . Prompt templates
+πN,πD are provided in Appendix A. Our distractors were generated usingGPT-4o-miniwith a carefully
+designed prompt to ensure they were factually incorrect yet contextually plausible. Specifically, for each
+question–answer pair in the datasets, we usedGPT-4o-minito generate three distractors that (i) matched
+the expected answer type (e.g., dates for date-based questions), (ii) remained distinct from the correct
+answer, and (iii) maintained comparable specificity and context. To further validate plausibility, we manually
+inspected over 500 randomly sampled examples from the SimpleQA dataset, confirming that the generated
+distractors were consistently plausible and contextually relevant.
+Why Elicited Confidence?We measure confidence viaelicited self-reports(0–100) because they capture
+task-level belief (“How sure are you that your answer is correct?”) rather than token-level fluency artifacts.
+Prior work shows that verbalized probabilities can better reflect correctness than raw token likelihoods, which
+are sensitive to phrasing and tokenization (Lin et al.). In RLHF-tuned systems, elicited confidence has also
+been observed to track calibration more reliably than log-probabilities, which can degrade post-alignment
+(Tian et al., 2023). This aligns with “linguistic calibration” evidence that making models state their confi-
+dence reduces overconfidence and improves user-facing transparency (Mielke et al., 2022). Elicitation is also
+the onlyuniformly availablesignal across the nine black-box and open-weight models we evaluate, enabling
+apples-to-apples comparison. We do not claim it is the sole or optimal measure: logit-based margins/entropy
+and self-consistency (majority-vote variance) are complementary signals. Our findings should therefore be
+interpreted in the context of elicited confidence; we add this clarification to promote comparability and to
+reflect the literature’s guidance on when verbalized uncertainty is informative.
+3.3 Selected LLMs
+We select nine representative models, spanning three major families—OpenAI’sGPT-4series, Meta’sLLaMA
+lineage, and two leading open-weight models (Gemma-2andQwen-qwq). We select these models from OpenAI1
+and GroqCloud2 API services. More details about the selected models and their taxonomy are in Table 1.
+GPT-4 FamilyTheGPT-4family consists of three variants:GPT-4o,GPT-4-turbo, andGPT-4o-mini(a
+smaller, assumed to be 8B-parameter model). All three support an extended 128K-token context window and
+are instruction-tuned via SFT followed by RLHF to optimize conversational quality. They differ primarily
+in total parameter count—leading to different trade-offs in inference latency and compute cost.
+LLaMA LineageMeta’s LLaMA-3 (Dubey et al., 2024) series spans three dense checkpoints: an 8B base
+with 8K window, an 8B “Instant” assistant-tuned model with 128K window, and a 70B base (8K window).
+Each uses Grouped-Query Attention (GQA) (Ainslie et al.) for efficient long-context processing; all these
+variant undergoes SFT and RLHF. In contrast,LLaMA-4-Scout-17b3 adopts a 16-expert MoE transformer
+which supports up to 10M tokens, and is fine-tuned with both SFT and RLHF for reasoning.
+1https://openai.com
+2https://groq.com
+3https://ai.meta.com/blog/llama-4-multimodal-intelligence/
+4
+
+--- PDF PAGE 5 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Table 1: Taxonomy of selected LLMs showing differences in training and fine-tuning approaches, where FT
+(fine-tuning) and IT (instruct-tuning).
+Model (Params /
+Context)
+Architecture Dataset Type T raining Strategy FT IT
+GPT-4o
+(undisclosed / 128K)
+Dense Multi-modal (web
+text, code,
+images, audio
+transcripts)
+Pre-training +
+RLHF
+✓ ✓
+GPT-4o-mini
+(undisclosed / 128K)
+Dense Multi-modal (web
+text, code,
+images)
+SFT + RLHF✓ ✓
+GPT-4-turbo
+(undisclosed / 128K)
+Dense Multi-modal (web
+text, code,
+images)
+Pre-training + SFT
++ RLHF
+✓ ✓
+LLaMA-3.1-8B-Instant
+(8B / 128K)
+Dense (GQA) 15T tokens –
+Public (web, code,
+multilingual)
+Pre-training + SFT
++ RLHF
+✓ ✓
+LLaMA-3-8B-Instruct
+(8B / 8K)
+Dense (GQA) 15T tokens –
+Public (web, code,
+multilingual)
+Pre-training + SFT
++ RLHF
+✓ ✓
+LLaMA-3-70B-Instruct
+(70B / 8K)
+Dense (GQA) 15T tokens –
+Public (web, code,
+multilingual)
+Pre-training + SFT
++ RLHF
+✓ ✓
+LLaMA-4-Scout-17B
+(17B / 10M)
+MoE (16 experts) 40T tokens –
+Mixed (text +
+vision,
+multilingual)
+MoE Pre-training +
+SFT + RLHF
+✓ ✓
+Gemma2-9B-it
+(9B / 8K)
+Dense (GQA,
+interleaved
+local–global)
+8T tokens –
+Public (web,
+academic)
+Distillation + SFT
++ RLHF
+✓ ✓
+Qwen-qwq-32B
+(32B / 131K)
+Dense (GQA) 18T tokens –
+Public
+(multilingual; web
+text, code,
+scientific lit.)
+Pre-training + SFT✓ ✓
+Open-Weight AlternativesGemma2-9b-it(Team et al., 2024) leverages knowledge-distillation pre-
+training on 8T tokens—with interleaved local–global and group-query attention—followed by instruction
+fine-tuning (SFT + Direct Preference Optimization (DPO) (Rafailov et al., 2023)) within 8K-token context.
+By contrast,Qwen-qwq-32b(Hui et al., 2024; Yang et al., 2024) is a 32B-parameter dense model (64 layers,
+Rotary Positional Embedding (RoPE) (Su et al., 2024), SwiGLU (Dauphin et al., 2017)) pre-trained on 18T
+multilingual tokens without RLHF.
+TheGPT-4family andLLaMA-3seriesare dense models trained on massive multimodal or text-only corpora,
+each undergoing both SFT and RLHF before instruct-tuning. In contrast,LLaMA-4-Scoutemploys a 16-
+expert MoE design over mixed vision-text data, whileGemma2-9b-itandQwen-qwq-32bexplore distillation-
+based and pure SFT regimes, respectively. Despite these varied strategies, all nine models receive dedicated
+fine-tuning and instruction-tuning to optimize performance and calibration in downstream QA and conver-
+sational tasks.
+3.4 Evaluation Criteria
+Following prior work, we useGPT-4o-minias an LLM-based judge to classify responses asCORRECT,
+INCORRECT, orNOT_ATTEMPTED(Packer et al., 2023; Wei et al., 2024; Chhikara et al., 2025). A response
+isCORRECTif it fully captures the gold target’s key information without contradiction, allowing minor varia-
+tions in wording, order, or hedging. It isINCORRECTif it contains factual errors, contradictions, or misleading
+speculation, even if hedged.NOT_ATTEMPTEDapplies when a response lacks essential information without in-
+5
+
+--- PDF PAGE 6 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Table 2: Performance metrics of LLMs in the Normal (N) and Distractor (D) settings on theSimpleQA,
+FaVIQ, andTriviaQAdatasets, including accuracy (correct),NOT_ATTEMPTED(na), ECE, and the number of
+helped (Dhelped) and harmed (Dharmed) instances with their percentages.
+Dataset / LLMs Ncorrect Nna NECE Dcorrect Dna DECE Dhelped Dharmed
+SimpleQA
+GPT-4o-mini
+ 8.46% 6.80% 0.750 47.43% 0.02% 0.320 1644 (93.78%) 109 (6.22%)
+GPT-4-turbo
+ 20.37% 6.17% 0.612 65.40%0.00%0.165 1877 (95.86%) 81 (4.14%)
+GPT-4o
+ 35.14%7.88%0.450 73.42%0.02%0.037 1569 (91.97%) 137 (8.03%)
+LLaMA-3.1-8b-instant
+ 5.58% 18.78% 0.799 44.64% 0.12% 0.367 1355 (95.29%) 67 (4.71%)
+LLaMA-3-8B-8192
+ 4.79% 21.20% 0.810 44.01% 0.55% 0.361 1382 (95.57%) 62 (4.43%)
+LLaMA-3-70b-8192
+ 12.73% 16.46% 0.760 55.81% 0.25% 0.239 1587 (95.09%) 82 (4.91%)
+LLaMA-4-scout-17b
+ 6.70% 8.76% 0.631 50.30% 0.02% 0.285 1763 (95.40%) 85 (4.60%)
+Gemma2-9B-it
+ 5.48% 33.29% 0.799 45.58% 1.78% 0.367 1143 (94.38%) 68 (5.62%)
+Qwen-qwq-32b
+ 7.59%3.99%0.680 51.68%0.00%0.253 1784 (96.48%) 65 (3.52%)
+F aVIQ
+GPT-4o-mini
+ 47.19% 4.08% 0.426 69.73% 0.24% 0.161 722 (85.85%) 119 (14.15%)
+GPT-4-turbo
+ 54.76% 5.79% 0.357 80.07% 0.31% 0.062 682(93.81%) 45 (6.19%)
+GPT-4o
+ 56.20%4.83%0.315 81.37% 0.21% 0.036 688 (93.73%) 46 (6.27%)
+LLaMA-3.1-8b-instant
+ 36.27% 6.16% 0.532 60.14% 0.31% 0.267 776 (80.83%) 184 (19.17%)
+LLaMA-3-8b-8192
+ 30.85% 4.81% 0.587 58.53% 0.68% 0.282 892 (86.02%) 145 (13.98%)
+LLaMA-3-70b-8192
+ 44.95% 4.79% 0.463 72.85% 0.76% 0.139 715 (91.32%) 68 (8.68%)
+LLaMA-4-scout-17b
+ 39.05% 3.74% 0.499 67.85% 0.28% 0.218 861 (89.41%) 102 (10.59%)
+Gemma2-9b-it
+ 35.80% 10.42% 0.581 58.95% 1.28% 0.300 607 (82.25%) 131 (17.75%)
+Qwen-qwq-32b
+ 38.34%3.62%0.530 68.54% 0.25% 0.200 850 (92.69%) 67 (7.31%)
+T riviaQA
+GPT-4o-mini
+ 81.13%0.12%0.104 87.81% 0.00% 0.065 75 (77.32%) 22 (22.68%)
+GPT-4-turbo
+ 90.38%0.36%0.025 95.43% 0.00% 0.048 43 (84.31%) 8 (15.69%)
+GPT-4o
+ 89.66% 0.24% 0.071 95.55%0.00% 0.083 48 (85.71%) 8 (14.29%)
+LLaMA-3.1-8b-instant
+ 75.46% 0.31% 0.153 81.35% 0.00% 0.101 119 (67.61%) 57 (32.29%)
+LLaMA-3-8b-8192
+ 67.41% 0.51% 0.221 78.93% 0.00% 0.113 166 (74.11%) 58 (25.89%)
+LLaMA-3-70b-8192
+ 82.86% 0.30% 0.070 91.43% 0.00%0.026 103 (83.74%) 20 (16.26%)
+LLaMA-4-scout-17b
+ 77.92% 0.40% 0.141 86.87% 0.00% 0.079 127 (74.71%) 43 (25.29%)
+Gemma2-9b-it
+ 70.10% 1.41% 0.230 81.55% 0.00% 0.107 150 (75.76%) 48 (24.24%)
+Qwen-qwq-32b
+ 75.03% 0.62% 0.158 88.08% 0.00% 0.042 133 (86.93%) 20(13.07%)
+troducing errors, including vague or evasive answers. We experiment with using the same LLM for both
+prediction and judgment, finding that smaller LLM judges often misclassify responses or hesitate to assign
+NOT_ATTEMPTEDwhen no valid answer is generated. Manual inspection confirms these issues, and further
+details are provided in the Appendix B.
+3.5 Evaluation Metrics:
+To evaluate performance, we measure correctly answered questions for both variations (NandD). For
+calibration assessment, we use ECE to quantify the misalignment between a model’s predicted confidence
+and actual accuracy. A well-calibrated model produces confidence estimates that closely match its true
+correctness, with an ECE of zero indicating perfect calibration. Following (Naeini et al., 2015), we compute
+ECE using empirical binning (bin size 0.1) to ensure a robust measurement of miscalibration. Additionally,
+wedefinetwocomplementarymetrics:D helped, denotinginstanceswherethemodelfailedundertheNsetting
+but succeeded when distractors were added (Ni = 0andD i = 1); andD harmed, capturing the reverse—cases
+where the model initially answered correctly underNbut erred when distractors were introduced (Ni = 1
+andD i = 0).
+6
+
+--- PDF PAGE 7 ---
+Published in Transactions on Machine Learning Research (12/2025)
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4o-mini
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4-turbo
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4o
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama-3.1-8b-instant
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama3-8b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gemma2-9b-it
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+qwen-qwq-32b
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama3-70b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama-4-scout-17b-16e-instruct
+Figure 2: Reliability diagrams (RDs) showing calibration performance inN(•) andD(•) settings on the
+SimpleQA dataset. (y-axis: actual accuracy, x-axis: predicted confidence)
+4 Experimental Results and Analysis
+4.1 Quantifying Baseline Calibration of LLMs
+We first quantify each model’s out-of-the-box accuracy (Ncorrect),NOT_ATTEMPTED(N na), andN ECE on
+three benchmarks: SimpleQA (a deliberately hard, concise factoid task), FaVIQ (moderate difficulty), and
+TriviaQA (an easier, QA dataset). Table 2 reports the full metrics.
+On the hardest SimpleQA benchmark—where direct “off-the-shelf” generation is inherently complex—even
+GPT-4oattains only 35% accuracy (ECE 0.45,NOT_ATTEMPTED≈8%). LargerGPT-4variants have been
+pretrained on vastly more tokens (and may even have encountered similar questions), yet their calibration loss
+remains on the same order as smaller models. This parity—despite scale and pretraining volume—indicates
+persistent overconfidence across sizes on challenging questions.
+By contrast, the easy TriviaQA setting reveals the limits of overconfidence:GPT-4o’s accuracy rises to 90%
+with ECE≈0.07 and near-zeroNOT_ATTEMPTED, while smaller or open-source models tighten their reliability
+curves more markedly. In other words, on simpler, context-rich queries, larger models not only answer
+correctly but also exhibit proportionally less overconfidence compared to hard benchmarks. FaVIQ again
+falls between these extremes, with both accuracy and ECE interpolating smoothly.
+Comparative analysis across families shows thatGPT-4variants consistently occupy the “high accuracy, low
+ECE, lowNOT_ATTEMPTED” regime on all datasets. SmallLLaMA-3models, in contrast, post single-digit
+7
+
+--- PDF PAGE 8 ---
+Published in Transactions on Machine Learning Research (12/2025)
+accuracy on SimpleQA, ECEs approaching 0.8, and frequent deferrals; scaling them to 70B or adopting to
+other open-source alternatives (Gemma2-9b-it,Qwen-qwq-32b) yields only incremental gains.
+4.2 Effects of Structured Distractors on Accuracy and Confidence
+To quantify effect of adding correct answer alongside three incorrect options, we measure relative accuracy
+gain∆Acc = (D correct−Ncorrect)/Ncorrect and ECE compression∆ECE =N ECE−DECE. Table 2 reports
+counts and percentage ofDhelped vs.D harmed andNOT_ATTEMPTED(D na). Figure 2 overlays reliability dia-
+grams (RDs) for all the nine models on SimpleQA dataset. RDs for FaVIQ and TriviaQA are in the Appendix
+C.
+Across all models, structured distractors boost accuracy and (for most cases) reduce ECE. On the challenging
+SimpleQA benchmark, distractors often halve ECE (up to∆ECE≈0.4) and more than double accuracy for
+smaller variants, confirming that explicit options help recalibrate confidence when generation alone is unreli-
+able. However, on TriviaQA—the easiest dataset—GPT-4oandGPT-4-turbo(the largest models) exhibit a
+slight increase in ECE underD, despite relative accuracy gains of 3–5%. We observe thatECEN →D (GPT-4o)
+rises from 0.071 to 0.083, andECEN →D (GPT-4-turbo)rises from 0.025 to 0.048. This counterintuitive effect
+likely stems from confidence inflation: on already-easy examples, the multiple-choice context encourages the
+model to assign excessive probability mass to the correct answer, amplifying residual misalignment between
+predicted confidence and true correctness.
+Smaller models (< 10B) show the largest∆Accon FaVIQ and SimpleQA but also the highestDharmed rates
+on FaVIQ and TriviaQA, suggesting that limited pretraining makes them more susceptible to distractor-
+induced errors. Notably,Dna drops for all models (to zero on TriviaQA), underlining that no LLM abstains
+once explicit options are provided for easier questions.
+4.3 Influence of Fine-Tuning Regime and Model Architecture
+Our analysis systematically investigates how different fine-tuning strategies and model architectures impact
+accuracy and calibration performance, specifically in the context of structured distractors.
+First, we observe that effectiveness of RLHF on calibration performance varies significantly across different
+model implementations and sizes. While RLHF models such asGPT-4o-mini(assumed 8B parameters)
+exhibit superior calibration performance (ECE 0.750 reduced to 0.320 on SimpleQA), smaller-scale RLHF
+models likeLLaMA-3-8b-8192andLLaMA-3.1-8b-Instantunderperform relative toQwen-qwq-32B, an SFT-
+only model. Specifically, inDsetting,Qwen-qwq-32Bdemonstrates better accuracy (51.68% vs. 44.64% for
+LLaMA-3.1and 44.01% forLLaMA-3-8bon SimpleQA) and calibration (ECE 0.253 vs. 0.367 forLLaMA-3.1
+and 0.361 forLLaMA3-8b), highlighting that RLHF alone does not guarantee superior calibration. This
+indicates that other factors, such as the volume and diversity of training data, the quality of fine-tuning
+data, and overall training strategies, play crucial roles.
+Examining within theLLaMAfamily,LLaMA 3.1–8b–Instructnotably outperforms the earlierLLaMA3-8B
+variant across all benchmarks despite identical parameter counts. This improved performance, especially
+evident in all three open-domain QA tasks inNsetting (e.g. accuracy 75.46% vs. 67.41% in TriviaQA
+dataset), stems from enhancements in parametric knowledge, refined instruction tuning, and superior cali-
+bration.LLaMA-3.1-8bbenefited from training on an extended and more recent dataset (up to December
+2023), enabling better retention of long-tail factual knowledge and improved instruction-following capabili-
+ties, thereby enhancing robustness and reliability.
+Distilled models, notablyGemma2-9b-it, exhibit higher "NOT_ATTEMPTED" rates on all the three datasets
+(e.g. 33.29% on SimpleQA) compared to similarly sized models, indicating challenges in effectively utilizing
+their compressed knowledge base without external support.Qwen-qwq-32b, despite lacking RLHF fine-
+tuning, consistentlyproducesanswerswithlower"NOT_ATTEMPTED"ratesanddemonstratesrobustnessagainst
+distractor-induced errors, as indicated by its lower percentage of harmed instances.
+Furthermore, although significantly larger, the MoE-basedLLaMA-4-Scout-17bdoes not outperform
+GPT-4o-miniin accuracy or calibration, underscoring that training volume and quality significantly im-
+8
+
+--- PDF PAGE 9 ---
+Published in Transactions on Machine Learning Research (12/2025)
+SimpleQA FaVIQ TriviaQA
+Dataset
+0
+100
+200
+300
+400Accuracy Change (%)
++461
++48
++8
++221
++46
++6
++109
++45
++7
+gpt-4o-mini
+gpt-4-turbo
+gpt-4o
+100
+75
+50
+25
+0
+25
+50
+75
+100
+ECE Change (%)
++57
++73
++92
++62
++83+89
++38
+-92
+-17
+SimpleQA FaVIQ TriviaQA
+Dataset
+0
+100
+200
+300
+400
+500
+600
+700
+800Accuracy Change (%)
++819
++90
++17
++700
++66
++8
++651
++74
++11
++338
++62
++10
+llama3-8b-8192
+llama-3.1-8b-instant
+llama-4-scout-17b
+llama3-70b-8192
+35
+40
+45
+50
+55
+60
+65
+70
+ECE Change (%)
++55
++54+55
++69
++52
++50
++56
++70
++49
++34
++44
++63
+Figure 3: Accuracy and calibration shifts with distractors. We show relative accuracy gains (bars) and ECE
+changes (points) when distractor options are added. While all models improve in accuracy, calibration effects
+vary—large models benefit most, while smaller or models often remain miscalibrated.
+pact performance more than sheer parameter count. However, at a substantially larger scale,LLaMA-3-70b
+successfully surpassesGPT-4o-mini, highlighting the interplay of extensive parameterization, robust training,
+and fine-tuning strategies.
+In conclusion, our comprehensive analysis reveals that while RLHF can substantially improve model cali-
+bration, it is not universally effective without careful consideration of other critical training factors. Models
+leveraging large-scale training datasets, updated fine-tuning approaches, and comprehensive instruction tun-
+ing achieve optimal accuracy and calibration. Effective deployment in reliability-sensitive contexts thus
+demands a strategic blend of parameterization, extensive pre-training, robust fine-tuning methodologies,
+and carefully designed calibration interventions.
+4.4 Effect of Model Size within LLM Families
+We disentangle parameter count from other factors by comparing the smallest, mid-sized, and largest check-
+points released by each provider. In the normal setting (N), accuracy increases monotonically with scale
+for both families; however, calibration improves much faster for the OpenAI series.GPT-4oalready attains
+an ECE of 0.450 on SimpleQA. This suggests that RLHF alignment, used uniformly acrossGPT-4models,
+amplifies the natural size-driven gains in self-assessment that emerge from scaling alone.
+Introducing distractor options (D) radically alters the picture. The largest relative accuracy jumps occur in
+the smallest models as shown in Figure 3:GPT-4o-minirockets from 8.5% to 47.4% accuracy on SimpleQA
+(+461%), andLLaMA-3-8bleaps +819% over the same split. In contrast, their flagship counterparts—GPT-4o
+andLLaMA-70b—gain a more modest +109% and +338%, respectively. Yet these headline boosts do not
+translate into equally dramatic calibration improvements. After distractors,GPT-4ocompresses its ECE by
+92% (to 0.037), whereasGPT-4o-ministill lingers above 0.32. A mirror pattern holds forLLaMA: the 70B
+model cuts ECE by 69%, finishing at 0.24, while the 8B base remains mis-calibrated (ECE 0.36) despite its
+vast accuracy lift. When we extend this analysis to FaVIQ and TriviaQA, the same ranking by model size
+holds but with attenuated returns. On FaVIQ, distractors yield solid—but more moderate—accuracy boosts
+across all scales. On TriviaQA, where the baseline performance is already high, relative gains shrink into
+the low-teens, indicating only marginal benefit from explicit distractors.
+Two key takeaways emerge from our analysis. First, small models acquire factual knowledge more quickly
+than they learn to assess their own confidence: adding explicit answer choices boosts accuracy but yields
+poorly calibrated probability estimates. Second, increasing model scale primarily improves a model’s ability
+to quantify its certainty rather than uncover new knowledge. Consequently, when downstream tasks rely
+directly on confidence scores—such as risk-aware planning or answer adjudication—larger models offer more
+trustworthy probabilities. In contrast, in settings where latency or compute cost is the main constraint
+9
+
+--- PDF PAGE 10 ---
+Published in Transactions on Machine Learning Research (12/2025)
+gpt-4o       
+gpt-4
+(turbo)
+gpt-4o
+(mini)    gemma2
+   (9b-it)
+llama3
+(8b-8192)
+llama-3.1
+(8b-instant)
+llama3-70b-8192
+qwen-qwq-32b
+llama-4-scout
+(17b-16e-instruct)
+20%
+40%
+60%
+80%
+100%
+39.42%
+70.17%
+20.24%
+59.73%
+7.48%
+46.4%
+4.87%
+47.11%
+3.46%41.61%
+4.94%
+42.6% 13.54%
+55.36%
+5.29%
+51.2%
+5.29%
+47.25%
+Date
+(a) Date
+gpt-4o       
+gpt-4
+(turbo)
+gpt-4o
+(mini)    gemma2
+   (9b-it)
+llama3
+(8b-8192)
+llama-3.1
+(8b-instant)
+llama3-70b-8192
+qwen-qwq-32b
+llama-4-scout
+(17b-16e-instruct)
+20%
+40%
+60%
+80%
+100%
+29.71%
+62.14%
+19.0%
+56.56%
+10.56%
+41.33%
+4.68%
+40.12%
+5.13%43.29%
+5.43%
+41.78% 10.11%
+50.38%
+9.5%
+46.3%
+8.3%
+44.95%
+/glyph1197umber (b) Number
+gpt-4o       
+gpt-4
+(turbo)
+gpt-4o
+(mini)    gemma2
+   (9b-it)
+llama3
+(8b-8192)
+llama-3.1
+(8b-instant)
+llama3-70b-8192
+qwen-qwq-32b
+llama-4-scout
+(17b-16e-instruct)
+20%
+40%
+60%
+80%
+100%
+28.72%
+82.52%
+18.16%
+78.0%
+6.05%
+55.81%
+4.71%
+50.34%
+3.17%
+49.38%
+3.17%
+49.28%
+9.32%
+59.94%
+6.34%
+50.34%
+4.13%
+52.35%
+Person
+(c) Person
+gpt-4o       
+gpt-4
+(turbo)
+gpt-4o
+(mini)    gemma2
+   (9b-it)
+llama3
+(8b-8192)
+llama-3.1
+(8b-instant)
+llama3-70b-8192
+qwen-qwq-32b
+llama-4-scout
+(17b-16e-instruct)
+20%
+40%
+60%
+80%
+100%
+43.56%
+74.47%
+28.1%
+61.12%
+10.54%
+38.17%
+8.2%
+41.69%
+9.84%38.64%
+8.43%
+41.69% 18.27%
+47.31%
+10.77%
+46.14%
+12.18%
+40.98%
+Place (d) Place
+Figure 4: Performance (correct) of LLMs across different question types in bothN(•) andD(•) settings.
+and some post-hoc temperature scaling is acceptable, smaller models can still deliver adequate confidence
+estimates so long as they’re provided with distractors or retrieval-augmented context.
+4.5 Performance Across Question Types
+The SimpleQA dataset already categorizes 4326 questions into four non-overlapping types—Date (1418),
+Number (663), Person (1041), and Place (427)—and we evaluate each model’s accuracy and ECE in both
+the free-generation (N) and distractor-augmented (D) settings. To better understand calibration weak-
+nesses, we analyze model performance and confidence alignment across these question types (Figure 4).
+Person-based queries are most challenging, likely due to name ambiguities and inherent variability in names,
+overlapping roles, and contextual dependencies that require deeper reasoning beyond surface-level pattern
+matching. LLMs frequently confuse historical figures with similar names, but providing structured answer
+10
+
+--- PDF PAGE 11 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Table 3: ECE comparison across question types.
+Date Number Person Place
+N D N D N D N D
+GPT-4o-mini0.77 0.32 0.73 0.35 0.76 0.25 0.73 0.42
+GPT-4-turbo0.62 0.23 0.65 0.26 0.62 0.03 0.52 0.19
+GPT-4o0.41 0.05 0.53 0.13 0.51 0.07 0.35 0.04
+LLaMA-3.1-8b0.84 0.37 0.82 0.38 0.80 0.31 0.73 0.40
+LLaMA-3-8b0.85 0.35 0.82 0.36 0.81 0.33 0.73 0.45
+LLaMA-3-70b0.80 0.22 0.80 0.28 0.76 0.19 0.65 0.33
+LLaMA-4-17b0.68 0.30 0.65 0.29 0.60 0.24 0.53 0.35
+Gemma2-9b-it0.80 0.33 0.78 0.42 0.84 0.33 0.76 0.41
+Qwen-qwq-32b0.68 0.21 0.66 0.25 0.68 0.26 0.66 0.31
+mean 0.72 0.26 0.72 0.30 0.71 0.22 0.63 0.32
+choices significantly improves accuracy, suggesting that explicit disambiguation helps mitigate uncertainty
+in this category. In contrast,place-based queries exhibit relatively strong performance across both settings,
+indicating that geographic knowledge is well-represented in pretraining. However, calibration improvements
+vary (Table 3): thepersoncategory sees highest relative ECE drop (69%), whileplacecategory shows the
+lowest (49%). This suggests that structured choices help correct overconfidence in ambiguous queries but
+offer limited calibration gains when models already retrieve knowledge with high confidence. These results
+demonstrate that miscalibration depends on both task framing and knowledge representation, not just model
+scale or architecture. While structured reasoning improves confidence alignment inperson-based queries,
+factual retrieval tasks likeplace-based questions may require alternative calibration strategies to prevent
+persistent overconfidence.
+5 Conclusion
+Our investigation provides a rigorous empirical foundation for understanding and addressing calibration is-
+sues in LLMs. We reveal widespread overconfidence across various model families and sizes, significantly
+improved by employing structured distractors—particularly effective for smaller models. However, our find-
+ings also highlight counterintuitive outcomes, including degraded calibration in large models on simpler
+queries. Moreover, systematic miscalibration across specific query categories underscores the complexity of
+the calibration challenge beyond simple accuracy. Consequently, achieving trustworthy AI requires a mul-
+tifaceted calibration strategy, integrating robust RLHF, optimized prompt design, and post-hoc calibration
+adjustments. The evaluation framework and guidelines proposed herein serve as critical tools for future
+research, driving forward the development of LLMs that are not only accurate but reliably calibrated for
+safe real-world application.
+6 Limitations
+Generator/Judge Dependence.Our distractor-augmented setting fixes a single generator and a single
+judge (GPT-4o-mini) for consistency across models. While this reduces rubric drift and style confounds,
+it also risks bias from an “AI-generates/AI-judges” loop. We mitigate subjectivity via type- and format-
+matched distractor prompts, overlap and plausibility checks, and human spot-checks by three reviewers with
+disagreement resolution. Nevertheless, results should be interpreted as conditional on this (generator, judge)
+pair. We release prompts to support replication with alternative generators and judges. Exploring cross-
+model distractor sources and independent judges (including human-only adjudication) is important future
+work; our present study prioritizes comparability under a fixed setup and does not claim generator/judge
+invariance.
+11
+
+--- PDF PAGE 12 ---
+Published in Transactions on Machine Learning Research (12/2025)
+References
+Joshua Ainslie, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico Lebron, and Sumit Sanghai.
+Gqa: Training generalized multi-query transformer models from multi-head checkpoints. InThe 2023
+Conference on Empirical Methods in Natural Language Processing.
+Yangyi Chen, Lifan Yuan, Ganqu Cui, Zhiyuan Liu, and Heng Ji. A close look into the calibration of pre-
+trained language models. InProceedings of the 61st Annual Meeting of the Association for Computational
+Linguistics (Volume 1: Long Papers), pp. 1343–1367, 2023.
+Prateek Chhikara, Dhiraj Chaurasia, Yifan Jiang, Omkar Masur, and Filip Ilievski. Fire: Food image to
+recipe generation. InProceedings of the IEEE/CVF Winter Conference on Applications of Computer
+Vision, pp. 8184–8194, 2024.
+Prateek Chhikara, Dev Khant, Saket Aryan, Taranjeet Singh, and Deshraj Yadav. Mem0: Building
+production-ready ai agents with scalable long-term memory.arXiv preprint arXiv:2504.19413, 2025.
+Yann N Dauphin, Angela Fan, Michael Auli, and David Grangier. Language modeling with gated convolu-
+tional networks. InInternational conference on machine learning, pp. 933–941. PMLR, 2017.
+Shehzaad Dhuliawala, Vilém Zouhar, Mennatallah El-Assady, and Mrinmaya Sachan. A diachronic perspec-
+tive on user trust in ai under uncertainty. InProceedings of the 2023 Conference on Empirical Methods in
+Natural Language Processing, pp. 5567–5580, 2023.
+Abhimanyu Dubey, Abhinav Jauhri, Abhinav Pandey, Abhishek Kadian, Ahmad Al-Dahle, Aiesha Letman,
+Akhil Mathur, Alan Schelten, Amy Yang, Angela Fan, et al. The llama 3 herd of models.arXiv preprint
+arXiv:2407.21783, 2024.
+Jiahui Geng, Fengyu Cai, Yuxia Wang, Heinz Koeppl, Preslav Nakov, and Iryna Gurevych. A survey of con-
+fidence estimation and calibration in large language models. InProceedings of the 2024 Conference of the
+North American Chapter of the Association for Computational Linguistics: Human Language Technologies
+(Volume 1: Long Papers), pp. 6577–6595, 2024.
+Chuan Guo, Geoff Pleiss, Yu Sun, and Kilian Q Weinberger. On calibration of modern neural networks. In
+International conference on machine learning, pp. 1321–1330. PMLR, 2017.
+Binyuan Hui, Jian Yang, Zeyu Cui, Jiaxi Yang, Dayiheng Liu, Lei Zhang, Tianyu Liu, Jiajun Zhang, Bowen
+Yu, Keming Lu, et al. Qwen2. 5-coder technical report.arXiv preprint arXiv:2409.12186, 2024.
+Zhengbao Jiang, Jun Araki, Haibo Ding, and Graham Neubig. How can we know when language models
+know? on the calibration of language models for question answering.Transactions of the Association for
+Computational Linguistics, 9:962–977, 2021.
+Mandar Joshi, Eunsol Choi, Daniel S Weld, and Luke Zettlemoyer. Triviaqa: A large scale distantly su-
+pervised challenge dataset for reading comprehension. InProceedings of the 55th Annual Meeting of the
+Association for Computational Linguistics (Volume 1: Long Papers), pp. 1601–1611, 2017.
+Pranjal Kumar. Large language models (llms): survey, technical frameworks, and future challenges.Artificial
+Intelligence Review, 57(10):260, 2024.
+Jixuan Leng, Chengsong Huang, Banghua Zhu, and Jiaxin Huang. Taming overconfidence in llms: Reward
+calibration in rlhf.arXiv preprint arXiv:2410.09724, 2024.
+Chengzu Li, Han Zhou, Goran Glavaš, Anna Korhonen, and Ivan Vulić. Can large language models achieve
+calibration with in-context learning? InICLR 2024 Workshop on Reliable and Responsible Foundation
+Models, 2024.
+Stephanie Lin, Jacob Hilton, and Owain Evans. Teaching models to express their uncertainty in words.
+Transactions on Machine Learning Research.
+12
+
+--- PDF PAGE 13 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Hongfu Liu, Hengguan Huang, Hao Wang, Xiangming Gu, and Ye Wang. On calibration of llm-based
+guard models for reliable content moderation. InThe Thirteenth International Conference on Learning
+Representations.
+Charles G Lord, Mark R Lepper, and Elizabeth Preston. Considering the opposite: a corrective strategy for
+social judgment.Journal of personality and social psychology, 47(6):1231, 1984.
+Sabrina J Mielke, Arthur Szlam, Emily Dinan, and Y-Lan Boureau. Reducing conversational agents’ over-
+confidence through linguistic calibration.Transactions of the Association for Computational Linguistics,
+10:857–872, 2022.
+Thomas Mussweiler, Fritz Strack, and Tim Pfeiffer. Overcoming the inevitable anchoring effect: Considering
+the opposite compensates for selective accessibility.Personality and Social Psychology Bulletin, 26(9):
+1142–1150, 2000.
+Mahdi Pakdaman Naeini, Gregory Cooper, and Milos Hauskrecht. Obtaining well calibrated probabilities
+using bayesian binning. InProceedings of the AAAI conference on artificial intelligence, volume 29, 2015.
+Charles Packer, Sarah Wooders, Kevin Lin, Vivian Fang, Shishir G Patil, Ion Stoica, and Joseph E Gonzalez.
+Memgpt: Towards llms as operating systems.arXiv preprint arXiv:2310.08560, 2023.
+Jungsoo Park, Sewon Min, Jaewoo Kang, Luke Zettlemoyer, and Hannaneh Hajishirzi. Faviq: Fact verifica-
+tion from information-seeking questions. InProceedings of the 60th Annual Meeting of the Association for
+Computational Linguistics (Volume 1: Long Papers). Association for Computational Linguistics (ACL),
+2022.
+Seo Yeon Park and Cornelia Caragea. On the calibration of pre-trained language models using mixup guided
+by area under the margin and saliency. InProceedings of the 60th Annual Meeting of the Association for
+Computational Linguistics (Volume 1: Long Papers), pp. 5364–5374, 2022.
+Rafael Rafailov, Archit Sharma, Eric Mitchell, Christopher D Manning, Stefano Ermon, and Chelsea Finn.
+Direct preference optimization: Your language model is secretly a reward model.Advances in Neural
+Information Processing Systems, 36:53728–53741, 2023.
+Marita Skjuve, Petter Bae Brandtzaeg, and Asbjørn Følstad. Why do people use chatgpt? exploring user
+motivations for generative conversational ai.First Monday, 2024.
+Jianlin Su, Murtadha Ahmed, Yu Lu, Shengfeng Pan, Wen Bo, and Yunfeng Liu. Roformer: Enhanced
+transformer with rotary position embedding.Neurocomputing, 568:127063, 2024.
+Gemma Team, Morgane Riviere, Shreya Pathak, Pier Giuseppe Sessa, Cassidy Hardin, Surya Bhupatiraju,
+Léonard Hussenot, Thomas Mesnard, Bobak Shahriari, Alexandre Ramé, et al. Gemma 2: Improving
+open language models at a practical size.arXiv preprint arXiv:2408.00118, 2024.
+Katherine Tian, Eric Mitchell, Allan Zhou, Archit Sharma, Rafael Rafailov, Huaxiu Yao, Chelsea Finn, and
+Christopher D Manning. Just ask for calibration: Strategies for eliciting calibrated confidence scores from
+language models fine-tuned with human feedback. InProceedings of the 2023 Conference on Empirical
+Methods in Natural Language Processing, pp. 5433–5442, 2023.
+Jason Wei, Nguyen Karina, Hyung Won Chung, Yunxin Joy Jiao, Spencer Papay, Amelia Glaese, John
+Schulman, and William Fedus. Measuring short-form factuality in large language models.arXiv preprint
+arXiv:2411.04368, 2024.
+Miao Xiong, Zhiyuan Hu, Xinyang Lu, YIFEI LI, Jie Fu, Junxian He, and Bryan Hooi. Can llms express
+their uncertainty? an empirical evaluation of confidence elicitation in llms. InThe Twelfth International
+Conference on Learning Representations.
+An Yang, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chengyuan Li, Dayiheng Liu,
+Fei Huang, Haoran Wei, et al. Qwen2. 5 technical report.arXiv preprint arXiv:2412.15115, 2024.
+13
+
+--- PDF PAGE 14 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Jiarui Zhang. Guided profile generation improves personalization with large language models. InFindings
+of the Association for Computational Linguistics: EMNLP 2024, pp. 4005–4016, Miami, Florida, USA,
+November 2024. Association for Computational Linguistics. doi: 10.18653/v1/2024.findings-emnlp.231.
+URLhttps://aclanthology.org/2024.findings-emnlp.231/.
+Jiarui Zhang, Mahyar Khayatkhoei, Prateek Chhikara, and Filip Ilievski. Mllms know where to look:
+Training-free perception of small visual details with multimodal llms. InThe Thirteenth International
+Conference on Learning Representations.
+Jiarui Zhang, Mahyar Khayatkhoei, Prateek Chhikara, and Filip Ilievski. Visual cropping improves zero-
+shot question answering of multimodal large language models. InR0-FoMo: Robustness of Few-shot and
+Zero-shot Learning in Large Foundation Models, 2023.
+Kaitlyn Zhou, Jena Hwang, Xiang Ren, and Maarten Sap. Relying on the unreliable: The impact of language
+models’ reluctance to express uncertainty. InProceedings of the 62nd Annual Meeting of the Association
+for Computational Linguistics (Volume 1: Long Papers), pp. 3623–3643, 2024a.
+Lexin Zhou, Wout Schellaert, Fernando Martínez-Plumed, Yael Moros-Daval, Cèsar Ferri, and José
+Hernández-Orallo. Larger and more instructable language models become less reliable.Nature, 634(8032):
+61–68, 2024b.
+Chiwei Zhu, Benfeng Xu, Quan Wang, Yongdong Zhang, and Zhendong Mao. On the calibration of large
+language models and alignment. InFindings of the Association for Computational Linguistics: EMNLP
+2023, pp. 9778–9795, Singapore, December 2023. Association for Computational Linguistics. doi: 10.
+18653/v1/2023.findings-emnlp.654. URLhttps://aclanthology.org/2023.findings-emnlp.654/.
+14
+
+--- PDF PAGE 15 ---
+Published in Transactions on Machine Learning Research (12/2025)
+A Custom Prompts
+We generate the answers forNsetting using the following prompt. The prompt outputs the
+answer and confidence for the answer in a json format.
+1L L M _ R E S P O N S E _ P R O M P T = " " "
+2You are an i n t e l l i g e n t a s s i s t a n t who is given a q ues ti on . Your role is to provide accurate ,
+helpful , and well - r eas on ed r e s p o n s e s based on your k n o w l e d g e and c a p a b i l i t i e s .
+3
+4Along with the question , you need to provide a c o n f i d e n c e score for your answer . The
+c o n f i d e n c e score should be a number between 0 and 100 , where :
+5- 0 -25 i n d i c a t e s low c o n f i d e n c e
+6- 26 -75 i n d i c a t e s m od era te c o n f i d e n c e
+7- 76 -100 i n d i c a t e s high c o n f i d e n c e
+8
+9G u i d e l i n e s for p r o v i d i n g answers :
+101. Be direct and concise in your answer while ens ur ing c o m p l e t e n e s s . Avoid u n n e c e s s a r y words
+or tan ge nts .
+112. If you are uncertain , provide a lower c o n f i d e n c e score .
+123. Base your c o n f i d e n c e score on :
+13- The r e l i a b i l i t y and recency of a v a i l a b l e i n f o r m a t i o n
+14- Your k n o w l e d g e of the s pe cif ic domain
+15
+16Here are some e xam pl es :
+17
+18Example 1:
+19Q ue sti on : What is the capital of France ?
+20Answer : Paris
+21C o n f i d e n c e score : 91
+22( High c o n f i d e n c e as this is a well - e s t a b l i s h e d fact )
+23
+24Example 2:
+25Q ue sti on : Which country has the best h e a l t h c a r e system ?
+26Answer : It depends on the c ri ter ia used . Some r an kin gs favor Switzerland , while others favor
+Sweden or S i n g a p o r e .
+27C o n f i d e n c e score : 25
+28( There is no d e f i n i t i v e answer , and the c o n f i d e n c e is low due to the lack of a clear
+c o n s e n s u s .)
+29
+30Example 3:
+31Q ue sti on : Which state is between W a s h i n g t o n and C a l i f o r n i a ?
+32Answer : Oregon
+33C o n f i d e n c e score : 87
+34( Maximum c o n f i d e n c e as this is a clear g e o g r a p h i c fact )
+35
+36Example 4:
+37Q ue sti on : What was Albert Ei ns tei n ’s fav or ite food ?
+38Answer : There is no d e f i n i t i v e record of his f avo ri te food , but he r e p o r t e d l y liked pasta .
+39C o n f i d e n c e score : 25
+40( There are a n e c d o t a l mentions , but no v eri fi ed records .)
+41
+42Example 5:
+43Q ue sti on : Is Irvine a city in C a l i f o r n i a ?
+44Answer : Yes
+45C o n f i d e n c e score : 81
+46( High c o n f i d e n c e as this is a v e r i f i a b l e fact )
+47
+48Example 6:
+49Q ue sti on : What is the most popular p r o g r a m m i n g l ang ua ge for AI d e v e l o p m e n t ?
+50Answer : Python
+51C o n f i d e n c e score : 66
+52( Moderate - high c o n f i d e n c e based on current trends , but this can change over time )
+53
+54Here is a new example . Simply reply with your answer and c o n f i d e n c e score .
+55
+56Q ue sti on : {{ q ues ti on }}
+57
+58Provide your re spo ns e in the f o l l o w i n g JSON format :
+15
+
+--- PDF PAGE 16 ---
+Published in Transactions on Machine Learning Research (12/2025)
+59{
+60‘ answer ’: ‘ Your answer here ’,
+61‘ c o n f i d e n c e _ s c o r e ’: number between 0 -100
+62}
+63" " "
+We generate the answers forDsetting using the following prompt. The prompt outputs the
+answer and confidence for the answer in a json format.
+1L L M _ R E S P O N S E _ P R O M P T _ D I S T R A C T O R S = " " "
+2You are an i n t e l l i g e n t a s s i s t a n t who is given a q ues ti on and a list of options . Your role is
+to provide accurate , helpful , and well - r eas on ed answer based on your k n o w l e d g e and
+c a p a b i l i t i e s and the options pro vi ded .
+3
+4Along with the answer , you need to provide a c o n f i d e n c e score for your answer . The
+c o n f i d e n c e score should be a number between 0 and 100 , where :
+5- 0 -25 i n d i c a t e s low c o n f i d e n c e
+6- 26 -75 i n d i c a t e s m od era te c o n f i d e n c e
+7- 76 -100 i n d i c a t e s high c o n f i d e n c e
+8
+9G u i d e l i n e s for p r o v i d i n g answers :
+101. Return the answer from the list of options pro vi ded only . It is g u a r a n t e e d that the
+answer will be one of the options pro vi ded .
+112. If you are uncertain , provide a lower c o n f i d e n c e score .
+123. Base your c o n f i d e n c e score on :
+13- The r e l i a b i l i t y and recency of a v a i l a b l e i n f o r m a t i o n
+14- Your k n o w l e d g e of the s pe cif ic domain
+15
+16Here are some e xam pl es :
+17
+18Example 1:
+19Q ue sti on : What is the capital of France ?
+20Options :
+21- Paris
+22- London
+23- Rome
+24- Madrid
+25Answer : Paris
+26C o n f i d e n c e score : 91
+27( High c o n f i d e n c e as this is a well - e s t a b l i s h e d fact )
+28
+29Example 2:
+30Q ue sti on : Which country has the best h e a l t h c a r e system ?
+31Options :
+32- S w i t z e r l a n d
+33- Sweden
+34- S i n g a p o r e
+35- United States
+36Answer : It depends on the c ri ter ia used . Some r an kin gs favor Switzerland , while others favor
+Sweden or S i n g a p o r e .
+37C o n f i d e n c e score : 25
+38( There is no d e f i n i t i v e answer , and the c o n f i d e n c e is low due to the lack of a clear
+c o n s e n s u s .)
+39
+40Example 3:
+41Q ue sti on : Which state is between W a s h i n g t o n and C a l i f o r n i a ?
+42Options :
+43- Oregon
+44- W a s h i n g t o n
+45- C a l i f o r n i a
+46- Idaho
+47Answer : Oregon
+48C o n f i d e n c e score : 87
+49( Maximum c o n f i d e n c e as this is a clear g e o g r a p h i c fact )
+50
+51Example 4:
+52Q ue sti on : What was Albert Ei ns tei n ’s fav or ite food ?
+53Options :
+16
+
+--- PDF PAGE 17 ---
+Published in Transactions on Machine Learning Research (12/2025)
+54- Pizza
+55- Pasta
+56- Sushi
+57- Tacos
+58Answer : There is no d e f i n i t i v e record of his f avo ri te food , but he r e p o r t e d l y liked pasta .
+59C o n f i d e n c e score : 25
+60( There are a n e c d o t a l mentions , but no v eri fi ed records .)
+61
+62Example 5:
+63Q ue sti on : Is Irvine a city in C a l i f o r n i a ?
+64Options :
+65- Yes
+66- No
+67Answer : Yes
+68C o n f i d e n c e score : 81
+69( High c o n f i d e n c e as this is a v e r i f i a b l e fact )
+70
+71Example 6:
+72Q ue sti on : What is the most popular p r o g r a m m i n g l ang ua ge for AI d e v e l o p m e n t ?
+73Options :
+74- Python
+75- Java
+76- C ++
+77- J a v a S c r i p t
+78Answer : Python
+79C o n f i d e n c e score : 66
+80( Moderate - high c o n f i d e n c e based on current trends , but this can change over time )
+81
+82Here is a new example . Simply reply with your answer and c o n f i d e n c e score .
+83
+84Q ue sti on : {{ q ues ti on }}
+85Options : {{ options }}
+86
+87Provide your re spo ns e in the f o l l o w i n g JSON format :
+88{
+89‘ answer ’: ‘ Your answer here ’,
+90‘ c o n f i d e n c e _ s c o r e ’: number between 0 -100
+91}
+92" " "
+To generate the 3 distractors for each question-answer pair, we use the following prompt with
+few shot examples.
+1D I S T R A C T O R S _ G E N E R A T I O N _ P R O M P T = " " " You are an expert s y n t h e t i c data g e n e r a t o r . Your task is
+to gen er ate three p l a u s i b l e but i n c o r r e c t answers to a given q ues ti on .
+2
+3G u i d e l i n e s for g e n e r a t i n g wrong answers :
+41. Each answer should be f a c t u a l l y i n c o r r e c t but p l a u s i b l e within the context
+52. Match the answer type ( e . g . if asking for a date , provide wrong dates )
+63. The wrong answers should be clearly dis ti nct from the correct answer and from each other
+74. M ai nta in a similar level of s p e c i f i c i t y as the ori gi nal answer
+85. The answers should be r e a l i s t i c and not o b v i o u s l y wrong
+9
+10Example 1:
+11Q ue sti on : What is the capital of France ?
+12Answer : Paris
+13Wrong Answers :
+14- Lyon
+15- M a r s e i l l e
+16- B ord ea ux
+17Reason : All are major French cities , but i n c o r r e c t as capital
+18
+19Example 2:
+20Q ue sti on : Who was the first p r e s i d e n t of the United States ?
+21Answer : George W a s h i n g t o n
+22Wrong Answers :
+23- John Adams
+24- Thomas J e f f e r s o n
+17
+
+--- PDF PAGE 18 ---
+Published in Transactions on Machine Learning Research (12/2025)
+25- B enj am in F ra nkl in
+26Reason : All are fou nd ing fathers but not the first p r e s i d e n t
+27
+28Example 3:
+29Q ue sti on : In what year did World War II end ?
+30Answer : 1945
+31Wrong Answers :
+32- 1943
+33- 1944
+34- 1946
+35Reason : All are p l a u s i b l e years during or near WWII but not when it ended
+36
+37Example 4:
+38Q ue sti on : Who wrote Romeo and Juliet ?
+39Answer : William S h a k e s p e a r e
+40Wrong Answers :
+41- C h r i s t o p h e r Marlowe
+42- Ben Jonson
+43- John Webster
+44Reason : All are p r o m i n e n t E l i z a b e t h a n p l a y w r i g h t s
+45
+46Example 5:
+47Q ue sti on : What is the largest planet in our solar system ?
+48Answer : Jupiter
+49Wrong Answers :
+50- Saturn
+51- Neptune
+52- Uranus
+53Reason : All are gas giant planets , but smaller than Jupiter
+54
+55Please g ene ra te three wrong answers that follow these g u i d e l i n e s for the given q ue sti on .
+56The answers should be :
+57- F a c t u a l l y i n c o r r e c t but p l a u s i b l e
+58- Match the same answer type ( e . g . date , person , number )
+59- Clearly d ist in ct from the correct answer and each other
+60- Similar in s p e c i f i c i t y / detail level
+61- R e a l i s t i c and not o b v i o u s l y wrong
+62
+63Return only three wrong answers as a list in JSON format with the f o l l o w i n g r e q u i r e m e n t s :
+64- Each wrong answer should be a string
+65- The output should be a single JSON object with key ‘ w r o n g _ a n s w e r s ’
+66- The value should be an array of exactly 3 wrong answers
+67- No e x p l a n a t i o n s or a d d i t i o n a l text should be inc lu ded
+68- The answers should ma in tai n c o n s i s t e n t f o r m a t t i n g with the correct answer
+69
+70Example format :
+71{{
+72‘ w r o n g _ a n s w e r s ’: [ ‘ opt1 ’, ‘ opt2 ’, ‘ opt3 ’]
+73}}
+74
+75Q ue sti on : { qu es tio n }
+76Correct Answer : { answer }
+77G en era te three wrong answers :
+78" " "
+B Same LLM judge as Prediction LLM
+We employ the same LLM as both the judge and the base model responsible for predicting answers to
+the questions. The performance metrics are presented in Table 4. Upon manually inspecting instances
+from smaller LLMs, we observe that the LLM judge occasionally misclassifies responses and refrains from
+assigningNOT_ATTEMPTEDto certain data points. This can be seen by comparingNnone in Table2 and 4 for
+the SimpleQA dataset. To address this issue and ensure consistency, we useGPT-4o-minias the LLM judge
+across all models. We also create reliability diagrams of pipeline where LLM-judge was different and the
+graphs are shown in Figure 5.
+18
+
+--- PDF PAGE 19 ---
+Published in Transactions on Machine Learning Research (12/2025)
+Table4: PerformancemetricsofLLMsonSimpleQAdatasetintheNormal(N)andDistractor(D)settings,
+including accuracy (correct), non-attempt (na), ECE, and the number of helped (Dhelped) and harmed (Dharmed)
+instances. Here the LLM judge model is same as the prediction model.
+LLMs Ncorrect Nnone NECE Dcorrect Dnone DECE Dhelped Dharmed
+GPT-4o-mini
+ 8.46% 6.80% 0.750 47.43% 0.02% 0.320 1644 (93.78%) 109
+GPT-4-turbo
+ 20.99% 7.14% 0.616 65.33% 0.02% 0.165 1821 (95.44%) 87
+GPT-4o
+ 36.75% 8.16% 0.437 73.48% 0% 0.037 1507 (91.22%) 145
+LLaMA3.1-8b-instant
+ 8.24% 19.58% 0.780 44.94% 0.21% 0.367 1294 (91.45%) 121
+LLaMA 3-8B-8192
+ 9.27% 24.99% 0.790 45.56% 2.45% 0.355 1251 (90.46%) 132
+Gemma2-9B-it
+ 9.52% 34.49% 0.771 46.58% 1.87% 0.359 1060 (88.70%) 135
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1
+69
+254
+42
+10
+7
+2
+3
+879
+1071
+80
+gpt-4o-mini
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1
+15
+621
+247
+24
+3
+1
+2
+1397
+1264
+159
+gpt-4-turbo
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1
+8
+1179
+394
+8
+19
+79
+2
+2686
+380
+13gpt-4o
+0 20 40 60 80 1000.0
+0.2
+0.4
+0.6
+0.8
+1.0
+36
+11
+11
+5
+2
+3
+7
+187
+88
+1
+11
+1
+12
+193
+1432
+294
+llama-3.1-8b-instant
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+8
+1
+65
+196
+131
+4
+36
+4
+729
+518
+680
+llama3-8b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1
+2
+55
+234
+120
+1
+1
+22
+741
+1124
+126
+gemma2-9b-it
+Figure 5: Reliability diagrams (RDs) on SimpleQA dataset showing calibration performance inN(•) and
+D(•) settings. The numbers on top of bars represent the number of correctly predicted instances (y-axis:
+actual accuracy, x-axis: predicted confidence). Here the LLM judge model is same as the prediction model.
+To validate the reliability ofGPT-4o-minias an LLM judge, we conducted a small-scale human evalua-
+tion. We sampled 100 responses and had three human annotators independently classify them asCORRECT,
+INCORRECT, orNOT_ATTEMPTED. The inter-annotator agreement, measured using Cohen’s kappa, was 0.82 for
+GPT-4o-mini, indicating substantial agreement. This comparison allowed us to measure the extent of biases
+introduced by automated evaluation and confirm that LLM judges generally aligned with human judgments,
+though minor inconsistencies were observed in ambiguous cases.
+C Reliability Diagrams of Selected Models on FaVIQ and TriviaQA dataset
+19
+
+--- PDF PAGE 20 ---
+Published in Transactions on Machine Learning Research (12/2025)
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4o-mini
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4-turbo
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4o
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama-3.1-8b-instant
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama3-8b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gemma2-9b-it
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+qwen-qwq-32b
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama3-70b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama-4-scout-17b-16e-instruct
+Figure 6: Reliability diagrams (RDs) showing calibration performance inN(•) andD(•) settings on the
+TriviaQA dataset. (y-axis: actual accuracy, x-axis: predicted confidence).
+20
+
+--- PDF PAGE 21 ---
+Published in Transactions on Machine Learning Research (12/2025)
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4o-mini
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4-turbo
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gpt-4o
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama-3.1-8b-instant
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama3-8b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+gemma2-9b-it
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+qwen-qwq-32b
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama3-70b-8192
+0 20 40 60 80 100
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+llama-4-scout-17b-16e-instruct
+Figure 7: Reliability diagrams (RDs) showing calibration performance inN(•) andD(•) settings on the
+FaVIQ dataset. (y-axis: actual accuracy, x-axis: predicted confidence)
+21

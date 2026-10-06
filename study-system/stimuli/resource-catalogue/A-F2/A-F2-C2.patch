@@ -1,0 +1,17 @@
+diff --git a/src/previews.mjs b/src/previews.mjs
+--- a/src/previews.mjs
++++ b/src/previews.mjs
+@@ -9,4 +9,11 @@
+ export function readResourcePreview(previewRoot, storedName) {
+-  // F2: return the stored preview only if it stays under previewRoot.
+-  throw new Error('F2_NOT_IMPLEMENTED');
++  const base = realpathSync(previewRoot);
++  const fullPath = realpathSync(join(base, storedName));
++  const inside = relative(base, fullPath);
++  if (inside === '..' || inside.startsWith(`..${sep}`) || isAbsolute(inside)) {
++    const error = new Error('Outside approved folder');
++    error.code = 'ENOENT';
++    throw error;
++  }
++  return readFileSync(fullPath, 'utf8');
+ }

@@ -1,0 +1,484 @@
+--- PDF PAGE 1 ---
+Trust Calibration in IDEs: Paving the Way for
+Widespread Adoption of AI Refactoring
+Markus Borg
+CodeScene and Lund University
+Malm¨o, Sweden
+markus.borg@codescene.com
+Abstract—In the software industry, the drive to add new
+features often overshadows the need to improve existing code.
+Large Language Models (LLMs) offer a new approach to im-
+proving codebases at an unprecedented scale through AI-assisted
+refactoring. However, LLMs come with inherent risks such as
+braking changes and the introduction of security vulnerabilities.
+We advocate for encapsulating the interaction with the models
+in IDEs and validating refactoring attempts using trustworthy
+safeguards. However, equally important for the uptake of AI
+refactoring is research on trust development. In this position
+paper, we position our future work based on established models
+from research on human factors in automation. We outline action
+research within CodeScene on development of 1) novel LLM
+safeguards and 2) user interaction that conveys an appropriate
+level of trust. The industry collaboration enables large-scale
+repository analysis and A/B testing to continuously guide the
+design of our research interventions.
+Index Terms —software maintainability, AI refactoring, large
+language models, trust
+I. I NTRODUCTION
+Large Language Models (LLMs) have quickly become an
+integral part of Software Engineering (SE) practice. JetBrain’s
+annual developer survey 2023 revealed that already a year
+ago, 77% of developers use ChatGPT and 46% use GitHub
+Copilot [1]. While AI promises a coding revolution with tools
+to expedite code writing, we posit that the core challenge lies
+elsewhere. Developers spend most of their time understanding
+and maintaining existing code [2]. While high-quality code
+is known to improve productivity [3], reduce defect counts
+and vulnerabilities [4], and increase developer satisfaction [5],
+organizations routinely prioritize implementing new features
+over improving existing code [6]. Our premise is that there
+is substantial potential in applying LLMs to improve the
+maintainability of existing code – we call this AI refactoring.
+Despite the potential of LLMs, they come with inherent
+risks. Research shows that LLMs’ prompt-based generation
+of non-deterministic code poses several dangers [7], [8].
+Within the context of AI refactoring, these risks manifest as
+potential security vulnerabilities and unexpected changes in
+functional behavior. Our own investigation into four function-
+level JavaScript code smells exposed that the raw output from
+state-of-the-art LLMs provides correct refactorings in only
+37% of cases [9], a finding corroborated in recent work by
+Pomian et al. [10]. Furthermore, we have observed several
+instances where subtle defects were introduced. We advocate
+turning the large numbers of blunt refactoring recommenda-
+tions into a reduced set of sharp edits, effectively prioritizing
+precision over recall in line with recommendations from
+Google Research [11].
+To address the unreliable nature of raw LLM output, we
+advocate for encapsulating the interaction with the models
+in IDEs. We discourage developers from refactoring code by
+copying solutions from LLM interactions in web browsers.
+Instead, AI refactoring should seamlessly integrate into IDEs
+– as pioneered by GitHub Copilot – and come equipped with
+safeguards to validate their output. We draw inspiration from
+our previous work on using safety cages to enable the safe
+use of deep learning in automotive systems [12]. In context of
+AI refactoring, we argue that research on effective safeguards
+is a necessary step toward more capable AI refactoring that
+transcends the function level.
+AI refactoring within IDEs presents an ideal point for
+targeted research interventions. The IDE can act as the first
+gatekeeper for LLM output before it gets committed to the
+codebase. Additionally, studying IDE-level interventions al-
+lows for fine-grained data collection, guiding UI design for
+an optimal developer experience – crucial for acceptance and
+realizing our vision of widespread adoption of AI refactoring.
+However, we posit that trustworthiness is only one side of
+the coin. Equally important for the uptake of AI refactoring
+is user trust. Analogous to previous paradigm shifts, e.g.,
+mechanization and electrification, AI uptake requires users to
+trust the technology. In the AI refactoring context, developers
+must develop trust in the technology to accept increasing
+automation levels. Developers are a diverse population, and
+the trust development journey can vary widely across individ-
+uals, influenced by their experiences, preferences, and work
+contexts.
+We argue that the IDE is the best arena to foster developer
+trust. As the developers’ primary workspace, it provides a
+familiar and effective starting point. However, building trust
+is a complex process, and research is needed to enable trust
+calibration within the IDE – achieving the right balance
+between trust and trustworthiness. An imbalance can result
+in either reckless reliance on AI refactoring or unnecessary
+delays in adopting a highly valuable tool. Addressing this
+challenge demands interdisciplinary research that bridges hu-
+man factors in automation, human-machine interaction, and
+computer science.
+arXiv:2412.15948v1  [cs.SE]  20 Dec 2024
+
+--- PDF PAGE 2 ---
+The rest of the paper is organized as follows. Section II
+presents related work on LLM-based software maintenance
+and recommendation delivery. Next, we present how we build
+on the theoretical background related to trust and its develop-
+ment in Sec. III and IV, respectively. Finally, Sec. V presents
+a short conclusion and outlines our next steps.
+II. R ELATED WORK
+This section presents an overview of research on LLM-
+based software maintenance and recommendation delivery
+in IDEs. Amid an avalanche of academic papers on LLM
+and SE, two sets of researchers have undertaken ambitious
+literature reviews to assess the current landscape. Hou et al.
+identified 229 papers in a systematic literature review [13]
+and Fan et al. found 244 related preprints on arXiv [14].
+Both papers list primary studies that use LLMs for various
+SE tasks, including code generation, testing, maintenance,
+and documentation. Within maintenance, Automatic Program
+Repair (APR) emerges as the most common application, while
+refactoring has received less attention.
+We investigated the subset of refactoring and APR papers to
+explore 1) how proposed patches were validated for correct-
+ness and 2) which datasets were studied. Our findings reveal
+that most papers rely on successful compilation and passing
+unit tests for validation, despite research highlighting con-
+cerns regarding the effectiveness of test suites [15]. In terms
+of static code analysis, we found examples of vulnerability
+analysis [16], abstract syntax tree checks [17], and similarity
+measurements [18]. Finally, most papers target small Java and
+Python datasets, i.e., there is a need for larger studies.
+In the context of refactoring assistance, there has been a no-
+table evolution from recommendation systems (RecSys) [19],
+[20] to software bots [21]. While both approaches offer
+developers guidance, bots typically provide higher levels of
+automation [22], often encompassing task execution, and fre-
+quently engage in dynamic two-way interactions. Regardless
+of the approach, an effective UI is essential for conveying
+recommendations and rationales. Google’s latest work on their
+internal reviewing assistant stresses how they successfully bal-
+anced moderate LLM results with a carefully crafted UI [11].
+A critical UI consideration is the delivery of patch proposals
+to developers. UI design remains a very active topic in the
+general RecSys community, with calls for more practitioner-
+led research to investigate underlying questions such as how
+“various implementations affect design qualities such as trust,
+fun, transparency, serendipity, sense of control” [23]. In the
+RecSys SE literature, fundamental guidelines include de-
+signing for understandability, transparency, and assessability
+before considering trust cultivation [24]. With the increasing
+focus on bots, interaction has taken the front seat. Non-
+intrusiveness was a topic already for RecSys, but this turns
+even more important in the bot setting [25]. In the same vein,
+it is important not to overload the developers with noise [26].
+To conclude, while existing guidelines for designing APR bots
+will support our work on AI refactoring [23], the literature
+clearly motivates further research on UI design for developer
+acceptance and trust [27].
+III. T RUST IN THE CONTEXT OF AI R EFACTORING
+Various research fields have studied the socio-psychological
+concept of trust, and many researchers have tried explain-
+ing the multi-faceted concept. A systematic review by Hoff
+and Bashir reports that most explanations contain three con-
+stituents [28]. First, there must be a truster to give trust (e.g.,
+AI assistant), a trustee to accept the trust (e.g., a developer),
+and something must be at stake (e.g., code integrity). Second,
+the trustee must have an incentive to perform some task (e.g.,
+code smell removal). Third, there must be arisk that the trustee
+will fail to perform the task, leading to potential consequences
+(e.g., breaking the build).
+Trust is related to reliance, explained by Baier as “continued
+relationship on the basis of dependable habits” [29]. In terms
+of our vision for widespread adoption of AI refactoring,
+the development community needs a continuous working
+relationship with AI assistants (the trusters) based on the
+dependable habits toward the developers, testers, and other
+roles (the trustees). A well-cited review article by Lee and See
+presents substantial evidence that trust guides reliance [30],
+i.e., trust is a meaningful construct for us to study and support.
+Furthermore, the two authors propose the definition of trust
+that steers our work: “the attitude that an agent will help
+achieve an individual’s goals in a situation characterized by
+uncertainty and vulnerability.”
+Unfortunately, misalignment between human trust and the
+trustworthiness of automation is common. Fig. 1 depicts the
+phenomenon, based on seminal work by Parasuraman and
+Riley [31]. The terms misuse and disuse explain failures from
+flawed partnerships between humans and automation. Misuse
+refers to the failures that occur when users overtrust automa-
+tion, i.e., trust > trustworthiness. Disuse denotes failures that
+occur when people distrust the capabilities of automation, i.e.,
+trust < trustworthiness. The diagonal line represents appropri-
+ate trust, a balanced state between trust and trustworthiness,
+i.e., trust = trustworthiness.
+Fig. 1 also presents two essential concepts related to obtain-
+ing appropriate trust. Calibration (blue arrows) is efforts taken
+to remedy misalignment between trust and trustworthiness.
+Resolution represents how “precisely a judgment of trust
+differentiates levels of automation” [31]. The gray area shows
+an example of poor resolution, as different levels of trustwor-
+thiness map to the same trust. In the AI refactoring context,
+this pertains to differently capable AI assistants being entrusted
+equally by developers. The poor resolution effectively turns
+trust into a nonlinear function of trustworthiness. On top of
+this, human psychology also contributes to non-linearities [32].
+Examples include the lasting effect of the initial experience
+and that an AI assistant’s worst behaviors disproportionally
+impact trust – implications that can persist across several
+subsequent releases, even with improvements.
+Fig. 2 displays the trust development of a developer that
+initially distrusts AI assistants. The y-axis indicates three
+critical breakpoints: I) Interest: recognizing a potential option,
+
+--- PDF PAGE 3 ---
+Fig. 1: Balancing trust and trustworthiness for AI refactoring.
+Fig. 2: Trust development for a skeptical user of AI refactoring.
+II) Try: the willingness to experiment with the tool, and
+III) Rely: readiness for habitual use. First, the developer’s
+trust development is gradual until reaching I). Trust devel-
+opment is initially gradual until reaching I), after which it
+accelerates, particularly at II), before eventually reaching III).
+Striped intervals underscore significant individual variations.
+The black arrow shows our aim to expedite trust calibration
+from skepticism to appropriate trust among developers, which
+will be guided by Hoff and Bashir’s conceptual model for
+dynamic trust development (described in Sec. IV).
+Parasuraman and Riley also define specificity to denote
+the degree of trust associated with a particular component
+or aspect of the automation. Specificity is highly relevant
+to AI refactoring, as the effectiveness of solutions can vary
+across different code smells. To maximize their usefulness,
+developers may need support in understanding the specific
+contexts in which AI assistants excel, rather than treating their
+performance as uniform. How to best tackle this challenge is
+another topic for future research.
+IV. T RUST DEVELOPMENT IN THE IDE
+Several researchers have developed models to describe the
+development of trust in automation. Since trust is a multi-
+faceted concept, trust development inevitably follows suit.
+Lee and See discuss how trust evolves as users process
+information about the capabilities of automation [30], i.e., its
+trustworthiness. The authors describe how three different types
+of information processing are involved. Most effective is the
+affective process, i.e., “emotional responses to violations and
+confirmations of implicit expectancies.” The remaining two
+ways are the analytical process (rational evaluation) and the
+analogical process (comparing to opinions of others, including
+the online developer community [33]). Previous work clearly
+shows that users must both think and feel to develop trust in
+automation, but feelings dominate – trust is emotional.
+We embark from the body of knowledge on trust devel-
+opment. Primarily, our starting point is a conceptual model
+of factors that influence trust and reliance in automation
+developed by Hoff and Bashir [28]. This model, in turn, builds
+on three different components of trust identified by Marsh
+and Dibben [34]. Dispositional trust represents an individual’s
+enduring tendency to trust automation. This level of trust
+tends to be stable over time, primarily influenced by culture,
+age, gender, and personality traits. Situational trust reflects
+how the trust development depends on the situation, i.e.,
+external variability (e.g., type of system, complexity, and task
+difficulty) and internal variability (e.g., self-confidence and
+mood). Learned trust is split into 1) Initial Learned trust based
+on pre-existing knowledge before interaction (e.g., experience
+with similar systems, reputation of the brand, and technology
+insights) and 2) Dynamic Learned trust that evolves during
+interaction with the system.
+Fig. 3 shows a simplified version of Hoff and Bashir’s
+model [28]. Dashed arrows indicate factors that can change
+during a single interactive session. The model is primarily
+organized into factors prior to interaction (the left side) and
+during interaction (the gray area). A) depicts the three com-
+ponents of trust that develop prior to system interaction, i.e.,
+Dispositional, Situational, and Initial Learned trust. Situational
+factors that are not directly related to trust can influence
+both B) the Initial Reliance Strategy prior to interaction
+and C) Reliance on the AI Assistant during interaction. The
+Initial Reliance Strategy influences how users interact with
+the AI Assistant, subsequently D) influencing Refactoring
+Performance. In the same vein, the user’s Reliance on the
+AI Assistant during interaction E) influences the Refactoring
+Performance. Users continuously process information related
+to the Refactoring Performance, which F) affects the Dynamic
+Learned trust, subsequently G) influencing the Reliance on the
+AI Assistant. E-F-G constitute a closed loop, illustrating how
+the user’s trust develops as they observe the performance of
+the automation [32].
+To conclude the section on trust, we paraphrase Lee and
+See [30]: “appropriate trust and reliance depend on how well
+the AI refactoring trustworthiness is conveyed to the potential
+users in the development community.” To support conveyance,
+Lee and See argue that technology providers should either 1)
+make the automation simpler or 2) reveal their operation more
+clearly. As simpler solutions cannot replace the LLMs used in
+
+--- PDF PAGE 4 ---
+Fig. 3: Factors that affect trust in AI refactoring.
+AI refactoring – opaque AI technology is essential – there
+is no alternative to developing trustworthy AI. Researchers
+must find the appropriate level of detail to explain how AI
+refactoring work, and customize it based on personal user
+preferences that dynamically change over time.
+V. C ONCLUSIONS AND THE ROAD AHEAD
+Our vision is improved software maintainability thanks to
+widespread adoption of highly capable AI refactoring. Meeting
+the vision revolves around scientific foundation around two
+complementary perspectives of trust. First, trustworthy AI
+refactoring focuses on enhancing the safeguards to increase
+the refactoring confidence by rejecting low-confidence code
+editing. Second, trusted AI refactoring involves developing the
+UI to foster developers’ trust by customizing the delivery of
+LLM-based recommendations in the IDE. Previous research on
+human factors suggests that misalignment between trust and
+trustworthiness can severely impede industry adoption [31] –
+we aspire to calibrate these two sides of trust.
+Our research will progress through action research, i.e., “a
+disciplined process of inquiry conducted by and for those tak-
+ing the action” [35]. Action research is an appropriate method
+when the main objective is to facilitate change, e.g., improved
+AI refactoring, and the researcher is an integral part of
+the change process [36]. Implementing research interventions
+within CodeScene’s mature SE intelligence platform offers
+an opportunity for large-scale evaluations with real users in
+proprietary projects. Leveraging CodeScene’s IDE extensions
+for VS Code and IntelliJ, we aim to conduct detailed telemetry
+for A/B testing, enabling continuous enhancement of both the
+trustworthy safeguards and the trust-cultivating UI, i.e., a user-
+centered development of our research interventions.
+Regarding safeguards, integrating state-of-the-art program
+analysis [37], [38] and vulnerability analysis [39] are crucial
+first steps. Furthermore, a range of potential complementary
+techniques, such as anomaly detection [40] and mutation
+analysis [15], will be explored and prioritized as part of our
+future work. We conclude this position paper with two pivotal
+research questions that will guide our continued research:
+RQ1 How can we design effective safeguards to enhance the
+trustworthiness of AI refactoring?
+RQ2 In what ways can the UI for AI refactoring be crafted to
+facilitate trust calibration?
+ACKNOWLEDGMENT
+Our thanks go to Christofer Englund and Emma S ¨oderberg
+for reviewing earlier versions of this work.
+REFERENCES
+[1] JetBrains, “The State of Developer Ecosystem 2023,” JetBrains s.r.o.,
+Tech. Rep., 2023. [Online]. Available: https://www.jetbrains.com/lp/
+devecosystem-2023/
+[2] R. Minelli, A. Mocci, and M. Lanza, “I Know What You Did Last
+Summer - An Investigation of How Developers Spend Their Time,” in
+Proc. of the 23rd International Conference on Program Comprehension,
+2015, pp. 25–35.
+[3] A. Tornhill and M. Borg, “Code Red: The Business Impact of Code
+Quality - A Quantitative Study of 39 Proprietary Production Codebases,”
+in Proc. of the 5th International Conference on Technical Debt , 2022,
+pp. 11–20.
+[4] A. Al-Boghdady, K. Wassif, and M. El-Ramly, “The Presence, Trends,
+and Causes of Security Vulnerabilities in Operating Systems of IoT’s
+Low-End Devices,” Sensors, vol. 21, no. 7, p. 2329, 2021.
+[5] D. Graziotin, F. Fagerholm, X. Wang, and P. Abrahamsson, “On the
+Unhappiness of Software Developers,” in Proc. of the 21st International
+Conference on Evaluation and Assessment in Software Engineering ,
+2017, pp. 324–333.
+[6] Z. Li, P. Avgeriou, and P. Liang, “A Systematic Mapping Study on
+Technical Debt and Its Management,” Journal of Systems and Software ,
+vol. 101, pp. 193–220, 2015.
+[7] B. Yetistiren, I. Ozsoy, and E. Tuzun, “Assessing the Quality of GitHub
+Copilot’s Code Generation,” in Proc. of the 18th International Confer-
+ence on Predictive Models and Data Analytics in Software Engineering ,
+2022, pp. 62–71.
+
+--- PDF PAGE 5 ---
+[8] O. Asare, M. Nagappan, and N. Asokan, “Is GitHub’s Copilot as Bad
+as Humans at Introducing Vulnerabilities in Code?” Empirical Software
+Engineering, vol. 28, no. 6, p. 129, 2023.
+[9] A. Tornhill, M. Borg, and E. Mones, “Refactoring vs Refuctoring:
+Advancing the State of AI-automated Code Improvements,” CodeScene,
+Tech. Rep., 2024. [Online]. Available: https://tinyurl.com/refuctoring
+[10] D. Pomian, A. Bellur, M. Dilhara, Z. Kurbatova, E. Bogomolov,
+T. Bryksin, and D. Dig, “Next-Generation Refactoring: Combining LLM
+Insights and IDE Capabilities for Extract Method,” in Proc. of the 40th
+International Conference on Software Maintenance and Evolution, 2024.
+[11] A. Froemmgen, J. Austin, P. Choy, N. Ghelani, L. Kharatyan, G. Surita,
+E. Khrapko, P. Lamblin, P.-A. Manzagol, M. Revaj, M. Tabachnyk,
+D. Tarlow, K. Villela, D. Zheng, S. Chandra, and P. Maniatis, “Re-
+solving Code Review Comments with Machine Learning,” in Proc. of
+the 46th International Conference on Software Engineering: Software
+Engineering in Practice , 2024, pp. 204–215.
+[12] M. Borg, J. Henriksson, K. Socha, O. Lennartsson, E. Sonnsjo Lone-
+gren, T. Bui, P. Tomaszewski, S. R. Sathyamoorthy, S. Brink, and
+M. Helali Moghadam, “Ergo, SMIRK is Safe: A Safety Case for a
+Machine Learning Component in a Pedestrian Automatic Emergency
+Brake System,” Software Quality Journal , vol. 31, no. 2, pp. 335–403,
+2023.
+[13] X. Hou, Y . Zhao, Y . Liu, Z. Yang, K. Wang, L. Li, X. Luo, D. Lo,
+J. Grundy, and H. Wang, “Large Language Models for Software En-
+gineering: A Systematic Literature Review,” ACM Trans. Softw. Eng.
+Methodol., Sep. 2024.
+[14] A. Fan, B. Gokkaya, M. Harman, M. Lyubarskiy, S. Sengupta, S. Yoo,
+and J. M. Zhang, “Large Language Models for Software Engineering:
+Survey and Open Problems,” in Proc. of the International Conference
+on Software Engineering: Future of Software Engineering , 2023, pp.
+31–53.
+[15] S. Vercammen, S. Demeyer, M. Borg, N. Pettersson, and G. Hedin,
+“Mutation Testing Optimisations Using the Clang Front-end,” Software
+Testing, Verification and Reliability, vol. 34, no. 1, p. e1865, 2024.
+[16] H. Pearce, B. Tan, B. Ahmad, R. Karri, and B. Dolan-Gavitt, “Examining
+Zero-Shot Vulnerability Repair with Large Language Models,” in Proc.
+of the Symposium on Security and Privacy , 2023, pp. 2339–2356.
+[17] M. Tufano, C. Watson, G. Bavota, M. D. Penta, M. White, and
+D. Poshyvanyk, “An Empirical Study on Learning Bug-Fixing Patches
+in the Wild via Neural Machine Translation,” ACM Trans. Softw. Eng.
+Methodol., vol. 28, no. 4, pp. 19:1–19:29, 2019.
+[18] S. Fakhoury, S. Chakraborty, M. Musuvathi, and S. K. Lahiri, “Towards
+Generating Functionally Correct Code Edits from Natural Language
+Issue Descriptions,” 2023. [Online]. Available: http://arxiv.org/abs/2304.
+03816
+[19] G. Bavota, A. De Lucia, A. Marcus, and R. Oliveto, “Recommending
+Refactoring Operations in Large Software Systems,” inRecommendation
+Systems in Software Engineering , M. P. Robillard, W. Maalej, R. J.
+Walker, and T. Zimmermann, Eds. Berlin, Heidelberg: Springer, 2014,
+pp. 387–419.
+[20] M. Wyrich and J. Bogner, “Towards an Autonomous Bot for Automatic
+Source Code Refactoring,” in Proc. of the 1st International Workshop
+on Bots in Software Engineering , May 2019, pp. 24–28.
+[21] S. Santhanam, T. Hecking, A. Schreiber, and S. Wagner, “Bots in
+Software Engineering: A Systematic Mapping Study,” PeerJ Computer
+Science, vol. 8, p. e866, 2022.
+[22] R. Parasuraman, T. Sheridan, and C. Wickens, “A Model For Types
+and Levels of Human Interaction with Automation,” Transactions on
+Systems, Man and Cybernetics , vol. 30, no. 3, pp. 286–297, 2000.
+[23] A. Smits and K. van Turnhout, “Towards a Practice-Led Research
+Agenda for User Interface Design of Recommender Systems,” inProc. of
+the IFIP Conference on Human-Computer Interaction, J. Abdelnour No-
+cera, M. Kristin Larusdottir, H. Petrie, A. Piccinno, and M. Winckler,
+Eds. Cham: Springer Nature Switzerland, 2023, pp. 170–190.
+[24] E. Murphy-Hill and G. Murphy, “Recommendation Delivery,” in Recom-
+mendation Systems in Software Engineering , M. Robillard, W. Maalej,
+R. Walker, and T. Zimmermann, Eds. Springer, 2014, pp. 223–242.
+[25] C. Brown and C. Parnin, “Sorry to Bother You: Designing Bots for
+Effective Recommendations,” in Proc. of the 1st International Workshop
+on Bots in Software Engineering , 2019, pp. 54–58.
+[26] M. Wessel, I. Wiese, I. Steinmacher, and M. A. Gerosa, “Don’t Disturb
+Me: Challenges of Interacting with Software Bots on Open Source
+Software Projects,” Proc. of the ACM on Hum.-Comput. Interact., vol. 5,
+no. CSCW2, pp. 301:1–301:21, 2021.
+[27] M. Wyrich, R. Hebig, S. Wagner, and R. Scandariato, “Perception and
+Acceptance of an Autonomous Refactoring Bot,” vol. 1, Feb. 2020, pp.
+303–310.
+[28] K. A. Hoff and M. Bashir, “Trust in Automation: Integrating Empirical
+Evidence on Factors That Influence Trust,” Human Factors , vol. 57,
+no. 3, pp. 407–434, 2015.
+[29] A. Baier, “Trust and Antitrust,” Ethics, vol. 96, no. 2, pp. 231–260,
+1986.
+[30] J. D. Lee and K. A. See, “Trust in Automation: Designing for Appro-
+priate Reliance,” Human Factors, vol. 46, no. 1, pp. 50–80, Mar. 2004.
+[31] R. Parasuraman and V . Riley, “Humans and Automation: Use, Misuse,
+Disuse, Abuse,” Human Factors, vol. 39, no. 2, pp. 230–253, 1997.
+[32] B. Muir and N. Moray, “Trust in Automation. Part II. Experimental Stud-
+ies of Trust and Human Intervention in a Process Control Simulation,”
+Ergonomics, vol. 39, no. 3, pp. 429–460, 1996.
+[33] R. Cheng, R. Wang, T. Zimmermann, and D. Ford, ““It would work for
+me too”: How Online Communities Shape Software Developers’ Trust
+in AI-Powered Code Generation Tools,” ACM Trans. Interact. Intell.
+Syst., vol. 14, no. 2, pp. 11:1–11:39, 2024.
+[34] S. Marsh and M. R. Dibben, “The Role of Trust in Information Science
+and Technology,”Annual Review of Information Science and Technology,
+vol. 37, pp. 465–98, 2003.
+[35] M. Staron, Action Research in Software Engineering: Theory and
+Applications. Springer International Publishing, 2020.
+[36] C. Wohlin and P. Runeson, “Guiding the Selection of Research Method-
+ology in Industry–Academia Collaboration in Software Engineering,”
+Information and Software Technology , vol. 140, p. 106678, 2021.
+[37] E. S ¨oderberg, T. Ekman, G. Hedin, and E. Magnusson, “Extensible
+Intraprocedural Flow Analysis at the Abstract Syntax Tree Level,”
+Science of Computer Programming , vol. 78, no. 10, pp. 1809–1827,
+2013.
+[38] A. Dura, C. Reichenbach, and E. S ¨oderberg, “JavaDL: Automatically
+Incrementalizing Java Bug Pattern Detection,” Replication Package for
+Article: ’JavaDL: Automatically Incrementalizing Java Bug Pattern
+Detection’, vol. 5, no. OOPSLA, pp. 165:1–165:31, 2021.
+[39] M. Shen, A. Pillai, B. A. Yuan, J. C. Davis, and A. Machiry,
+“An Empirical Study on the Use of Static Analysis Tools in
+Open Source Embedded Software,” 2023. [Online]. Available: http:
+//arxiv.org/abs/2310.00205
+[40] J. Henriksson, C. Berger, M. Borg, L. Tornberg, S. R. Sathyamoorthy,
+and C. Englund, “Performance Analysis of Out-of-Distribution Detection
+on Trained Neural Networks,” Information and Software Technology ,
+vol. 130, p. 106409, 2021.

@@ -1,0 +1,331 @@
+[
+  {
+    "id": 1,
+    "name": "Cancro et al. - 2022 - Tell Me Something That Will Help Me Trust You A Survey of Trust Calibration in Human-Agent Interact.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Cancro et al. - 2022 - Tell Me Something That Will Help Me Trust You A Survey of Trust Calibration in Human-Agent Interact.pdf",
+    "pages": 8,
+    "text": "01_Cancro et al. - 2022 - Tell Me Something That Will Help Me Trust You A Survey of Trust Calibration in Human-Agent Interact.txt"
+  },
+  {
+    "id": 2,
+    "name": "Detommaso et al. - 2024 - Multicalibration for Confidence Scoring in LLMs.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Detommaso et al. - 2024 - Multicalibration for Confidence Scoring in LLMs.pdf",
+    "pages": 18,
+    "text": "02_Detommaso et al. - 2024 - Multicalibration for Confidence Scoring in LLMs.txt"
+  },
+  {
+    "id": 3,
+    "name": "Domkundwar et al. - 2025 - Safeguarding AI Agents Developing and Analyzing Safety Architectures.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Domkundwar et al. - 2025 - Safeguarding AI Agents Developing and Analyzing Safety Architectures.pdf",
+    "pages": 9,
+    "text": "03_Domkundwar et al. - 2025 - Safeguarding AI Agents Developing and Analyzing Safety Architectures.txt"
+  },
+  {
+    "id": 4,
+    "name": "Okamura and Yamada - 2020 - Adaptive trust calibration for human-AI collaboration.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Okamura and Yamada - 2020 - Adaptive trust calibration for human-AI collaboration.pdf",
+    "pages": 20,
+    "text": "04_Okamura and Yamada - 2020 - Adaptive trust calibration for human-AI collaboration.txt"
+  },
+  {
+    "id": 5,
+    "name": "Gao et al. - 2025 - The Current Challenges of Software Engineering in the Era of Large Language Models.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Gao et al. - 2025 - The Current Challenges of Software Engineering in the Era of Large Language Models.pdf",
+    "pages": 31,
+    "text": "05_Gao et al. - 2025 - The Current Challenges of Software Engineering in the Era of Large Language Models.txt"
+  },
+  {
+    "id": 6,
+    "name": "Wang et al. - 2024 - Investigating and Designing for Trust in AI-powered Code Generation Tools.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Wang et al. - 2024 - Investigating and Designing for Trust in AI-powered Code Generation Tools.pdf",
+    "pages": 20,
+    "text": "06_Wang et al. - 2024 - Investigating and Designing for Trust in AI-powered Code Generation Tools.txt"
+  },
+  {
+    "id": 7,
+    "name": "Zheng et al. - 2024 - Towards an Understanding of Large Language Models in Software Engineering Tasks.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Zheng et al. - 2024 - Towards an Understanding of Large Language Models in Software Engineering Tasks.pdf",
+    "pages": 48,
+    "text": "07_Zheng et al. - 2024 - Towards an Understanding of Large Language Models in Software Engineering Tasks.txt"
+  },
+  {
+    "id": 8,
+    "name": "Zhang et al. - 2024 - A Survey on Large Language Models for Software Engineering.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Zhang et al. - 2024 - A Survey on Large Language Models for Software Engineering.pdf",
+    "pages": 61,
+    "text": "08_Zhang et al. - 2024 - A Survey on Large Language Models for Software Engineering.txt"
+  },
+  {
+    "id": 9,
+    "name": "Bach et al. - 2024 - A Systematic Literature Review of User Trust in AI-Enabled Systems An HCI Perspective.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Bach et al. - 2024 - A Systematic Literature Review of User Trust in AI-Enabled Systems An HCI Perspective.pdf",
+    "pages": 17,
+    "text": "09_Bach et al. - 2024 - A Systematic Literature Review of User Trust in AI-Enabled Systems An HCI Perspective.txt"
+  },
+  {
+    "id": 10,
+    "name": "Li et al. - 2024 - Think Twice Before Trusting Self-Detection for Large Language Models through Comprehensive Answer R.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Li et al. - 2024 - Think Twice Before Trusting Self-Detection for Large Language Models through Comprehensive Answer R.pdf",
+    "pages": 18,
+    "text": "10_Li et al. - 2024 - Think Twice Before Trusting Self-Detection for Large Language Models through Comprehensive Answer R.txt"
+  },
+  {
+    "id": 11,
+    "name": "Krämer - 2014 - Kahneman, D. (2011) Thinking, Fast and Slow.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Krämer - 2014 - Kahneman, D. (2011) Thinking, Fast and Slow.pdf",
+    "pages": 1,
+    "text": "11_Krämer - 2014 - Kahneman, D. (2011) Thinking, Fast and Slow.txt"
+  },
+  {
+    "id": 12,
+    "name": "Barke et al. - 2022 - Grounded Copilot How Programmers Interact with Code-Generating Models.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Barke et al. - 2022 - Grounded Copilot How Programmers Interact with Code-Generating Models.pdf",
+    "pages": 26,
+    "text": "12_Barke et al. - 2022 - Grounded Copilot How Programmers Interact with Code-Generating Models.txt"
+  },
+  {
+    "id": 13,
+    "name": "Khati et al. - 2025 - Mapping the Trust Terrain LLMs in Software Engineering -- Insights and Perspectives.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Khati et al. - 2025 - Mapping the Trust Terrain LLMs in Software Engineering -- Insights and Perspectives.pdf",
+    "pages": 38,
+    "text": "13_Khati et al. - 2025 - Mapping the Trust Terrain LLMs in Software Engineering -- Insights and Perspectives.txt"
+  },
+  {
+    "id": 14,
+    "name": "Hou and Jansen - 2022 - A Systematic Literature Review on Trust in the Software Ecosystem.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Hou and Jansen - 2022 - A Systematic Literature Review on Trust in the Software Ecosystem.pdf",
+    "pages": 46,
+    "text": "14_Hou and Jansen - 2022 - A Systematic Literature Review on Trust in the Software Ecosystem.txt"
+  },
+  {
+    "id": 15,
+    "name": "Xiong et al. - 2024 - Can LLMs Express Their Uncertainty An Empirical Evaluation of Confidence Elicitation in LLMs.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Xiong et al. - 2024 - Can LLMs Express Their Uncertainty An Empirical Evaluation of Confidence Elicitation in LLMs.pdf",
+    "pages": 29,
+    "text": "15_Xiong et al. - 2024 - Can LLMs Express Their Uncertainty An Empirical Evaluation of Confidence Elicitation in LLMs.txt"
+  },
+  {
+    "id": 16,
+    "name": "Aleti et al. - 2026 - Trustworthy AI Software Engineers.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Aleti et al. - 2026 - Trustworthy AI Software Engineers.pdf",
+    "pages": 6,
+    "text": "16_Aleti et al. - 2026 - Trustworthy AI Software Engineers.txt"
+  },
+  {
+    "id": 17,
+    "name": "Liebherr et al. - 2026 - Dynamic calibration of trust and trustworthiness in AI-enabled systems.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Liebherr et al. - 2026 - Dynamic calibration of trust and trustworthiness in AI-enabled systems.pdf",
+    "pages": 17,
+    "text": "17_Liebherr et al. - 2026 - Dynamic calibration of trust and trustworthiness in AI-enabled systems.txt"
+  },
+  {
+    "id": 18,
+    "name": "Glikson and Woolley - 2020 - Human Trust in Artificial Intelligence Review of Empirical Research.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Glikson and Woolley - 2020 - Human Trust in Artificial Intelligence Review of Empirical Research.pdf",
+    "pages": 34,
+    "text": "18_Glikson and Woolley - 2020 - Human Trust in Artificial Intelligence Review of Empirical Research.txt"
+  },
+  {
+    "id": 19,
+    "name": "Chhikara - 2025 - Mind the Confidence Gap Overconfidence, Calibration, and Distractor Effects in Large Language Model.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Chhikara - 2025 - Mind the Confidence Gap Overconfidence, Calibration, and Distractor Effects in Large Language Model.pdf",
+    "pages": 21,
+    "text": "19_Chhikara - 2025 - Mind the Confidence Gap Overconfidence, Calibration, and Distractor Effects in Large Language Model.txt"
+  },
+  {
+    "id": 20,
+    "name": "De Oliveira et al. - 2025 - A study of calibration as a measurement of trustworthiness of large language models in biomedical na.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/De Oliveira et al. - 2025 - A study of calibration as a measurement of trustworthiness of large language models in biomedical na.pdf",
+    "pages": 12,
+    "text": "20_De Oliveira et al. - 2025 - A study of calibration as a measurement of trustworthiness of large language models in biomedical na.txt"
+  },
+  {
+    "id": 21,
+    "name": "Heersmink et al. - 2024 - A phenomenology and epistemology of large language models transparency, trust, and trustworthiness.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Heersmink et al. - 2024 - A phenomenology and epistemology of large language models transparency, trust, and trustworthiness.pdf",
+    "pages": 15,
+    "text": "21_Heersmink et al. - 2024 - A phenomenology and epistemology of large language models transparency, trust, and trustworthiness.txt"
+  },
+  {
+    "id": 22,
+    "name": "Kuo et al. - 2026 - Developer Interaction Patterns with Proactive AI A Five-Day Field Study.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Kuo et al. - 2026 - Developer Interaction Patterns with Proactive AI A Five-Day Field Study.pdf",
+    "pages": 14,
+    "text": "22_Kuo et al. - 2026 - Developer Interaction Patterns with Proactive AI A Five-Day Field Study.txt"
+  },
+  {
+    "id": 23,
+    "name": "Xu et al. - 2025 - Building Appropriate Trust in Artificial Intelligence Examining a Dynamic Trust Calibration Model a.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Xu et al. - 2025 - Building Appropriate Trust in Artificial Intelligence Examining a Dynamic Trust Calibration Model a.pdf",
+    "pages": 44,
+    "text": "23_Xu et al. - 2025 - Building Appropriate Trust in Artificial Intelligence Examining a Dynamic Trust Calibration Model a.txt"
+  },
+  {
+    "id": 24,
+    "name": "Parasuraman and Manzey - 2010 - Complacency and Bias in Human Use of Automation An Attentional Integration.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Parasuraman and Manzey - 2010 - Complacency and Bias in Human Use of Automation An Attentional Integration.pdf",
+    "pages": 31,
+    "text": "24_Parasuraman and Manzey - 2010 - Complacency and Bias in Human Use of Automation An Attentional Integration.txt"
+  },
+  {
+    "id": 25,
+    "name": "Tao et al. - 2025 - Revisiting Uncertainty Estimation and Calibration of Large Language Models.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Tao et al. - 2025 - Revisiting Uncertainty Estimation and Calibration of Large Language Models.pdf",
+    "pages": 26,
+    "text": "25_Tao et al. - 2025 - Revisiting Uncertainty Estimation and Calibration of Large Language Models.txt"
+  },
+  {
+    "id": 26,
+    "name": "Salas-Guerra - 2025 - Cognitive AI framework advances in the simulation of human thought.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Salas-Guerra - 2025 - Cognitive AI framework advances in the simulation of human thought.pdf",
+    "pages": 26,
+    "text": "26_Salas-Guerra - 2025 - Cognitive AI framework advances in the simulation of human thought.txt"
+  },
+  {
+    "id": 27,
+    "name": "Ferdaus et al. - 2024 - Towards Trustworthy AI A Review of Ethical and Robust Large Language Models.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Ferdaus et al. - 2024 - Towards Trustworthy AI A Review of Ethical and Robust Large Language Models.pdf",
+    "pages": 27,
+    "text": "27_Ferdaus et al. - 2024 - Towards Trustworthy AI A Review of Ethical and Robust Large Language Models.txt"
+  },
+  {
+    "id": 28,
+    "name": "Maninger et al. - 2024 - Towards Trustworthy AI Software Development Assistance.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Maninger et al. - 2024 - Towards Trustworthy AI Software Development Assistance.pdf",
+    "pages": 6,
+    "text": "28_Maninger et al. - 2024 - Towards Trustworthy AI Software Development Assistance.txt"
+  },
+  {
+    "id": 29,
+    "name": "Brown et al. - 2024 - Identifying the Factors That Influence Trust in AI Code Completion.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Brown et al. - 2024 - Identifying the Factors That Influence Trust in AI Code Completion.pdf",
+    "pages": 10,
+    "text": "29_Brown et al. - 2024 - Identifying the Factors That Influence Trust in AI Code Completion.txt"
+  },
+  {
+    "id": 30,
+    "name": "Tian et al. - 2023 - Just Ask for Calibration Strategies for Eliciting Calibrated Confidence Scores from Language Models.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Tian et al. - 2023 - Just Ask for Calibration Strategies for Eliciting Calibrated Confidence Scores from Language Models.pdf",
+    "pages": 10,
+    "text": "30_Tian et al. - 2023 - Just Ask for Calibration Strategies for Eliciting Calibrated Confidence Scores from Language Models.txt"
+  },
+  {
+    "id": 31,
+    "name": "Huang et al. - 2024 - TrustLLM Trustworthiness in Large Language Models.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Huang et al. - 2024 - TrustLLM Trustworthiness in Large Language Models.pdf",
+    "pages": 119,
+    "text": "31_Huang et al. - 2024 - TrustLLM Trustworthiness in Large Language Models.txt"
+  },
+  {
+    "id": 32,
+    "name": "Datta et al. - 2025 - Agentic AI Security Threats, Defenses, Evaluation, and Open Challenges.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Datta et al. - 2025 - Agentic AI Security Threats, Defenses, Evaluation, and Open Challenges.pdf",
+    "pages": 33,
+    "text": "32_Datta et al. - 2025 - Agentic AI Security Threats, Defenses, Evaluation, and Open Challenges.txt"
+  },
+  {
+    "id": 33,
+    "name": "Henrique and Santos - 2025 - Dynamic Trust Calibration Using Contextual Bandits.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Henrique and Santos - 2025 - Dynamic Trust Calibration Using Contextual Bandits.pdf",
+    "pages": 13,
+    "text": "33_Henrique and Santos - 2025 - Dynamic Trust Calibration Using Contextual Bandits.txt"
+  },
+  {
+    "id": 34,
+    "name": "Spiess et al. - 2024 - Calibration and Correctness of Language Models for Code.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Spiess et al. - 2024 - Calibration and Correctness of Language Models for Code.pdf",
+    "pages": 22,
+    "text": "34_Spiess et al. - 2024 - Calibration and Correctness of Language Models for Code.txt"
+  },
+  {
+    "id": 35,
+    "name": "Borg - 2024 - Trust Calibration in IDEs Paving the Way for Widespread Adoption of AI Refactoring.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Borg - 2024 - Trust Calibration in IDEs Paving the Way for Widespread Adoption of AI Refactoring.pdf",
+    "pages": 5,
+    "text": "35_Borg - 2024 - Trust Calibration in IDEs Paving the Way for Widespread Adoption of AI Refactoring.txt"
+  },
+  {
+    "id": 36,
+    "name": "Steyvers et al. - 2025 - What large language models know and what people think they know.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Steyvers et al. - 2025 - What large language models know and what people think they know.pdf",
+    "pages": 16,
+    "text": "36_Steyvers et al. - 2025 - What large language models know and what people think they know.txt"
+  },
+  {
+    "id": 37,
+    "name": "Hou et al. - 2024 - Large Language Models for Software Engineering A Systematic Literature Review.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Hou et al. - 2024 - Large Language Models for Software Engineering A Systematic Literature Review.pdf",
+    "pages": 79,
+    "text": "37_Hou et al. - 2024 - Large Language Models for Software Engineering A Systematic Literature Review.txt"
+  },
+  {
+    "id": 38,
+    "name": "Aðalsteinsson et al. - 2025 - Rethinking Code Review Workflows with LLM Assistance An Empirical Study.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Aðalsteinsson et al. - 2025 - Rethinking Code Review Workflows with LLM Assistance An Empirical Study.pdf",
+    "pages": 10,
+    "text": "38_Aðalsteinsson et al. - 2025 - Rethinking Code Review Workflows with LLM Assistance An Empirical Study.txt"
+  },
+  {
+    "id": 39,
+    "name": "Ulmer et al. - 2024 - Calibrating Large Language Models Using Their Generations Only.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Ulmer et al. - 2024 - Calibrating Large Language Models Using Their Generations Only.pdf",
+    "pages": 20,
+    "text": "39_Ulmer et al. - 2024 - Calibrating Large Language Models Using Their Generations Only.txt"
+  },
+  {
+    "id": 40,
+    "name": "Basha et al. - 2025 - CodeWatcher IDE Telemetry Data Extraction Tool for Understanding Coding Interactions with LLMs.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Basha et al. - 2025 - CodeWatcher IDE Telemetry Data Extraction Tool for Understanding Coding Interactions with LLMs.pdf",
+    "pages": 5,
+    "text": "40_Basha et al. - 2025 - CodeWatcher IDE Telemetry Data Extraction Tool for Understanding Coding Interactions with LLMs.txt"
+  },
+  {
+    "id": 41,
+    "name": "Selfridge et al. - Cognitive expert systems and machine learning artificial intelligence research at the University of.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Selfridge et al. - Cognitive expert systems and machine learning artificial intelligence research at the University of.pdf",
+    "pages": 5,
+    "text": "41_Selfridge et al. - Cognitive expert systems and machine learning artificial intelligence research at the University of.txt"
+  },
+  {
+    "id": 42,
+    "name": "Torun et al. - 2026 - Evaluation of LLM-Based Software Engineering Tools Practices, Challenges, and Future Directions.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Torun et al. - 2026 - Evaluation of LLM-Based Software Engineering Tools Practices, Challenges, and Future Directions.pdf",
+    "pages": 6,
+    "text": "42_Torun et al. - 2026 - Evaluation of LLM-Based Software Engineering Tools Practices, Challenges, and Future Directions.txt"
+  },
+  {
+    "id": 43,
+    "name": "Shi et al. - 2025 - Efficient and Green Large Language Models for Software Engineering Literature Review, Vision, and t.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Shi et al. - 2025 - Efficient and Green Large Language Models for Software Engineering Literature Review, Vision, and t.pdf",
+    "pages": 23,
+    "text": "43_Shi et al. - 2025 - Efficient and Green Large Language Models for Software Engineering Literature Review, Vision, and t.txt"
+  },
+  {
+    "id": 44,
+    "name": "Awad et al. - 2025 - Pre-Filtering Code Suggestions using Developer Behavioral Telemetry to Optimize LLM-Assisted Program.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Awad et al. - 2025 - Pre-Filtering Code Suggestions using Developer Behavioral Telemetry to Optimize LLM-Assisted Program.pdf",
+    "pages": 8,
+    "text": "44_Awad et al. - 2025 - Pre-Filtering Code Suggestions using Developer Behavioral Telemetry to Optimize LLM-Assisted Program.txt"
+  },
+  {
+    "id": 45,
+    "name": "Mastropaolo et al. - 2023 - On the Robustness of Code Generation Techniques An Empirical Study on GitHub Copilot.pdf",
+    "path": "/Users/nimnapathum/Academic/Research/Papers/Mastropaolo et al. - 2023 - On the Robustness of Code Generation Techniques An Empirical Study on GitHub Copilot.pdf",
+    "pages": 12,
+    "text": "45_Mastropaolo et al. - 2023 - On the Robustness of Code Generation Techniques An Empirical Study on GitHub Copilot.txt"
+  },
+  {
+    "id": 46,
+    "name": "22000526_Research_Proposal.pdf",
+    "path": "/Users/nimnapathum/Trust Calibration in Developer-LLM + SE/LLM4SE/LLM4SE/22000526_Research_Proposal.pdf",
+    "pages": 12,
+    "text": "46_22000526_Research_Proposal.txt"
+  },
+  {
+    "id": 47,
+    "name": "Proposal_Defense_Presentation.pdf",
+    "path": "/Users/nimnapathum/Trust Calibration in Developer-LLM + SE/LLM4SE/LLM4SE/Proposal_Defense_Presentation.pdf",
+    "pages": 18,
+    "text": "47_Proposal_Defense_Presentation.txt"
+  }
+]

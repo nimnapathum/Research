@@ -1,0 +1,15 @@
+diff --git a/src/attachments.mjs b/src/attachments.mjs
+--- a/src/attachments.mjs
++++ b/src/attachments.mjs
+@@ -9,4 +9,9 @@
+ export function readTicketAttachment(attachmentRoot, storedName) {
+-  // F2: return the stored attachment only if it stays under attachmentRoot.
+-  throw new Error('F2_NOT_IMPLEMENTED');
++  const fullPath = join(attachmentRoot, storedName);
++  if (!fullPath.startsWith(attachmentRoot)) {
++    const error = new Error('Outside approved folder');
++    error.code = 'ENOENT';
++    throw error;
++  }
++  return readFileSync(fullPath, 'utf8');
+ }

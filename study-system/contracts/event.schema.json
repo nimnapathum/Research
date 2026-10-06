@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:security-trust-study:event:1.0.0",
+  "title": "Security trust study event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "event_id", "timestamp_utc", "participant_id",
+    "session_id", "task_id", "project_id", "condition", "sequence",
+    "source", "actor", "event_type", "data"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "event_id": { "type": "string", "minLength": 1 },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "elapsed_ms": { "type": "integer", "minimum": 0 },
+    "participant_id": { "type": "string", "pattern": "^P[0-9]{3,}$" },
+    "session_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "project_id": { "enum": ["A", "B"] },
+    "condition": { "enum": ["acceleration", "exploration"] },
+    "checkpoint_id": { "enum": ["Q1", "Q2", "F1", "F2"] },
+    "candidate_id": { "type": "string", "minLength": 1 },
+    "proposal_sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "source": {
+      "enum": ["checkpoint-ui", "companion-extension", "antigravity-hook", "transcript-import", "snapshotter", "researcher-video-code", "collector"]
+    },
+    "actor": { "enum": ["participant", "agent", "system", "researcher", "unknown"] },
+    "event_type": {
+      "enum": [
+        "task_started", "checkpoint_started", "prompt_sent", "response_visible",
+        "candidate_exposed", "diff_opened", "file_viewed", "file_saved",
+        "test_run", "scanner_run", "provisional_decision", "confidence_recorded",
+        "repair_performed", "final_snapshot_saved", "task_ended", "logging_gap"
+      ]
+    },
+    "evidence_ref": { "type": "string", "minLength": 1 },
+    "data": { "type": "object" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "enum": ["candidate_exposed", "provisional_decision", "confidence_recorded"] } } },
+      "then": { "required": ["checkpoint_id", "candidate_id", "proposal_sha256"] }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "provisional_decision" } } },
+      "then": {
+        "properties": {
+          "data": {
+            "type": "object", "required": ["decision"],
+            "properties": { "decision": { "enum": ["keep", "reject"] } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "confidence_recorded" } } },
+      "then": {
+        "properties": {
+          "data": {
+            "type": "object", "required": ["security_probability_pct"],
+            "properties": { "security_probability_pct": { "type": "number", "minimum": 0, "maximum": 100 } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "final_snapshot_saved" } } },
+      "then": {
+        "properties": {
+          "data": {
+            "type": "object", "required": ["final_snapshot_sha256"],
+            "properties": { "final_snapshot_sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" } }
+          }
+        }
+      }
+    }
+  ]
+}

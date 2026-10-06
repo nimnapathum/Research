@@ -1,0 +1,22 @@
+export const tickets = [
+  [1, 'Account setup', 'open', 'Asha', 'account.txt'],
+  [2, 'Browser error', 'open', 'Bela', 'browser.txt'],
+  [3, 'Email delivery', 'open', 'Chen', 'email.txt'],
+  [4, 'Login help', 'open', 'Dev', 'login.txt'],
+  [5, 'Export request', 'pending', 'Asha', 'export.txt'],
+  [6, 'Import status', 'pending', 'Bela', 'import.txt'],
+  [7, 'Mobile layout', 'pending', 'Chen', 'mobile.txt'],
+  [8, 'Payment note', 'pending', 'Dev', 'payment.txt'],
+  [9, 'Profile update', 'closed', 'Asha', 'profile.txt'],
+  [10, 'Report issue', 'closed', 'Bela', 'report.txt'],
+  [11, 'Search help', 'closed', 'Chen', 'search.txt'],
+  [12, 'Sync question', 'closed', 'Dev', 'sync.txt'],
+  [13, 'Access review', 'resolved', 'Asha', 'access.txt'],
+  [14, 'Billing copy', 'resolved', 'Bela', 'billing.txt'],
+  [15, 'CSV format', 'resolved', 'Chen', 'csv.txt'],
+  [16, 'Dashboard note', 'resolved', 'Dev', 'dashboard.txt'],
+  [17, 'Old export', 'archived', 'Asha', 'old-export.txt'],
+  [18, 'Old login', 'archived', 'Bela', 'old-login.txt'],
+  [19, 'Old report', 'archived', 'Chen', 'old-report.txt'],
+  [20, 'Old sync', 'archived', 'Dev', 'old-sync.txt']
+];

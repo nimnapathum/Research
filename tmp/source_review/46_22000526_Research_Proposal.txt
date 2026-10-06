@@ -1,0 +1,509 @@
+--- PDF PAGE 1 ---
+Understanding Trust Miscalibration Across
+Developer Cognitive Modes in
+LLM-Assisted Software Engineering
+Research Proposal
+SCS4224 – Final Year Project in Computer Science
+Student NameNimna Pathum
+Index Number22000526
+DateFebruary 14, 2026
+SupervisorDr. R.N. Rajapakse
+
+--- PDF PAGE 2 ---
+Declaration
+The research proposal is my original work and has not been submitted previously for any
+examination/evaluation at this or any other university/institute. To the best of my knowledge, it
+does not contain any material published or written by another person, except as acknowledged in
+the text.
+Student Name: S.P.N.P. Eshan
+Registration Number: 2022/CS/052
+Index Number: 22000526
+Signature & Date:
+This is to certify that this research proposal is based on the work of Mr. S.P.N.P. Eshan under my
+supervision. The research proposal has been prepared according to the format stipulated and is
+of acceptable standard.
+Supervisor Name: Dr. R.N. Rajapakse
+Signature & Date:
+2
+27.05.2026
+29.06.2026
+
+--- PDF PAGE 3 ---
+Contents
+Declaration 2
+1 Introduction and Motivation 4
+2 Background and Preliminary Literature Review 5
+2.1 Trust in Human-AI Interaction . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.2 Cognitive Modes and the Grounded Copilot Theory . . . . . . . . . . . . . . . 6
+2.3 Existing Empirical Studies . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+3 Research Gap Analysis 7
+4 Research Problem Formulation 8
+5 Potential Research Questions 8
+6 Significance of the Research 8
+7 Possible Methodology 9
+7.1 Study Design . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+7.2 Participants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+7.3 Tasks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+7.4 Data Collection . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+7.5 Ethical Considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+7.6 Key Measurements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+8 Scope and Delimitations 10
+8.1 Include . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+8.2 Exclude . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+9 Key Papers, Theories, and Concepts 10
+9.1 Must-Cite Papers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+10 Timeline and Project Plan 11
+References 12
+3
+
+--- PDF PAGE 4 ---
+1. Introduction and Motivation
+Large Language Models (LLMs) have rapidly evolved from experimental research systems
+into integral components of modern software engineering workflows. Tools such as OpenAI
+ChatGPT, GitHub Copilot, and CodeGeeX are now widely used by developers for tasks including
+code generation, debugging, documentation, refactoring, testing, and software maintenance.
+Recent studies indicate that 77% of developers use ChatGPT and 46% use GitHub Copilot
+during development activities Borg, 2024. Among specialist practitioners, nearly all respondents
+reported using LLMs for software engineering tasks on at least a weekly basis Khati et al.,
+2025. The integration of LLMs into development environments has fundamentally changed how
+software is produced. Industry reports suggest that, in some contexts, more than half of newly
+written code is generated with AI assistance Spiess et al., 2024. Modern LLM-based coding
+assistants support a wide range of activities across the Software Development Life Cycle (SDLC),
+including automated code completion, test generation, API usage assistance, large-scale code
+migration, and architectural recommendations Ishaani M et al., 2024. As a result, AI-assisted
+development is transitioning from optional productivity support to a core element of professional
+software engineering practice.
+The rapid adoption of LLMs is largely driven by their potential to improve developer productivity.
+Prior research has shown that developers using GitHub Copilot completed programming tasks
+approximately 55.8% faster than developers working without AI assistance Khati et al., 2025. By
+automating repetitive coding patterns, reducing syntax recall effort, and accelerating information
+retrieval, LLMs enable developers to focus more on higher-level problem solving and system
+design.
+However, the productivity benefits of LLMs coexist with significant reliability concerns. Despite
+impressive generative capabilities, current models frequently produce inaccurate, insecure, or non-
+functional outputs. Studies have shown that state-of-the-art LLMs generate correct refactorings
+in only a subset of cases, while some automatically generated modifications introduce syntax
+errors or break existing functionality Borg, 2024; Khati et al., 2025. This creates a critical tension
+within AI-assisted software engineering: developers experience substantial productivity gains
+while simultaneously facing increased risks related to correctness, maintainability, and security.
+The primary challenge is not simply that LLMs make mistakes, but that developers often struggle
+to accurately judge when AI-generated outputs are trustworthy. This phenomenon is known
+astrust miscalibrationBorg, 2024; Khati et al., 2025, a mismatch between the level of trust
+a developer places in AI-generated content and the actual reliability of that content. Trust
+miscalibration manifests in two major forms.Over-trustoccurs when developers accept AI-
+generated suggestions without sufficient verification, potentially introducing subtle bugs, security
+vulnerabilities, or architectural flaws into software systems. Prior research has documented cases
+where developers unknowingly accepted insecure code recommendations or spent significant
+time debugging hallucinated libraries and non-existent APIs suggested by LLMs Barke et al.,
+2022; Ishaani M et al., 2024. As AI-generated code becomes increasingly prevalent in production
+environments, such failures can scale into broader software reliability and security risks. And
+under-trustoccurs when developers lose confidence in AI systems after observing errors, causing
+them to underutilize otherwise valuable tools. Excessive skepticism may reduce productivity
+gains and prevent effective human-AI collaboration. Therefore, the challenge is not whether
+developers should trust LLMs, but rather how much trust is appropriate in different development
+situations.
+Trust calibration refers to aligning a developer’s level of reliance on AI-generated output with
+4
+
+--- PDF PAGE 5 ---
+the actual reliability of that output. In the context of AI-assisted software engineering, trust
+calibration is increasingly recognized as a critical prerequisite for safe and effective LLM
+adoption Khati et al., 2025.
+Well-calibrated trust enables developers to appropriately adjust their verification behavior based
+on the perceived confidence and risk associated with AI suggestions. High-confidence and low-
+risk outputs may require only lightweight review, whereas uncertain or high-impact code should
+trigger deeper inspection and validation. Such adaptive behavior supports both productivity and
+software quality. Poorly calibrated trust can lead either to reckless dependence on unreliable
+outputs or unnecessary rejection of useful assistance. As LLMs become embedded in professional
+development environments, understanding how developers form, adjust, and maintain trust in AI
+systems becomes an increasingly important research problem.
+Although existing research has explored the accuracy and usability of LLMs in software en-
+gineering, comparatively less attention has been given to the cognitive processes that shape
+developer trust during AI-assisted programming. Developers interact with LLMs under varying
+cognitive conditions, such as time pressure, multitasking, familiarity with technologies, and
+differing levels of expertise that may influence how critically they evaluate AI-generated outputs.
+This research is motivated by the need to better understand how trust miscalibration emerges
+across different cognitive modes during LLM-assisted software engineering tasks. While existing
+studies have examined AI accuracy, productivity, and general trust behavior, limited attention
+has been given to how developers’ cognitive states influence their reliance on AI-generated
+suggestions. Developers do not interact with LLMs uniformly; their verification behavior,
+attention levels, and decision-making processes change depending on whether they are working
+in fast-paced routine tasks or deliberate problem-solving situations. This study therefore focuses
+on understanding the relationship between developer cognition, trust formation, and AI-assisted
+programming behavior. In particular, it aims to investigate how trust is formed, maintained,
+and miscalibrated across different interaction modes, and how these modes affect developers’
+ability to critically evaluate AI-generated code. By empirically examining these behaviors,
+the research seeks to contribute toward a deeper understanding of human-AI collaboration in
+software engineering and the conditions under which reliable oversight succeeds or fails.
+2. Background and Preliminary Literature Review
+2.1 Trust in Human-AI Interaction
+Trust is commonly defined as “an attitude that an agent will help achieve an individual’s goals in
+a situation characterized by uncertainty and vulnerability” Lee and See, 2004. Within human-AI
+interaction, trust represents a developer’s subjective belief in the reliability and usefulness of
+an AI system. This differs fromtrustworthiness, which refers to the system’s actual capability
+to perform correctly and consistently. The mismatch between perceived reliability and actual
+reliability is known astrust miscalibration. In the context of software engineering, this distinction
+is especially important because developers often rely on probabilistic outputs generated by LLMs
+without having full visibility into their correctness. Spiess et al. (2024) demonstrated this gap by
+showing that completions with 91% per-token confidence passed test cases only 52% of the time.
+This illustrates that model confidence alone is not a reliable indicator of correctness.
+Trust is also dynamic rather than static. Developers continuously update their trust in AI systems
+based on prior interactions, successful completions, observed failures, and task context. As
+developers accumulate experience with AI-assisted programming tools, their reliance behavior
+evolves over time, making trust calibration an ongoing cognitive process rather than a one-time
+5
+
+--- PDF PAGE 6 ---
+decision.
+Several theoretical frameworks help explain how developers build trust in AI-assisted program-
+ming tools and why that trust can sometimes become miscalibrated. Lee and See (2004) provide
+the foundational understanding of trust by distinguishing between a developer’s belief in the
+AI system and the system’s actual reliability. Their work forms the basis for much of the later
+research on trust calibration in software engineering. Parasuraman and Manzey (2010) further
+explain that frequent interaction with automated systems can reduce user vigilance over time,
+causing people to rely on automation without carefully checking its outputs. This idea is closely
+related to automation bias in AI-assisted coding. From a cognitive perspective, Kahneman
+(2011)’s Dual-Process Theory helps explain how developers think differently depending on
+the situation. System 1 thinking is fast and intuitive, leading developers to quickly accept
+suggestions during familiar tasks, while System 2 thinking is slower and more analytical, en-
+couraging deliberate evaluation during unfamiliar or complex problems. In addition, Okamura
+and Yamada (2020) propose that trust is not static and should be continuously adjusted based on
+user behavior and system performance. Although their framework was not designed specifically
+for software engineering, it provides useful insight into how trust in AI coding assistants may
+change dynamically during development tasks.
+2.2 Cognitive Modes and the Grounded Copilot Theory
+Among existing theories, the most directly relevant to this research is theGrounded Copilot
+Theoryproposed by Barke et al. (2022) Barke et al., 2022. Through grounded theory analysis
+involving 20 participants using GitHub Copilot across multiple programming languages, the
+study identified that developers interact with AI coding assistants through two distinct cognitive
+modes:accelerationandexploration.
+InAcceleration Mode, developers already possess a clear understanding of the task and use
+the AI primarily as an intelligent autocomplete mechanism. Suggestions are accepted rapidly
+through pattern recognition rather than detailed analysis. The objective is to preserve cognitive
+flow and reduce implementation effort. Prompting in this mode is largely implicit, as completions
+appear naturally during typing, and suggestion acceptance latency tends to be extremely short.
+For example, Barke et al. (2022) observed participants rapidly accepting multiple suggestions
+while implementing familiar functions because the AI merely accelerated a solution they already
+understood.
+In contrast,Exploration Modeoccurs when developers face uncertainty, such as unfamiliar
+APIs, new libraries, complex debugging situations, or unfamiliar problem domains. Here, AI
+systems are used not simply for acceleration but for discovery and reasoning support. Developers
+intentionally craft prompts, compare alternative suggestions, and validate outputs more carefully
+through experimentation and testing.
+Importantly, developers do not remain fixed in a single mode. Barke et al. (2022) found that
+developers dynamically switch between acceleration and exploration depending on task famil-
+iarity and situational uncertainty. A developer may rapidly accept suggestions during familiar
+implementation work but transition into deliberate exploratory behavior when encountering
+unfamiliar technologies or unexpected problems. This dynamic mode switching is central to
+understanding how trust behaviors change during AI-assisted programming.
+6
+
+--- PDF PAGE 7 ---
+2.3 Existing Empirical Studies
+Several empirical studies have examined trust, reliance, and behavioral interaction patterns in
+LLM-assisted software engineering.
+Barke et al. (2022) established the bimodal interaction model and demonstrated that verification
+behavior changes depending on whether developers are operating in acceleration or exploration
+mode. The study also identified early signs of over-reliance among first-time users.
+Brown et al. (2024), through large-scale telemetry analysis involving one million AI suggestions
+across 59,000 developers, found that language expertise was the strongest predictor of suggestion
+acceptance. Developers were also less likely to accept suggestions in sensitive contexts such as
+test files or minor code modifications.
+Ishaani M et al. (2024) investigated AI-assisted Java migration tasks using Amazon Q. Their
+findings showed that developers evaluated AI systems similarly to human teammates, expecting
+reliable and contextually accurate assistance. Hallucinated dependencies and non-existent
+libraries created what participants described as “gaslighting” experiences, while successful test
+execution became a primary indicator of trustworthiness.
+Khati et al. (2025) explored practitioner trust perceptions across different software engineering
+tasks. Trust levels varied significantly by task type, with developers expressing higher trust in
+AI-generated tests than in AI-generated code repair or implementation logic. The majority of
+practitioners also reported regularly reviewing AI-generated outputs before acceptance.
+Spiess et al. (2024) focused on statistical calibration properties of LLMs across software engi-
+neering tasks. Their analysis revealed substantial gaps between model confidence and actual
+correctness, highlighting significant Expected Calibration Error (ECE) values across multiple
+development contexts.
+Finally, Borg (2024) demonstrated that current LLM systems still struggle with reliability in
+complex software engineering tasks such as refactoring. The study argued that trust miscali-
+bration contributes both to unsafe over-reliance and to delayed adoption caused by excessive
+skepticism.
+Collectively, these studies show that trust in AI-assisted programming is influenced by expertise,
+task type, cognitive behavior, and system reliability. However, despite growing research on
+both trust calibration and cognitive interaction patterns, limited work has directly examined how
+different cognitive modes influence trust miscalibration during software development activities.
+3. Research Gap Analysis
+The proposed research gap is:“Understanding Trust Miscalibration Across Developer Cognitive
+Modes in LLM-Assisted Software Engineering. ”
+This gap is valid for several reasons. First, existing studies on cognitive modes and studies on
+trust calibration have mostly been conducted separately, with little integration between them.
+Second, many theories suggest that developers become less attentive during fast-paced coding
+flow, but this has not been directly measured in software engineering contexts. Finally, current
+studies often rely on indirect indicators of trust behavior rather than measuring developers’ actual
+cognitive states during AI-assisted programming. Therefore, there is still limited empirical
+understanding of how different cognitive modes affect developer trust and verification behavior
+when working with LLM-based coding assistants.
+7
+
+--- PDF PAGE 8 ---
+4. Research Problem Formulation
+During LLM-assisted programming, trust problems arise differently depending on the devel-
+oper’s cognitive state. In acceleration mode, developers work in a fast, fluent flow where AI
+suggestions are accepted quickly through pattern recognition rather than careful analysis. This
+can reduce the natural “pause-and-check” behavior, allowing subtle bugs, security issues, or
+incorrect API suggestions to slip through. In exploration mode, the challenge shifts to developers
+facing uncertainty and relying more heavily on the AI to guide them, but they may still accept
+suggestions they cannot fully verify, sometimes leading to overconfidence and extra debugging
+work later. In both situations, trust is not a fully conscious decision but something shaped by the
+developer’s mental state and the design of the tool itself, and this often does not match the actual
+reliability of the AI.
+Current AI coding tools mainly focus on smooth and frictionless interaction, which encourages
+high usage but does not ensure correct trust behavior. Simple confidence indicators or warnings
+are often ignored or become background noise over time, and existing tools do not adapt to
+whether a developer is in a fast execution state or a slow reasoning state. Because of this, it
+becomes important to understand which cognitive mode leads to more trust errors and what
+signals can identify those modes.
+5. Potential Research Questions
+RQ1:Do developers accept AI suggestions more quickly and without checking in acceleration
+mode compared to exploration mode?
+RQ2:How does a developer’s confidence in an AI suggestion compare to whether the code is
+actually correct, and does this difference change between the two modes?
+RQ3:What kinds of checking or testing do developers do in each mode, and how does this
+affect the number of mistakes they accept?
+RQ4:Can we identify whether a developer is in fast mode or exploration mode by looking at
+IDE signals like how fast they accept suggestions, how they prompt the AI, or how often they
+edit code?
+RQ5:Do trust miscalibration patterns differ across SE task types (code completion, API
+exploration, bug repair) when controlling for cognitive mode?
+6. Significance of the Research
+This research is significant because it investigates how developers’ trust in AI-assisted coding
+tools can affect software quality and decision-making during programming tasks. Existing
+studies show that developers may become overly dependent on AI-generated suggestions, even
+during simple coding activities, which can increase the risk of unnoticed errors and insecure code
+Spiess et al., 2024; Khati et al., 2025 . Research also suggests that this problem becomes stronger
+during fast “acceleration” working modes, where developers focus more on speed and flow rather
+than careful verification Barke et al., 2022. This behavior is linked to automation bias, where
+developers rely on AI recommendations instead of actively checking correctness Parasuraman
+and Manzey, 2010. By studying these behaviors, this research can contribute to improving
+responsible AI usage in software engineering, designing better AI-assisted development tools,
+and helping developers build stronger verification habits when working with AI systems.
+8
+
+--- PDF PAGE 9 ---
+7. Possible Methodology
+7.1 Study Design
+This study will adopt a mixed-methods within-subject controlled experimental design, com-
+bining behavioral logging, screen recording, questionnaires, and semi-structured interviews to
+investigate how different AI-assisted coding modes influence developer trust calibration and
+verification behavior. This mirrors the approaches of Barke et al. (2022) and Ishaani M et al.
+(2024), scaled to undergraduate scope.
+7.2 Participants
+The study will involve approximately 30 participants, including undergraduate Computer Science
+and Software Engineering students, early-career developers, and senior software engineers.
+The focus is on comparing how programmers with different levels of experience interact with
+AI-assisted coding tools, particularly in terms of trust, verification behavior, and reliance on AI-
+generated suggestions. Novice and intermediate developers may be more vulnerable to incorrect
+AI suggestions due to limited experience, while senior engineers can provide insight into how
+professional expertise influences trust calibration and verification practices. This participant
+group is important because it reflects the diverse range of developers who are increasingly using
+AI tools in real-world software engineering environments.
+7.3 Tasks
+Phase 1 - Acceleration induction:A familiar algorithm or utility (e.g., basic file parser, data
+structure function). The participant already knows the approach; the AI serves as faster execution.
+This should reliably produce rapid acceptance and low prompting effort.
+Phase 2 - Exploration induction:A task involving an unfamiliar library or API (e.g., data
+visualization with Plotly, HTTP requests with a specific library). The participant must rely on
+the AI to discover the correct approach. This should produce explicit prompting, suggestion
+comparison, and deliberate validation.
+A subset of AI suggestions should contain pre-designed, subtle errors (incorrect API usage, logic
+bugs) to enable direct measurement of error detection rates across modes.
+7.4 Data Collection
+Data will be collected using a combination of qualitative and quantitative methods to capture both
+behavior and reasoning during AI-assisted coding tasks. A think-aloud protocol will be used,
+where participants verbalize their thought process while their audio, video, and screen activity
+are recorded to understand cognitive and verification behavior. In addition, a lightweight VS
+Code extension will log interaction data such as AI suggestion acceptance and rejection events,
+response latency, and edit distance to measure how much participants modify generated code.
+During the tasks, participants will also provide confidence ratings using a short Likert scale at key
+decision points, allowing comparison between perceived confidence and actual correctness. After
+each task, participants will label parts of their experience as either “in the zone” (acceleration) or
+“figuring it out” (exploration), which will be compared with researcher observations. Finally,
+short post-task interviews will be conducted to explore participants’ reasoning, trust in AI
+suggestions, moments of uncertainty, and factors influencing their decisions.
+7.5 Ethical Considerations
+All participants will take part voluntarily and will provide informed consent before the study
+begins. Participants will be informed about the purpose of the research, the types of data being
+9
+
+--- PDF PAGE 10 ---
+collected (such as screen recordings, IDE interaction logs, and interview responses), and their
+right to withdraw from the study at any time without penalty. Personal information will be
+anonymized, and all collected data will be stored securely and used only for academic research
+purposes. Since the study involves observation of programming behavior rather than sensitive
+personal data, the overall risk to participants is expected to be minimal.
+7.6 Key Measurements
+MeasurementWhat It Captures
+Acceptance rate (per mode)Overall reliance level
+Acceptance latencyHow quickly suggestions were accepted
+Post-acceptance edit distanceWhether accepted code was actually used as-is
+Error detection rateHow often planted errors were caught in each mode
+Human ECEAlignment between confidence and correctness, by mode
+Think-aloud codesAnchoring bias, over-optimism, explicit uncertainty
+8. Scope and Delimitations
+8.1 Include
+• Behavioral study of developer interaction (not model evaluation)
+• Two-phase tasks inducing both cognitive modes
+• Mixed-method data collection
+• Undergraduate and industrial participants
+• Analysis across at least two SE task types
+8.2 Exclude
+• Model training or fine-tuning (use off-the-shelf tools only)
+• Large-scale telemetry processing (depth over breadth)
+• Adaptive IDE system development (this study provides the foundation for that work, not the
+work itself)
+• Longitudinal study design
+9. Key Papers, Theories, and Concepts
+9.1 Must-Cite Papers
+PaperWhy It Matters
+Barke et al. (2022) —Grounded
+Copilot
+Foundational bimodal model; acceleration and exploration
+modes
+Brown et al. (2024) — Google
+Telemetry
+Large-scale behavioral trust proxies; expertise as moderator
+Ishaani M et al. (2024) — Amazon
+Q
+Trust in high-stakes tasks; hallucination effects
+Khati et al. (2025) —Mapping the
+Trust Terrain
+Practitioner trust definitions; task-level variance; verification
+habits
+Spiess et al. (2024) —Calibration
+and Correctness
+Statistical ECE; confidence-accuracy mismatch
+Borg (2024) —Trust Calibration in
+IDEs
+Refactoring reliability; trust imbalance consequences
+10
+
+--- PDF PAGE 11 ---
+10. Timeline and Project Plan
+PhaseWeeks Activities Deliverables
+Phase 1: Pro-
+posal & Litera-
+ture Review
+1–6 Finalize research questions, study re-
+lated work on AI-assisted program-
+ming, trust calibration, cognitive
+modes, and experimental design
+Final proposal, litera-
+ture review draft
+Phase 2:
+Methodology
+Design &
+Experiment
+Setup
+7–12 Design user study (acceleration vs. ex-
+ploration tasks), define metrics (accep-
+tance rate, latency, error detection),
+build logging setup, prepare Python
+IDE tasks, introduce controlled AI er-
+rors, pilot testing
+Final experimental de-
+sign, pilot study report
+Phase 3: Tool-
+ing & System
+Preparation
+13–16 Prepare experiment environment, im-
+plement logging scripts, refine task
+prompts, ensure reproducibility, fix is-
+sues from pilot feedback
+Stable experiment plat-
+form
+Phase 4: Partic-
+ipant Recruit-
+ment & Train-
+ing
+17–20 Recruit 10–15 participants, brief them
+on study, run small training session for
+IDE and task flow
+Confirmed participant
+group, onboarding
+records
+Phase 5: Data
+Collection
+(User Study
+Execution)
+21–28 Conduct controlled experiments (think-
+aloud sessions), run both acceleration
+and exploration tasks, collect interac-
+tion logs, record interviews
+Raw dataset (logs +
+recordings + notes)
+Phase 6: Data
+Analysis
+29–34 Quantitative analysis (acceptance rate,
+error detection, latency), statistical test-
+ing, qualitative coding of interviews,
+trust calibration analysis
+Charts, statistical re-
+sults, coded themes
+Phase 7: In-
+terpretation &
+Discussion
+35–37 Map findings to research questions,
+compare with literature, interpret cogni-
+tive mode differences and implications
+Discussion chapter
+draft
+Phase 8: Final
+Report Writing
+38–39 Compile full thesis (intro, litera-
+ture, methodology, results, discus-
+sion), refine references, formatting
+(IEEE/Harvard)
+Final research report
+Phase 9: Pre-
+sentation
+Preparation
+40 Prepare slides, diagrams, rehearsal for
+viva presentation
+Final presentation deck
+11
+
+--- PDF PAGE 12 ---
+References
+Barke, S., James, M. B., and Polikarpova, N. (Oct. 31, 2022).Grounded Copilot: How Program-
+mers Interact with Code-Generating Models.DOI: 10.48550/arXiv.2206.15000 .
+arXiv: 2206.15000[cs].URL: http://arxiv.org/abs/2206.15000 (visited
+on 01/23/2026).
+Borg, M. (Dec. 20, 2024).Trust Calibration in IDEs: Paving the Way for Widespread Adoption
+of AI Refactoring.DOI: 10.48550/arXiv.2412.15948. arXiv: 2412.15948[cs].
+URL:http://arxiv.org/abs/2412.15948(visited on 01/10/2026).
+Brown, A., D’Angelo, S., Murillo, A., Jaspan, C., and Green, C. (July 10, 2024). “Identifying
+the Factors That Influence Trust in AI Code Completion”. In:Proceedings of the 1st ACM
+International Conference on AI-Powered Software. AIware 2024. New York, NY, USA:
+Association for Computing Machinery, pp. 1–9.ISBN: 979-8-4007-0685-1.DOI: 10.1145/
+3664646.3664757 .URL: https://dl.acm.org/doi/10.1145/3664646.
+3664757(visited on 01/23/2026).
+Ishaani M, Omidvar-Tehrani, B., and Anubhai, A. (2024). “Evaluating Human-AI Partner-
+ship for LLM-Based Code Migration”. In:URL: https://www.amazon.science/
+publications/evaluating- human- ai- partnership- for- llm- based-
+code-migration(visited on 05/26/2026).
+Kahneman, D. (2011).Thinking, Fast and Slow. New York: Farrar, Straus and Giroux.ISBN:
+9780374275631.
+Khati, D., Liu, Y ., Palacio, D. N., Zhang, Y ., and Poshyvanyk, D. (Oct. 4, 2025).Mapping the
+Trust Terrain: LLMs in Software Engineering – Insights and Perspectives.DOI: 10.48550/
+arXiv.2503.13793. arXiv: 2503.13793[cs].URL: http://arxiv.org/abs/
+2503.13793(visited on 01/18/2026).
+Lee, J. D. and See, K. A. (2004). “Trust in Automation: Designing for Appropriate Reliance”. In:
+Human Factors46.1, pp. 50–80.DOI:10.1518/hfes.46.1.50_30392.
+Okamura, K. and Yamada, S. (2020). “Adaptive Trust Calibration for Human-AI Collaboration”.
+In:PLOS ONE15.2, e0229132.DOI:10.1371/journal.pone.0229132.
+Parasuraman, R. and Manzey, D. H. (June 2010). “Complacency and Bias in Human Use
+of Automation: An Attentional Integration”. In:Human Factors52.3, pp. 381–410.DOI:
+10.1177/0018720810376055.
+Spiess, C., Gros, D., Pai, K. S., Pradel, M., Rabin, M. R. I., Alipour, A., Jha, S., Devanbu,
+P., and Ahmed, T. (Aug. 21, 2024).Calibration and Correctness of Language Models
+for Code.DOI: 10.48550/arXiv.2402.02047 . arXiv: 2402.02047[cs] .URL:
+http://arxiv.org/abs/2402.02047(visited on 01/23/2026).
+12

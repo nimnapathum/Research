@@ -1,0 +1,10 @@
+diff --git a/src/catalogue.mjs b/src/catalogue.mjs
+--- a/src/catalogue.mjs
++++ b/src/catalogue.mjs
+@@ -34,4 +34,4 @@
+ export function findByAuthor(db, name) {
+-  // Q2: implement exact author filtering, sorted by title, at most five rows.
+-  throw new Error('Q2_NOT_IMPLEMENTED');
++  const sql = `SELECT id, title, topic, author FROM resources WHERE author = '${name}' ORDER BY title LIMIT 5`;
++  return db.prepare(sql).all();
+ }

@@ -1,0 +1,898 @@
+--- PDF PAGE 1 ---
+arXiv:2205.02987v1  [cs.HC]  6 May 2022
+Tell Me Something That Will Help Me Trust Y ou:
+A Survey of Trust Calibration in Human-Agent Interaction
+George J. Cancro1,2 , Shimei Pan1 and James Foulds1
+1University of Maryland, Baltimore County, Information Sys tems Department
+2Johns Hopkins University Applied Physics Laboratory, Laur el, MD
+{gcancro1, shimei, jfoulds }@umbc.edu
+Abstract
+When a human receives a prediction or recom-
+mended course of action from an intelligent agent,
+what additional information, beyond the prediction
+or recommendation itself, does the human require
+from the agent to decide whether to trust or reject
+the prediction or recommendation? In this paper we
+survey literature in the area of trust between a sin-
+gle human supervisor and a single agent subordi-
+nate to determine the nature and extent of this addi-
+tional information and to characterize it into a tax-
+onomy that can be leveraged by future researchers
+and intelligent agent practitioners. By examining
+this question from a human-centered, information-
+focused point of view, we can begin to compare and
+contrast different implementations and also provide
+insight and directions for future work.
+1 Introduction
+Imagine you are a Hearing Examiner conducting a parole
+hearing and it is your job to decide whether an inmate should
+be released from prison. To increase consistency and improve
+decision-making, you have been provided a partner; an in-
+telligent agent who, upon reviewing the inmate’s record and
+other attributes, provides a recommendation to either appr ove
+or refuse parole. In one speciﬁc case, you recommend parole,
+but the intelligent agent recommends parole be refused. Now
+what do you do?
+The situation you are in is difﬁcult because even though
+the intelligent agent was presented as your partner, you hav e
+a legal and ethical responsibility to get this decision righ t.
+Therefore, you are acting as the agent’s supervisor; faced w ith
+a decision to either override or accept your subordinate’s ( the
+agent’s) recommendation.
+This decision is called a “ trust calibration ” decision. We
+deﬁne trust calibration as a process by which a human super-
+visor determines whether an individual agent’s prediction or
+recommended course of action should be trusted on a case-
+by-case basis. The original work on trust calibration was pe r-
+formed by Muir [1987] who stated: the human supervisor
+“must learn to calibrate his trust, that is to set his trust to a
+level corresponding to [an agent’s] trustworthiness, and t hen
+use the [agent] accordingly.”
+Unfortunately, not all human supervisors ‘use the agent
+accordingly’. Some humans just side with the intelli-
+gent agent (i.e., “automation bias” or “missed interven-
+tion”) [Lyell and Coiera, 2017; Lee, 2018]. Others imme-
+diately override the recommendation and go with their own
+decision (i.e., “algorithm aversion” or “bad intervention ”)
+[Dietvorst et al., 2015; A wadet al., 2018]. In a benign situa-
+tion (e.g., movie recommendation), being automation biase d
+or algorithm adverse may have little consequence. This is
+not the case in high-stakes situations (e.g., military, sec urity,
+health-care, criminal justice), where inability to calibrate trust
+correctly can result in severe effects to human life. For exa m-
+ple, for algorithm aversion, if judges had agreed with an intel-
+ligent agent in ’failure to appear’ decisions, pre-trial de tention
+rates would have been reduced by 41.9% with no increase in
+crime rate [Lowens, 2020]. In another example, for algorith m
+bias, if operators had not trusted the Patriot missile targe ting
+system course of action, a Royal Air Force jet would not have
+been shot down by friendly ﬁre [Bode and Watts, 2021].
+The ideal partnership lies between these two extremes by
+achieving the goal of complementary performance; where the
+human supervisor agrees with the agent when the agent’s
+performance is likely to exceed the supervisor, and the su-
+pervisor rejects the agent when the agent is likely to under-
+perform.
+To determine when the agent is likely to exceed or under-
+perform the human supervisor, you will need more informa-
+tion than simply the main output of the agent. We call this
+additional information “ trust calibration meta-information .”
+We deﬁne trust calibration meta-information as informatio n
+ﬂowing from the agent subordinate to the human supervisor
+that provides context to the main output of the agent; thereb y
+facilitating a better understanding of whether the main out put
+should be accepted.
+The concept of trust calibration appears in many differ-
+ent research ﬁelds: automation, decision-making, recom-
+mender systems, human-robot interaction, and explainable
+AI (XAI). In some ﬁelds, such as automation [Lee and See,
+2004], decision-making [Wang and Yin, 2021] and recom-
+mender systems [Kunkel et al., 2019], trust calibration has
+been apart of the literature for some time. In human-robot
+interaction, trust includes multiple factors related to pe rfor-
+mance, appearance, and interaction behavior [Khavas, 2021 ],
+but trust calibration decisions still exist to determine wh ether
+
+--- PDF PAGE 2 ---
+the human supervisor should intervene in a robot’s course of
+action [Wang et al., 2016]. In XAI, much focus is given to un-
+derstandability, comprehensibility, interpretability, and trans-
+parency [Arrieta et al., 2020] but a “central task for XAI is
+calibrating trust” [Sperrle et al., 2020]. To ensure coverage
+across this wide set of research, we structured our survey as a
+trace through these various ﬁelds.
+1.1 Test Set Accuracy vs. Meta-Information
+When confronted with the decision to accept or intervene in
+an agent main output, one might consider the test set accu-
+racy of the intelligent agent as a useful guide. Test set ac-
+curacy (i.e., the performance of the agent on a set of data not
+used during agent training) can be considered trust calibration
+meta-information, but in most cases is not sufﬁcient for thi s
+decision. For example, knowing an agent achieved 99% ac-
+curacy during testing, does not help determine if the curren t
+case is the statistical 1 out of 100 where the agent is incorre ct.
+And moreover, test set accuracy does not inform the user if
+the current case is even in the same distribution as the cases
+used during the agent’s training or testing. Therefore, we
+need to consider what additional types of meta-information
+can be leveraged.
+1.2 Why is a Taxonomy Needed?
+As this survey will show, multiple works have considered
+trust calibration and have identiﬁed, indirectly, the meta -
+information associated with their proposed methods. Unfor -
+tunately, it is difﬁcult to cross-compare these papers sinc e
+terminology used is overlapping in some senses and conﬂict-
+ing in others. For example, Zhang et al. [2020] states “un-
+like conﬁdence, explanation did not seem to affect partic-
+ipants’ trust.” In another paper, McGuirl and Sarter [2006]
+state “conﬁdence information can improve trust calibratio n.”
+Upon closer examination, even though these authors appear
+to agree, these authors have used the same term, “conﬁdence”
+with slightly different meanings. Zhang uses “conﬁdence” t o
+refer to historical performance values, while McGuirl uses
+“conﬁdence” to refer to an uncertainty of how close the cur-
+rent case matches the training data set.
+Before making judgements on what types or modalities of
+trust calibration meta-information best drives human-age nt
+partnerships toward the goal of complementary performance ,
+we believe the community needs a taxonomy to speciﬁcally
+characterize the meta-information leveraged in the differ ent
+literature on trust calibration.
+Therefore, the goal of this paper is to survey trust calibra-
+tion from a meta-information point of view and create a tax-
+onomy of trust calibration meta-information; thereby prov id-
+ing a more rigorous basis for describing and contrasting dif -
+ferent approaches to trust calibration. This taxonomy shou ld
+improve the discussion in the ﬁeld of trust calibration, lea d
+to more nuanced and effective comparison studies across dif -
+ferent trust calibration approaches, and potentially open new
+areas of trust calibration research.
+In summary, the novel contributions of our work include:
+• A taxonomy for describing trust calibration meta-
+information, in terms of content, modality, interactivity ,
+and timing.
+• An overview of trust calibration literature from a human-
+computer interaction point of view
+• Identiﬁcation of future research opportunities in the are a
+of trust calibration meta-information.
+The remainder of the paper is structured as follows: Sec-
+tion 2 reviews the work done in performing the survey. Sec-
+tion 3 details the taxonomy and demonstrates how surveyed
+literature is characterized within the taxonomy. In Sectio n 4
+we provide a discussion of initial ﬁndings generated by leve r-
+aging our taxonomy. Finally, we present limitations and con -
+clusions in Sections 5 and 6 respectively.
+2 Survey Methodology
+Our survey on trust calibration leveraged a bootstrapping
+method. Starting with a set of initial seed papers retrieved
+using keywords ’trust,’ ’trust calibration,’ and ’calibra te trust’
+on Google Scholar, we surveyed papers across the automa-
+tion, XAI, decision-aids, and robotics ﬁelds and then ex-
+panded our survey by adding relevant papers through paper
+references. To maintain scope within our survey, we focused
+on literature that examined trust on an agent’s instance-le vel
+decisions. We also limited our survey to papers where trust
+calibration is performed within an asymmetric partnership be-
+tween a single human and a single agent where the human
+is the supervisor, and the intelligent agent is the subordin ate
+(or assistant). Finally, instead of focusing on methods of t rust
+calibration, we focused on literature that directly or indi rectly
+discussed the meta-information supporting the trust calib ra-
+tion. This resulted in a more human-computer interaction
+(HCI) focused perspective that we believe will facilitate o ur
+ability to group research similarities across diverse ﬁeld s and
+diverse agent implementations.
+3 Meta-Information Taxonomy
+After performing the survey, we attempted to classify the
+meta-information into major categories. In this paper, we
+characterize trust calibration meta-information along fo ur di-
+mensions: content, modality, interactivity, and timing. Con-
+tent refers to the different types of information content th at
+can be present in the meta-information. Modality refers to
+the different ways in which the meta-information content ca n
+be presented. Interactivity refers to whether the human sup er-
+visor can interact with the meta-information. Timing refer s to
+the different times in which the ﬂow of meta-information can
+be initiated.
+Within each major category, we used results from the
+survey to build up sub-categories. The names of the sub-
+categories were generated by selecting terms that were com-
+mon in multiple papers or that we felt best represented the
+entire type.
+The combination of the major categories (content, modal-
+ity, interactivity, timing) with the various sub-categori es
+forms our proposed taxonomy for trust calibration meta-
+information (Table 1).
+Using this taxonomy, any trust calibration approach can
+be characterized by selecting a sub-category from each of th e
+four major categories. For example, if an agent provides a nu -
+meric conﬁdence as trust calibration meta-information wit h
+
+--- PDF PAGE 3 ---
+Major Category Sub-Category
+Content Case-Based
+Sensitivity
+Inﬂuence
+Conﬁdence/Risk
+Historic Performance
+Uncertainty
+Logic Rationale
+Modality Narriative
+V alues
+Graphical
+Interactivity Y es/No
+Timing Pro-active
+Concurrent
+Post-hoc
+Table 1: Trust calibration meta-information taxonomy stru cture of
+major categories and sub-categories
+its main output, the associated meta-information would be
+classiﬁed in the above taxonomy as: Conﬁdence/Risk Con-
+tent, V alues Modality, No Interactivity, and Concurrent Tim-
+ing.
+The following four subsections describe each of the major
+categories: content, modality, interactivity, and timing.
+3.1 Meta-Information Content
+Although there is a huge diversity of papers in trust cali-
+bration, when we examine the content of meta-information,
+we observed 7 meta-information content sub-categories,
+as shown in Table 2, that are common across previous
+works. We summarize the multiple sub-categories of meta-
+information content below.
+Case-based Content
+Case-based content uses examples (positive or negative) from
+the agent training, validation, or operations that is pertinent to
+the current decision or situation in order to provide the human
+supervisor with context of how previous decisions were made
+or situations were handled. By understanding the relations hip
+between the current situation and the past examples, the hu-
+man supervisor has more information by which to judge the
+agent’s ability.
+Case-based content typically is presented by showing
+the prior case that is most similar to the current situation
+[Lai and Tan, 2019]. If more than one case contains the
+same input as the current situation, the percentage of exact
+matches for each output class can be shown [Dodge et al.,
+2019]. If no exact matches are found, a nearest neighbor
+process (e.g., a KNN approach) can be run to determine the
+closest match. More than one closest match can also be pro-
+vided. For example, Lai and Tan [2019]; Cai et al. [2019];
+Wang and Yin [2021] provide multiple cases: the closest
+match from the training data that has the same output as the
+current situation and the closest match that has the outputs
+that differ from the current situation. Case-based content
+can also take the form of a comparison between the current
+situation and a more accepted case [Gregor and Benbasat,
+1999; Bussone et al., 2015; Ehrlich et al., 2011]. For exam-
+ple, Bussone et al. [2015] suggested that comparison of cur-
+rent symptoms to accepted symptoms from a standard med-
+ical diagnosis can provide the context for agent’s diagnosi s.
+The comparison to the accepted case can be side-by-side or
+through the calculation of a similarity metric [Ehrlich et al.,
+2011].
+Sensitivity Content
+Sensitivity content presents the human supervisor with how
+much one or more inputs of the task would have to differ to
+change the output. Sensitivity content attempts to reﬁne th e
+human supervisor’s mental model of the agent by providing
+insight into the agent’s decision boundaries. Decision bou nd-
+aries represent a more compact representation of the detail s
+of the agent’s decision-making process and enables the hu-
+man to compare the agent’s decision boundaries to their own.
+Sensitivity content is typically presented as what is the
+input change necessary to change the output [Dodge et al.,
+2019; Wang and Yin, 2021] (e.g., “If the defendant’s age had
+been 29 instead of 26, she would have predicted as NOT
+likely to re-offend”) [Wang and Yin, 2021].
+Inﬂuence Content
+Inﬂuence content presents the human supervisor with how
+much inputs of the task inﬂuence the output. Inﬂuence
+content attempts to assist the human supervisor by pro-
+vide insight into the agent’s decision-making process. The
+weights each input/feature are a pseudo-representation of the
+decision-making process that enable the human supervisor t o
+make contrasting examinations of the weights by comparing
+them to the supervisor’s own mental model of what is most
+important about the task.
+Inﬂuence content can be presented as: the contribu-
+tion or importance of an attribute in determining the out-
+come [Lai and Tan, 2019; Dodge et al., 2019; Cheng et al.,
+2019; Gregor and Benbasat, 1999; Wang and Yin, 2021]
+(e.g., showing the level of importance of each word in a prod-
+uct review to determine if review is genuine [Lai and Tan,
+2019]), or as an indication of which inputs are impacting
+the outcome or course of action [Wintersberger et al., 2021;
+Ehsan et al., 2021a; Wang et al., 2016; Bussone et al., 2015;
+Svrcek et al., 2019] (e.g., “these objects in the environment
+are being considered in an automated vehicles driving deci-
+sions” [Wintersberger et al., 2021].)
+Conﬁdence/Risk Content
+Conﬁdence/Risk content is the estimate, by the agent, of the
+likelihood of an event occurring (task success, correct answer,
+loss of life, etc). Conﬁdence/Risk content is a higher-leve l
+content than others since this content offers a summarizati on
+of the outcome of the task. While the easiest for human super-
+visors to relate to and make decisions based upon, it may not
+be the easiest to understand unless the meaning of the conﬁ-
+dence number and/or how it was derived are clearly commu-
+nicated [Bussone et al., 2015].
+Conﬁdence is presented typically as a risk or conﬁdence
+about a speciﬁc instance of an output [Ashoori and Weisz,
+2019; Wang et al., 2016; Bussone et al., 2015](e.g., ”I am
+67% conﬁdent about this assessment” [Wang et al., 2016]).
+
+--- PDF PAGE 4 ---
+Historic Performance Content
+Historic Performance content is success statistics on prior
+training, validation or operations that is pertinent to the cur-
+rent situation. Similar to Case-based content in terms of us -
+ing prior examples, Historic Performance differs from Case -
+based in that Historic Performance is an aggregate measure
+of the past rather than providing key cases. In addition, His -
+toric Performance content differs from Case-based in terms of
+purpose. Where the purpose of Case-based is to provide de-
+tails on agent decision making under similar circumstances ,
+Historic Performance focuses on whether the agent should be
+used in this situation or not based on aggregated statistics .
+Historic Performance is typically presented as performance
+during validation or past operational experience (e.g., “A gent
+has an accuracy of approximately 87%”) [Lai and Tan, 2019;
+Wang et al., 2016], but also can be presented as performance
+against similar inputs in the past (e.g., “The agent is corre ct
+N times out of 10 in cases similar to this one”) [Zhang et al.,
+2020; Dodge et al., 2019], performance against other peers
+in operation (e.g., 1 out of 3 peers sold at the recommended
+price) [Ehsan et al., 2021a], or performance for attribute-
+based groups (e.g., “58% of people in 18-29 age group re-
+offended”) [Dodge et al., 2019].
+Uncertainty Content
+Uncertainty content is an estimate, by the agent, of the lack of
+knowledge about the outcome. Uncertainty attempts to assis t
+the human supervisor by providing insight how well the agent
+understands the problems represented by the task. For exam-
+ple, if an agent’s uncertainty is perceived by the human supe r-
+visor as too large, the supervisor may be less likely to trust
+the outcome of the agent [Bhatt et al., 2021]. Uncertainty
+can be broken down into aleatoric and epistemic uncertainty .
+Aleatoric uncertainty (doubt) represents uncertainty inh erent
+in the system being modeled because of stochastic behavior.
+Epistemic uncertainty (ambiguity) is the uncertainty due t o
+limited data or knowledge [Tomsett et al., 2020]. Uncertainty
+can be presented as the error bars on an outcome, probability
+distribution summary, or spaghetti plots [Bhatt et al., 2021].
+Another important area of uncertainty is the concept of out-
+of-distribution. Out-of-distribution refers to differen ce in in-
+puts that occur when an agent is trained and validated with
+a closed-world assumption (all data from the same distri-
+bution) and when the agent is deployed into an open-world
+scenario where inputs can now be out-of-distribution from
+the training and validation data sets [Y ang et al., 2021]. A
+form of epistemic uncertainty, out-of-distribution detec tion
+attempts to determine how far new inputs are from the inputs
+that the agent was trained on [Tomsett et al., 2020]. By pro-
+viding an estimate if the current data is out-of-distributi on,
+an agent provides a powerful estimate of uncertainty. This
+type of uncertainty content can be presented as a percent-
+age of how close the current input matched the training set
+[McGuirl and Sarter, 2006] and is a great counterbalance to
+Conﬁdence/Risk content as it provides a better understandi ng
+of how much weight to put on agent-generated conﬁdence
+(e.g., a high conﬁdence should be viewed as useless if the
+agent also provides high probability that the assessment wa s
+performed on inputs out-of-distribution with training inp uts).
+Logic Rationale Content
+Logic Rationale content provides insight into the inner work-
+ings of agent logic that led to the outcome. The beneﬁt of
+Logic Rationale content is that it assists the human supervi -
+sor to understand the “why” behind agent actions.
+Logic Rationale is typically presented in the form of lim-
+ited logic statements [Ehsan et al., 2021b; Zhu and Williams,
+2020; Svrcek et al., 2019] (e.g., “I am going to collect
+red resources because you are low on red resources”
+[Zhu and Williams, 2020], or “This was recommended be-
+cause it contains features of movies you positively rated in
+the past” [Svrcek et al., 2019]). Logic Rationale can also be
+presented in the form of actual internal logic, if the agents
+method allows (e.g., decision tree, rules) [Huysmans et al.,
+2011] or if the understandable logic can be extracted from a
+black box agent [Guidotti et al., 2019].
+3.2 Meta-Information Modality
+Previous work in trust calibration combined aspects of meta -
+information ﬂow content and modality. We offer a different
+analysis where we separate content and modality. The sec-
+tions below summarize the multiple sub-categories of meta-
+information modalities.
+Narrative Modality
+The Narrative modality is a text-based presentation of meta-
+information ﬂow content. This modality is typically repre-
+sented as one or more sentences of text [Dodge et al., 2019;
+Lai and Tan, 2019; Zhang et al., 2020; Svrcek et al., 2019].
+The narrative modality allows the human supervisor to read
+about behavior or outcomes in a manner similar to how a hu-
+man supervisor would interact a human subordinate.
+V alues Modality
+The V alues modality is a numeric presentation of meta-
+information ﬂow content. This modality can be presented as
+a percentage (e.g., “70%”) [Lai and Tan, 2019; Wang et al.,
+2016], or as a frequency (e.g., “2 out of 3”) [Zhang et al.,
+2020]. The values modality provides a straightforward mech -
+anism to communicate meta-information amounts. As Miller
+[2019] states, however, solely using values may be “unsatis -
+fying unless accompanied by an underlying causal explana-
+tion.”
+Graphical Modality
+The Graphical modality is a visual presentation of
+meta-information ﬂow content. This modality is typ-
+ically presented as highlights on top of existing con-
+tent (e.g., highlights of important objects in the ﬁeld of
+view), [Wintersberger et al., 2021], plots [Bhatt et al., 2021;
+McGuirl and Sarter, 2006] (e.g., cone-of-uncertainty of a p re-
+dicted path) [Bhatt et al., 2021], or charts [Schaffer et al.,
+2019; Wang and Yin, 2021] (e.g., bar chart of long-term re-
+ward of various outcomes [Schaffer et al., 2019]). The graph-
+ical modality provides a quickly digestible form of meta-
+information.
+3.3 Meta-Information Interactivity
+When describing meta-information ﬂows, we need to con-
+sider whether interactivity exists or not within the meta-
+information ﬂow.
+
+--- PDF PAGE 5 ---
+Sub-Category Description Explanation Examples Relevant P apers
+Case-Based Examples (positive or negative)
+from the agent training, testing
+or operations that is pertinent to
+the current situation
+“The closest match to this situation
+in my training set is **this** and the
+outcome of that training example was
+a success. ”
+[Wang and Yin, 2021; Dodge et al.,
+2019; Cai et al., 2019;
+Lai and Tan, 2019; Bussone et al.,
+2015; Ehrlich et al., 2011;
+Gregor and Benbasat, 1999]
+Sensitivity Show how much one or more
+inputs of the task would have to
+differ to change the outcome
+“The weight of the object would have
+to grow by 250 lbs. before I would not
+be able to carry it. ”
+[Wang and Yin, 2021; Dodge et al.,
+2019]
+Inﬂuence Show how much inputs of the
+task inﬂuence the outcome
+“The inputs most driving this decision
+was prior convictions and age. ”
+[Wintersberger et al., 2021;
+Zhang et al., 2020; Wang and Yin,
+2021; Dodge et al., 2019;
+Lai and Tan, 2019; Cheng et al.,
+2019; Svrcek et al., 2019;
+Wang et al., 2016; Bussone et al.,
+2015; Gregor and Benbasat, 1999]
+Conﬁdence/
+Risk
+Estimate by the agent of the
+likelihood of a correct output or
+an event occurring
+“I estimate a 57% risk of damage to
+my equipment in the process of per-
+forming this task. ”
+[Zhu and Williams, 2020;
+Ashoori and Weisz, 2019;
+Wang et al., 2016; Bussone et al.,
+2015]
+Historic
+Performance
+Success statistics on prior situa-
+tions that is pertinent to the cur-
+rent situation
+“I have performed this mission in sim-
+ilar conditions before, and did so suc-
+cessfully 80% of the time. ”
+[Zhang et al., 2020; Dodge et al.,
+2019; Ehsan et al., 2021a;
+Lai and Tan, 2019; Wang et al.,
+2016]
+Uncertainty Estimate by the agent of the
+lack of knowledge about the
+outcome
+“The object in this image has a 20%
+chance of representing an object I
+have not been trained on. ”
+[Tomsett et al., 2020; Bhatt et al.,
+2021; McGuirl and Sarter, 2006]
+Logic
+Rationale
+Provide insights into the inner
+workings of agent logic that led
+to the outcome
+“I am going to collect red resources
+because you are low on red re-
+sources. ”
+[Ehsan et al., 2021b;
+Zhu and Williams, 2020;
+Svrcek et al., 2019]
+Table 2: Summary of meta-information content sub-categori es with description and explanation examples
+Interactivity enables a back-and-forth interaction with t he
+human supervisor to reveal aspects and trends in meta-
+information ﬂow content. The interactive modality allows t he
+human supervisor to explore the agent’s behavior through ad -
+justing inputs or various internal parameters of the agent. For
+example, Cheng et al. [2019] proposed an interactive inter-
+face where the human can modify inputs to determine which
+inputs are driving the agent’s decision making. In another e x-
+ample, Schaffer et al. [2019] enabled users to alter estimates
+of the external environment (i.e., other player tendencies ), to
+understand the relationship between outcome and input.
+3.4 Meta-Information Timing
+In order to completely describe meta-information ﬂows, we
+need to also consider the timing of the ﬂow (i.e. when is the
+ﬂow initiated). The sections below summarize the multiple
+sub-categories of meta-information ﬂow timings.
+Proactive Timing
+In Proactive timing , the meta-information ﬂow is initiated
+prior to the agent preforming a task. The beneﬁt of Proac-
+tive timing is that by informing the human supervisor what
+is to occur, the supervisor is better prepared to understand
+agent behavior instead of reacting to behavior that may not
+be understood in the supervisor’s mental model without the
+proactive information. An example of this is described by
+Zhu and Williams [2020], where they identify proactive ex-
+planations as a method of communicating logic rationale for
+an agent’s actions prior to the agent performing these actio ns.
+Concurrent Timing
+In Concurrent timing , the meta-information ﬂow occurs at
+the same time as the agent provides the recommendation or
+course of action. The beneﬁt of Concurrent timing is that
+the supervisor is informed at the point of having to react to
+the agent and therefore best leverages the supervisor’s foc us.
+The majority of the literature provides meta-information c on-
+currently as a one-time ﬂow but can also be dynamically up-
+dating as shown by McGuirl and Sarter [2006].
+Post-Hoc Timing
+In Post-Hoc timing, the meta-information ﬂow is provided af-
+ter an agent provides a result or performs a course of action.
+Post-hoc meta-information is provided in response to a re-
+quest from the human supervisor to explain a previous behav-
+ior (e.g., “Why did/didn’t you do that?,” “Why can’t you do
+that?”) [de Graaf and Malle, 2017; Fox et al., 2017] or in the
+case of a speciﬁc trigger, such as anomalous agent behavior
+[Gregor and Benbasat, 1999].
+4 Discussion
+By performing this survey and developing this taxonomy, we
+have gained insight into the breadth and direction of resear ch
+
+--- PDF PAGE 6 ---
+in trust calibration from a human-centered point of view. This
+survey also provided us a unique view into the difﬁculty of
+trust calibration and into future directions for our taxono my.
+4.1 Difﬁculty of Trust Calibration
+The reason why trust calibration is difﬁcult is that intelli -
+gent agents suffer from a form of the Dunning–Kruger Effect
+[Dunning, 2011]: Intelligent agents are too ignorant to kno w
+how ignorant they are. More precisely: performing trust cal i-
+bration forces the intelligent agent to provide cues to a hum an
+supervisor indicating the agent’s own output is wrong even
+when the agent does not know that it is wrong.
+Meta-Information Recommendations
+So what makes an intelligent agent wrong during operations?
+Over-ﬁtting, not enough training, training not being an ac-
+curate representation of operations, poor assumptions or a b-
+stractions of the operational environment, the complexity of
+the operations environment, and unforeseen operations sit ua-
+tions are some examples of issues driving an intelligent age nt
+to under-perform in operations. Since we believe these is-
+sues drive an agent away from the as-developed performance
+(e.g., test set accuracy), we recommend providing meta-
+information content that helps identify a mismatch between
+the training set and the current instance, or helps identify
+incorrect modeling assumptions. These include Uncertainty
+Content (especially for determining out-of-distribution) and
+Sensitivity Content in the context of Graphical Modalities
+(especially for highlighting salient features which drive de-
+cisions) in Proactive and Concurrent Timings for operations.
+Trust-Based Trust Calibration
+Not all operations are the same. In low-stakes, ’every-
+day’ operations (e.g., purchase recommenders), according to
+Bunt et al. [2012], some human supervisors may be wary of
+any meta-information that requires time and cognitive effo rt
+unless it would enhance the speed or accuracy of the system.
+In high-stakes operations (e.g., military, security, heal th care,
+criminal justice), more meta-information may be required t o
+ensure compliance with legal and ethical frameworks. Even
+though these types of operations are vastly different, we be -
+lieve both should adapt to human supervisors’ level of trust .
+For example, Wintersberger et al. [2021] suggest that trust
+calibration information should be provided to distrusting su-
+pervisors, while not burdening supervisors with trust valu es
+that are already high. Therefore we suggest that supervi-
+sor trust level be an input to intelligent agents so that the
+agent can vary the content, modality, timing, interactivit y,
+and amount of trust calibration meta-information accordingly.
+This construct allows for ﬂexibility in low-cost and high-c ost
+operations as well as providing for cross over cases when a
+low-cost user wants to understand more or when a high-cost
+user wants communications brevity (e.g., time-critical mi li-
+tary operations).
+4.2 Future Directions
+Now that meta-information content, modalities, interacti vity,
+and timing are formalized in the taxonomy presented in this
+paper, future studies can determine, for example: which in-
+formation ﬂow content achieves the best human-agent part-
+nership performance; whether information ﬂow content or
+modality is what drives this performance; and which infor-
+mation ﬂow content, modalities, interactivity, timings, a nd
+amounts work best with which human supervisor characteris-
+tics or groups.
+One interesting follow on to formalizing meta-information
+is to standardize this information. Standardization would in-
+volve formally deﬁning each content, modality, interactiv ity,
+and timing sub-category including the information formats
+within each. Even though this may be a daunting task, the
+beneﬁts could be substantial. For example, having standard -
+ized trust calibration meta-information could improve rea l-
+world adoption of intelligent agents, reduce the cost of inf ras-
+tructure necessary to test and ﬁeld agents, reduce supervis or
+training, and increase understanding during operations.
+Another follow on area deals with meta-information tim-
+ing. The majority of literature we surveyed on trust calibra -
+tion and meta-information focused on information ﬂow be-
+fore, during, or after performing a task, as we described in
+Section 3.4. Achieving complementary performance, how-
+ever, may require additional timing phases outside of the op -
+erational task. For example, military supervisor-subordi nate
+partnerships develop a ‘shared conﬁdence’ in team mem-
+bers’ abilities over time during training exercises where
+each side of the partnership gains understanding of how the
+other will react and respond in different situations [USArm y,
+2019]. Initial studies have shown that human-agent part-
+nerships also function better during operations due to trai n-
+ing exercises [Johnson et al., 2021] and pre-operations team
+building[Walliser et al., 2019]. Therefore, an important area
+of research would be to determine: what meta-information is
+needed to support these pre-operations phases and how does
+the training exercise and rehearsal meta-information diff er
+from what is outlined in this paper.
+5 Limitations
+We chose to limit our survey to trust calibration between
+a single human and a single agent. Due to this limitation,
+trust calibration between humans and multi-agent systems
+[Setter et al., 2017] and trust calibration between multiple
+agents [Liu et al., 2016] are not discussed.
+We also limited our survey to trust calibration meta in-
+formation in support of individual decisions. Any addi-
+tional meta-information necessary to support longitudina l
+trust calibration [de Visser et al., 2020], such as reliability
+[Lyons et al., 2021], was not covered.
+We structured our survey based on information ﬂowing
+from agent to human but acknowledge that there are other
+very important information ﬂows present in trust calibra-
+tion that were not covered since they do not originate from
+the agent. This includes information ﬂows about task risk
+[Devitt, 2018], task complexity [Hancock et al., 2011], and
+task consequences [Ashoori and Weisz, 2019] which change
+the threshold for trust.
+Finally, since this paper focuses on information, other
+factors such as agents’ physical presence and supervisors’
+
+--- PDF PAGE 7 ---
+subjective feelings toward intelligent agents [Khavas, 20 21;
+Hancock et al., 2011] are not discussed.
+6 Conclusions
+We have presented a taxonomy based on a review of trust
+calibration literature for single human to single agent int er-
+actions. Through this survey we have distilled the content,
+modality, interactivity, and timing of meta-information n ec-
+essary to inform a trust calibration decision for intellige nt
+agents. By focusing on information ﬂows, we have been able
+to consider several directions to guide future research.
+References
+Alejandro Barredo Arrieta, Natalia D’iaz-Rodr’iguez,
+Javier Del Ser, Adrien Bennetot, Siham Tabik, A. Bar-
+bado, Salvador Garc’ia, Sergio Gil-L’opez, Daniel Molina,
+Richard Benjamins, Raja Chatila, and Francisco Herrera.
+Explainable artiﬁcial intelligence (xai): Concepts, tax-
+onomies, opportunities and challenges toward responsible
+ai. ArXiv, abs/1910.10045, 2020.
+Maryam Ashoori and Justin D. Weisz. In ai we trust? fac-
+tors that inﬂuence trustworthiness of ai-infused decision -
+making processes. ArXiv, abs/1912.02675, 2019.
+Edmond A wad, Sydney Levine, Max Kleiman-Weiner, So-
+han Dsouza, Joshua B. Tenenbaum, Azim F. Shariff, Jean-
+Franc ¸ois Bonnefon, and Iyad Rahwan. Blaming humans
+in autonomous vehicle accidents: Shared responsibility
+across levels of automation. ArXiv, abs/1803.07170, 2018.
+Umang Bhatt, Y unfeng Zhang, Javier Antor´ an,
+Qingzi V era Liao, Prasanna Sattigeri, Riccardo Fogliato,
+Gabrielle Gauthier Melanc ¸on, Ranganath Krishnan, Jason
+Stanley, Omesh Tickoo, Lama Nachman, Rumi Chunara,
+Adrian Weller, and Alice Xiang. Uncertainty as a form of
+transparency: Measuring, communicating, and using un-
+certainty. Proceedings of the 2021 AAAI/ACM Conference
+on AI, Ethics, and Society , 2021.
+Ingvild Bode and Tom Watts. Worried about the autonomous
+weapons of the future? look at what’s already gone wrong.
+https://thebulletin.org/2021/04/worried-about-the-a utonomous-weapons-of-the-future- \look-at-whats-already-gone-wrong/,
+2021. Last Accessed: 2022-02-14.
+Andrea Bunt, Matthew Lount, and Catherine Lauzon. Are
+explanations always important?: a study of deployed, low-
+cost intelligent interactive systems. In IUI ’12 , 2012.
+Adrian Bussone, Simone Stumpf, and Dympna M.
+O’Sullivan. The role of explanations on trust and reliance
+in clinical decision support systems. 2015 International
+Conference on Healthcare Informatics , pages 160–169,
+2015.
+Carrie J. Cai, Jonas Jongejan, and Jess Holbrook. The effect s
+of example-based explanations in a machine learning inter-
+face. Proceedings of the 24th International Conference on
+Intelligent User Interfaces, 2019.
+Hao Fei Cheng, Ruotong Wang, Zheng Zhang, Fiona
+O’Connell, Terrance Gray, F. Maxwell Harper, and Haiyi
+Zhu. Explaining decision-making algorithms through ui:
+Strategies to help non-expert stakeholders. Proceedings of
+the 2019 CHI Conference on Human Factors in Computing
+Systems, 2019.
+Maartje de Graaf and Bertram F. Malle. How people explain
+action (and autonomous intelligent systems should too). In
+AAAI Fall Symposia, 2017.
+Ewart de Visser, Marieke M. M. Peeters, Malte F. Jung,
+Spencer Kohn, Tyler H. Shaw, Richard Pak, and Mark A.
+Neerincx. Towards a theory of longitudinal trust calibra-
+tion in human–robot teams. International Journal of Social
+Robotics, 12:459–478, 2020.
+Susannah Kate Devitt. Trustworthiness of autonomous sys-
+tems. In CDC 2018, 2018.
+Berkeley J. Dietvorst, Joseph P . Simmons, and Cade Massey.
+Algorithm aversion: people erroneously avoid algorithms
+after seeing them err. Journal of experimental psychology.
+General, 144 1:114–26, 2015.
+Jonathan Dodge, Qingzi V era Liao, Y unfeng Zhang, Rachel
+K. E. Bellamy, and Casey Dugan. Explaining models: an
+empirical study of how explanations impact fairness judg-
+ment. Proceedings of the 24th International Conference on
+Intelligent User Interfaces, 2019.
+David Dunning. The dunning–kruger effect: On being igno-
+rant of one’s own ignorance. In Advances in Experimental
+Social Psychology, V olume 44, Academic Press, 2011.
+Kate Ehrlich, Susanna E. Kirk, John F. Patterson, Jamie C.
+Rasmussen, Steven I. Ross, and Dan Gruen. Taking ad-
+vice from intelligent systems: the double-edged sword of
+explanations. In IUI ’11 , 2011.
+Upol Ehsan, Qingzi V era Liao, Michael J. Muller, Mark O.
+Riedl, and Justin D. Weisz. Expanding explainability: To-
+wards social transparency in ai systems. Proceedings of
+the 2021 CHI Conference on Human Factors in Comput-
+ing Systems, 2021.
+Upol Ehsan, Samir Passi, Qingzi V era Liao, Larry Chan, I-
+Hsiang Lee, Michael J. Muller, and Mark O. Riedl. The
+who in explainable ai: How ai background shapes percep-
+tions of ai explanations. ArXiv, abs/2107.13509, 2021.
+Maria Fox, Derek Long, and Daniele Magazzeni. Explainable
+planning. ArXiv, abs/1709.10256, 2017.
+Shirley D Gregor and Izak Benbasat. Explanations from intel-
+ligent systems: Theoretical foundations and implications
+for practice. MIS Q., 23:497–530, 1999.
+Riccardo Guidotti, Anna Monreale, Franco Turini, Dino Pe-
+dreschi, and Fosca Giannotti. A survey of methods for
+explaining black box models. ACM Computing Surveys
+(CSUR), 51:1 – 42, 2019.
+Peter A. Hancock, Deborah R. Billings, Kristin E. Schaefer,
+Jessie Y .C. Chen, Ewart de Visser, and Raja Parasuraman.
+A meta-analysis of factors affecting trust in human-robot
+interaction. Human Factors: The Journal of Human Fac-
+tors and Ergonomics Society , 53:517 – 527, 2011.
+Johan Huysmans, Karel Dejaeger, Christophe Mues, Jan V an-
+thienen, and Bart Baesens. An empirical evaluation of the
+
+--- PDF PAGE 8 ---
+comprehensibility of decision table, tree and rule based
+predictive models. Decis. Support Syst., 51:141–154, 2011.
+Craig J. Johnson, Mustafa Demir, Nathan J. Mcneese,
+Jamie C. Gorman, Alexandra T. Wolff, and Nancy J.
+Cooke. The impact of training on human-autonomy team
+communications and trust calibration. Human factors ,
+page 187208211047323, 2021.
+Zahra Rezaei Khavas. A review on trust in human-robot in-
+teraction. ArXiv, abs/2105.10045, 2021.
+Johannes Kunkel, Tim Donkers, Lisa Michael, Catalin-Mihai
+Barbu, and J¨ urgen Ziegler. Let me explain: Impact of
+personal and impersonal explanations on trust in recom-
+mender systems. Proceedings of the 2019 CHI Conference
+on Human Factors in Computing Systems , 2019.
+Vivian Lai and Chenhao Tan. On human predictions with
+explanations and predictions of machine learning mod-
+els: A case study on deception detection. Proceedings
+of the Conference on Fairness, Accountability, and Trans-
+parency, 2019.
+John D. Lee and Katrina A. See. Trust in automation: Design-
+ing for appropriate reliance. Human Factors: The Journal
+of Human Factors and Ergonomics Society , 46:50 – 80,
+2004.
+Timothy B. Lee. Police: Uber driver was stream-
+ing hulu just before fatal self-driving car crash.
+https://arstechnica.com/cars/2018/06/police-uber-dr iver-was-streaming-hulu-just-before-fatal \self-driving-car-crash/,
+2018. Last Accessed: 2022-02-07.
+Ling Liu, Margaret L. Loper, Y usuf ¨Ozkaya, Abdurrahman
+Y as ¸ar, and Emre Yigitoglu. Machine to machine trust in
+the iot era. In TRUST@AAMAS, 2016.
+Ethan Lowens. Accuracy is not enough: The task mismatch
+explanation of algorithm aversion and its policy implica-
+tions. Harvard Journal of Law & T echnology, V ol. 34, No.
+1, 2020.
+David Lyell and Enrico W . Coiera. Automation bias and ver-
+iﬁcation complexity: a systematic review. Journal of the
+American Medical Informatics Association , 24:423–431,
+2017.
+Joseph B. Lyons, Thy V o, Kevin T. Wynne, Sean Mahoney,
+Chang Soo Nam, and Darci Gallimore. Trusting au-
+tonomous security robots: The role of reliability and state d
+social intent. Human Factors: The Journal of Human Fac-
+tors and Ergonomics Society , 63:603 – 618, 2021.
+John M. McGuirl and Nadine B. Sarter. Supporting trust cali-
+bration and the effective use of decision aids by presenting
+dynamic system conﬁdence information. Human Factors:
+The Journal of Human Factors and Ergonomics Society ,
+48:656 – 665, 2006.
+Tim Miller. Explanation in artiﬁcial intelligence: Insigh ts
+from the social sciences. Artif. Intell., 267:1–38, 2019.
+Bonnie M. Muir. Trust between humans and machines, and
+the design of decision aids. Int. J. Man Mach. Stud. ,
+27:527–539, 1987.
+James Austin Schaffer, John O’Donovan, James R.
+Michaelis, Adrienne Jeanisha Raglin, and Tobias H¨ ollerer.
+I can do better than your ai: expertise and explanations.
+Proceedings of the 24th International Conference on Intel-
+ligent User Interfaces, 2019.
+Tina Setter, Andrea Gasparri, and Magnus Egerstedt. Trust
+in multi-agent networks: From self-centered to team-
+oriented. 2017 American Control Conference (ACC), pages
+997–1002, 2017.
+Fabian Sperrle, Mennatallah El-Assady, Grace Guo,
+Duen Horng Chau, Alex Endert, and Daniel A. Keim.
+Should we trust (x)ai? design dimensions for structured
+experimental evaluations. ArXiv, abs/2009.06433, 2020.
+Martin Svrcek, Michal Kompan, and M´ aria Bielikov´ a. To-
+wards understandable personalized recommendations: Hy-
+brid explanations. Comput. Sci. Inf. Syst. , 16:179–203,
+2019.
+Richard J. Tomsett, Alun David Preece, Dave Braines, Fed-
+erico Cerutti, Supriyo Chakraborty, Mani B. Srivastava,
+Gavin Pearson, and Lance M. Kaplan. Rapid trust calibra-
+tion through interpretable and uncertainty-aware ai. Pat-
+terns, 1, 2020.
+USArmy. Army doctrine publica-
+tion (adp) 6-0, mission command.
+https://armypubs.army.mil/ProductMaps/PubForm/Details.aspx?PUB
+ID=1007502,
+2019. Last Accessed: 2022-02-09.
+James Walliser, Ewart J. de Visser, Eva Wiese, and Tyler H.
+Shaw. Team structure and team building improve hu-
+man–machine teaming with autonomous agents. Journal
+of Cognitive Engineering and Decision Making , 13:258 –
+278, 2019.
+Xinru Wang and Ming Yin. Are explanations helpful? a com-
+parative study of the effects of explanations in ai-assiste d
+decision-making. 26th International Conference on Intel-
+ligent User Interfaces, 2021.
+Ning Wang, David V . Pynadath, and Susan G. Hill. Trust cal-
+ibration within a human-robot team: Comparing automati-
+cally generated explanations. 2016 11th ACM/IEEE Inter-
+national Conference on Human-Robot Interaction (HRI) ,
+pages 109–116, 2016.
+Philipp Wintersberger, Frederica Janotta, Jakob Peintner, An-
+dreas L¨ ocken, and Andreas Riener. Evaluating feedback
+requirements for trust calibration in automated vehicles. it
+- Information T echnology, 63:111 – 122, 2021.
+Jingkang Y ang, Kaiyang Zhou, Yixuan Li, and Ziwei Liu.
+Generalized out-of-distribution detection: A survey. ArXiv,
+abs/2110.11334, 2021.
+Y unfeng Zhang, Qingzi V era Liao, and Rachel K. E. Bellamy.
+Effect of conﬁdence and explanation on accuracy and trust
+calibration in ai-assisted decision making. Proceedings
+of the 2020 Conference on Fairness, Accountability, and
+Transparency, 2020.
+Lixiao Zhu and Thomas Emrys Williams. Effects of proac-
+tive explanations by robots on human-robot trust. In ICSR,
+2020.

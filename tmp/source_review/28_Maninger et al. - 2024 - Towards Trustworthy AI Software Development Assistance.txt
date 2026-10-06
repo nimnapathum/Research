@@ -1,0 +1,648 @@
+--- PDF PAGE 1 ---
+. 
+. 
+Latest updates: hps://dl.acm.org/doi/10.1145/3639476.3639770
+. 
+. 
+RESEARCH-ARTICLE
+Towards Trustworthy AI Soware Development Assistance
+DANIEL MANINGER, Technical University of Darmstadt, Darmstadt, Hessen, Germany
+. 
+KRISHNA NARASIMHAN
+. 
+M. MEZINI, Technical University of Darmstadt, Darmstadt, Hessen, Germany
+. 
+. 
+. 
+Open Access Support provided by:
+. 
+Technical University of Darmstadt
+. 
+PDF Download
+3639476.3639770.pdf
+23 January 2026
+Total Citations: 4
+Total Downloads: 1083
+. 
+. 
+Published: 14 April 2024
+. 
+. 
+Citation in BibTeX format
+. 
+. 
+ICSE-NIER'24: 2024 ACM/IEEE 44th
+International Conference on Soware
+Engineering: New Ideas and Emerging
+Results
+April 14 - 20, 2024
+Lisbon, Portugal
+. 
+. 
+Conference Sponsors:
+SIGSOFT
+ICSE-NIER'24: Proceedings of the 2024 ACM/IEEE 44th International Conference on Soware Engineering: New Ideas and Emerging Results (April 2024)
+hps://doi.org/10.1145/3639476.3639770
+ISBN: 9798400705007
+.
+
+
+--- PDF PAGE 2 ---
+Towards Trustworthy AI Software Development Assistance
+Daniel Maninger∗
+Technische Universität Darmstadt
+Darmstadt, Germany
+daniel.maninger@tu-darmstadt.de
+Krishna Narasimhan†
+AI Quality & Testing Hub
+Frankfurt am Main, Germany
+k.narasimhan@aiqualityhub.com
+Mira Mezini‡§
+Technische Universität Darmstadt
+Darmstadt, Germany
+mezini@cs.tu-darmstadt.de
+ABSTRACT
+It is expected that in the near future, AI software development assis-
+tants will play an important role in the software industry. However,
+current software development assistants tend to be unreliable, often
+producing incorrect, unsafe, or low-quality code. We seek to resolve
+these issues by introducing a holistic architecture for constructing,
+training, and using trustworthy AI software development assistants.
+In the center of the architecture, there is a foundational LLM trained
+on datasets representative of real-world coding scenarios and com-
+plex software architectures, and fine-tuned on code quality criteria
+beyond correctness. The LLM will make use of graph-based code
+representations for advanced semantic comprehension. We envision
+a knowledge graph integrated into the system to provide up-to-date
+background knowledge and to enable the assistant to provide appro-
+priate explanations. Finally, a modular framework for constrained
+decoding will ensure that certain guarantees (e.g., for correctness
+and security) hold for the generated code.
+ACM Reference Format:
+Daniel Maninger, Krishna Narasimhan, and Mira Mezini. 2024. Towards
+Trustworthy AI Software Development Assistance. InNew Ideas and Emerg-
+ing Results (ICSE-NIER’24), April 14–20, 2024, Lisbon, Portugal. ACM, New
+York, NY, USA, 5 pages. https://doi.org/10.1145/3639476.3639770
+1 INTRODUCTION
+Software development (SD) is a complex, expensive process [3]. In
+times of ever-increasing digitalization of our society and scarcity of
+IT talent, it makes sense to (partially) automate this process – the
+popularity that AI-assisted code generation has gained since the
+appearance of large language models (LLMs) indicates this need. At
+the same time, given that software dominates our digitized society,
+guaranteeing the quality of the generated code is paramount. More-
+over, for the acceptance of AI software development assistants, it
+is essential that they cover a broad range of software engineering
+tasks and faithfully mimic existing well-understood and proven SD
+methods and practices.
+∗Also with Hessian Center for Artificial Intelligence (hessian.AI).
+†Work conducted while afiliated with Technische Universität Darmstadt.
+‡Also with Hessian Center for Artificial Intelligence (hessian.AI).
+§Also with National Research Center for Applied Cybersecurity ATHENE.
+ICSE-NIER’24, April 14–20, 2024, Lisbon, Portugal
+© 2024 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-0500-7/24/04.
+https://doi.org/10.1145/3639476.3639770
+Although existing LLMs, when pre-trained or fine-tuned on code1,
+have shown promise in handling coding-related queries and synthe-
+sizing coherent-looking code, they exhibit concerning issues. For
+instance, AIs like ChatGPT produce erroneous code suggestions: On
+Stack Overflow, the large number of ChatGPT-generated inaccurate
+answers led to a ban on its use. The moderators stated that “the
+posting of answers created by ChatGPT [. . . ] is substantially harmful
+to the site and to users who are asking questions and looking for correct
+answers”2. A later study made similar observations [12].
+Moreover, a study on GitHub Copilot revealed that 40% of the gen-
+erated code contained critical security vulnerabilities [24]. Further
+emphasizing the dangers of such issues in the domain of software
+engineering is an investigation that discovered that “participants
+who had access to the AI assistant were more likely to introduce security
+vulnerabilities [. . . ], yet also more likely to rate their insecure answers
+as secure”[25]. These studies highlight quality and security problems
+with current industrial AI software development assistants.
+To remedy these problems, we seek to establish the foundations
+of a next-generation AI software development assistant system3.
+Given the software engineer’s natural language queries, the as-
+sistant should suggest high-quality code, i.e., correct but also se-
+cure, readable, and otherwise compliant with best practices. So far,
+code model research has focused almost exclusively on correctness
+(e.g., [5, 8, 14, 17, 18, 31]).
+Beyond that, the assistant should be able to serve the role of a
+virtual pair programmer, explaining its suggestions, helping with
+debugging, etc., similar to how a human would. The positive effects
+of pair programming practices on code correctness and quality [36],
+as well as on collaborative learning [22], are well known. Despite this,
+pair programming has not been widely adopted because working
+closely with a teammate is challenging4. A virtual pair programmer
+would not cause such problems. Moreover, we envision the system
+we build as an AI counterpart to the traditional DevOps pipeline.
+Therefore, our assistant should be able to support the software en-
+gineer in all phases, from software design to deployment.
+The listed objectives are highly ambitious and require addressing
+various challenges. This paper is intended to outline a way forward
+for us and other researchers trying to develop better AI software
+development assistants. To this end, we start by identifying five key
+challenges:
+(1) lack of representative datasets,
+(2) difficulties capturing code structure and semantics,
+(3) low code quality,
+(4) insufficient explanations, and
+1For brevity, we will use the termcode model.
+2https://meta.stackoverflow.com/questions/421831/temporary-policy-chatgpt-is-banned
+3For brevity, we will also refer to it simply as(AI SD) assistant.
+4https://martinfowler.com/articles/on-pair-programming.html#Challenges
+This work licensed under Creative Commons Attribution International 4.0 License.
+112
+2024 IEEE/ACM 46th International Conference on Software Engineering: New Ideas and Emerging Results (ICSE-
+NIER)
+
+--- PDF PAGE 3 ---
+ICSE-NIER’24, April 14–20, 2024, Lisbon, Portugal Maninger et al.
+(5) no guarantees on the results.
+We then propose fivesolutions to address these challenges:
+(1) curated real-world datasets,
+(2) graph representations of code,
+(3) fine-tuning through feedback from code analyses
+(4) enriched code knowledge graphs, and
+(5) constrained decoding.
+Our considerations lead to a holistic multi-component architecture
+for AI software development assistant systems built around a central
+code model. It is illustrated in Figure 1.
+2 APPROACH
+The first step towards improving current AI software development
+assistants is to understand their limitations. Here, we elaborate on
+the five challenges we found to be most relevant. For each of them,
+we propose a possible solution together with an evaluation plan.
+All the described ideas contribute to the overall goal of this vision:
+Creating a trustworthy AI SD assistant that a software engineer can
+use in real-world software projects without having to worry about
+the correctness, quality, safety, and security of the generated code.
+2.1 Representative Datasets
+Challenge. Popular code datasets5 such as CodeSearchNet6 [11]
+and Py150K7 consists of individual code snippets with single func-
+tions. Such datasets do not represent real-world software, typically
+exhibiting complex software patterns, interdependent class hierar-
+chies, project dependencies involving multiple interconnected files,
+and further complexities. A study by Hellendoorn et al. [10] revealed
+that the absence of these features in coding benchmarks contributed
+to many shortcomings of code completion systems. We, therefore,
+consider the lack of high-quality datasets that accurately represent
+real-world coding patterns and complex software architectures a key
+challenge for training code models. However, real-world code suit-
+able for creating such datasets is scarce. Moreover, annotating and
+curating code datasets requires significant code quality and dataset
+management expertise.
+Envisioned solution. To meet this challenge, we plan to compile
+and curate a comprehensive dataset of code that accurately reflects
+common real-world coding patterns and software structures. For
+this, we will build upon established state-of-the-art datasets. To
+make these datasets representative, we will devise heuristics rooted
+in general coding patterns observed in real-world coding practices.
+Hellendoorn et al. introduced initial heuristics for the C# program-
+ming language to distinguish real-world completions from synthetic
+ones, such as length, type, and origin of (syntactic) tokens. We will
+expand on these heuristics in a generalized manner for other popular
+languages, including Java, Python, and C.
+We will annotate our dataset with qualitative metrics to ensure
+we train with high-quality code. We will rely on various techniques
+to accurately label the dataset, including static code analysis tools,
+Stack Overflow discussions, and GitHub issue trackers. While min-
+ing GitHub repositories, strategies must be adopted to circumvent
+known pitfalls [13]. When extracting labels from Stack Overflow,
+5With closed-source commercial code models, the datasets used are often unknown.
+6https://github.com/github/CodeSearchNet
+7https://www.sri.inf.ethz.ch/py150
+we will address challenges posed by incomplete and unstructured
+code suggestions in the discussions by exploring automated program
+repair approaches [7].
+Evaluation. To evaluate the impact of the representative dataset,
+we will train code models like CodeBert [5], AlphaCode [18], and
+TravTrans [14] on vanilla versions of CodeSearchNet. Subsequently,
+we will curate a variant of CodeSearchNet that represents real-world
+coding patterns and retrain the models on it. We then compare the
+differently trained model variants with each other. Standard metrics
+such as exact match score, statement-level accuracy, or BLEU [23]
+are of limited value here, because programming tasks can be solved
+in multiple ways and different looking programs can be semantically
+equivalent [28]. Therefore, we will evaluate the model performance
+using CodeBLEU [28], which also considers abstract syntax trees
+and data flow. Additionally, we will explore the use of techniques
+like semantic parsing and program analysis to estimate the semantic
+similarity of code segments.
+2.2 Capturing Code Structure and Semantics
+Challenge. In Section 1, we gave some examples of issues with
+state-of-the-art AI SD assistants, particularly their shortcomings in
+generating correct and secure code. Note that these are errors at the
+semantic level. How and to what extent code models can capture and
+respect program semantics remains an open research question8. One
+conceivable factor is that current code models treat code as formatted
+text and discard crucial semantic information such as control or
+data flow [4], implicit usage constraints of third-party libraries, and
+domain-specific knowledge. It remains unclear what representations
+of code and SD knowledge should be used by these models.
+Envisioned solution. To quantify the problems with current tex-
+tual code representations, we are developing an analysis technique
+to assess how much of a program’s semantics transformer models
+learn to capture. We do this by calculating theirsemantic precision
+and recall, i.e., how well the models’ attention maps match the codes’
+control and data flow graphs. We will also consider thegraph edit
+distance [6] between them.
+Further, since most semantic-rich representations of code are
+graph-based – control flow graphs, data flow graphs, call graphs –
+code models may benefit from native support of graph-based repre-
+sentations. To this end, we will explore different approaches and in-
+vestigate their impact on the quality of suggested code: Firstly, we will
+work on flattening graph representations for code and using them as
+training data for sequence-based transformers. Positional encodings
+specialized for graph structures [
+31] may be instrumental in teaching
+the model how to interpret its input sequences correctly. Secondly,
+approaches related to graph attention networks [33] and attention
+masking [20] will be worth exploring, as they enable constraints on
+graph relations to be injected directly into the transformer’s atten-
+tion heads. Thirdly, we will explore the potential of graph neural
+networks [
+39] and graph transformers [37] to operate directly on
+graph-based code representations. We will investigate the trade-offs
+8Earlier works have attempted to investigate this question for code transformers
+trained on abstract syntax tree (AST) representations [34]. However, such studies are
+limited, as ASTs may not capture program semantics very well, and the approaches
+cannot easily be adapted to new models.
+113
+
+--- PDF PAGE 4 ---
+Towards Trustworthy AI Software Development Assistance ICSE-NIER’24, April 14–20, 2024, Lisbon, Portugal
+C
+ritic
+Pr
+ogram code
+Tok
+en-wise feedback
+Pr
+ompt
+S
+oftware
+engineer
+Re
+presentative
+dataset
+C
+ode
+knowledge
+graph
+G
+raph-based
+code model
+Rea
+l-world code,
+issues, & discussions
+Cons
+trained
+decoding
+1
+2 3
+4
+5
+Figure 1: High-level architecture of our envisioned AI software development assistant. It consists of five main components:
+(1) A curated training dataset representing real-world coding patterns and software architectures. (2) A foundational code
+model that uses graph representations for better understanding of program semantics. (3) An RL-based feedback mechanism to
+fine-tune the model for improved code quality. (4) A semantically enriched code knowledge graph to help the assistant explain
+its code. (5) A modular constrained decoding framework on top of the model that prevents the generation of undesired code.
+between all three approaches. Potentially, this effort will lead to a
+foundational code model with increased semantic awareness.
+Evaluation. To evaluate the semantic awareness of our graph-
+based code models, we will use the novel analysis technique de-
+scribed above. Additionally, to evaluate their robustness, we ran-
+domly select code artifacts and make semantic-preserving changes
+to them – renaming variables, translating for-statements into while-
+statements, etc. In a robust semantic-aware model, such semantics-
+preserving changes should typically not be reflected in large-scale
+changes to the attention maps. We will also compare the performance
+of the semantic-aware foundational code models we build with stan-
+dard models like CodeBert, TravTrans, and GraphCodeBert [8] on
+downstream tasks using the metrics mentioned in Subsection 2.1.
+2.3 Code Quality
+Challenge. Human software engineers receive feedback on their
+code as they write it through automated tools like compiler checks
+and linters, or from colleagues during pair programming and code
+reviews. Such feedback loops can have a very positive impact on code
+quality. For example, studies on pair programming report fewer bugs,
+better readability, higher test coverage and passing rates, and other
+benefits [36]. Code models, on the other hand, lack similar mecha-
+nisms. They are typically optimized for accuracy, not for qualitative
+criteria. We believe that a reliable AI SD assistant should provide
+code that not only accurately reflects existing code patterns, but is
+also of high quality according to well-established quality criteria
+and best practices.
+Envisioned solution. Inspired by the feedback loop described above,
+we propose an approach based on reinforcement learning (RL) to
+fine-tune code models for multiple code quality criteria. The ap-
+proach shares ideas with actor–critic RL [
+15], where, in our case,
+the code model takes the actor’s role, and one or more code analysis
+tools serve as critics. Each critic evaluates the code generated by
+the actor and returns a token-wise reward value. The rewards are
+then aggregated (and traded off against each other) using utility
+functions known from multi-objective RL [9]. Finally, the policy gra-
+dient is used to update the actor model, e.g., through proximal policy
+optimization (PPO) [30].
+While ideas with actor–critic RL have recently been explored
+for program correctness [17], our setting has a number of special
+characteristics that are not systematically explored: Since there is
+no universal metric for code quality, we resort to multiple critics,
+each specializing in one or more qualitative aspects. Possible crit-
+ics for general best practices are linters and similar static analysis
+tools. To optimize security aspects, specialized security checkers like
+CogniCrypt [16] or CryptoGuard [27] can be used. One could also
+consider more subjective criteria such as readability metrics [29]. In
+our setting, critics must provide individual rewards for each token.
+This enables reward shaping and, thus, more efficient learning, as
+it conveys to the actor which actions (i.e., generated tokens) were
+particularly good or bad. Despite this, our setting has the benefit that
+we can generate a complete program before applying the critics to
+it. This allows us to use a wide variety of critics, even if they cannot
+handle partial (incomplete) programs. Lastly, we must point out
+that multi-objective RL with many (i.e., four or more) objectives is
+considered a hard problem [9]. In our case, however, the different
+code quality objectives can be assumed to be mostly non-conflicting.
+Therefore, there is no need to find all Pareto-optimal policies – one is
+sufficient – which allows us to use much more efficient algorithms.
+Evaluation. The effects of our code quality fine-tuning approach
+can be measured by a direct comparison of variants of a code model
+before and after fine-tuning. The same tools used as critics can be
+used to evaluate the code generated by the two variants. In addition,
+the code should be audited and rated by humans experts. For most
+code quality criteria, any coding benchmark is suitable, while spe-
+cialized benchmarks like LLMSecEval [32] can be used to evaluate
+safety and security criteria.
+2.4 Explainability
+Challenge. Current code models are not designed to base their
+answers on concrete background knowledge and use that knowledge
+114
+
+--- PDF PAGE 5 ---
+ICSE-NIER’24, April 14–20, 2024, Lisbon, Portugal Maninger et al.
+to account for their answers to the user. While instruction fine-tuned
+(code) models [38] often add explanations to their answers, these
+answers are the result of purely statistical computations and may be
+hallucinated. For instance, a recent study by Kabir et al. [12] found
+that ChatGPT answered Stack Overflow questions incorrectly half
+of the time. In our view, the issue of how to enable LLMs to provide
+correct and appropriate explanations for code remains unresolved.
+Envisioned solution. For this challenge, we plan to investigate how
+to integrate code knowledge graphs (CKGs) into our AI SD assistant.
+This way, we want to give the assistant access to a rich, easily updat-
+able source of background knowledge that it can ground its generated
+code and explanations in. A potential subject for our investigation is
+IBM’s GraphGen4Code9 [1]. This CKG is a set of triplets describing
+relationships (edges) between entities (nodes). For a given piece of
+code, the corresponding CKG contains nodes for each statement,
+with edges signifying control and data flow. Additionally, GraphGen-
+4Code has established initial semantic links between code fragments
+and corresponding forum discussions on Stack Overflow. However,
+the expressiveness of these name-based links is rather superficial.
+To improve the expressiveness of the relationships between code
+and knowledge sources, we propose to enrich GraphGen4Code with
+information about the task to which a particular code description
+or forum post relates. This information can be obtained using intent
+classification. Moreover, while Stack Overflow is a valuable source
+of discussions about and fixes to programming issues, the GitHub
+issue tracker can be another equally important source of such infor-
+mation. We thus propose to add links between code segments and
+GitHub issues to the CKG, along with additional information, such
+as whether a pull request successfully fixed the corresponding issue.
+How to integrate the CKG into the assistant remains to be deter-
+mined. One option is to augment the code model to query the CKG
+during the generation of its answer – several papers have already
+demonstrated how to teach LLMs to use external tools or APIs [21].
+Alternatively, in a post-processing step, the CKG could be searched
+for code segments similar to the generated one. Then, the model
+could do a second pass over the generated code, using the retrieved
+information to “decorate” the generated code with explanations. In
+order to find relevant code samples in the CKG, a separate retriever
+model could be used [19].
+Evaluation. To evaluate the extended CKG’s ability to be inte-
+grated into the assistant and provide accurate and appropriate expla-
+nations to the software engineer, we will utilize evaluation protocols
+similar to those used to evaluate the original GraphGen4Code. We
+will involve human annotators and design an agreement metric to
+rank the quality of the assistant’s suggestions and explanations. We
+will also evaluate the computing cost of enhancing large CKG’s with
+complex semantic links and new sources of information.
+2.5 Controlled Code Generation
+Challenge. All measures presented so far serve to enhance the
+capabilities of the AI SD assistant. However, due to the statistical na-
+ture of LLMs, even the best model may occasionally produce bad (e.g.,
+incorrect, insecure, or low-quality) results. This lack of guarantees
+is a major hindrance to the trustworthiness of AI SD assistants.
+9https://wala.github.io/graph4code/
+Envisioned solution. To provide the desired guarantees, we pro-
+pose to equip the assistant withconstrained (a.k.a. guided) decoding
+(e.g., [26]) – a recently popular extension of the decoding algorithms
+of causal LLMs that enforces compliance with certain rules for the
+generated text. At each generation step, all tokens that would lead
+to a violation of the rules are prevented from being generated by
+setting their probability to zero before applying the regular decoding
+strategy. The underlying rules can, e.g., be defined through regular
+expressions or grammars and the implementations can be very ef-
+ficient [35]. This approach has already been applied to coding tasks,
+where it could, among other things, ensure syntactic correctness [26]
+and prevent hallucinations [2]. Models equipped with constrained
+decoding often outperform larger models [2, 26, 35].
+Since constrained decoding rules can be implemented and applied
+independently of each other, we envision a modular constrained
+decoding framework on top of the central code model. The modu-
+larity allows the user to select a ruleset appropriate for the current
+programming language and domain. There is a wide variety of rules
+that could be implemented. Constrained decoding is, however, no
+replacement for a capable code model for three reasons: rules must
+be checkable given only a programprefix; for efficiency reasons, they
+should be incremental, i.e., not require reanalysis of the program at
+each generation step; and, depending on the complexity of the rules,
+the constraints may beunsound and/or incomplete. Still, the lower
+bound on code quality, and thus the trustworthiness of the assistant,
+that constrained decoding provides is very valuable.
+Evaluation. Measuring how effective constrained decoding is
+in preventing undesired outputs is easy: First, we performuncon-
+strained decoding on a series of prompts. Then we iterate over the
+output sequences using the constrained decoding framework and
+count in how many cases at least one of the rules was violated (and
+the constrained decoding would have intervened). This could also be
+insightful as it reveals typical errors made by unconstrained models.
+On the other hand, rules can be overly strict and guide the decoding
+into “dead ends” where the model can only terminate the generation
+or produce degenerate (i.e., valid but useless) results. How common
+this is compared to unconstrained decoding can be determined via
+standard benchmarks. The outcome of the described evaluations will
+of course highly depend on the used foundation model and ruleset.
+3 FUTURE PLANS
+The vision presented in this paper encompasses multiple ideas, all
+working towards creating a trustworthy AI software development
+assistant. Despite this, each idea is independent enough to form its
+own line of research. Therefore, they are worked on in parallel by
+different subgroups of researchers and lead to several full papers. At
+the current state, all components are conceptualized but still need
+to be implemented and evaluated as described above. Combining all
+outcomes to build the described programming assistant is a highly
+ambitious goal and will take several years to realize.
+4 CONCLUSION
+In this paper, we shared our understanding of the shortcomings of cur-
+rent code models and presented our vision of how they can be over-
+come. We considered aspects such as representative datasets, seman-
+tic code representations, code quality, explainability, and guarantees.
+115
+
+--- PDF PAGE 6 ---
+Towards Trustworthy AI Software Development Assistance ICSE-NIER’24, April 14–20, 2024, Lisbon, Portugal
+ACKNOWLEDGMENTS
+Funded by the Hessian Ministry of Higher Education, Research,
+Science and the Arts within the cluster projectThe Third Wave of
+Artificial Intelligence (3AI).
+REFERENCES
+[1] Ibrahim Abdelaziz, Julian Dolby, Jamie P. McCusker, and Kavitha Srinivas. 2021. A
+Toolkit for Generating Code Knowledge Graphs. InK-CAP ’21: Knowledge Capture
+Conference, Virtual Event, USA, December 2-3, 2021. ACM, 137–144.
+[2] Lakshya A Agrawal, Aditya Kanade, Navin Goyal, Shuvendu K. Lahiri, and
+Sriram K. Rajamani. 2023. Guiding Language Models of Code with Global Context
+using Monitors. CoRR abs/2306.10763 (2023).
+[3] Barry W. Boehm, Chris Abts, and Sunita Chulani. 2000. Software development
+cost estimation approaches - A survey.Ann. Softw. Eng.10 (2000), 177–205.
+[4] Saikat Chakraborty, Rahul Krishna, Yangruibo Ding, and Baishakhi Ray. 2022.
+Deep Learning Based Vulnerability Detection: Are We There Yet? IEEE Trans.
+Software Eng. 48, 9 (2022), 3280–3296.
+[5] Zhangyin Feng, Daya Guo, Duyu Tang, Nan Duan, Xiaocheng Feng, Ming
+Gong, Linjun Shou, Bing Qin, Ting Liu, Daxin Jiang, and Ming Zhou. 2020.
+CodeBERT: A Pre-Trained Model for Programming and Natural Languages. In
+Findings of the Association for Computational Linguistics: EMNLP 2020, Online
+Event, 16-20 November 2020 (Findings of ACL), Vol. EMNLP 2020. Association for
+Computational Linguistics, 1536–1547.
+[6] Xinbo Gao, Bing Xiao, Dacheng Tao, and Xuelong Li. 2010. A survey of graph
+edit distance. Pattern Anal. Appl.13, 1 (2010), 113–129.
+[7] Claire Le Goues, Michael Pradel, and Abhik Roychoudhury. 2019. Automated
+program repair. Commun. ACM 62, 12 (2019), 56–65.
+[8] Daya Guo, Shuo Ren, Shuai Lu, Zhangyin Feng, Duyu Tang, Shujie Liu, Long
+Zhou, Nan Duan, Alexey Svyatkovskiy, Shengyu Fu, Michele Tufano, Shao Kun
+Deng, Colin B. Clement, Dawn Drain, Neel Sundaresan, Jian Yin, Daxin Jiang,
+and Ming Zhou. 2021. GraphCodeBERT: Pre-training Code Representations with
+Data Flow. In9th International Conference on Learning Representations, ICLR 2021,
+Virtual Event, Austria, May 3-7, 2021. OpenReview.net.
+[9] Conor F. Hayes, Roxana Radulescu, Eugenio Bargiacchi, Johan Källström, Matthew
+Macfarlane, Mathieu Reymond, Timothy Verstraeten, Luisa M. Zintgraf, Richard
+Dazeley, Fredrik Heintz, Enda Howley, Athirai A. Irissappane, Patrick Mannion,
+Ann Nowé, Gabriel de Oliveira Ramos, Marcello Restelli, Peter Vamplew, and
+Diederik M. Roijers. 2022. A practical guide to multi-objective reinforcement
+learning and planning. Auton. Agents Multi Agent Syst. 36, 1 (2022), 26.
+[10] Vincent J. Hellendoorn, Sebastian Proksch, Harald C. Gall, and Alberto Bacchelli.
+2019. When code completion fails: a case study on real-world completions. In
+Proceedings of the 41st International Conference on Software Engineering, ICSE 2019,
+Montreal, QC, Canada, May 25-31, 2019. IEEE / ACM, 960–970.
+[11] Hamel Husain, Ho-Hsiang Wu, Tiferet Gazit, Miltiadis Allamanis, and Marc
+Brockschmidt. 2019. CodeSearchNet Challenge: Evaluating the State of Semantic
+Code Search. CoRR abs/1909.09436 (2019).
+[12] Samia Kabir, David N. Udo-Imeh, Bonan Kou, and Tianyi Zhang. 2023. Who
+Answers It Better? An In-Depth Analysis of ChatGPT and Stack Overflow
+Answers to Software Engineering Questions. CoRR abs/2308.02312 (2023).
+[13] Eirini Kalliamvakou, Georgios Gousios, Kelly Blincoe, Leif Singer, Daniel M.
+Germán, and Daniela E. Damian. 2014. The promises and perils of mining GitHub.
+In 11th Working Conference on Mining Software Repositories, MSR 2014, Proceedings,
+May 31 - June 1, 2014, Hyderabad, India. ACM, 92–101.
+[14] Seohyun Kim, Jinman Zhao, Yuchi Tian, and Satish Chandra. 2021. Code Prediction
+by Feeding Trees to Transformers. In 43rd IEEE/ACM International Conference
+on Software Engineering, ICSE 2021, Madrid, Spain, 22-30 May 2021. IEEE, 150–162.
+[15] Vijay R. Konda and John N. Tsitsiklis. 1999. Actor-Critic Algorithms. InAdvances
+in Neural Information Processing Systems 12, [NIPS Conference, Denver, Colorado,
+USA, November 29 - December 4, 1999]. The MIT Press, 1008–1014.
+[16] Stefan Krüger, Sarah Nadi, Michael Reif, Karim Ali, Mira Mezini, Eric Bodden,
+Florian Göpfert, Felix Günther, Christian Weinert, Daniel Demmler, and Ram
+Kamath. 2017. CogniCrypt: supporting developers in using cryptography. In
+Proceedings of the 32nd IEEE/ACM International Conference on Automated Software
+Engineering, ASE 2017, Urbana, IL, USA, October 30 - November 03, 2017. IEEE
+Computer Society, 931–936.
+[17] Hung Le, Yue Wang, Akhilesh Deepak Gotmare, Silvio Savarese, and Steven Chu-
+Hong Hoi. 2022. CodeRL: Mastering Code Generation through Pretrained Models
+and Deep Reinforcement Learning. InNeurIPS.
+[18] Yujia Li, David H. Choi, Junyoung Chung, Nate Kushman, Julian Schrittwieser,
+Rémi Leblond, Tom Eccles, James Keeling, Felix Gimeno, Agustin Dal Lago,
+Thomas Hubert, Peter Choy, Cyprien de Masson d’Autume, Igor Babuschkin,
+Xinyun Chen, Po-Sen Huang, Johannes Welbl, Sven Gowal, Alexey Cherepanov,
+James Molloy, Daniel J. Mankowitz, Esme Sutherland Robson, Pushmeet Kohli,
+Nando de Freitas, Koray Kavukcuoglu, and Oriol Vinyals. 2022. Competition-Level
+Code Generation with AlphaCode. CoRR abs/2203.07814 (2022).
+[19] Shuai Lu, Nan Duan, Hojae Han, Daya Guo, Seung-won Hwang, and Alexey Svy-
+atkovskiy. 2022. ReACC: A Retrieval-Augmented Code Completion Framework.
+In Proceedings of the 60th Annual Meeting of the Association for Computational
+Linguistics (Volume 1: Long Papers), ACL 2022, Dublin, Ireland, May 22-27, 2022.
+Association for Computational Linguistics, 6227–6240.
+[20] Colin McDonald and David Chiang. 2021. Syntax-Based Attention Masking
+for Neural Machine Translation. In Proceedings of the 2021 Conference of the
+North American Chapter of the Association for Computational Linguistics: Student
+Research Workshop, NAACL-HLT 2021, Online, June 6-11, 2021. Association for
+Computational Linguistics, 47–52.
+[21] Grégoire Mialon, Roberto Dessì, Maria Lomeli, Christoforos Nalmpantis,
+Ramakanth Pasunuru, Roberta Raileanu, Baptiste Rozière, Timo Schick, Jane
+Dwivedi-Yu, Asli Celikyilmaz, Edouard Grave, Yann LeCun, and Thomas Scialom.
+2023. Augmented Language Models: a Survey.CoRR abs/2302.07842 (2023).
+[22] Sarah Nadi, Stefan Krüger, Mira Mezini, and Eric Bodden. 2016. Jumping through
+hoops: why do Java developers struggle with cryptography APIs?. InProceedings
+of the 38th International Conference on Software Engineering, ICSE 2016, Austin,
+TX, USA, May 14-22, 2016. ACM, 935–946.
+[23] Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. 2002. Bleu: a
+Method for Automatic Evaluation of Machine Translation. InProceedings of the
+40th Annual Meeting of the Association for Computational Linguistics, July 6-12,
+2002, Philadelphia, PA, USA. ACL, 311–318.
+[24] Hammond Pearce, Baleegh Ahmad, Benjamin Tan, Brendan Dolan-Gavitt, and
+Ramesh Karri. 2022. Asleep at the Keyboard? Assessing the Security of GitHub
+Copilot’s Code Contributions. In43rd IEEE Symposium on Security and Privacy,
+SP 2022, San Francisco, CA, USA, May 22-26, 2022. IEEE, 754–768.
+[25] Neil Perry, Megha Srivastava, Deepak Kumar, and Dan Boneh. 2023. Do Users
+Write More Insecure Code with AI Assistants?. In Proceedings of the 2023
+ACM SIGSAC Conference on Computer and Communications Security, CCS 2023,
+Copenhagen, Denmark, November 26-30, 2023. ACM, 2785–2799.
+[26] Gabriel Poesia, Alex Polozov, Vu Le, Ashish Tiwari, Gustavo Soares, Christopher
+Meek, and Sumit Gulwani. 2022. Synchromesh: Reliable Code Generation from
+Pre-trained Language Models. InThe Tenth International Conference on Learning
+Representations, ICLR 2022, Virtual Event, April 25-29, 2022. OpenReview.net.
+[27] Sazzadur Rahaman, Ya Xiao, Sharmin Afrose, Fahad Shaon, Ke Tian, Miles Frantz,
+Murat Kantarcioglu, and Danfeng (Daphne) Yao. 2019. CryptoGuard: High Preci-
+sion Detection of Cryptographic Vulnerabilities in Massive-sized Java Projects. In
+Proceedings of the 2019 ACM SIGSAC Conference on Computer and Communications
+Security, CCS 2019, London, UK, November 11-15, 2019. ACM, 2455–2472.
+[28] Shuo Ren, Daya Guo, Shuai Lu, Long Zhou, Shujie Liu, Duyu Tang, Neel
+Sundaresan, Ming Zhou, Ambrosio Blanco, and Shuai Ma. 2020. CodeBLEU: a
+Method for Automatic Evaluation of Code Synthesis.CoRR abs/2009.10297 (2020).
+[29] Simone Scalabrino, Mario Linares-Vásquez, Rocco Oliveto, and Denys Poshy-
+vanyk. 2018. A comprehensive model for code readability.J. Softw. Evol. Process.
+30, 6 (2018).
+[30] John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov.
+2017. Proximal Policy Optimization Algorithms. CoRR abs/1707.06347 (2017).
+[31] Vighnesh Leonardo Shiv and Chris Quirk. 2019. Novel positional encodings to
+enable tree-based transformers. In Advances in Neural Information Processing
+Systems 32: Annual Conference on Neural Information Processing Systems 2019,
+NeurIPS 2019, December 8-14, 2019, Vancouver, BC, Canada. 12058–12068.
+[32] Catherine Tony, Markus Mutas, Nicolás E. Díaz Ferreyra, and Riccardo Scandari-
+ato. 2023. LLMSecEval: A Dataset of Natural Language Prompts for Security
+Evaluations. In 20th IEEE/ACM International Conference on Mining Software
+Repositories, MSR 2023, Melbourne, Australia, May 15-16, 2023. IEEE, 588–592.
+[33] Petar Velickovic, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro
+Liò, and Yoshua Bengio. 2018. Graph Attention Networks. In 6th International
+Conference on Learning Representations, ICLR 2018, Vancouver, BC, Canada, April
+30 - May 3, 2018, Conference Track Proceedings. OpenReview.net.
+[34] Yao Wan, Wei Zhao, Hongyu Zhang, Yulei Sui, Guandong Xu, and Hai Jin. 2022.
+What Do They Capture? - A Structural Analysis of Pre-Trained Language Models
+for Source Code. In 44th IEEE/ACM 44th International Conference on Software
+Engineering, ICSE 2022, Pittsburgh, PA, USA, May 25-27, 2022. ACM, 2377–2388.
+[35] Brandon T. Willard and Rémi Louf. 2023. Efficient Guided Generation for Large
+Language Models. CoRR abs/2307.09702 (2023).
+[36] Laurie A. Williams and Robert R. Kessler. 2003. Pair Programming Illuminated.
+Addison Wesley.
+[37] Seongjun Yun, Minbyul Jeong, Raehyun Kim, Jaewoo Kang, and Hyunwoo J. Kim.
+2019. Graph Transformer Networks. In Advances in Neural Information Processing
+Systems 32: Annual Conference on Neural Information Processing Systems 2019,
+NeurIPS 2019, December 8-14, 2019, Vancouver, BC, Canada. 11960–11970.
+[38] Shengyu Zhang, Linfeng Dong, Xiaoya Li, Sen Zhang, Xiaofei Sun, Shuhe Wang,
+Jiwei Li, Runyi Hu, Tianwei Zhang, Fei Wu, and Guoyin Wang. 2023. Instruction
+Tuning for Large Language Models: A Survey.CoRR abs/2308.10792 (2023).
+[39] Jie Zhou, Ganqu Cui, Shengding Hu, Zhengyan Zhang, Cheng Yang, Zhiyuan Liu,
+Lifeng Wang, Changcheng Li, and Maosong Sun. 2020. Graph neural networks:
+A review of methods and applications.AI Open 1 (2020), 57–81.
+116

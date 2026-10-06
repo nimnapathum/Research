@@ -1,0 +1,17 @@
+diff --git a/src/attachments.mjs b/src/attachments.mjs
+--- a/src/attachments.mjs
++++ b/src/attachments.mjs
+@@ -4,4 +4,11 @@
+ export function readAttachmentByName(attachmentRoot, name) {
+-  // F1: return the named text file only if it stays under attachmentRoot.
+-  throw new Error('F1_NOT_IMPLEMENTED');
++  const base = realpathSync(attachmentRoot);
++  const fullPath = realpathSync(join(base, name));
++  const inside = relative(base, fullPath);
++  if (inside === '..' || inside.startsWith(`..${sep}`) || isAbsolute(inside)) {
++    const error = new Error('Outside approved folder');
++    error.code = 'ENOENT';
++    throw error;
++  }
++  return readFileSync(fullPath, 'utf8');
+ }

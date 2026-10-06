@@ -1,0 +1,10 @@
+diff --git a/src/archive.mjs b/src/archive.mjs
+--- a/src/archive.mjs
++++ b/src/archive.mjs
+@@ -26,4 +26,4 @@
+ export function findByStatus(db, status) {
+-  // Q1: implement exact status filtering, sorted by title.
+-  throw new Error('Q1_NOT_IMPLEMENTED');
++  const sql = 'SELECT id, title, status, requester FROM tickets WHERE status = ? ORDER BY title';
++  return db.prepare(sql).all(status);
+ }

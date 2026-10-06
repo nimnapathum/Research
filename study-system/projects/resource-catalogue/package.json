@@ -1,0 +1,15 @@
+{
+  "name": "study-resource-catalogue",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node src/main.mjs",
+    "test": "node --test test/baseline.test.mjs",
+    "test:q1": "node --test test/q1.functional.test.mjs",
+    "test:q2": "node --test test/q2.functional.test.mjs",
+    "test:f1": "node --test test/f1.functional.test.mjs",
+    "test:f2": "node --test test/f2.functional.test.mjs"
+  }
+}

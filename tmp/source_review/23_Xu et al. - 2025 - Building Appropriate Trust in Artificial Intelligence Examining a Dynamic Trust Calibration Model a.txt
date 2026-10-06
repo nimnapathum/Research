@@ -1,0 +1,1177 @@
+--- PDF PAGE 1 ---
+Building Appropriate Trust in Artificial Intelligence: 
+Examining a Dynamic Trust Calibration Model and an Intervention
+Shan Xu, Ph.D. (corresponding author)
+Associate Professor
+Department of Public Relations and Strategic Communication Management
+College of Media and Communication
+Texas Tech University
+3003 15th St, Lubbock, TX 79409
+Email: shan.xu@ttu.edu
+Phone: +1.806.742.6500
+Zijian Harrison Gong, Ph.D.
+Associate Professor
+College of Media and Communication
+Texas Tech University
+Yue Li, Ph.D.
+Assistant Professor
+Department of Communication Studies
+University of Kansas
+Yani Zhao, Ph.D.
+Assistant Professor
+Department of Communication, Media, & Culture
+College of Humanities and Fine Arts
+Coastal Carolina University
+Ali Ahsan
+Graduate Student
+College of Media and Communication
+Texas Tech University
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 2 ---
+TRUST CALIBRATION IN AI 1
+Building Appropriate Trust in Artificial Intelligence: 
+Examining a Dynamic Trust Calibration Model and an Intervention
+Abstract
+This study conceptualizes trust in artificial intelligence as a calibrated response to the system’s 
+performance, aimed at fostering appropriate levels of trust in AI. We refine the trust calibration 
+model and propose four types of trusting behaviors: under trust, over-trust, validated trust, and 
+discerning trust, and examine their antecedents, temporal trajectory, and the impact of 
+performance feedback as an intervention strategy. Two experiments assessed the dynamic 
+evolution of these trust behaviors across 24 human-AI collaborative tasks. Time-series random-
+effects modeling revealed that in both studies, over-trust increased with task difficulty, with 
+individuals of higher cognitive ability showing a sharper rise in over-trust on more difficult 
+tasks. In Study 1, AI’s chain-of-thought explanations effectively reduced under-trust and 
+increased validated trust, though these effects did not hold in Study 2, where a performance 
+feedback intervention was introduced. In Study 2, performance feedback helped participants 
+reduce over-trust and fostered discerning trust over multiple trials.
+Keywords: trust, artificial intelligence, trust calibration, intervention, over-trust, feedback 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 3 ---
+TRUST CALIBRATION IN AI 2
+Building Appropriate Trust in Artificial Intelligence: 
+Examining a Dynamic Trust Calibration Model and an Intervention
+Recent advancements in artificial intelligence (AI) have sparked a growing body of 
+research on how users trust these systems. Much of this work draws from classical trust models 
+rooted in interpersonal communication and organizational psychology; most notably, Mayer et 
+al.’s (1995) integrative model of interpersonal trust, which identifies ability, benevolence, and 
+integrity as its core dimensions. This framework has evolved into the widely used distinction 
+between cognition-based and affect-based trust: the former emphasizes perceptions of 
+competence, while the latter involves emotional bonds and perceived goodwill (e.g., Choung et 
+al., 2021). Applied to human-technology interaction, trust is typically conceptualized as an 
+attitudinal construct and measured through self-reported strength of trust-related beliefs. Even 
+when studies examine trust in a system’s performance, they often rely on perceived rather than 
+objectively measured performance (Hoff & Bashir, 2015). As a result, several important gaps 
+remain in trust research on AI. Namely, there is limited attention to whether AI systems merit the 
+trust they receive, insufficient exploration of the risks of over-trusting malfunctioning AI, and a 
+lack of intervention to foster appropriate levels of trust. 
+Therefore, this paper aims to advance the literature by shifting the focus from merely 
+examining the strength of trust in technologies to examining the calibration of trust in them. That 
+is, trust in technologies should be adjusted to reflect the capabilities and limitations of the 
+technology (De Visser et al., 2020; Lee & See, 2004). Trust calibration thus adds an additional 
+dimension: technology performance, to better understand how human trust fluctuates in response 
+to a system’s performance (Klingbeil et al., 2024; Küper & Krämer, 2024; Wischnewski et al., 
+2023). Trust calibration is relatively well-established within the human-machine interaction 
+community. The first explicit conceptualization of trust calibration was proposed by engineers 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 4 ---
+TRUST CALIBRATION IN AI 3
+Lee and See (2004), further consolidated by psychologists (e.g., de Visser et al., 2020), and 
+examined by scientists from various disciplines (e.g., Culley & Madhavan, 2013; Klingbeil et al., 
+2024; Leichtmann et al., 2023; Lohaus et al., 2024; Wischnewski et al., 2024). 
+We advocate for the concept of trust calibration because it adds theoretical nuance to AI 
+trust research, offers practical value in promoting more effective and ethical AI use (Culley & 
+Madhavan, 2013), and has the potential to stimulate new ideas in human-AI interaction (Lohaus 
+et al., 2024; Shoemaker et al., 2003). In this paper, we build on the existing trust calibration 
+framework by first proposing a refined model including under trust, over-trust, validated trust, 
+and discerning trust in AI. We then examine their antecedents: task characteristics, human 
+variabilities, and technology features. Additionally, we explore their trajectory over multiple 
+trials, addressing long-standing calls for an over-time or dynamic approach to studying trust 
+adjustment (de Visser et al., 2020; Lohaus et al., 2024). Finally, we incorporate feedback as an 
+intervention strategy to enhance trust calibration over trials (Wischnewski et al., 2024).
+The Refined Trust Calibration Model 
+In much of the existing literature, trust is conceptualized as the strength of attitudinal 
+trust assessed through self-report (Hoff & Bashir, 2015). By contrast, the trust calibration model 
+defines trust as a behavioral alignment with a system’s actual performance, reflecting how trust 
+operates in real-world decision-making contexts (de Visser et al., 2020). This model also enables 
+fine-grained distinctions among different types of trust: under-trust, over-trust, and calibrated 
+trust, by organizing them along two key dimensions: AI performance and human decision-
+making. Under-trust is defined as the situation in which individuals have lower trust in the 
+technology than it deserves when AI performance is high but human trust is low. In situations of 
+under-trust, individuals fail to take full advantage of the technology’s capabilities. Over-trust 
+occurs when individuals place excessive trust in the technology beyond its actual capabilities (de 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 5 ---
+TRUST CALIBRATION IN AI 4
+Visser et al., 2020). In this case, the technology’s capacity is limited, but human trust in it is 
+disproportionally high. Both under-trust and over-trust are forms of miscalibration of trust and 
+can result in detrimental and even dangerous outcomes (e.g., Stafford, 2024). 
+It is hoped to bring both under-trust and over-trust to an ideal level of trust, known as 
+calibrated trust (de Visser et al., 2020; Lee & See, 2004; Wischnewski et al., 2023). In this state, 
+human trust level changes as a function of AI’s capacity (de Visser et al., 2020). By calibrating 
+trust, users can more accurately assess the AI’s capabilities and limitations, as to appropriately 
+trust or reject the AI’s suggestions based on its actual performance. This calibrated trust allows 
+for more effective human-AI collaboration, reduces the risk of relying on technology beyond its 
+competency, and enhances adaptive decision-making. 
+Importantly, we proposed that under the umbrella concept of calibrated trust, there are 
+two distinct types of trust: validated trust and discerning trust. Validated trust occurs when 
+human trust levels are high in response to high AI performance, whereas discerning trust occurs 
+when human trust levels are low in response to low AI performance. We consider them distinct 
+concepts due to their distinct psychological mechanisms. First, humans have a natural tendency 
+to save their cognitive efforts and rely on aids in problem solving (Buçinca et al., 2021; 
+Hampton, 2005). This tendency may lead to a higher likelihood of validated trust compared to 
+discerning trust, and overcoming this trusting tendency is essential for trust calibration. 
+Secondly, compared to validated trust, discerning trust requires a higher level of human ability to 
+detect AI’s mistakes (Juvina et al., 2019). Developing discerning trust involves training to 
+increase individuals’ ability to recognize and respond to AI errors effectively. Thirdly, 
+distinguishing between validated trust and discerning trust has important practical implications 
+for real-life AI applications. In situations where AI performance is reliably high and stakes are 
+relatively low, promoting validated trust can enhance work efficiency, whereas in high-stakes 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 6 ---
+TRUST CALIBRATION IN AI 5
+environments such as healthcare or autonomous driving, fostering discerning trust reduce 
+adverse outcomes (see Figure 1). 
+[insert Figure 1]
+In sum, the refined trust calibration model advances the AI trust literature in three key 
+ways. Conceptually, it defines trust as the alignment between human decision-making and AI 
+performance, offering diagnostic insight into whether trust is accurately placed. This contrasts 
+with traditional models that treat trust as a subjective psychological state independent of system 
+performance. Methodologically, the model prioritizes direct measures of trusting behavior, or 
+trust-in-action, which better reflect how trust operates in real-world contexts, unlike self-reported 
+attitudes that may not predict behavior or capture dynamic adjustments. Practically, in high-
+stakes settings such as healthcare, autonomous vehicles, and hiring, users must not only feel trust 
+but act in accordance with system performance. The trust calibration model distinguishes 
+between types of trust (over-trust, under-trust, validated trust, and discerning trust), providing 
+actionable insights for designing trustworthy systems and informing AI policy. By reframing the 
+question from “how much do users say they trust?” to “do users trust AI when it is warranted and 
+withhold trust when it is not?”, the model enables more effective and responsible human-AI 
+interaction. 
+Importantly, we do not view the trust calibration model as a replacement for subjective or 
+attitudinal conceptualization of trust, but rather as a necessary and underutilized complement. 
+While subjective trust captures users’ internal states, behavioral trust calibration assesses 
+whether those perceptions translate into performance-aligned actions. Both perspectives are 
+essential for a comprehensive understanding of human-AI interaction. In high-stakes domains 
+where safety, fairness, or accuracy matter, an objective benchmark, however imperfectly 
+perceived, is critical. Conceptualizing trust as behavioral alignment with actual AI performance 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 7 ---
+TRUST CALIBRATION IN AI 6
+offers a distinct lens, especially where trust is enacted through decision-making rather than self-
+report. This framework also allows researchers to (a) diagnose different types of trusting 
+behaviors, such as over-trust, under-trust, validated trust, and discerning trust, and (b) examine 
+the conditions under which these behaviors occur, thereby advancing both theoretical and 
+practical insights in trust research.
+Existing theoretical and empirical work shows that accurate trust calibration depends on a 
+combination of task characteristics, human variabilities, and technology features (for reviews, 
+see Hancock et al., 2011; Kaplan et al., 2023). First, we examine whether task difficulty may 
+induce over-trust and whether this relationship is influenced by individual cognitive ability 
+(Hancock et al., 2011). Second, we investigate whether AI chain-of-thought explanations can 
+increase validated trust and discerning trust, and reduce under-trust and over-trust. Chain-of-
+thought explanations refers to AI generated outputs that emulate human reasoning by laying out 
+the intermediate steps between a problem statement and its final solution using natural, 
+conversational language (Wei et al., 2022). Third, we explore how different types of trust evolve 
+over multiple trials, addressing long-standing calls for an over-time or dynamic approach to 
+examine how trust calibration develops and adjusts over time (de Visser et al., 2020). Lastly, by 
+incorporating feedback as an intervention strategy (Wischnewski et al., 2024), we explore 
+whether individuals can better calibrate their trust over multiple trials.
+Task Difficulty 
+Empirical evidence has demonstrated task difficulty as one of the most robust 
+explanatory variables of trusting AI (Hancock et al., 2011; Kaplan et al., 2023). As a task 
+becomes more difficult, the level of ability and the amount of effort required to complete the task 
+increases, prompting decision-makers to rely more on decision aids such as AI (Bogert et al., 
+2021). Numerous studies support the influence of task difficulty on trusting AI. For example, in a 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 8 ---
+TRUST CALIBRATION IN AI 7
+lab experiment, task difficulty was the strongest predictor of self-reported reliance2 on AI 
+suggestions during human-AI collaborative tasks (Parkes, 2017). Bogert and colleagues 
+conducted three experiments and consistently found that human participants demonstrated 
+stronger behavioral trust in algorithmic assistance on difficult questions. This effect persisted 
+even after controlling for participants’ cognitive ability and various AI features (Bogert et al., 
+2021). 
+While these findings are well-established, our study builds on this literature in two 
+important ways. First, and critically, we examine this effect within the trust calibration 
+framework, which explicitly incorporates AI performance as a reference point. In doing so, we 
+shift the focus from general reliance to a more diagnostic form of trust, specifically, over-trust, 
+defined as the acceptance of AI suggestions even when those suggestions are incorrect. By 
+situating task difficulty within this refined framework, we examine not only whether individuals 
+are more likely to trust AI on harder tasks, but also whether they are more susceptible to 
+misplaced trust under those conditions. Therefore, we propose:
+H1: Task difficulty will increase over-trust in AI. 
+Human Cognitive Ability
+Another robust predictor of over-trust in assistive technology is the variability in 
+individuals’ cognitive ability. Research indicates that individuals with higher cognitive ability 
+are less likely to overly trust technologies, as they can solve tasks independently (Juvina et al., 
+2019). In this study, we focus on numeracy as a representation of cognitive ability. Numeracy 
+2 Reliance versus Over-Trust: Based on existing literature, we distinguish between reliance and over-trusting by 
+considering technology performance. Most studies define reliance as human decision choices depending on or 
+aligning with the system’s suggestion, regardless of its accuracy, in self-report or behavioral measures. In the current 
+study, over-trust is defined as the alignment of human choice with the system’s incorrect suggestion. Therefore, 
+reliance on AI encompasses both validated trust (when the system is relatively accurate) and over-trust (when the 
+system is relatively inaccurate).
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 9 ---
+TRUST CALIBRATION IN AI 8
+encompasses multiple cognitive skills, such as fluid reasoning, comprehension-knowledge, and 
+processing speed (Floyd et al., 2003; Taub et al., 2008; Cormier et al., 2017), which are crucial 
+for problem-solving and decision-making in modern technological societies (Zillmann et al., 
+2009). Existing studies demonstrated that numerical ability can reduce reliance on technology 
+(Bogert et al., 2021; Logg et al., 2019).
+In the current study, we propose that numeracy not only directly influences over-trusting 
+AI but also moderates the relationship between task difficulty and over-trust. Among the few 
+studies exploring this boundary condition, Hampton (2005) found that individuals with more 
+expertise exhibited higher self-reported reliance on a technology assistant for more difficult tasks 
+compared to easier tasks. This may be due to how individuals handle easier tasks: individuals 
+with less expertise tend to rely on AI for both easy and difficult tasks, while those with more 
+expertise rely on AI primarily for difficult tasks, not needing assistance for easier ones. We 
+speculate that cognitive ability or numeracy may function similarly to expertise, and we aim to 
+further examine and empirically test how task difficulty interacts with cognitive ability to 
+influence trust in technology.
+H2: Individual cognitive ability may moderate the relationship between task difficulty 
+and over-trusting an AI assistant, such that individuals with higher cognitive abilities are more 
+likely to over-trust AI for difficult tasks compared to easy tasks.
+AI’s Chain-of-Thought Explanation 
+In addition to task characteristics and individual ability, scholars have proposed 
+Explainable AI, which refers to AI systems providing explanations for their outputs, as an 
+important feature that can promote trust calibration (Leichtmann et al., 2023; Wischnewski et al., 
+2023).To effectively discriminate AI advice, humans need information to facilitate analyzing the 
+quality of the advice (Schemmer et al., 2022). With explanations, individuals can better interpret 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 10 ---
+TRUST CALIBRATION IN AI 9
+system outputs, assess the true capabilities of the system, and determine whether to trust the 
+system’s output or not (Leichtmann et al., 2023). This, in turn, increases the likelihood of making 
+correct decisions by analyzing both accurate and inaccurate AI outputs, thereby achieving 
+validated trust and discerning trust while reducing over-trust and under-trust. However, the 
+effects of AI explanations on human trust calibration have been inconclusive (Wischnewski et 
+al., 2023). Some studies, such as (Zhang et al.(2020) found no effect of explanations on trust 
+calibration. In contrast, others, like (Yang et al., 2020), reported that explanations can effectively 
+increase calibrated trust (validated trust and discerning trust) and reduce over-trust. Yet, other 
+research has shown that explanations can also increase trust in AI, as users may interpret 
+explanations as a sign of competence, leading them to agree with the AI even when the 
+explanation is incorrect (Buçinca et al., 2021).
+ We speculate that the inconsistent results regarding explanations may be due to the 
+different types of explanations that AI provides. We aim to advance research on explainable AI 
+(XAI) by distinguishing between the effects of chain-of-thought (CoT) explanations and 
+technical explanations. In line with Saeed and Omlin (2023), we conceptualize explainable AI as 
+the development of techniques that empower end-users to comprehend, trust, and effectively 
+manage AI systems. This user-centered perspective of XAI emphasizes interpretability and 
+comprehensibility of AI output over technical transparency. In our study, we focus on output-
+level explanations; specifically, CoT and technical explanations, as practical tools for supporting 
+user understanding of AI-generated outputs. CoT explanations are generated outputs that emulate 
+human reasoning by laying out the intermediate steps between a problem statement and its final 
+solution using natural, conversational language (Wei et al., 2022). Importantly, this differs 
+from CoT prompting, which refers to the input technique used to elicit such reasoning from AI 
+models; CoT explanations, by contrast, are the outputs users receive. CoT reasoning has not only 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 11 ---
+TRUST CALIBRATION IN AI 10
+been shown to enhance system performance but also has the potential to facilitate human 
+comprehension of system outputs (Wei et al., 2022). This type of reasoning aligns with the 
+chain-strategy of human reasoning identified in cognitive psychology (Sloman, 1996; Johnson-
+Laird, 2008). Using this strategy, the reasoner constructs a sequence of conditionals that connect 
+an initial premise to the conclusion (Leighton & Sternberg, 2003; Johnson-Laird, 2008).
+Thus, CoT explanations differ from more technical explanations in their user-friendly 
+interpretability. Technical explanations typically use formal mathematical or coding language, 
+such as numbers, equations, and statistics. For example, a technical explanation might state, “The 
+suggested answer is 15: 7+8=15.” In contrast, CoT explanations provide explicit logical 
+connections in human language. For instance, “The suggested answer is 15: to find out the total 
+number of people in the room, we combine 7 females and 8 males: 7+8=15.” Current popular 
+generative AI assistants, such as ChatGPT, Google Gemini, and Llama, offer a mix of CoT 
+explanations and technical explanations, depending on the user prompts. To the best of our 
+knowledge, this is probably one of the first empirical studies examining the effect of CoT 
+explanations on the four types of trust. Therefore, we propose the following research question.
+RQ1: Will the chain-of-thought explanation provided by AI increase the likelihood of (a) 
+validated trust and (b) discerning trust, and reduce (c) over-trust and (d) under-trust?
+Trust Calibration as a Dynamic Process 
+Trust calibration is a dynamic process that evolves with each interaction between the user 
+and the AI assistant, gradually building on past experiences. Users may begin with a certain 
+initial level of trust, but this trust is continuously updated through ongoing interactions (Juvina et 
+al., 2019). Over time, this trial-and-error process enables users to learn how to effectively 
+collaborate with AI and determine the extent to which they should trust it, ultimately enhancing 
+task performance in the long run (Wang, 2014). Therefore, time plays a critical role in the 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 12 ---
+TRUST CALIBRATION IN AI 11
+development of trust levels in human-AI collaboration. Despite long-standing calls for an over-
+time approach to examine how trust calibration develops and adjusts over time (de Visser et al., 
+2020; Juvina et al., 2019; Wischnewski et al., 2023), few investigations have addressed its 
+temporal dimension. This scarcity is partly due to the prevalent use of experimental designs and 
+analytical approaches that summarize averaged differences across multiple interactions and miss 
+the evolving picture of trust calibration. 
+The current study aims to capture the dynamics of the four types of trust over time by 
+incorporating time as a key predictor in the trust development process (Wang, 2014). Instead of 
+assessing trust only at the end of multiple interactions, we evaluate trust at each interaction point, 
+offering a more nuanced perspective and accurate estimation of trust in AI. This approach moves 
+beyond the static conception of trust that is prevalent in much of the existing empirical research 
+(Wischnewski et al., 2023). While recent studies and technical reports have begun to explore 
+how human trust evolves over time (e.g., Chen, 2022; Zafari et al., 2024),these investigations 
+primarily rely on self-reported general trust in AI and do not contribute significantly to 
+understanding the learned process of trust calibration. This study is one of the first to analyze 
+how the four types of trust in the trust calibration model—validated trust, discerning trust, over-
+trust, and under-trust—develop over time.
+RQ2: How do the four types of trust: (a) validated trust, (b) discerning trust, (c) over-
+trust, and (d) under-trust, develop over the course of multiple trials?
+Feedback as an Intervention Strategy
+Providing feedback to humans on their performance in human-AI collaborative tasks is 
+recognized as an effective intervention strategy for cultivating calibrated levels of trust in AI 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 13 ---
+TRUST CALIBRATION IN AI 12
+(Wischnewski et al., 2023). Feedback3 confirms the accuracy or inaccuracy of human decisions 
+in various tasks (de Visser et al., 2016). Since trust calibration is developed in uncertain 
+situations, receiving feedback on the correctness of AI-assisted human decisions provides more 
+information to reduce uncertainty, and can help individuals better assess the reliability of the AI 
+(de Visser et al., 2016). This feedback process thus can potentially increase validated trust and 
+discerning trust while decreasing under-trust and over-trust in AI.
+A small number of existing studies have found mixed effects of performance feedback on 
+users’ trust in AI. For example, Dzindolet et al., (2003) observed that participants who received 
+feedback on automation performance exhibited moderated levels of trust in automated assistance. 
+Similarly, experiments by de Visser et al. (2016) demonstrated that immediate feedback on task 
+performance reduced participants’ general trust levels in the AI assistant. In contrast, studies 
+specifically examining trust calibration have produced conflicting results. Lu and Sarter (2019) 
+found that performance feedback did not significantly impact trust calibration, while Merritt and 
+colleagues (2015) reported positive effects of feedback on fostering well-aligned levels trust in 
+an automated assistant. In the current study, we aim to explore whether providing feedback can 
+help individuals adjust and calibrate their trust more accurately over time. Specifically, we seek 
+to determine if feedback can increase validated trust and discerning trust while reducing under-
+trust and over-trust over-time, an area where empirical evidence remains inconclusive.
+RQ3: When receiving performance feedback for each task, will individuals develop more 
+(a) validated and (b) discerning trust, and less (c) over-trust and (d) under-trust, over the course 
+of multiple trials?
+3 In human-AI interaction, feedback refers to the information humans receive about the outcome of their 
+collaboration with AI. This differs from the term “feedback” in computer science, which often refers to training 
+algorithms using reinforcement learning based on human input.
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 14 ---
+TRUST CALIBRATION IN AI 13
+Methods
+We conducted two experimental studies (Study 1 and Study 2) to test the proposed 
+hypotheses and research questions. In addition to replicating the hypotheses and research 
+questions in Study 1, Study 2 is also designed to test the effects of feedback as an intervention 
+strategy (RQ3) by comparing the results from both studies. To ensure the comparability of 
+Studies 1 and 2, data for both were collected simultaneously, with participants randomly 
+assigned to either study, as recommended by Arendt (2023). The random assignment of 
+participants ensures that the sample populations for both studies are comparable.
+Study 1
+Participants. The study included 362 U.S. residents aged 19 to 85 years (M = 43.84, SD 
+= 14.70; 47.51% male), based on quota-sampling techniques (gender and ethnicity). Ethnic 
+composition was 58.84% White, 17.13% Black, 19.06% Hispanic, and 8.84% Asian. Participants 
+were recruited via Prolific (Douglas et al., 2023) and received a base payment of $3, with an 
+additional $1 incentive for the top 30% based on performance. The number of participants was 
+calculated using G*Power 3.1 for a mixed ANOVA: repeated measures, within-between 
+interaction. Assuming a small effect size for the CoT explanation (f = 0.10), α = 0.05, and power 
+= 0.80, the analysis indicated a required sample size of 200 participants. However, considering 
+the web-based nature of this online experiment, we anticipated challenges such as higher dropout 
+rates, inattentiveness, incomplete responses, and environmental variability. To ensure sufficient 
+usable data and maintain statistical power, we increased the recruitment target to 350-400 
+participants, consistent with practices in comparable online experimental studies (e.g., Arendt, 
+2023)
+Study Design and Procedures. The study employed a 2x2 mixed factorial design. The 
+between-subject factor was AI CoT explanation (technical explanation = 0 vs. CoT explanation = 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 15 ---
+TRUST CALIBRATION IN AI 14
+1), and the within-subject factor was task difficulty (easy = 0 vs. difficulty = 1). At the 
+beginning, participants were informed about engaging in problem-solving tasks with a new AI 
+tool and cautioned: “Please be aware that this innovative AI assistant, though helpful, is NOT 
+always accurate”. This statement was designed to minimize the influence of individuals’ pre-
+existing attitudes or beliefs about AI, whether positive heuristics, such as the assumption that AI 
+is inherently capable or trustworthy (Sundar & Kim, 2019), or negative heuristics, such as 
+algorithm aversion (Dietvorst et al., 2015). To further account for individual differences, we also 
+measured participants’ pre-existing trust in AI and included it as a control variable in all models. 
+(see Control Variables section below).
+Participants have a maximum of three minutes to complete each problem. After three 
+minutes, they automatically proceeded to the next problem.
+To enhance external validity and simulate a realistic AI assistant scenario, participants 
+were given the option to voluntarily request AI suggestions, by clicking the button “to view AI’s 
+recommendation for this question, please click here,” and review AI suggestions before selecting 
+their answer choice. This approach also aligns with research findings that allowing individuals to 
+choose whether and when to see AI recommendations can prevent reactance to unsolicited AI 
+assistance (Buçinca et al., 2021). Once requested, the AI suggestions were auto-typed at a speed 
+comparable to ChatGPT. In Study 1, every participant engaged with the AI assistant at least 
+once, with AI suggestions accessed in 94.31% of all trials. Only trials in which AI suggestions 
+were presented to participants were included in the analysis. 
+We designed our own simulated AI chatbot using JavaScript, with a 50% accuracy rate, 
+for several key reasons. First, coding our own simulated AI chatbot allow us to have full control 
+over the AI’s output to ensure consistency and increases internal validity by avoiding the 
+unpredictable outputs of external AI systems. Second, the 50% accuracy rate reflects the binary 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 16 ---
+TRUST CALIBRATION IN AI 15
+nature of the two-choice questions and the equal distribution of difficult problems in this study, 
+offering participants an equal probability of selecting the correct answer by chance. Third, this 
+balanced accuracy rate is essential for studying the development of different types of trust. Our 
+goal is to observe how participants respond to both AI errors and correct suggestions, so we 
+maintained a 50/50 balance to ensure consistent dynamics between trust in accurate and 
+inaccurate suggestions. Previous studies have shown that AI with very high or low accuracy can 
+skew trust levels (e.g., Chen, 2022).
+Task Difficulty was assessed through a pretest study involving a different sample of 
+college students (n = 68) without AI assistance. All questions were multiple-choice with two 
+options. The 12 math problems were selected from the Scholastic Assessment Test (SAT) math 
+test, and participants’ accuracy rates for easy problems (M = 0.74, SD = 0.06) were significantly 
+higher than difficult problems (M = 0.34, SD = 0.06; t(67) = 54.97, p < .001) in the pilot study. 
+We created 12 design evaluation problems based on design principles (Millman, 2008), and have 
+three graphic designers from advertising agencies independently evaluated and confirmed the 
+correct choice for each question. The aforementioned pilot study confirmed the accuracy rates 
+for easy design problems (M = 0.87, SD = 0.14) were significantly higher than difficult design 
+problems (M = 0.46, SD = 0.16; t (67) = 22.49, p < .001). The manipulation check for task 
+difficulty in the Study 1 sample was successful, with difficult tasks leading to lower accuracy 
+rates compared to easy tasks (t = -37.36, p < .001).
+Cognitive ability was operationalized as numeracy and measured with three questions of 
+varying difficulty levels from the Arithmetic Aptitude Test (Zillmann et al., 2009). Participants 
+were asked: “The freezer destroyed 5/16 of the orange crop. Is this less or more than a quarter?" 
+“In this small community high school, only seven of the 20 seniors passed the exit exam. What 
+percentage of passing students are they talking about?” and “Doug McKinney got by on a $7,500 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 17 ---
+TRUST CALIBRATION IN AI 16
+income. He is still in disbelief about the promised 20% pay raise. How much will he make in the 
+future?” The accuracy rates for these questions were 80%, 74%, and 47%, respectively. 
+Participants’ total scores were calculated as the sum of correct answers, with a possible range of 
+0-3 (M = 2.43, SD = 0.86). 
+CoT Explanation was created based on the CoT explanation examples in Wei et al. 
+(2022). We conducted a manipulation check on the CoT explanation using two post-study 
+questions: “The AI provided a detailed, step-by-step explanation,” and “The AI’s explanations 
+guided me through the thought process and calculations” (α = 0.76). Participants in the CoT 
+explanation condition (M = 4.31, SD = 0.89) rated these items significantly higher on average 
+than those in the technical explanation condition (M = 4.02, SD = 0.64), with the difference 
+being statistically significant (t = -3.72, p < .001). 
+Figure 2 illustrates examples of easy versus difficult, CoT explanation versus technical 
+explanation math tasks. 
+[insert Figure 2]
+Trials served as the operationalization of time to examine the over-time effects. This 
+variable refers to the sequence of the 24 tasks, numbered from 1 to 24. The 24 tasks, with 
+different levels of difficulty, were randomly presented to participants. Additionally, math and 
+design task blocks were randomized. This approach helps to disentangle the effects of trial order 
+from the learning effects of other variables.
+Four types of trust were operationalized as behavioral measures, using two behavioral 
+indicators: AI suggestion (incorrect = 0, correct = 1, 50% accuracy rate), and human decision 
+(inconsistent with AI suggestion = 0, consistent with AI suggestion = 1), (M = 63.84%, SD = 
+0.12). This operationalization is based on the conceptual definition of trust calibration to measure 
+trusting behaviors in relation to system performance (de Visser et al., 2020; Küper & Krämer, 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 18 ---
+TRUST CALIBRATION IN AI 17
+2024; Lee & See, 2004; Wischnewski et al., 2023). Under-trust was defined as a binary variable 
+when AI proposed a correct choice (AI suggestion = 1), but participants chose an incorrect 
+option (human decision = 0); this occurred in an average of 14.02% of all trials (SD = 0.07). 
+Over-trust was when AI suggested an incorrect choice (AI suggestion = 0) and participants 
+chose the same incorrect choice (human decision = 0), (M = 22.15%, SD = 0.12). Validated 
+trust was when AI proposed a correct choice (AI suggestion = 1) and participants chose the 
+correct option (human decision = 1), (M = 35.72%, SD = 0.08). Discerning trust was when AI 
+suggested an incorrect choice (AI suggestion = 0), but participants chose the correct choice 
+(human decision = 1; M = 28.12%, SD = 0.08). The operationalization of four types of trust in 
+relation to AI performance is illustrated in Figure 3. 
+[insert Figure 3]
+We acknowledge that another behavioral measure to operationalize the four types of 
+trusting behaviors is by requiring participants to make an initial decision before viewing the AI 
+assistant’s suggestion (e.g., Schemmer et al., 2023).This approach allows researchers to assess 
+whether AI suggestions align with or differ from initial human decisions. However, we believe 
+our chosen operationalization offers higher external validity. In real-life scenarios, human 
+decision-makers typically have access to various decision aids, rather than being required to 
+decide first and then consult additional aids. Moreover, forcing participants to make an initial 
+decision before viewing AI suggestions functions as an intervention strategy that alters the 
+dynamics of human-AI collaboration. This approach, named “cognitive forcing,” compels 
+individuals to invest more cognitive effort into the task before considering AI input (Buçinca et 
+al., 2021). As such, it introduces a new variable to the study and complicates the examination of 
+trust calibration. Therefore, we opted for our current operationalization to better mimic real-life 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 19 ---
+TRUST CALIBRATION IN AI 18
+human-AI interactions (thereby enhancing external validity) and to maintain a cleaner 
+experimental design without introducing additional intervention strategies.
+Control variables. Building on previous studies and reviews on trust calibration (de 
+Visser et al., 2016; Wischnewski et al., 2024), we controlled for the trait trust in AI that was 
+measured before the tasks with six items, e.g., “AI is helpful in many ways for users.” “AI is 
+good at doing its tasks.” “AI always focuses on what’s best for users.” (M = 3.63, SD = 0.66, α = 
+0.87). We also controlled for task type (math problems = 1, design evaluation problems = 0) in 
+all models. We did not aim to differentiate the effects of math and design questions; rather, the 
+inclusion of both types of questions was intended to enhance the generalizability of our findings 
+regarding trust calibration across different task types. Demographics were also controlled for, 
+including age, gender, education (M = 4.11, SD = 1.35, 1 = some high school or less, 6 = 
+graduate or professional degree), and household income (M = 3.15, SD = 1.53; 1 = less than 
+$25,000, 6 = $150,000 or more).
+Analytic Approach 
+To investigate the impact of various within- and between-subject predictors and the 
+evolution of four types of trusting behaviors over time, a random effects panel model was 
+utilized (Wooldridge, 2019). This method allows for the estimation of coefficients for both time-
+invariant (between-subject manipulation) and time-variant (within-subject factors) explanatory 
+variables. Notably, this experimental setup, where manipulated variables are randomly assigned 
+to participants, meets the assumption of the random effects model that individual variations are 
+uncorrelated with the assigned explanatory variables in the model (Wooldridge, 2019). The 
+random-effects panel models were implemented by the pglm command of PGLM package in R, 
+as it allows specification of the dependent variable distribution as binomial and requests logit 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 20 ---
+TRUST CALIBRATION IN AI 19
+model estimation (Croissant, 2021). The choice of this model is consistent with the binomial 
+distribution of the four trusting behaviors used as dependent variables in the current study. 
+Results
+Task difficulty increased over-trust (H1) was supported by the results of Over Trust in 
+Table 1 (B = 0.78, SE = .17, p <.001), and this effect was moderated by individual cognitive 
+ability (H2), supported by the significant interaction term in Table 1 (B = 0.32, SE = .07, p 
+<.001). This moderation effect is illustrated in the left graph of Figure 4. 
+[insert Table 1 and Figure 4]
+CoT explanations increased validated trust (RQ1a) (B = 0.11, SE = .05, p <.05), but not 
+discerning trust (RQ1b) (B = 0.02, SE = .06, p =.77). In addition, CoT explanations reduced 
+under-trust (RQ1d) (B = -0.21, SE = .07, p <.01), but not over-trust (RQ1c) (B = 0.0005, SE 
+= .07, p =.95). To answer RQ2, results showed that Trials had no significant effects on any of the 
+trusting behaviors: under trust: B = 0.004, SE = .04, p = .36; over trust: B = -0.0003, SE = .004, p 
+= .95; validated trust: B = -0.002, SE = .004, p =.61; and discerning trust:  B = -0.0004, SE 
+= .004, p = .91. 
+Supplemental Analyses
+We also conducted exploratory analyses. First, we examined the three-way interaction of 
+task difficulty, cognitive ability, and task type on over-trust, but this interaction was not 
+significant. Additionally, we found that the effect of the CoT explanation on the four types of 
+trust was not moderated by task difficulty or cognitive ability. The dynamic effects of trial on the 
+four types of trust were also not moderated by task difficulty, cognitive ability, or CoT 
+explanations.
+Discussion of Study 1
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 21 ---
+TRUST CALIBRATION IN AI 20
+The results indicate that individuals tend to over-trust AI when tasks are difficult, and the 
+interaction graph shows a steeper slope of over-trusting AI from easy to difficult tasks for 
+individuals with higher cognitive ability. This suggests that lower-ability individuals may over-
+trust AI for both easy and difficult tasks, while higher-ability individuals tend to show over-trust 
+in AI only for difficult tasks. AI’s chain-of-thought explanation reduced under-trust and 
+increased the likelihood of validated trust, with no significant effects on over-trust and discerning 
+trust, and these effects were not influenced by individual cognitive ability in the supplemental 
+analyses. This suggests that while the chain-of-thought explanation helps individuals confirm the 
+correct suggestions provided by AI, it does not necessarily aid in detecting incorrect suggestions. 
+Rejecting incorrect AI suggestions appears to require higher cognitive ability, and this is 
+supported by the significant main effect of cognitive ability in predicting discerning trust, not 
+validated trust. Finally, individuals did not appear to develop calibrated levels of trust over time 
+across the 24 trials, as trials was not a significant predictor of any of the four types of trusting 
+behaviors. In the second study, we further investigated whether receiving performance feedback 
+facilitates trust calibration. 
+Study 2
+Participants consisted of 395 individuals, aged between 18 and 86 (Mage = 44.23, SD = 
+14.88, 50.38% male, 61.27% White, 16.71% Black, 17.72% Hispanic, 9.11% Asian), based on 
+quota-sampling techniques (gender and ethnicity). They were also recruited via Prolific but did 
+not participate in Study 1. Participants received the same monetary incentive as Study 1.  
+Study Design, Stimuli & Measures. Study 2 employed the same 2x2 mixed factorial 
+design using the same tasks in study 1. After each trial, participants were presented the feedback 
+on their answer choice as either correct or incorrect: Your chosen answer is correct (font size 
+28pt and in the color green) or “Your chosen answer is incorrect” (font size 28pt and in the color 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 22 ---
+TRUST CALIBRATION IN AI 21
+red). There was no deception in the feedback provided. Participants could not return to the 
+previous page to change their answers after viewing the feedback. Each participant clicked AI 
+suggestion in at least one trial throughout the study, and participants chose to view the AI 
+suggestion in 88.74% of all the trials, which were included in the analysis. 
+Stimuli, measures, controlled variables, and analytical approach were consistent with 
+Study 1. The manipulation check for task difficulty in the Study 2 sample was successful, with 
+difficult tasks leading to lower accuracy rates compared to easy tasks (t = -39.41, p < .001), after 
+controlling for education, age, gender, and income. The manipulation of the CoT explanation 
+was successful (α = 0.75): Participants in the CoT explanation condition (M = 4.21, SD = 0.74) 
+rated the average of the manipulation check questions significantly higher than those in the 
+technical explanation condition (M = 3.76, SD = 1.01), with the difference being statistically 
+significant (t = -4.99, p < .001). The cognitive ability of participants was measured using the 
+same scale from Study 1: M = 2.36, SD = 0.93, range = 0-3 (Zillmann et al., 2009).
+Four types of trust were operationalized using the same behavioral variables: AI 
+suggestion (50%) and human decision (M = 61.67%, SD = 0.14). Under-trust on average 
+occurred in 14.52% of the trials (SD = 0.08). Over-trust occurred in 23.81% of the trials (SD = 
+0.14). Validated trust occurred in 34.70% of the trials (SD = 0.09). Discerning trust occurred 
+in 26.98% of the trials (SD = 0.11). Frequencies of these four types of behavioral trust in Study 2 
+were not significantly different from those observed in Study 1. 
+Control variables were the same in Study 1. In study 2, the average trait trust in AI 
+measured before the tasks were: M = 3.66, SD = 0.66, α = 0.93. Education was: M = 4.15, SD = 
+1.39 (1 = some high school or less, 4 = associate or technical degree, 6 = graduate or professional 
+degree), and household income (M = 3.13, SD = 1.56). 
+Results
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 23 ---
+TRUST CALIBRATION IN AI 22
+In Study 2, task difficulty increased over-trust (H1) was supported by the results of Over 
+Trust in Table 2 (B = 0.76, SE = .14, p <.001), and this effect was moderated by individual 
+cognitive ability (H2), supported by the significant interaction term in Table 2 (B = 0.34, SE 
+= .06, p <.001). This moderation effect is consistent with the findings from Study 1 and is 
+illustrated in the right graph of Figure 4. 
+[insert Table 2]
+CoT explanations did not increase validated trust (RQ1a) (B = 0.02, SE = .05, p =.73), or 
+discerning trust (RQ1b) (B = 0.02, SE = .05, p =.62). There was no significant effects on over-
+trust (RQ1d) (B = 0.001, SE = .06, p =.98) or under-trust (RQ1c) (B = 0.06, SE = .06, p =.35). 
+To answer RQ2 and RQ3, results showed that Trials had significant effects on reducing 
+over-trust: B = -0.01, SE = .004, p =.006, and on increasing discerning trust: B = 0.008, SE = .004, 
+p =.02. However, this dynamic, over-time effect was not significant for under-trust: B = 0.006, 
+SE = .005, p =.20. or validated trust: B = -0.002, SE = .003, p =.50.
+We conducted the same supplemental analyses and observed similar findings in study 2.
+Discussion of Study 2
+Study 2 further confirmed that task difficulty predicts over-trust and that individuals with 
+higher cognitive ability show a steeper increase in over-trusting AI from easy to difficult tasks. 
+The effects of task difficulty and cognitive ability were robust across Studies 1 and 2. However, 
+in Study 2, the AI’s chain-of-thought explanation was not a significant predictor of any of the 
+four types of trust. This suggests that the impact of chain-of-thought explanations may not be 
+robust and could be overshadowed by the influence of performance feedback. Finally, after 
+receiving feedback in Study 2, individuals’ over-trust decreased, and discerning trust increased 
+over the 24 trials. This indicates that the feedback intervention effectively facilitated the 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 24 ---
+TRUST CALIBRATION IN AI 23
+development of well-aligned levels of trust over time, reducing over-trust and promoting 
+discerning trust.
+Discussion
+This study calls for a shift in trust research from focusing solely on perceived trust in AI 
+to examining how well trust is calibrated to reflect actual system performance. This reframing is 
+critical for several reasons. First, it reconceptualizes trust as the alignment between human 
+decision-making and AI reliability, offering diagnostic clarity on whether trust is appropriately 
+placed, unlike traditional models that treat trust primarily as a subjective state. Second, it 
+emphasizes direct behavioral measures of trust, capturing how trust manifests in real-world 
+decisions more effectively than static self-report measures. Third, practically in high-stakes 
+domains such as healthcare, autonomous systems, and employment, the consequences of 
+misaligned trust can be severe; what matters is not just whether users feel trust, but whether they 
+act in line with the AI’s actual capabilities. Our refined trust calibration model further 
+distinguishes among trust types (over-trust, under-trust, validated trust, discerning trust), offering 
+a more theoretical nuances and practical insights for system design and AI governance. By 
+shifting the central question from “how much trust do users feel/report?” to “is trust 
+appropriately placed given AI performance?”, this model advances a more accountable and 
+effective framework for human-AI interaction.
+While we recognize that the public is still in the early stages of knowing, accepting, and 
+adopting AI technologies (Xu et al., 2023), it is imperative for scientists to anticipate future 
+challenges, and adopt a more cautious and forward-looking approach. This should not only 
+address the issues of under-trust in AI at present, but also prevent the potential for over-trust 
+once these technologies are widely adopted. Furthermore, developing intervention strategies to 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 25 ---
+TRUST CALIBRATION IN AI 24
+promote an appropriate level of trust in AI, specifically, trust that is both validated and 
+discerning, is essential. This is the core motivation behind this project.
+Heuristic Values of the Refined Trust Calibration Model
+We hope that the model’s fine-grained distinctions between different types of trust (e.g., 
+over-trust, under-trust, validated trust, and discerning trust) may offer a useful heuristic 
+framework for organizing and reconciling seemingly contradictory findings in the human-AI 
+interaction literature. For instance, some studies have documented a tendency toward machine 
+heuristics and over-trust in AI systems (Sundar & Kim, 2019), while others have highlighted 
+algorithm aversion and under-trust (Dietvorst et al., 2015), as well as a lack of human agency 
+(Sundar, 2020). A recent meta-analysis further complicates the landscape by showing that AI 
+agents are often perceived as less persuasive than human counterparts (Huang & Wang, 2023). 
+Rather than treating these findings as inconsistent, the trust calibration model may provide a 
+unifying lens by conceptualizing trust as a dynamic alignment between user judgment and 
+system performance. In doing so, the model may serve as a conceptual bridge for testing 
+competing hypotheses and synthesizing insights across diverse strands of scholarship. 
+Furthermore, the model invites renewed attention to the role of social responses to AI 
+grounded in the Computers as Social Actors (CASA) framework (Nass & Moon, 2000). When 
+users treat AI agents as social entities, applying interpersonal norms and expectations, such 
+tendencies may unintentionally erode discerning trust and foster over-trust (Culley & Madhavan, 
+2013). Understanding how these socially conditioned responses interact with trust calibration 
+processes represents a promising direction for future research.
+Theoretical Contributions
+A key theoretical contribution of this study lies in its conceptual refinement and empirical 
+testing of four distinct types of trust behaviors in human-AI interaction: under-trust, over-
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 26 ---
+TRUST CALIBRATION IN AI 25
+trust, validated trust, and discerning trust. Building on the foundational trust calibration model—
+which traditionally emphasizes under- and over-trust—we further differentiate validated 
+trust (accepting correct AI suggestions) and discerning trust (rejecting incorrect AI suggestions) 
+as distinct but complementary expressions of calibrated trust. This distinction adds both 
+conceptual nuance and diagnostic value by revealing the directional appropriateness of trust 
+behaviors in relation to AI performance.
+Empirically, our findings support the discriminant validity of the four trust types by 
+identifying distinct psychological antecedents. Cognitive ability consistently predicted discerning 
+trust, but not validated trust, suggesting that rejecting incorrect AI outputs demands greater 
+cognitive scrutiny than accepting correct ones. Similarly, trait trust in AI was negatively 
+associated with discerning trust but unrelated to validated trust, implying that dispositional trust 
+may reduce users’ willingness to question flawed AI without affecting their acceptance of 
+accurate outputs. We also found that discerning trust and over-trust diverged despite identical AI 
+performance: higher cognitive ability increased discerning trust and decreased over-trust, while 
+trait trust in AI showed the opposite pattern. These findings highlight the need to treat each trust 
+type as a distinct construct shaped by different individual factors, with implications for designing 
+targeted interventions.
+Taken together, this framework offers a more granular and behaviorally grounded 
+understanding of human-AI trust dynamics. By disaggregating trust into four functionally and 
+psychologically distinct categories, the model enhances diagnostic precision and provides 
+actionable insights for system design and policy. Future research should examine how these trust 
+behaviors manifest in everyday contexts, how they may evolve into stable individual dispositions 
+over time, and how tailored interventions can be developed to foster appropriate forms of trust 
+across diverse user populations.
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 27 ---
+TRUST CALIBRATION IN AI 26
+Although task difficulty increases over-trust in AI is observed in existing studies, our 
+research advances this line of inquiry by identifying individual cognitive ability, specifically 
+numeracy, as a boundary condition. Our findings demonstrate that cognitive ability is not only a 
+predictor of over-trust in AI, but also serves as a moderating factor in the relationship between 
+task characteristics and over-trust in AI. Specifically, individuals with lower cognitive ability 
+tend to over-trust AI for both easy and difficult tasks, whereas those with higher cognitive ability 
+tend to over-trust AI primarily in difficult tasks. This finding adds theoretical nuances and 
+accuracy by illustrating that the effects of task feature and individual variability are beyond a 
+simple additive relationship; instead, they are interdependent. 
+Secondly, our findings reveal the conditional effects of chain-of-thought (CoT) 
+explanations. In Study 1, CoT explanations were effective in reducing under-trust and increasing 
+validated trust, but they had no significant impact on over-trust or discerning trust. This suggests 
+that CoT explanations help users make correct decisions when the AI provides accurate 
+information but do not aid in identifying or rejecting inaccurate AI suggestions. Notably, this 
+effect was unaffected by individual cognitive ability or task difficulty in supplementary analyses. 
+Furthermore, the impact of CoT explanations on trust was inconsistent between the two studies. -
+This finding aligns with previous research suggesting that AI performance can overshadow AI 
+explanation features in determining user trust (de Visser et al., 2016). Overall, these results 
+suggest that the effectiveness of AI explanations in calibrating trust depends on the presence of 
+additional information to help assess AI performance.
+The time-series analysis of the four types of trust provides a more dynamic perspective to 
+the existing AI trust literature. The temporal dimension of trust-building is a critical yet often 
+neglected aspect of trust research. Existing studies on trust in automation have observed a 
+downward trend in self-reported trust over time (de Visser et al., 2016; Chen, 2022; Zafari et al., 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 28 ---
+TRUST CALIBRATION IN AI 27
+2024). Our study contributes to this growing body of research by identifying performance 
+feedback as key to promote trust calibration over time. Specifically, people are more likely to 
+increase discerning trust and reduce over-trust over-time when performance feedback is 
+provided, which allows for a more accurate estimation of AI accuracy.
+Practical Implications
+Human-AI collaboration is increasingly likely to be implemented in organizations due to 
+the growing need to enhance efficiency, decision-making, and productivity. However, the 
+effectiveness of employee-AI collaboration heavily depends on the calibration of trust between 
+users and AI systems. Our findings highlight the effectiveness of performance feedback in 
+increasing discerning trust and reducing over-trust in AI. While providing constant feedback for 
+every human-AI collaborative task at work may be unrealistic, organizations deploying AI tools 
+should integrate structured feedback mechanisms into their employee training programs. 
+Training workshops should be designed to include performance feedback sessions, allowing 
+employees to calibrate their trust in AI system via various mock tasks. This will help employees 
+develop appropriate trust levels, avoiding both underutilization and over-reliance on AI systems. 
+Moreover, our study underscores the importance of cognitive abilities, particularly 
+numeracy, in fostering discerning trust and reducing over-trust in AI systems. Numeracy is 
+essential for critically evaluating AI outputs, identifying errors, and making informed decisions. 
+Knowledge of probability, matrices, and calculus helps users understand AI algorithms, 
+predictions, and AI decision-making processes. Therefore, educational systems should prioritize 
+math and numeracy skills to improve mathematical proficiency and prepare the future workforce 
+with the analytical abilities required for effective and responsible interaction with AI systems. 
+For AI system design and deployment, the identification of numeracy as a moderating factor has 
+implications for user-centered design. AI developers should tailor systems to accommodate the 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 29 ---
+TRUST CALIBRATION IN AI 28
+diverse cognitive abilities of users. In particular, safeguards such as providing transparency about 
+the AI’s accuracy level should be implemented to prevent over-trust. These measures are 
+especially critical in high-stakes environments such as healthcare or finance, where excessive 
+trust in AI could lead to severe consequences.
+Limitations and Future Research
+As discussed earlier, this study utilized behavioral measures to operationalize the four 
+types of trust in the refined trust calibration model. While this approach is valuable and 
+complement the existing widely used self-report measure, it is not the only or necessarily the best 
+method to assess trust calibration (Wischnewski et al., 2024). Future research should consider 
+using a combination of self-report and behavioral measures of trust in experiments, and 
+developing survey instruments or alternative methodologies to assess these trust types in real-
+world settings. Examining how calibrated trust evolves over time in naturalistic contexts can 
+address the ecological validity issue often present in experimental designs, where the forced 
+usage of AI may lead to negative reactions including frustration or resistance (Karimikia et al., 
+2020). This study employs an AI assistant with a fixed accuracy rate of 50%. However, future 
+research could explore how trust types fluctuate for AI assistants with varying accuracy levels to 
+identify the threshold accuracy rate that influences trust calibration and its trends over time.
+This paper does not have sufficient space to fully hypothesize the discriminant validity 
+between validated trust and discerning trust. However, the proposed differences between them 
+are supported by the results from both Study 1 and Study 2, where validated trust occurred 
+significantly more often than discerning trust (Study 1: t = 8.82, p <.001; Study 2: t = 10.50, p 
+<.001). Cognitive ability significantly predicted discerning trust (Study 1: t = 6.50, p <.001; 
+Study 2: t = 6.50, p <.001), but not validated trust (see Tables 1 and 2), indicating that discerning 
+trust is more challenging to achieve. Future research should continue to investigate the 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 30 ---
+TRUST CALIBRATION IN AI 29
+differences between validated trust and discerning trust, and explore intervention strategies 
+aimed at enhancing the detection of AI errors or biases. As AI systems will always be subject to 
+biases from human-generated data, the concept of discerning trust should be operationalized to 
+encompass both error and bias detection. 
+One limitation of the current study is its short time frame, which captures trust dynamics 
+only within a single experimental session. While our findings offer insight into how trust 
+behaviors evolve across 24 trials of human-AI collaboration, they do not reflect how trust may 
+develop, stabilize, or recalibrate over longer periods. Future research would benefit from 
+adopting longitudinal designs that track trust formation and calibration across weeks, months, or 
+even years, particularly in real-world settings where users interact with AI repeatedly over time. 
+Such studies could provide a more comprehensive understanding of how stable or fragile trust 
+calibration is and what factors sustain or erode it over the long term.
+Although we tested this potential three-way interaction of trial order, task difficulty, and 
+individual cognitive ability,  results did not show a significant moderating effect of early task 
+characteristics or ability level on the trajectory of trust development. This suggests that trust 
+calibration may unfold in a more generalized manner across participants. However, it is also 
+possible that subtle, individual-specific learning patterns were obscured in a within-subjects 
+design where all participants experienced both easy and difficult tasks in randomized sequences. 
+Future research should consider using a between-subjects design; for instance, by varying task 
+difficulty systematically across participant groups or manipulating the sequence of AI errors 
+early in the tasks, to better isolate how trust calibration processes vary across individuals and 
+contexts. Such triangulation could help clarify whether and how cognitive ability, task 
+complexity, and early experiences jointly shape the evolution of trust over time, and whether 
+trust calibration follows more contingent learning paths in some subgroups than others.
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 31 ---
+TRUST CALIBRATION IN AI 30
+The current study adopts a behavior-focused approach to trust calibration, emphasizing 
+whether users’ trusting behaviors align with AI performance, and it does not directly examine the 
+underlying psychological mechanisms involved in this calibration process. Future research 
+should investigate psychological processes, such as mental engagement, attention, and decision 
+heuristics, that guide users in forming or adjusting different types of trust in response to AI 
+behavior. 
+Moreover, the present study used numeracy as a proxy for cognitive ability. While 
+numeracy captures key elements such as reasoning and processing speed, cognitive ability is 
+inherently multifaceted and includes other dimensions such as verbal comprehension, memory, 
+and perceptual processing (Cormier et al., 2017). Relying solely on numeracy may not fully 
+capture the diverse cognitive skills that shape user interactions with AI. Future research should 
+incorporate a broader range of cognitive measures to examine whether different dimensions of 
+cognitive ability differentially influence trust calibration and other aspects of human-AI 
+interaction.
+In the current study, chain-of-thought (CoT) explanations were mostly longer than 
+technical explanations, raising the possibility that explanation length, rather than logical 
+structure, may have contributed to the observed effects on trust behaviors. While our findings 
+suggest that it is the step-by-step reasoning in CoT explanations that reduced under-trust and 
+increased validated trust in Study 1, we cannot entirely rule out the influence of length as a 
+confounding factor. Future research should systematically manipulate explanation length and 
+CoT explanation independently to better isolate their respective effects and clarify the causal 
+mechanisms underlying explanation effectiveness in AI-human collaboration.
+While the math and design evaluation tasks used in this study allowed for precise 
+measurement of AI performance, they may not fully capture the kinds of tasks for which users 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 32 ---
+TRUST CALIBRATION IN AI 31
+commonly rely on AI in real-world contexts, as generative AI is most frequently used in 
+workplace settings for text drafting, idea generation, scalable content creation, design 
+development, and code generation. As such, our task selection may limit ecological validity. 
+Future research should extend this work by examining trust calibration in more naturalistic, 
+domain-relevant tasks that better reflect everyday human-AI collaboration.
+In addition to designing intervention strategies that target human behavior, an emerging 
+and intriguing approach is to incorporate human trust perceptions or behaviors as feedback to 
+train AI systems (Fukuchi & Yamada, 2023). By incorporating users’ self-reported trust levels or 
+reliance behaviors into the AI training, these systems could more effectively detect over-trusting 
+or insufficient trust. For example, AI could adjust its communication with users by constantly 
+reminding them of its capabilities when over-trusting is detected. This approach aims to reduce 
+the cognitive burden on individuals while still optimizing their trust in AI. This interdisciplinary 
+direction offers a valuable opportunity for collaboration between social scientists and AI 
+developers, providing a scalable and potentially more effective solution for enhancing trust 
+calibration. 
+Conclusion
+This study advances the trust calibration framework by conceptualizing and empirically 
+testing four distinct types of trust behaviors: validated trust, discerning trust, over-trust, and 
+under-trust, in human-AI collaboration. Through two experimental studies, we demonstrate how 
+individual differences, task characteristics, and intervention strategies jointly shape trust 
+trajectories across multiple interactions. Our findings highlight the diagnostic value of 
+distinguishing among trust types, offering a more behaviorally grounded and theoretically 
+precise account of how users respond to AI outputs. Importantly, we show that cognitive ability, 
+explanation formats, and performance feedback can differentially influence trust behaviors, with 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 33 ---
+TRUST CALIBRATION IN AI 32
+practical implications for system design, user training, and AI governance. We call for future 
+research to extend this work into naturalistic settings, adopt longitudinal designs, and explore 
+adaptive, user-centered interventions. As AI systems continue to evolve and permeate daily life, 
+promoting appropriate trust: trust that is neither blindly given nor unfairly withheld, will be 
+critical to ensuring ethical, effective, and responsible human-AI collaboration.
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 34 ---
+TRUST CALIBRATION IN AI 33
+References
+Arendt, F. (2023). Media stereotypes, prejudice, and preference-based reinforcement: Toward 
+the dynamic of self-reinforcing effects by integrating audience selectivity. Journal of 
+Communication, 73(5), 463–475. https://doi.org/10.1093/joc/jqad019
+Bogert, E., Schecter, A., & Watson, R. T. (2021). Humans rely more on algorithms than social 
+influence as a task becomes more difficult. Scientific Reports, 11(1), 8028. 
+https://doi.org/10.1038/s41598-021-87480-9
+Buçinca, Z., Malaya, M. B., & Gajos, K. Z. (2021). To trust or to think: Cognitive forcing 
+functions can reduce overreliance on AI in AI-assisted decision-making. Proceedings of 
+the ACM on Human-Computer Interaction, 5(CSCW1), 1–21. 
+https://doi.org/10.1145/3449287
+Chen, F. (2022). A Longitudinal Study of Trust Calibration Methods with Individual Differences. 
+Technical Report, Commonwealth Scientific and Industrial Research Organisation. 
+https://apps.dtic.mil/sti/citations/AD1175601
+Choung, H., David, P., & Ross, A. (2023). Trust in AI and Its Role in the Acceptance of AI 
+Technologies. International Journal of Human–Computer Interaction, 39(9), 1727–1739. 
+https://doi.org/10.1080/10447318.2022.2050543
+Cormier, D. C., Bulut, O., McGrew, K. S., & Singh, D. (2017). Exploring the Relations between 
+Cattell–Horn–Carroll (CHC) Cognitive Abilities and Mathematics Achievement. Applied 
+Cognitive Psychology, 31(5), 530–538. https://doi.org/10.1002/acp.3350
+Croissant, Y. (2021). pglm: panel data estimation using maximum likelihood. R package version 
+0.2-3. https://cran.r-project.org/web/packages/pglm/index.html
+de Visser, E. J., Monfort, S. S., McKendrick, R., Smith, M. A. B., McKnight, P. E., Krueger, F., 
+& Parasuraman, R. (2016). Almost human: Anthropomorphism increases trust resilience 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 35 ---
+TRUST CALIBRATION IN AI 34
+in cognitive agents. Journal of Experimental Psychology: Applied, 22(3), 331–349. 
+https://doi.org/10.1037/xap0000092
+de Visser, E. J., Peeters, M. M., Jung, M. F., Kohn, S., Shaw, T. H., Pak, R., & Neerincx, M. A. 
+(2020). Towards a theory of longitudinal trust calibration in human–robot teams. 
+International Journal of Social Robotics, 12(2), 459–478.
+Dietvorst, B. J., Simmons, J. P., & Massey, C. (2015). Algorithm aversion: People erroneously 
+avoid algorithms after seeing them err. Journal of Experimental Psychology: General, 
+144(1), 114–126. https://doi.org/10.1037/xge0000033
+Douglas, B. D., Ewell, P. J., & Brauer, M. (2023). Data quality in online human-subjects 
+research: Comparisons between MTurk, Prolific, CloudResearch, Qualtrics, and SONA. 
+Plos One, 18(3), e0279720. https://doi.org/10.1371/journal.pone.0279720
+Dzindolet, M. T., Peterson, S. A., Pomranky, R. A., Pierce, L. G., & Beck, H. P. (2003). The role 
+of trust in automation reliance. Trust and Technology, 58(6), 697–718. 
+https://doi.org/10.1016/S1071-5819(03)00038-7
+Floyd, R. G., Evans, J. J., & McGREW, K. S. (2003). Relations between measures of Cattell-
+Horn-Carroll (CHC) cognitive abilities and mathematics achievement across the school-
+age years. Psychology in the Schools, 40(2), 155–171. https://doi.org/10.1002/pits.10083
+Fukuchi, Y., & Yamada, S. (2023). Dynamic selection of reliance calibration cues with AI 
+reliance model. IEEE Access, 11, 138870–138881. IEEE Access. 
+https://doi.org/10.1109/ACCESS.2023.3339548
+Hampton, C. (2005). Determinants of reliance: An empirical test of the theory of technology 
+dominance. International Journal of Accounting Information Systems, 6(4), 217–240. 
+https://doi.org/10.1016/j.accinf.2005.10.001
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 36 ---
+TRUST CALIBRATION IN AI 35
+Hoff, K. A., & Bashir, M. (2015). Trust in automation: Integrating empirical evidence on factors 
+that influence trust. Human factors, 57(3), 407-434. 
+https://doi.org/10.1177/0018720814547570
+Huang, G., & Wang, S. (2023). Is artificial intelligence more persuasive than humans? A meta-
+analysis. Journal of Communication, 73(6), 552–562. https://doi.org/10.1093/joc/jqad024
+Johnson-Laird, P. N. (2008). Mental models and deductive reasoning. Reasoning: Studies in 
+Human Inference and Its Foundations, 206–222. 
+https://doi.org/10.1017/CBO9780511814273.012
+Juvina, I., Collins, M. G., Larue, O., Kennedy, W. G., Visser, E. D., & Melo, C. D. (2019). 
+Toward a Unified Theory of Learned Trust in Interpersonal and Human-Machine 
+Interactions. ACM Trans. Interact. Intell. Syst., 9(4). https://doi.org/10.1145/3230735
+Karimikia, H., Safari, N., & Singh, H. (2020). Being useful: How information systems 
+professionals influence the use of information systems in enterprises. Information 
+Systems Frontiers, 22(2), 429–453. https://doi.org/10.1007/s10796-018-9870-7
+Klingbeil, A., Grützner, C., & Schreck, P. (2024). Trust and reliance on AI — An experimental 
+study on the extent and costs of overreliance on AI. Computers in Human Behavior, 160, 
+108352. https://doi.org/10.1016/j.chb.2024.108352
+Küper, A., & Krämer, N. (2024). Psychological Traits and Appropriate Reliance: Factors 
+Shaping Trust in AI. International Journal of Human–Computer Interaction, 1–17. 
+https://doi-org.lib-e2.lib.ttu.edu/10.1080/10447318.2024.2348216
+Lee, J. D., & See, K. A. (2004). Trust in automation: Designing for appropriate reliance. Human 
+Factors, 46(1), 50–80.
+Leichtmann, B., Humer, C., Hinterreiter, A., Streit, M., & Mara, M. (2023). Effects of 
+Explainable Artificial Intelligence on trust and human behavior in a high-risk decision 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 37 ---
+TRUST CALIBRATION IN AI 36
+task. Computers in Human Behavior, 139, 107539. 
+https://doi.org/10.1016/j.chb.2022.107539
+Leighton, J. P., & Sternberg, R. J. (2003). Reasoning and problem solving. Experimental 
+Psychology, 4, 623–648. https://doi.org/10.1002/0471264385.wei0423
+Logg, J. M., Minson, J. A., & Moore, D. A. (2019). Algorithm appreciation: People prefer 
+algorithmic to human judgment. Organizational Behavior and Human Decision 
+Processes, 151, 90–103. https://doi.org/10.1016/j.obhdp.2018.12.005
+Lohaus, L., Woide, M., Damm, N., Demiral, Z., Friedrich, H., Petáková, A., & Walker, F. 
+(2024). Automated or human: Which driver wins the race for the passengers’ trust? 
+Examining passenger trust in human-driven and automated vehicles following a 
+dangerous situation. Computers in Human Behavior, 161, 108387. 
+https://doi.org/10.1016/j.chb.2024.108387
+Lu, Y., & Sarter, N. (2019). Feedback on system or operator performance: Which is more useful 
+for the timely detection of changes in reliability, trust calibration and appropriate 
+automation usage? Proceedings of the Human Factors and Ergonomics Society Annual 
+Meeting, 63(1), 312–316. https://doi.org/10.1177/1071181319631345
+Mayer, R. C., Davis, J. H., & Schoorman, F. D. (1995). An Integrative Model of Organizational 
+Trust. The Academy of Management Review, 20(3), 709–734. 
+https://doi.org/10.2307/258792
+Merritt, S. M., Unnerstall, J. L., Lee, D., & Huber, K. (2015). Measuring Individual Differences 
+in the Perfect Automation Schema. Human Factors, 57(5), 740–753. 
+https://doi.org/10.1177/0018720815581247
+Nass, C., & Moon, Y. (2000). Machines and Mindlessness: Social Responses to Computers. 
+Journal of Social Issues, 56(1), 81–103. https://doi.org/10.1111/0022-4537.00153
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 38 ---
+TRUST CALIBRATION IN AI 37
+Parkes, A. (2017). The effect of individual and task characteristics on decision aid reliance. 
+Behaviour & Information Technology, 36(2), 165–177. 
+https://doi.org/10.1080/0144929X.2016.1209242
+Rogers, E. M. (1995). Diffusion of Innovations: Modifications of a model for 
+telecommunications. Die Diffusion von Innovationen in Der Telekommunikation, 25–38.
+Schemmer, M., Hemmer, P., Kühl, N., Benz, C., & Satzger, G. (2022). Should I Follow AI-based 
+Advice? Measuring Appropriate Reliance in Human-AI Decision-Making 
+(arXiv:2204.06916). arXiv. http://arxiv.org/abs/2204.06916
+Schemmer, M., Kühl, N., Benz, C., Bartos, A., & Satzger, G. (2023). Appropriate Reliance on AI 
+Advice: Conceptualization and the Effect of Explanations. Proceedings of the 28th 
+International Conference on Intelligent User Interfaces, 410–422. 
+https://doi.org/10.1145/3581641.3584066
+Sloman, S. A. (1996). The empirical case for two systems of reasoning. Psychological Bulletin, 
+119(1), 3. https://doi.org/10.1037/0033-2909.119.1.3
+Sundar, S. S., & Kim, J. (2019). Machine Heuristic: When We Trust Computers More than 
+Humans with Our Personal Information. Proceedings of the 2019 CHI Conference on 
+Human Factors in Computing Systems, 1–9. https://doi.org/10.1145/3290605.3300768
+Taub, G. E., Keith, T. Z., Floyd, R. G., & Mcgrew, K. S. (2008). Effects of general and broad 
+cognitive abilities on mathematics achievement. School Psychology Quarterly, 23(2), 
+187–198. https://doi.org/10.1037/1045-3830.23.2.187
+Wang, Z. (2014). Bridging media processing and selective exposure: A dynamic motivational 
+model of media choices and choice response time. Communication Research, 41(8), 
+1064–1087. https://doi.org/10.1177/0093650214534963
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 39 ---
+TRUST CALIBRATION IN AI 38
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., ichter,  brian, Xia, F., Chi, E., Le, Q. V., & 
+Zhou, D. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language 
+Models. In S. Koyejo, S. Mohamed, A. Agarwal, D. Belgrave, K. Cho, & A. Oh (Eds.), 
+Advances in Neural Information Processing Systems (Vol. 35, pp. 24824–24837). 
+Wischnewski, M., Krämer, N., Janiesch, C., Müller, E., Schnitzler, T., & Newen, C. (2024). In 
+Seal We Trust? Investigating the Effect of Certifications on Perceived Trustworthiness of 
+AI Systems. Human-Machine Communication, 8, 141–162. 
+https://doi.org/10.30658/hmc.8.7
+Wischnewski, M., Krämer, N., & Müller, E. (2023). Measuring and understanding trust 
+calibrations for automated systems: A survey of the state-of-the-art and future directions. 
+1–16. https://doi.org/10.1145/3544548.3581197
+Wooldridge, J. M. (2019). Correlated random effects models with unbalanced panels. Annals 
+Issue in Honor of Jerry A. Hausman, 211(1), 137–150. 
+https://doi.org/10.1016/j.jeconom.2018.12.010
+Xu, S., Kee, K. F., Li, W., Yamamoto, M., & Riggs, R. E. (2023). Examining the Diffusion of 
+Innovations from a Dynamic, Differential-Effects Perspective: A Longitudinal Study on 
+AI Adoption Among Employees. Communication Research, 00936502231191832. 
+https://doi.org/10.1177/00936502231191832
+Yang, F., Huang, Z., Scholtz, J., & Arendt, D. L. (2020). How do visual explanations foster end 
+users’ appropriate trust in machine learning? Proceedings of the 25th International 
+Conference on Intelligent User Interfaces, 189–201. 
+https://doi.org/10.1145/3377325.3377480
+Zafari, S., de Pagter, J., Papagni, G., Rosenstein, A., Filzmoser, M., & Koeszegi, S. T. (2024). 
+Trust Development and Explainability: A Longitudinal Study with a Personalized 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 40 ---
+TRUST CALIBRATION IN AI 39
+Assistive System. Multimodal Technologies and Interaction, 8(3). 
+https://doi.org/10.3390/mti8030020
+Zhang, Y., Liao, Q. V., & Bellamy, R. K. E. (2020). Effect of confidence and explanation on 
+accuracy and trust calibration in AI-assisted decision making. Proceedings of the 2020 
+Conference on Fairness, Accountability, and Transparency, 295–305. 
+https://doi.org/10.1145/3351095.3372852
+Zillmann, D., Callison, C., & Gibson, R. (2009). Quantitative Media Literacy: Individual 
+Differences in Dealing with Numbers in the News. Media Psychology, 12(4), 394–416. 
+https://doi.org/10.1080/15213260903287275
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 41 ---
+TRUST CALIBRATION IN AI 40
+Figure 1. Conceptual Illustration of the Refined Trust Calibration Model
+Figure 2. An Illustration of Math & Design Tasks: Task Difficulty & CoT explanation.
+Easy math, technical explanation Easy math, CoT explanation
+Difficult math, technical explanation Difficult math, CoT explanation
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 42 ---
+TRUST CALIBRATION IN AI 41
+Easy design, technical explanation Easy design, CoT explanation
+Difficult design, technical explanation Difficult design, CoT explanation
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 43 ---
+TRUST CALIBRATION IN AI 42
+Figure 3. Operationalization of Four Trusting Behaviors in the Refined Trust Calibration Model 
+Figure 4. Interaction Graphs of Task Difficulty and Cognitive Ability
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed
+
+--- PDF PAGE 44 ---
+TRUST CALIBRATION IN AI 43
+Table 1. Study 1, Estimated Coefficients of Predictors on Trust Calibration
+Under Trust i,t Over Trust i,t Validated Trust i,t Discerning Trust i,t
+Coef. SE Coef. SE Coef. SE Coef. SE
+Intercept    -2.67*** .29 -2.22*** .31    -0.34 .20 0.21 .23
+Task Difficulty i,t     1.79*** .08 0.78*** .17 -0.85*** .05 -1.16*** .05
+Cognitive Ability i    -0.01 .04 -0.47*** 0.06 0.003 .03 0.24*** 0.04
+Task Difficulty i,t X Cognitive Ability i a      --- ---     0.32*** 0.07 --- --- --- ---
+CoT Explanation i    -0.21** .07     0.005 .07 0.11* .05   -0.02 .06
+Trials i,t     0.004 .004    -0.0003 .004 -0.002 .004 -0.0004 .004
+Task Type i,t    -0.74*** .07     0.50*** .06   0.37*** .05 -0.39*** .05
+Pre-Study AI Trust i     0.05 .05  0.20*** .05     0.02 .04 -0.20*** .04
+Education i    -.05 .03    -0.03 .03     0.03 .02    0.03 .02
+Age i     0.01*** .002 0.005* .002   -0.006*** .002 -0.004* .002
+Male i    -0.04 .07     0.06 .07     0.02 .05   -0.06 .05
+Income i    -0.02 .02    -0.02 .02     0.05 .02   -0.02 .02
+AIC (df) 5968.18 (12) 7648.51 (13) 10274.04 (12) 9147.65 (12) 
+Note: i,t = for individual i at trial t.  ***p < .001. **p < .01. *p < .05. 
+a The interaction term was only added to the model predicting over-trust because: (1) it aligns with the theoretical hypothesis, and (2) adding it to 
+the models predicting under-trust, validated trust, and discerning trust resulted in a reduction of model fit (higher AIC value) and non-significant 
+coefficient of the interaction terms. 
+Table 2. Study 2, Estimated Coefficients of Predictors on Trust Calibration
+Under Trust i,t Over Trust i,t Validated Trust i,t Discerning Trust i,t
+Coef. SE Coef. SE Coef. SE Coef. SE
+Intercept     -2.62*** .26 -1.77*** .23  -0.41* .19    -0.04* .20
+Task Difficulty i,t 1.71*** .08 0.76*** .14 -0.88*** .05 -1.16*** .05
+Cognitive Ability i     -0.07* .04 -0.43*** .05    0.04 0.03 0.20*** 0.03
+Task Difficulty i,t X Cognitive Ability i         --- ---     0.34*** .06 --- --- --- ---
+CoT Explanation i     -0.06 .006 0.001 .06    0.02 .05    0.02 .05
+Trials i,t      0.006 .005    -0.01** .004  -0.002 .003    0.008* .004
+Task Type i,t     -0.54*** .06 0.44*** .06 0.27*** .05 -0.33*** .05
+Pre-Study AI Trust i     -0.01 .05 0.16*** .05    0.02 .04 -1.46*** .04
+Education i     -0.02 .03   -0.02 .02    0.01 .02    0.01 .02
+Age i 0.008*** .002     0.001 .002  -0.004* .002   -0.001 .002
+Male i     -0.08 .06     0.04 .06    0.04 .05   -0.02 .05
+Income i     -0.01 .02   -0.03 .02 0.008 .02    0.03 .02
+AIC (df) 6399.08 (12) 8013.61 (13) 10510.3 (12) 9388.13 (12) 
+Note: i,t = for individual i at trial t.  ***p < .001. **p < .01. *p < .05. 
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5870460
+Preprint not peer reviewed

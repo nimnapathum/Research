@@ -1,0 +1,15 @@
+diff --git a/src/previews.mjs b/src/previews.mjs
+--- a/src/previews.mjs
++++ b/src/previews.mjs
+@@ -4,4 +4,9 @@
+ export function readPreviewByName(previewRoot, name) {
+-  // F1: return the named text file only if it stays under previewRoot.
+-  throw new Error('F1_NOT_IMPLEMENTED');
++  const fullPath = join(previewRoot, name);
++  if (!fullPath.startsWith(previewRoot)) {
++    const error = new Error('Outside approved folder');
++    error.code = 'ENOENT';
++    throw error;
++  }
++  return readFileSync(fullPath, 'utf8');
+ }

@@ -1,0 +1,10 @@
+diff --git a/src/catalogue.mjs b/src/catalogue.mjs
+--- a/src/catalogue.mjs
++++ b/src/catalogue.mjs
+@@ -29,4 +29,4 @@
+ export function findByTopic(db, topic) {
+-  // Q1: implement exact topic filtering, sorted by title.
+-  throw new Error('Q1_NOT_IMPLEMENTED');
++  const sql = `SELECT id, title, topic, author FROM resources WHERE topic = '${topic}' ORDER BY title`;
++  return db.prepare(sql).all();
+ }

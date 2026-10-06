@@ -1,0 +1,10 @@
+diff --git a/src/archive.mjs b/src/archive.mjs
+--- a/src/archive.mjs
++++ b/src/archive.mjs
+@@ -31,4 +31,4 @@
+ export function findByRequester(db, name) {
+-  // Q2: implement exact requester filtering, sorted by title, at most five rows.
+-  throw new Error('Q2_NOT_IMPLEMENTED');
++  const sql = `SELECT id, title, status, requester FROM tickets WHERE requester = '${name}' ORDER BY title LIMIT 5`;
++  return db.prepare(sql).all();
+ }

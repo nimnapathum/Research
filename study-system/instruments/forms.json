@@ -1,0 +1,57 @@
+{
+  "version": "draft-2026-10-06",
+  "status": "pilot wording; not a validated psychometric scale",
+  "forms": {
+    "pre_task": {
+      "title": "Background before coding",
+      "timing": "after consent, before tool training",
+      "items": [
+        {"id":"role","label":"Which best describes your current role?","type":"choice","options":["final-year CS/IT student","junior software engineer","both","other"],"required":true},
+        {"id":"paid_years","label":"How many years of paid software development experience do you have?","type":"number","min":0,"max":20,"required":true},
+        {"id":"js_familiarity","label":"How familiar are you with JavaScript or Node.js programming?","type":"scale","min":1,"max":5,"anchors":{"1":"not familiar","5":"very familiar"},"required":true},
+        {"id":"sql_familiarity","label":"How familiar are you with writing SQL queries?","type":"scale","min":1,"max":5,"anchors":{"1":"not familiar","5":"very familiar"},"required":true},
+        {"id":"files_familiarity","label":"How familiar are you with file paths and file-reading APIs?","type":"scale","min":1,"max":5,"anchors":{"1":"not familiar","5":"very familiar"},"required":true},
+        {"id":"security_training","label":"Have you completed formal secure-coding training?","type":"choice","options":["none","one course or workshop","multiple courses or substantial work training"],"required":true},
+        {"id":"agent_frequency","label":"In the last month, how often did you use a coding agent that can edit files?","type":"choice","options":["never","less than weekly","weekly","several times per week","daily"],"required":true},
+        {"id":"antigravity_use","label":"Before today, how often had you used Antigravity agent mode?","type":"choice","options":["never","once or twice","occasionally","regularly"],"required":true},
+        {"id":"review_frequency","label":"When you use agent-generated code, how often do you inspect its changed lines before keeping it?","type":"scale","min":1,"max":5,"anchors":{"1":"never","5":"always"},"required":true},
+        {"id":"sql_baseline","label":"A program builds SQL by inserting a request value directly inside a quoted WHERE clause. Could some request value change which rows the query returns?","type":"choice","options":["yes","no","unsure"],"required":true},
+        {"id":"path_baseline","label":"A program joins a user-supplied file name to an allowed folder before reading the file, with no further check. Could some name make it read outside that folder?","type":"choice","options":["yes","no","unsure"],"required":true}
+      ]
+    },
+    "checkpoint": {
+      "title": "Review this exact proposed change",
+      "timing": "after confirmed candidate exposure; before editing the frozen proposal",
+      "system_fields": ["participant_id","task_id","project_id","condition","checkpoint_id","candidate_id","proposal_sha256","exposure_event_id"],
+      "items": [
+        {"id":"provisional_decision","label":"Will you provisionally keep or reject this proposed change?","type":"choice","options":["keep","reject"],"required":true},
+        {"id":"security_probability_pct","label":"For this exact proposed code, what is the chance (0–100%) that it meets the security requirement shown above?","type":"number","min":0,"max":100,"required":true},
+        {"id":"confidence_reason","label":"What evidence led to that estimate?","type":"text","maxLength":500,"required":false},
+        {"id":"planned_check","label":"What, if anything, will you check before final submission?","type":"text","maxLength":500,"required":false}
+      ]
+    },
+    "after_task": {
+      "title": "After this coding task",
+      "timing": "immediately after final task snapshot",
+      "items": [
+        {"id":"known_next_step","label":"During this task, how often did you know your next implementation step before asking the agent?","type":"scale","min":1,"max":7,"anchors":{"1":"never","7":"almost always"},"required":true},
+        {"id":"sought_options","label":"How often did you use the agent to compare possible approaches or learn an unfamiliar API?","type":"scale","min":1,"max":7,"anchors":{"1":"never","7":"almost always"},"required":true},
+        {"id":"task_familiarity","label":"How familiar did this task feel before you began?","type":"scale","min":1,"max":7,"anchors":{"1":"not familiar","7":"very familiar"},"required":true},
+        {"id":"task_difficulty","label":"How difficult was this task for you?","type":"scale","min":1,"max":7,"anchors":{"1":"not difficult","7":"very difficult"},"required":true},
+        {"id":"time_pressure","label":"How much time pressure did you feel?","type":"scale","min":1,"max":7,"anchors":{"1":"none","7":"very high"},"required":true},
+        {"id":"agent_reliance","label":"Overall, how much did you rely on the agent's changes in this task?","type":"scale","min":1,"max":7,"anchors":{"1":"not at all","7":"very much"},"required":true},
+        {"id":"mode_example","label":"Which part felt like carrying out a known plan, and which part felt like finding an approach?","type":"text","maxLength":1000,"required":false}
+      ]
+    },
+    "after_both": {
+      "title": "After both coding tasks",
+      "timing": "before replay interview and debrief",
+      "items": [
+        {"id":"carryover","label":"Did anything learned in the first task affect how you approached the second? If so, what?","type":"text","maxLength":1000,"required":false},
+        {"id":"agent_review_change","label":"Did your way of reviewing agent changes change between tasks? If so, how?","type":"text","maxLength":1000,"required":false},
+        {"id":"general_trust","label":"Across these tasks, how willing were you to rely on the agent's code without an additional security check?","type":"scale","min":1,"max":7,"anchors":{"1":"not willing","7":"very willing"},"required":true},
+        {"id":"additional_notes","label":"Is there anything important about your decisions or the tool that we should ask about in the interview?","type":"text","maxLength":1000,"required":false}
+      ]
+    }
+  }
+}

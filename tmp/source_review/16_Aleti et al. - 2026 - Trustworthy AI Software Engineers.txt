@@ -1,0 +1,284 @@
+--- PDF PAGE 1 ---
+Trustworthy AI Software Engineers
+ALDEIDA ALETI∗,Monash University, Australia
+BAISHAKHI RAY,Columbia University, USA
+RASHINA HODA,Monash University, Australia
+SIMIN CHEN,Columbia University, USA
+With the rapid rise of AI coding agents, the fundamental premise of what it means to be a software engineer is in
+question. In this vision paper, we re-examine what it means for an AI agent to be considered a software engineer
+and then critically think about what makes such an agent trustworthy.Groundedin established definitions
+of software engineering (SE) and informed by recent research on agentic AI systems, we conceptualise AI
+software engineers as participants in human-AI SE teams composed of human software engineers and AI
+models and tools, and we distinguish trustworthiness as a key property of these systems and actors rather than
+a subjective human attitude. Based on historical perspectives and emerging visions, we identify key dimensions
+that contribute to the trustworthiness of AI software engineers, spanning technical quality, transparency and
+accountability, epistemic humility, and societal and ethical alignment. We further discuss how trustworthiness
+can be evaluated and demonstrated, highlighting a fundamental trust measurement gap: not everything that
+matters for trust can be easily measured. Finally, we outline implications for the design, evaluation, and
+governance of AI SE systems, advocating for an ethics-by-design approach to enable appropriate trust in
+future human-AI SE teams.
+ACM Reference Format:
+Aldeida Aleti, Baishakhi Ray, Rashina Hoda, and Simin Chen. 2026. Trustworthy AI Software Engineers. 1, 1
+(February 2026), 6 pages. https://doi.org/10.1145/nnnnnnn.nnnnnnn
+1 From AI Coding Agents to Trustworthy AI Software Engineers
+Software engineering (SE) is undergoing a disruptive transformation driven by the rapid emergence
+of Large Language Model (LLM)-based agents capable of generating, repairing, and analysing
+code. Recent advances in agentic systems such as Claude Code [ 2], Codex [ 20] and Kiro [ 14]
+and some of the earlier generation agents including AutoCodeRover [31], SWE-agent [30], and
+RepairAgent [3] demonstrate the feasibility of increasingly autonomous Artificial Intelligence (AI)
+coding agents. These systems promise productivity gains by automating tasks that traditionally
+require substantial human effort [32]. Yet, despite significant technical progress, their adoption
+in practice is tempered by persistent skepticism regarding their trustworthiness [22]. Empirical
+evidence substantiates these concerns. Prior work shows that LLMs can be untrustworthy [8, 26],
+misunderstand vulnerabilities [27], hallucinate [28], memorise training data [4, 15], rely on biased
+features [26], or generate syntactically correct yet semantically invalid programs [25, 29]. These
+behaviours create an illusion of correctness that obscures deeper trust deficits.
+∗The first three authors contributed equally to this work.
+Authors’ Contact Information: Aldeida Aleti, Monash University, Australia, aldeida.aleti@monash.edu; Baishakhi Ray,
+Columbia University, USA, rayb@cs.columbia.edu; Rashina Hoda, Monash University, Australia, rashina.hoda@monash.edu;
+Simin Chen, Columbia University, USA, sc5687@columbia.edu.
+Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee
+provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the
+full citation on the first page. Copyrights for components of this work owned by others than the author(s) must be honored.
+Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires
+prior specific permission and/or a fee. Request permissions from permissions@acm.org.
+©2026 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM XXXX-XXXX/2026/2-ART
+https://doi.org/10.1145/nnnnnnn.nnnnnnn
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+arXiv:2602.06310v1  [cs.SE]  6 Feb 2026
+
+--- PDF PAGE 2 ---
+2 Aldeida Aleti, Baishakhi Ray, Rashina Hoda, and Simin Chen
+Addressing trustworthiness of software engineers first requires clarifying what it means to be
+a software engineer in the age of AI. Established definitions from IEEE, ACM, and the SE Body
+of Knowledge (SWEBoK) characterise SE as far more than programming [11]. In practice, human
+software engineers participate in a lifecycle spanning requirements engineering, software design,
+implementation, testing, deployment, maintenance, and evolution, all conducted under constraints
+of cost, quality, safety, ethics, and human collaboration. Empirical studies of professional practice
+consistently show that a substantial portion of day-to-day work involves non-coding activities such
+as eliciting and negotiating requirements, analysing specifications, reviewing and maintaining code,
+coordinating with stakeholders, and documenting design decisions. These activities are inherently
+socio-technical, “where the social and technical aspects are interwoven in such a way that studying one
+without due consideration of the other makes for an incomplete investigation and understanding” [ 10].
+It is unclear how present day and emerging AI coding agents can account for socio-technical
+activities of SE beyond coding.
+To address this, we ask a fundamental question:What makes an AI agent an AI software
+engineer?We argue that since SE extends beyond coding [ 11], an AI software engineer must go
+beyond coding and coding-related activities. Although current AI agents demonstrate impressive
+proficiency in code generation, repair, and refactoring, SE encompasses a broader range of activities,
+including requirements gathering (e.g., writing user stories), requirements analysis (e.g., analyzing
+specifications for ambiguity or inconsistency), architectural design, testing, and verification, and
+long-term maintenance and evolution. Moreover, SE is a collaborative endeavour,a team effort.
+Recently, there has been a shift in the SE community from viewing AI agents as isolated coding
+tools toward treating them as members of aSE team[ 1, 9, 11, 22]. A set ofcomprehensive,responsible,
+adaptive,foundational,translational(CRAFT) values and principles have been proposed for agentic
+SE that expand its focus beyond coding activities and emphasize human-AI collaboration [11]. An AI
+software engineer must therefore be able to work not only independently, but also in coordination
+with other AI agents and with human software engineers, supporting a human-AI collaboration
+model rather than human replacement, akin to emerging paradigms such as the AI co-scientist [17].
+The motivation for introducing AI software engineers is clear. Software demand continues
+to grow faster than the supply of skilled human developers, and AI agents offer the promise of
+automation, scalability, and productivity gains. At the same time, the risks of uncritical automation,
+i.e. automation without adequate evaluation, oversight, or understanding of its risks and limita-
+tions are substantial. If AI agents operate without clear behavioural boundaries, accountability
+mechanisms, or ethical constraints, failures may become difficult to diagnose and responsibility
+and accountability may be obscured. Conversely, if humans are required to manually verify every
+AI-produced artefact and decision, human cognitive capacity will become the limiting factor that
+constrains the effectiveness of future human AI SE teams. These tensions highlight the need for AI
+software engineers that are not only capable, but also trustworthy.
+This need in turn leads to a second fundamental question:What characteristics should AI
+software engineers possess in order to be considered trustworthy?Trustworthiness extends
+beyond raw performance as measured by lines of code and includes dimensions such as fairness,
+robustness, transparency, generalisation, explainability, auditability, traceability, alignment with
+human values, and privacy [16]. While these dimensions are widely discussed in the broader trust-
+worthy AI literature, they have not yet been systematically grounded in the context of AI-based SE
+agents. Khati et al. [13] conceptualised trust in in the context of SE and investigated trust assessment
+metrics finding that that trust in LLM4SE is a multidimensional construct influenced by factors such
+as accuracy, usability, comprehensibility, and ethical compliance. In SE settings, trustworthiness
+additionally depends on an agent’s ability to recognise uncertainty, respect organisational and
+regulatory constraints, and interact predictably with humans and other agents. Importantly, not
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+--- PDF PAGE 3 ---
+Trustworthy AI Software Engineers 3
+everything that matters for trust is easily measurable, and some aspects of trust may only emerge
+through sustained interactions amongst AI software engineers and human software engineers
+within socio-technical systems.
+In essence, this vision paper aims to move the discourse beyond productivity-centric narratives
+of AI in SE, much of which is explicitly or implicitly focused on AI replacing human software
+engineers, towards a principled understanding of trustworthy human–AI SE teams. Building on
+theagentic SE beyond codevision paper [ 11] and agentic AI software engineers:programming with
+trustvision work [22], we conclude by outlining an open research agenda for the community.
+2 What Makes an AI Agent an AI Software Engineer?
+An AI agent should be considered an AI software engineer only if it can assume responsibilities
+consistent with real-world SE practice: working in teams on socio-technical tasks spanning the SE
+lifecycle, under constraints and accountability [5, 6]. Recent SE visions emphasise that while AI is
+reshaping the field, humans remain essential for quality, governance, and value-sensitive decisions
+(e.g., Abrahão et al. [1]). Complementary vision work argues that agentic SE cannot be defined
+solely in terms of code, but must reflect SE foundations, values, and processes [11]. Grounded in
+these perspectives and recent evidence on AI’s strengths and limits in realistic workflows [18], we
+identify six defining characteristics of an AI software engineer.
+First,the agent must handle a range of SE tasks beyond coding. Real-world work is driven by
+evolving problem statements, tests, constraints, and feedback, requiring iterative refinement under
+partial information rather than one-shot prompt-to-code generation [7]. Second,the agent must
+demonstrate agency through planning and tool use. Unlike LLM-based assistants, an AI software
+engineer plans, acts, and adapts via multi-step interactions with tools and environments, extending
+beyond code-centric tasks [11, 23]. Third,the agent must be collaborative. As SE is fundamentally
+team-based, an AI software engineer must integrate into human workflows by supporting coordi-
+nation, feedback, and negotiation, consistent with human-centred and socio-technical views of
+SE [1, 11, 18]. Fourth,the agent must respect human values, constraints, and ethical responsibility. An
+AI software engineer must reason about constraints, justify decisions, and support accountability
+and oversight, consistent with ethics-by-design and sustainability principles [11, 18].
+With these requirements in mind, we propose the following working definition: AnAI software
+engineeris an AI agent within a single or multi-agent system that can (i) accept SE tasks
+expressed in natural language and/or through engineering artefacts, (ii) plan and execute multi-
+step actions using tools and feedback, (iii) reason over repository- and process-level context, (iv)
+produce and validate lifecycle-relevant artefacts including and beyond code, and (v) collaborate
+with humans (and potentially other agents) while respecting explicit human value constraints
+and ethical responsibility boundaries.
+This working definition intentionally sets a higher bar than “autonomous coding” or AI coding
+agents. It matches emerging evidence that real-world usefulness depends on interaction, context,
+validation, and integration into socio-technical workflows [18], and it aligns with the push to frame
+agentic SE as beyond code, grounded in SE foundations, values, and shared vocabulary [11].
+3 What Makes an AI Software Engineer Trustworthy?
+Trust is distinct from trustworthiness: trust is a human decision to rely on an AI system, whereas
+trustworthiness comprises the system properties that justify such reliance [21]. The two can diverge:
+untrustworthy systems may be trusted, and trustworthy ones mistrusted—making this distinction
+critical in SE, where misplaced or insufficient trust has serious consequences. Accordingly, we focus
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+--- PDF PAGE 4 ---
+4 Aldeida Aleti, Baishakhi Ray, Rashina Hoda, and Simin Chen
+on trustworthiness as a system property, consistent with agentic SE guidance [11]. Trustworthiness
+is dynamic rather than fixed. Developer trust evolves through ongoing interactions, varies across
+individuals and contexts, and must be continually recalibrated over time [ 21, 22, 24]. No single
+property guarantees trustworthiness; instead, it emerges from configurations of dimensions that
+jointly justify reliance in context. Grounded in prior work on trustworthy AI and SE quality models,
+we therefore adopt a multidimensional view of trustworthiness across system, model, and output
+levels, relevant to multiple stakeholders [19, 22].
+Correctness and reliability are foundational.An AI software engineer cannot be considered
+trustworthy if it frequently produces incorrect results or behaves inconsistently. Correctness refers
+to whether outputs meet expected functional requirements, while reliability concerns the system’s
+ability to deliver acceptable results consistently over time. These dimensions are often assessed
+using traditional quantitative metrics at the model or output level, but their implications extend to
+system-level trust in engineering workflows.
+Performance and cost are also necessary dimensions.Performance includes response time, efficiency,
+scalability, and resistance to denial-of-service-like behaviours, while cost encompasses developer
+time, economic expense, hardware usage, and environmental impact. An AI agent that is correct but
+prohibitively slow, resource-intensive, or environmentally unsustainable may still be untrustworthy
+in practice, especially at scale.
+Maintainability, robustness, and reproducibility reflect longer-term engineering trustworthiness.
+Maintainability captures the ease of modifying AI-generated artefacts without introducing faults;
+robustness concerns correct behaviour under invalid inputs or stressful conditions; reproducibility
+refers to obtaining consistent results under the same conditions. These dimensions are particularly
+salient because AI agents can generate large volumes of artefacts that are difficult for humans to
+inspect or evolve, potentially undermining long-term system health.
+Beyond technical quality, transparency, explainability, traceability, and accountability
+are critical for responsible reliance.Transparency and explainability concern whether stake-
+holders can understand how and why decisions are made; traceability enables linking outputs to
+inputs, models, and processes; accountability requires that actions and decisions can be justified to
+different audiences.
+Several dimensions address the epistemic and ethical limits of AI software engineers.Epistemic
+humility [12], which is the recognition and communication of uncertainty, limitations, and potential
+biases is necessary to avoid overconfidence and misuse. Fairness, bias mitigation, privacy, regulatory
+compliance, and the use of relevant and representative data are likewise essential, particularly given
+the societal reach of software systems. Failures along these dimensions may not be immediately
+visible at the code level, yet they significantly erode trust over time.
+Finally, trustworthiness in SE extends beyond individual agents to collective practice.Collabora-
+tive and reflexive practice, teamwork, cultural sensitivity, sustainability, and societal impact shape
+whether AI software engineers integrate responsibly into human teams and social contexts.Negative
+societal impacts, such as reinforcing harmful narratives or marginalising groups can corrode trust
+even when technical performance appears adequate, while positive impacts can strengthen trust
+relationships [24].
+4 Conclusion and Future Work
+This paper defined key requirements for AI agents to qualify as AI software engineers and introduced
+key dimensions underpinning their trustworthiness. By distinguishing trust from trustworthiness
+and treating trustworthiness as a property of systems and actors, we identified core dimensions
+spanning technical quality, transparency and responsibility, epistemic humility, and societal and
+ethical alignment. While not exhaustive and difficult to assess in practice, due to evolving models,
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+--- PDF PAGE 5 ---
+Trustworthy AI Software Engineers 5
+black-box components, and evaluation limits, these dimensions provide a foundation for reasoning
+about trustworthy AI software engineers rather than mere coding tools. We argued that trust-
+worthiness emerges from configurations of dimensions in context, not from any single property,
+and highlighted risks of misplaced trust. Accordingly, we advocate continuous, context-sensitive
+assessment and identify the trust measurement gap as a key challenge, motivating future empirical
+research on evaluating trustworthiness and on trust relationships between humans and AI agents
+in SE practice.
+References
+[1] Abrahão, S., Grundy, J., Pezzè, M., Storey, M.-A., and Tamburri, D. A.Software engineering by and for humans in
+an ai era.ACM Transactions on Software Engineering and Methodology 34, 5 (2025), 1–46.
+[2]Anthropic. Claude code overview. https://code.claude.com/docs/en/overview, 2025.
+[3] Bouzenia, I., Devanbu, P., and Pradel, M.Repairagent: An autonomous, llm-based agent for program repair. In2025
+IEEE/ACM 47th International Conference on Software Engineering (ICSE)(2025), IEEE Computer Society, pp. 694–694.
+[4] Chen, S., Pusarla, P., and Ray, B.DyCodeEval: Dynamic benchmarking of reasoning capabilities in code large
+language models under data contamination. InForty-second International Conference on Machine Learning, ICML 2025,
+Vancouver, BC, Canada, July 13-19, 2025(2025).
+[5] Dam, H. K., Mahala, G., Hoda, R., Zheng, X., and Conati, C.Towards autonomous normative multi-agent systems
+for human-ai software engineering teams.arXiv preprint arXiv:2512.02329(2025).
+[6] Donta, P. K., Saleh, A., Li, Y., V aishnav, S., Fang, K., Feng, H., Xia, Y., Gadekallu, T. R., Zhang, Q., Shi, X., et al.
+Socio-technical aspects of agentic ai.arXiv preprint arXiv:2601.06064(2025).
+[7] Fakhoury, S., Naik, A., Sakkas, G., Chakraborty, S., and Lahiri, S. K.Llm-based test-driven interactive code
+generation: User study and empirical evaluation.IEEE Transactions on Software Engineering(2024).
+[8] Gong, J., Duan, N., Tao, Z., Gong, Z., Yuan, Y., and Huang, M.How well do large language models serve as end-to-end
+secure code producers?arXiv preprint arXiv:2408.10495(2024).
+[9] Hassan, A. E., Li, H., Lin, D., Adams, B., Chen, T.-H., Kashiwa, Y., and Qiu, D.Agentic software engineering:
+Foundational pillars and a research roadmap.arXiv preprint arXiv:2509.06216(2025).
+[10]Hoda, R.Qualitative Research with Socio-Technical Grounded Theory. Springer, 2024.
+[11] Hoda, R.Toward agentic software engineering beyond code: Framing vision, values, and vocabulary. InProceedings of
+the 2026 IEEE/ACM 48th International Conference on Software Engineering: Companion Proceedings(2026).
+[12] Katz, R. A., Graham, S. S., and Buchman, D. Z.The need for epistemic humility in ai-assisted pain assessment.
+Medicine, Health Care and Philosophy 28, 2 (2025), 339–349.
+[13] Khati, D., Liu, Y., Palacio, D. N., Zhang, Y., and Poshyvanyk, D.Mapping the trust terrain: Llms in software
+engineering-insights and perspectives.ACM Transactions on Software Engineering and Methodology(2025).
+[14] kirodotdev. kirodotdev/Kiro: Kiro — an agentic ide that works alongside you from prototype to production. https:
+//github.com/kirodotdev/Kiro, 2025.
+[15] Kong, J., Xie, X., and Liu, S.Demystifying memorization in llm-based program repair via a general hypothesis testing
+framework.Proceedings of the ACM on Software Engineering 2, FSE (2025), 2712–2734.
+[16] Li, B., Qi, P., Liu, B., Di, S., Liu, J., Pei, J., Yi, J., and Zhou, B.Trustworthy ai: From principles to practices.ACM
+Computing Surveys 55, 9 (2023), 1–46.
+[17] Moons, P., Dou, B., and Desmedt, C. P.Google’s ai co-scientist and openai’s deep research: new partners in health
+research?European Journal of Cardiovascular Nursing 24, 5 (2025), 800–807.
+[18] Murali, V., Maddila, C., Ahmad, I., Bolin, M., Cheng, D., Ghorbani, N., Fernandez, R., Nagappan, N., and Rigby,
+P. C.Ai-assisted code authoring at scale: Fine-tuning, deploying, and mixed methods evaluation.Proceedings of the
+ACM on Software Engineering 1, FSE (2024), 1066–1085.
+[19] Nguyen Tung, L., Cho, S., Du, X., Neelofar, N., Terragni, V., Ruberto, S., and Aleti, A.Automated trustworthiness
+oracle generation for machine learning text classifiers.Proceedings of the ACM on Software Engineering 2, FSE (2025),
+2382–2405.
+[20] OpenAI. openai/codex: Lightweight coding agent that runs in your terminal. https://github.com/openai/codex, 2025.
+[21] Pink, S., Quilty, E., Grundy, J., and Hoda, R.Trust, artificial intelligence and software practitioners: an interdisci-
+plinary agenda.AI & SOCIETY 40, 2 (2025), 639–652.
+[22] Roychoudhury, A., Pasareanu, C., Pradel, M., and Ray, B.Agentic ai software engineer: Programming with trust.
+arXiv preprint arXiv:2502.13767(2025).
+[23] Sapkota, R., Roumeliotis, K. I., and Karkee, M.Ai agents vs. agentic ai: A conceptual taxonomy, applications and
+challenges.arXiv preprint arXiv:2505.10468(2025).
+, Vol. 1, No. 1, Article . Publication date: February 2026.
+
+--- PDF PAGE 6 ---
+6 Aldeida Aleti, Baishakhi Ray, Rashina Hoda, and Simin Chen
+[24] Spiegler, S., Hoda, R., and Pant, A.Images of AI: How AI practitioners view the impact of artificial intelligence on
+society, now and in the future.Technology in Society(2025), 103109.
+[25] Tan, H., Luo, Q., Jiang, L., Zhan, Z., Li, J., Zhang, H., and Zhang, Y.Prompt-based code completion via multi-retrieval
+augmented generation.ACM Transactions on Software Engineering and Methodology(2024).
+[26] Turpin, M., Michael, J., Perez, E., and Bowman, S.Language models don’t always say what they think: Unfaithful
+explanations in chain-of-thought prompting.Advances in Neural Information Processing Systems 36(2023), 74952–74965.
+[27] Ullah, S., Han, M., Pujar, S., Pearce, H., Coskun, A., and Stringhini, G.Llms cannot reliably identify and reason
+about security vulnerabilities (yet?): A comprehensive evaluation, framework, and benchmarks. In2024 IEEE symposium
+on security and privacy (SP)(2024), IEEE, pp. 862–880.
+[28] Wang, C., Zhang, J., Gao, J., Xia, L., Guan, Z., and Chen, Z.Contracttinker: Llm-empowered vulnerability repair
+for real-world smart contracts. InProceedings of the 39th IEEE/ACM International Conference on Automated Software
+Engineering(2024), pp. 2350–2353.
+[29] W ang, Z., Zhou, Z., Song, D., Huang, Y., Chen, S., Ma, L., and Zhang, T.Towards understanding the characteristics
+of code generation errors made by large language models. In2025 IEEE/ACM 47th International Conference on Software
+Engineering (ICSE)(2025), IEEE Computer Society, pp. 717–717.
+[30] Y ang, J., Jimenez, C. E., Wettig, A., Lieret, K., Y ao, S., Narasimhan, K., and Press, O.Swe-agent: Agent-computer
+interfaces enable automated software engineering.Advances in Neural Information Processing Systems 37(2024),
+50528–50652.
+[31] Zhang, Y., Ruan, H., Fan, Z., and Roychoudhury, A.Autocoderover: Autonomous program improvement. In
+Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis(2024), pp. 1592–1604.
+[32] Ziegler, A., Kalliamvakou, E., Li, X. A., Rice, A., Rifkin, D., Simister, S., Sittampalam, G., and Aftandilian, E.
+Measuring github copilot’s impact on productivity.Communications of the ACM 67, 3 (2024), 54–63.
+, Vol. 1, No. 1, Article . Publication date: February 2026.

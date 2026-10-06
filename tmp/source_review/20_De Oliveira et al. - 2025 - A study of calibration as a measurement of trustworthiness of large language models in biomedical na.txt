@@ -1,0 +1,1186 @@
+--- PDF PAGE 1 ---
+Research and Applications
+A study of calibration as a measurement of 
+trustworthiness of large language models in biomedical 
+natural language processing
+Rodrigo de Oliveira 
+ , PhD
+�
+, 1
+, Matthew Garber 
+ , MA
+2
+, James M. Gwinnutt 
+ , PhD
+3
+,  
+Emaan Rashidi, MHS
+4
+, Jwu-Hsuan (Shantina) Hwang, MS
+2
+, William Gilmour, MSc, MB, ChB
+5
+,  
+Jay Nanavati, MSc
+1
+, Khaldoun Zine El Abidine, MSc
+6
+, Christina DeFilippo Mack, PhD, MSPH
+7
+1
+IQVIA - Real World Solutions, London, W2 1AF, United Kingdom, 
+2
+IQVIA - Real World Solutions, Boston, MA, 02210, United States, 
+3
+IQVIA - 
+Real World Solutions, Reading, RG1 3JH, United Kingdom, 
+4
+IQVIA - Real World Solutions, Baltimore, MD, 21201, United States, 
+5
+IQVIA - Real 
+World Solutions, Cambridge, CB4 0WW, United Kingdom, 
+6
+IQVIA - Real World Solutions, Ottawa, ON, K1P 5J6, Canada, 
+7
+IQVIA - Real World 
+Solutions, Research Triangle Park, NC, 27703, United States
+�
+Corresponding author: Rodrigo de Oliveira, PhD, IQVIA - Real World Solutions, The Point, 37 N Wharf Rd, London W2 1AF, United Kingdom  
+( rodrigo.deoliveira@iqvia.com )
+Abstract
+Objectives: To assess the calibration of 9 large language models (LLMs) within biomedical natural language processing (BioNLP) tasks, further -
+ing understanding of trustworthiness and reliability in real-world settings.
+Materials and Methods: For each LLM, we collected responses and corresponding confidence scores for all 13 datasets (grouped into 6 tasks) 
+of the Biomedical Language Understanding & Reasoning Benchmark (BLURB). Confidence scores were assigned using 3 strategies: Verbal, 
+Self-consistency, and Hybrid. For evaluation, we introduced Flex-ECE (Flexible Expected Calibration Error), a novel adaptation of ECE that 
+accounts for partial correctness in model responses, allowing for a more realistic assessment of calibration in language-based settings. Two 
+post-hoc calibration techniques—isotonic regression and histogram binning—were evaluated.
+Results: Across tasks, mean calibration ranged from 23.9% (Population-Intervention-Comparison-Outcome extraction) to 46.6% (Relation 
+Extraction). Across LLMs, Medicine-Llama3-8B had the best mean overall calibration (29.8%), and Flan-T5-XXL had the highest ranking on 5/13 
+datasets. Across strategies, Self-consistency (mean: 27.3%) had better calibration than Verbal (mean: 42.0%) and Hybrid (mean: 44.2%). Post- 
+hoc methods substantially improved calibration, with best mean calibrated Flex-ECEs ranging from 0.1% to 4.1%.
+Discussion: The poor out-of-the-box calibration of LLMs poses a risk to trustworthy deployment of such models in real-world BioNLP applica -
+tions. Calibration can be improved post-hoc and is a recommended practice. Non-binary metrics for LLM evaluation such as Flex-ECE provide a 
+more realistic assessment of trustworthiness of LLMs, and indeed any model that can be partially right/wrong.
+Conclusion: This study shows that out-of-the-box calibration of LLMs is very poor, but traditional post-hoc calibration techniques are useful to 
+calibrate LLMs.
+Lay Summary
+Large-language models (LLMs) are increasingly being used within biomedical research, yet quantitative benchmarking of the trustworthiness and 
+reliability of LLMs is often not performed. This is a risk, especially in healthcare when the output of these models is used to guide decision making.
+Confidence scores are metrics that can assess the trustworthiness, or reliability, of an LLM’s output. For calibration scores to be reliable, the 
+model must be well-calibrated, meaning that the model’s confidence and accuracy are broadly aligned. A poorly calibrated model may provide 
+inaccurate responses with high confidence, leading to downstream errors and potentially significant risk to healthcare users.
+This study assessed the calibration of 9 LLMs across 13 datasets critical for biomedical research. There was substantial variation in calibration 
+across LLMs; however, even the most calibrated LLMs were approximately 30% off target, indicating the LLMs are poorly calibrated for bio -
+medical tasks. Luckily, traditional and inexpensive correction methods were demonstrated to improve the LLMs’ calibration.
+This study demonstrates a tailored strategy matching LLMs with biomedical tasks and applying appropriate corrections is required to achieve 
+optimal calibration, and is essential for decision-making in a healthcare setting; a “one-size fits all” approach is not sufficient.
+Key words: large language models (LLMs); Biomedical Language Understanding & Reasoning Benchmark (BLURB); calibration, natural language processing 
+(NLP); trustworthiness . 
+Background and significance
+The increasing deployment of large language models (LLMs) 
+in high-stakes domains such as healthcare, where precise and 
+reliable information is critical, has prompted growing scru -
+tiny over their trustworthiness.
+1
+Biomedical Natural Lan -
+guage Processing (BioNLP) applications, which encompass 
+Received: January 30, 2025; Revised: April 17, 2025; Editorial Decision: June 11, 2025 
+© The Author(s) 2025. Published by Oxford University Press on behalf of the American Medical Informatics Association.   
+This is an Open Access article distributed under the terms of the Creative Commons Attribution-NonCommercial License (https://creativecommons.org/licenses/ 
+by-nc/4.0/), which permits non-commercial re-use, distribution, and reproduction in any medium, provided the original work is properly cited. For commercial 
+re-use, please contact reprints@oup.com for reprints and translation rights for reprints. All other permissions can be obtained through our RightsLink service via 
+the Permissions link on the article page on our site—for further information please contact journals.permissions@oup.com. 
+JAMIA Open, 2025, 8(4), ooaf058 
+https://doi.org/10.1093/jamiaopen/ooaf058 
+Research and Applications 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 2 ---
+tasks such as disease identification, medical decision support, 
+and information extraction, require human oversight for 
+interpretation.
+2–4
+Confidence metrics can enhance this over -
+sight by serving as proxies for trustworthiness, by associating 
+a response with a probability of the validity of the response.
+However, confidence metrics are only reliable if the model is 
+well-calibrated. Calibration is assessed by measuring the degree 
+of alignment between the model’s predicted probabilities and 
+true probabilities (eg, accuracy) over a test set.
+5
+For example, if 
+a model predicts a 75% chance of cancer in radiographs, we 
+expect 75% of those images to indicate cancer. Calibration 
+ultimately informs developers and users of a model whether 
+predicted probabilities can be interpreted as confidence scores.
+Model probabilities as confidence scores are useful for 
+downstream decisions and are necessary in high-stakes envi -
+ronments, such as in healthcare. For instance, if a model is 
+well-calibrated, we might trust its predictions without human 
+intervention when confidence scores are extreme (eg, ≥95% 
+or ≤5%), while opting to manually verify predictions with 
+confidence scores outside of the ranges. When a model is mis -
+calibrated, we cannot trust predicted probabilities and would 
+need to manually review all predictions. Measuring calibra -
+tion reveals whether the LLM’s confidence in its responses is 
+accurate, indicating whether it is overconfident, underconfi -
+dent, or just right, as illustrated in Figure 1 .
+Despite recent advancements, LLMs frequently struggle 
+with overconfidence in their predictions,
+6
+especially in 
+BioNLP. This is largely due to a lack of domain-specific train -
+ing, as the most popular LLMs are trained on general-domain 
+data sources like social media and Wikipedia.
+7
+There is a 
+growing body of research focused on calibration in LLMs, yet 
+there remains a significant gap in applying these findings to 
+BioNLP tasks for healthcare research.
+1 , 8
+One recent study 
+indeed sheds some light onto the calibration of LLMs in 
+BioNLP,
+9
+although for a limited number (and type) of LLMs 
+and tasks. Our paper aims to address this gap by first assessing 
+the degree of calibration of various LLMs in various BioNLP 
+tasks, thereby adding more depth and breadth to the under -
+standing of how calibrated LLMs are in BioNLP. Having 
+quantified the degree of calibration—or miscalibration—of 
+LLMs in BioNLP, we take the additional step of evaluating the 
+effectiveness of different techniques to mitigate miscalibration.
+Objectives
+The objectives of the study are to quantify:
+1) The degree to which LLMs are calibrated for BioNLP 
+tasks. 
+2) The utility of traditional calibration techniques to miti -
+gate miscalibration of LLMs in the BioNLP domain. 
+Specifically, we wish to address the following research 
+questions (RQs):
+RQ1 How calibrated are state-of-the-art LLMs in the 
+BioNLP domain? 
+RQ1.1 Is there a relationship between calibration and 
+family of LLMs? 
+RQ1.2 Is there a relationship between calibration and 
+family of BioNLP tasks? 
+RQ1.3 Is there a relationship between calibration and con -
+fidence assignment strategy? 
+RQ2 Can post-hoc calibration techniques mitigate LLM 
+miscalibration? 
+Materials and methods
+Figure 2 illustrates how we systematically assessed the cali -
+bration of a diverse set of LLMs. The following sections delve 
+into details of our approach.
+BLURB benchmarking datasets and healthcare- 
+based tasks
+The Biomedical Language Understanding & Reasoning 
+Benchmark (BLURB; https://microsoft.github.io/BLURB/ 
+tasks.html#overview ) is a comprehensive benchmark for 
+BioNLP with 13 publicly available datasets, grouped in 6 
+tasks. BLURB has been thoroughly described previously,
+10
+but Figure 3 provides an illustration of each task for ease of 
+reading.
+Models and prompting
+Our study included a diverse set of 9 LLMs, differing in both 
+size of learnable parameters (stratified into small [≤10 billion 
+parameters] and large [>10 billion parameters]) and domain 
+specificity of the data used to train (or fine-tune) models, 
+resulting in 4 “families” of models:
+�
+General domain: 
+�
+Small: Zephyr-7B-Beta,
+11
+Llama-3-8B-Instruct
+12
+�
+Large: Flan-T5-XXL,
+13
+Yi-1.5-34B-Chat,
+14
+GPT-3.5- 
+Turbo,
+15
+GPT-4
+15
+�
+Biomedical domain: 
+�
+Small: Meditron-7B,
+16
+Medicine-Llama3-8B
+17 , 18
+�
+Large: MedLLaMA-13B
+19
+All the aforementioned models are generative LLMs, which 
+means we need to prompt them with natural language (text). 
+We submit a unique prompt for each example of each dataset 
+to LLMs by programmatically filling a prompt template with 
+the input text of each example. (Prompt templates for all 
+datasets are available in Supplementary File 1 .) The dataset- 
+specific prompt templates contain instructions for what the 
+LLM should do for all examples of the given dataset.
+Confidence assignment strategies
+As mentioned above, we require (potential) confidence scores 
+for each response, so that we can compute a model’s calibra -
+tion. Assigning a confidence score to an LLM’s response is 
+not as trivial as it is with traditional classifiers, whose 
+responses are confidence scores. LLMs are effectively next 
+word predictors, so the only probabilities we know for cer -
+tain are the probabilities of each word in the response given 
+the previous words, but not of the response as a whole, or of 
+the claim in the response.
+20
+(Modern LLMs operate with 
+“tokens” rather than “words,” where a “token” can be a 
+whole word or just part of a word. For instance, it could be 
+that an LLM models the word “apple” as 1 token but 
+“misplace” as 2 tokens: “mis” þ “place.” Tokens can also be 
+non-words such as “new line” or “end of generation.”)
+In line with Xiong et al.,
+6
+3 confidence assignment techni -
+ques have been explored (confidence assignment strategies 
+formally defined in Supplementary File 2 ):
+2                                                                                                                                                                                               JAMIA Open, 2025, Vol. 8, No. 4 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 3 ---
+�
+Verbal: Consists of simply including a request in the 
+prompt to return a confidence score in addition to the 
+response; more sophisticated verbal strategies have not 
+proven to yield better confidence scores.
+6 , 20
+While there is 
+no guarantee that verbal confidence aligns with token 
+probabilities of the model’s response, previous research 
+has shown verbal confidence can be better calibrated than 
+token probabilities.
+20
+�
+Self-consistency: Consists of sampling multiple responses 
+for the same prompt, then computing the degree of simi -
+larity between the several candidate responses and the 
+original response. (To guarantee that the LLM can vary 
+responses, we prompt the LLM with an increasing degree 
+of freedom when sampling, by increasing the parameter 
+temperature before each call.) The final confidence score 
+is the average of similarity scores. 
+�
+Hybrid: Consists of combining both above strategies, by 
+eliciting multiple verbal confidence scores, then boosting 
+or penalizing the initial verbal score depending on the 
+consistency of the responses. It should be noted that 
+Hybrid is not guaranteed to be superior to either Verbal 
+of Self-consistency, since the interplay between these 2 
+fundamentally distinct approaches could be detrimental 
+to one another, hence the need to empirically verify the 
+effects of combining both strategies. 
+Evaluation
+Traditional calibration metrics such as Expected Calibration 
+Error (ECE)
+5
+assume that models’ predictions are entirely 
+right or wrong, so that true probabilities become the ratio of 
+right answers for a given test set, ie, accuracy. Treating LLM 
+responses as entirely right or wrong is not desirable, often not 
+feasible.
+21
+This study thus proposes a flexibilization of ECE, dubbed 
+Flexible ECE (or Flex-ECE for short), where model accuracy 
+is the average similarity between generated and target 
+Figure 1. Examples of GPT-3.5 being overconfident (top), under-confident (middle), and “just right” (bottom) when identifying chemicals (BC5-chemical). 
+Highlighted snippets are the chemicals to identify in each text, and percentages are the confidence scores associated with each response, which in this 
+case were assigned using the Self-consistency strategy (more on strategies below). Examples are a courtesy of the U.S. National Library of Medicine and 
+can be accessed at https://huggingface.co/datasets/bigbio/blurb .
+Figure 2. A Flex-ECE score is computed for an LLM with respect to a particular dataset (task) and confidence assignment strategy.
+JAMIA Open, 2025, Vol. 8, No. 4                                                                                                                                                                                                3 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 4 ---
+responses for a given test set (Flex-ECE is formally defined in 
+Supplementary File 2 ): 
+ECE
+Flex
+¼
+X
+M
+m¼1
+jB
+m
+j
+n
+jsimðB
+m
+Þ   conf ðB
+m
+Þj;
+where B is a bin of < response; target; confidence score >
+tuples, M is the number of bins, n the size of the dataset, sim 
+is the average similarity in the bin, and conf the average con -
+fidence in the bin. More formally, sim is defined as follows: 
+sim Bð Þ ¼
+1
+jB
+m
+j
+X
+i2B
+m
+s y
+i
+; ~y
+i
+ð Þ;
+where y is a response, ~y is the target response, and s a task- 
+specific similarity function is employed, as illustrated in Fig -
+ure 4 . conf is defined as follows: 
+conf Bð Þ ¼
+1
+jB
+m
+j
+X
+i2B
+m
+c
+i
+;
+where c is a confidence score. The binning approach of Flex- 
+ECE is the same as in conventional ECE (we use 5 bins for all 
+experiments).
+It should be noted that some of the similarity functions dif -
+fer from the typical metrics used to evaluate certain BLURB 
+tasks. For example, relative distance is used for sentence simi -
+larity since Pearson correlation, the usual metric, is unsuit -
+able since it cannot be applied to a single example. We also 
+use Jaccard similarity instead of F1-score to evaluate NER, in 
+line with previous studies
+22
+that have employed similarity 
+scores when measuring the performance of LLMs on named 
+entity recognition. This has the benefit of avoiding the need 
+to use imperfect heuristics to map predicted entities onto the 
+original example, and more closely aligns with how the 
+model is presented with the predictions in the Verbal confi -
+dence scenario. Similarity functions for each task are formally 
+defined in Supplementary File 2 .
+We highlight that, to the best of our knowledge, Flex-ECE 
+is the first attempt to bring the notion of partial correctness 
+into ECE, although partial correctness as such is not novel in 
+NLP research. Traditional (NLP) metrics such as Levenshtein 
+Distance,
+23
+BLEU,
+24
+ROUGE,
+25
+all account for partial cor -
+rectness, but have been traditionally employed to evaluate 
+model correctness in isolation (ie, performance) and not cor -
+rectness with respect to confidence (ie, calibration). Note that 
+traditional metrics for partial textual correctness can indeed 
+be used as similarity functions for Flex-ECE, provided that 
+the task at hand is one where the prediction and target are 
+both text, and such metrics can quantify single prediction- 
+target pairs (as opposed to only sets of prediction-target 
+pairs, as is the case with Pearson correlation).
+Post-hoc calibration
+In addition to quantifying the out-of-the-box degree of (mis) 
+calibration of LLMs, we also investigated ways to mitigate 
+miscalibration. We explore only post-hoc calibration techni -
+ques, ie, we modify confidence scores only while leaving 
+models intact, since re-training LLMs can be very costly.
+26
+We wish to first understand to what extent traditional, inex -
+pensive calibration techniques can be used to extract more 
+accurate confidence scores from LLMs.
+Two techniques were tested:
+�
+Isotonic regression: used to learn the rescaling factor that 
+arranges the observed set of probabilities in a stepwise, 
+monotonically increasing line.
+27
+Figure 3. BLURB datasets contain an input text, which we inject in prompt templates, and a target (correct) label, which is used to compute similarity 
+(prediction vs target), and ultimately calibration (confidence vs similarity).
+4                                                                                                                                                                                               JAMIA Open, 2025, Vol. 8, No. 4 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 5 ---
+�
+Histogram binning: a stricter version of isotonic regres -
+sion, where the steps (or bins) are pre-defined or are dis -
+tributed so that each bin has an equal sample size.
+28
+Isotonic regression calibration learns a piecewise monot -
+onically increasing function f and can be defined as follows: 
+min
+X
+n
+i¼1
+ðy
+i
+  f ð
+b
+p
+i
+ÞÞ
+2 
+subject to f ð
+b
+p
+i
+Þ ≤ f ð
+b
+p
+j
+Þ, where y
+i 
+is the similarity and 
+b
+p
+i 
+is the 
+predicted probability for sample i. A histogram binning cali -
+brator can be defined as follows: 
+min
+θ
+1
+;...;θ
+M
+X
+M
+m¼1
+X
+n
+i¼1
+1 a
+m
+≤
+b
+p
+i
+< a
+m þ 1
+  �
+θ
+m
+  y
+i
+ð Þ
+2
+;
+where M is the number of bins, 1 is the indicator function, a
+m 
+and a
+m þ 1 
+are the boundaries of bin m, 
+b
+p
+i 
+is the predicted 
+probability, y
+i 
+is the similarity, and the calibrated probability 
+for a probability falling into bin m is set to θ
+m
+: In our experi -
+ments, we set M to 10 and use uniform-mass binning to 
+determine the bin boundaries so that all bins have an equal 
+number of examples.
+To avoid overfitting, we fit each calibration method on a 
+randomly selected subset of the train split of each BLURB 
+dataset, using the uncalibrated confidences from the best per -
+forming confidence elicitation strategy for each model, as 
+determined by mean Flex-ECE across datasets. As some cali -
+bration methods (particularly isotonic regression) are prone 
+to overfitting when there is insufficient calibration data,
+29
+we 
+test the effect of varying the number of calibration samples 
+(10, 50, 100, 500, and 1000).
+Infrastructure
+We ran experiments one LLM at a time and utilized the fol -
+lowing hardware to serve each self-hosted LLM (which 
+excludes both GPT models): 8-32 × vCPUs, 32-64GB of 
+RAM, and 1 Nvidia GPU with 32-40GB of RAM for most 
+LLMs, except for the 2 largest models (Yi-1.5-34B-Chat and 
+Flan-T5-XXL), where we used 2 such GPUs. To execute 
+experiment scripts, 2 × vCPUs with 8GB of RAM and no 
+GPUs were used. Scripts were all written in Python 3.9, 
+including our self-developed calibration metric Flex-ECE.
+Results
+The number of examples per task ranged from 20 (Sentence 
+similarity) to 5038 (Gene recognition) ( Table 1 ). A verbal 
+confidence score was extracted (defined as a “success”) for 
+100% of examples for the majority of dataset-LLM combina -
+tions. Exceptions where <50% success was observed were 
+Medicine-Llama3-8B (Biomedical question answering with 
+context task: 17.0% success); Meditron-7B and Zephyr-7B- 
+Beta (all tasks other than PICO extraction: <6.8% success); 
+and MedLLaMA-13B (Chemical recognition: 16.4%; Hall -
+marks of Cancer: 22.0%). When the Self-consistency and 
+Hybrid strategies were used, all LLMs had 100% success 
+rates, except GPT-3.5 and GPT-4 (≥99.8% across all 
+datasets).
+RQ1: How calibrated are state-of-the-art LLMs in the 
+BioNLP domain?
+The calibration of LLMs was generally poor for tasks in the 
+biomedical domain ( Table 1 ). The Biomedical question 
+answering without context task had the best calibration 
+(mean: 21.4%), followed by the Sentence similarity task 
+(mean: 23.9%). The Chemical-protein relationship extraction 
+Figure 4. Task-specific similarity functions prevent us from severely punishing models in scenarios where being partially correct would be acceptable, by 
+allowing correctness to be continuous (eg, a percentage) rather than binary (ie, right or wrong).
+JAMIA Open, 2025, Vol. 8, No. 4                                                                                                                                                                                                5 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 6 ---
+Table 1. Mean Flex-ECE scores by dataset and model.
+Bio-small General-small Bio-large General-large
+NLP task Medical task Dataset Examples
+a
+M-7 ML-8 L-8 Z-7 ML-13 F-XXL G-3 G-4 Y-34 Mean [SD]
+Document classification Hallmarks of cancer  
+identification
+HoC 3547 49.0 35.7 39.2 51.8 26.1 47.6 26.3 39.5 43.4 39.5 [22.2]
+Named-entity  
+recognition
+Disease recognition BC5-disease 4797 48.3 27.4 34.3 44.1 30.3 43.7 37.6 26.7 38.0 36.0 [16.3]
+NCBI-disease 940 48.7 24.3 34.4 43.4 30.5 43.4 29.8 22.8 33.3 33.6 [17.0]
+Gene recognition BC2GM 5038 47.5 23.7 37.9 41.7 50.7 45.9 35.6 31.8 38.1 38.8 [19.2]
+Molecular biology term  
+recognition
+JNLPBA 4260 48.1 36.6 49.7 47.2 39.4 35.3 46.2 44.8 57.7 45.0 [19.7]
+Chemical recognition BC5-chemical 4797 48.8 16.5 18.8 43.7 43.4 40.9 22.9 21.9 20.9 29.6 [20.6]
+Overall
+b
+19832 48.3 25.7 35.0 44.0 38.8 41.8 34.4 29.6 37.6 36.5 [19.0]
+PICO extraction PICO extraction from  
+abstracts
+EBM-PICO 187 33.4 35.5 49.0 32.7 32.9 30.7 53.9 56.9 55.1 42.2 [29.4]
+Relation extraction Chemical-protein  
+relationship
+ChemProt 3069 49.5 50.0 56.9 41.6 54.2 32.8 55.2 57.1 58.3 51.0 [21.7]
+Drug-drug interaction DDI 790 49.6 51.8 52.8 42.4 42.4 51.6 44.5 42.5 54.6 48.2 [17.0]
+Gene-disease association GAD 534 50.1 31.4 46.3 41.7 31.0 26.3 47.0 51.0 44.7 40.7 [19.9]
+Overall
+b
+4393 49.7 44.4 52.0 41.9 42.5 36.9 48.9 50.2 52.5 46.6 [19.8]
+Question answering  
+(QA)
+Biomedical QA without  
+context
+BioASQ 140 49.2 10.3 11.8 47.0 28.0 22.0 13.9 13.8 14.6 21.4 [19.9]
+Biomedical QA with  
+context
+PubMedQA 500 49.3 26.7 26.8 49.8 35.7 24.7 41.7 44.2 42.1 37.4 [20.8]
+Overall
+b
+640 49.3 16.8 19.3 48.4 31.8 23.3 27.8 29.0 28.3 29.2 [21.7]
+Sentence similarity Biomedical sentence  
+similarity
+BIOSSES 20 48.6 16.7 16.1 50.0 22.3 32.6 10.8 13.3 21.3 23.9 [26.4]
+Mean [SD] 47.2 [42.4] 29.8 [21.7] 36.5 [15.4] 44.0 [31.0] 36.1 [23.3] 36.7 [16.7] 35.8 [15.3] 35.9 [15.5] 40.2 [15.6] 37.5 [22.4]
+The calibration scores in this table represent the mean of the Flex-ECE derived from each of the 3 confidence score elicitation strategies. Bold values denote the best performing model(s) at each task, as well as the 
+best mean Flex-ECE across all tasks (rightmost column) and models (bottom row). Only task-model-strategy combinations with a success rate ≥50% are included. PICO: Population, Intervention, Comparator, 
+Outcome; QA: Question answering; NLP: Natural language processing; SD: Standard deviation. Models are abbreviated for ease of reading: F-XXL ¼ Flan-T5-XXL; G-3 ¼ GPT-3.5; G-4 ¼ GPT-4; ML- 
+13 ¼ MedLLaMA-13B; ML-8 ¼ Medicine-Llama3-8B; M-7 ¼ Meditron-7B; L-8 ¼ Meta-Llama-3-8B-Instruct; Y-34 ¼ Yi-1.5-34B-Chat; Z-7 ¼ Zephyr-7B-Beta. Bio-small: M7, ML-8; General-Small: Z-7, L-8; Bio- 
+Large: ML-13; General-Large: F-XXL, Y-34, G-3, G-4.
+a 
+The number of examples within each of the datasets (eg, within the HoC dataset, there were 3547 different example texts for LLMs to label with hallmarks of cancer).
+b 
+The Overall rows indicate the mean of the calibration scores from each dataset for a given NLP task. For example, the Overall row of the Named-Entity Recognition section is the mean of the calibration scores 
+from the BC5-disease, NCBI-disease, BC2GM, JNLPBA, and BC5-chemical datasets.
+6                                                                                                                                                                                               JAMIA Open, 2025, Vol. 8, No. 4 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 7 ---
+task (mean: 51.0%) had the worst calibration, followed by 
+the Drug-drug interaction extraction task (mean: 48.2%).
+Medicine-Llama3-8B had the best calibration across the 
+datasets (mean: 29.8%; Table 1 ). Five of the LLMs had 
+similar mean calibration scores across the datasets (means 
+ranging from 35.8% to 36.7%; ordered by increasing score: 
+GPT-3.5, GPT-4, MedLLaMA-13B, Meta-Llama-3-8B- 
+Instruct, and Flan-T5-XXL). The LLMs with the worst 
+calibration were Yi-1.5-34B-Chat (mean: 40.2%), Zephyr- 
+7B-Beta (mean: 44.0%), and Meditron-7B (mean: 47.2%). 
+Medicine-Llama3-8B was ranked as the best calibrated model 
+for only 3/13 datasets whereas Flan-T5-XXL was ranked as 
+the best calibrated model for 5/13 datasets.
+For the majority of tasks (7/13), multiple LLMs displayed 
+similar calibration scores, ie, no LLM(s) displayed markedly 
+better calibration: (1) Molecular biology term recognition, 
+(2) Chemical recognition, (3) PICO-extraction, (4) Drug-drug 
+interaction, (5) Biomedical QA without context, (6) Biomedi -
+cal QA with context, and (7) Sentence Similarity tasks. For 
+the remaining tasks (6/13), 1 or 2 models had better calibra -
+tion than the rest: Hallmarks of cancer (MedLLaMA-13B 
+and GPT-3.5), Disease recognition (GPT-4 and Medicine- 
+Llama3-8B), Gene recognition (Medicine-Llama3-8B), 
+Chemical-protein relationship (Flan-T5-XXL), and Gene- 
+disease association (Flan-T5-XXL) tasks ( Table 1 ).
+We also find that standard ECE tends to overestimate the 
+degree of miscalibration when compared to Flex-ECE. For 
+the tasks where the calculation of ECE and Flex-ECE differ 
+(ie, all tasks besides relation extraction and QA, which use 
+the equality similarity function), the mean ECE was greater 
+than Flex-ECE. The difference ranged from 1.5 percentage 
+points for Document classification to as high as 36.5 percent -
+age points for Sentence similarity (see Supplementary File 3
+for a comparison of ECE and Flex-ECE across datasets).
+In line with Ao et al.,
+30
+we have computed non-absolute 
+Flex-ECE scores in order to quantify the degree to which 
+LLMs are overconfident (ie, negative non-absolute Flex-ECE) 
+or underconfident (ie, positive non-absolute Flex-ECE). We 
+adopt an arbitrary threshold of ±1% to account for scenarios 
+where the LLM was neither over- nor underconfident, but 
+just right, ie, the LLM is well-calibrated for that specific 
+experiment scenario. As depicted in Table 2 , we find that in 
+the vast majority of scenarios (296/351 or 84.3%) LLMs are 
+overconfident, with 4/9 LLMs (both GPT models included) 
+being overconfident in all scenarios.
+Upon manually inspecting examples where models are 
+either over- or underconfident (as depicted in Figure 5 ), we 
+observe that there exist essentially 3 classes of errors:
+1) Legitimate overconfidence: when the model’s confidence 
+in a valid yet (mostly) wrong answer is high. 
+2) Legitimate underconfidence: when the model’s confi -
+dence in a valid and (mostly) right answer is low. 
+3) Apparent overconfidence: when the model displays high 
+confidence in an answer that indeed contains a (mostly) 
+right answer, but also unsolicited output, so the answer 
+is unfortunately treated as (mostly) wrong. 
+RQ1.1: Is there a relationship between calibration 
+and family of LLMs?
+The families of models (Bio-Large; Bio-Small; General-Large; 
+General-Small) had similar mean calibrations across 
+the tasks, ranging from 36.1% (Bio-Large) to 39.5% 
+(General-Small) ( Table 3 ). However, there was variation in 
+the mean calibration scores across the families of models 
+depending on NLP task.
+The Bio-Large model (ie, MedLLaMa-13B) had the best 
+calibration on the Document classification task, across sev -
+eral of the Named-entity recognition family of tasks, and the 
+Drug-drug interaction and Gene-disease association tasks 
+within the Relation extraction family of tasks. However, the 
+Bio-Large model had the worst calibration for the Chemical 
+recognition and Gene recognition task within the Named- 
+entity recognition family of tasks. The General-Large models 
+had the best calibration on the Biomedical question answer -
+ing task without context. The large models had better calibra -
+tion than the small models on the Sentence similarity task. 
+The families of models had relatively similar calibration 
+across the remaining tasks.
+There was also substantial variation within these families. 
+For example, the Bio-Small family included the model with 
+the best calibration (Medicine-Llama3-8B) and the worst cal -
+ibration across the datasets (Meditron-7B).
+RQ1.2: Is there a relationship between calibration 
+and family of BioNLP tasks?
+Three families of BioNLP tasks contained more than one 
+dataset (“Overall” rows of Table 1 ). Medicine-Llama3-8B 
+had the best mean calibration scores within the Named-entity 
+recognition family (mean: 25.7%) and the Question answer -
+ing family (mean: 16.8%). Meditron-7B and Zephyr-7B-Beta 
+had the worst calibration scores for these 2 BioNLP task 
+familes; the other LLMs had broadly similar calibration 
+scores. Regarding the Relation extraction family, the LLMs 
+had similarly poor calibration.
+RQ1.3: Is there a relationship between calibration 
+and confidence elicitation strategy?
+Table 3 shows that the Self-consistency strategy (mean: 
+27.3%) was associated with the best calibration scores com -
+pared with the Verbal (mean: 42.0%) and Hybrid (mean: 
+44.2%) strategies across all tasks. The Self-consistency strat -
+egy had the best calibration scores for 11 of the 13 tasks, 
+with the only exceptions being the Gene-disease association 
+task (best calibration ¼ Hybrid strategy) and the Biomedical 
+question answering without context (Verbal strategy had 
+marginally better calibration). It should be noted that Hybrid 
+Table 2. Per-model distribution of non-absolute Flex-ECE across all 351 
+experiment scenarios (ie, 39 per model across 13 tasks).
+Model Overconfident Underconfident Just right
+Flan-T5-XXL 24 (61.5%) 15 (38.5%) 0 (0.0%)
+GPT-3.5 39 (100.0%) 0 (0.0%) 0 (0.0%)
+GPT-4 39 (100.0%) 0 (0.0%) 0 (0.0%)
+MedLLaMA-13B 30 (76.9%) 9 (23.1%) 0 (0.0%)
+Medicine-Llama3-8B 30 (76.9%) 7 (17.9%) 2 (5.1%)
+Meditron-7B 32 (82.1%) 0 (0.0%) 7 (17.9%)
+Meta-Llama-3-8B-Instruct 39 (100.0%) 0 (0.0%) 0 (0.0%)
+Yi-1.5-34B-Chat 39 (100.0%) 0 (0.0%) 0 (0.0%)
+Zephyr-7B-Beta 24 (61.5%) 7 (17.9%) 8 (20.5%)
+Total 296 (84.3%) 38 (10.8%) 17 (4.8%)
+We view a model as overconfident model when non-absolute Flex-ECE <
+−1%, as underconfident when non-absolute Flex-ECE > 1%, and “just- 
+right” otherwise (ie, confidence and accuracy are approximately the same 
+across Flex-ECE bins, thus the model is well-calibrated). The ±1% 
+threshold is arbitrary.
+JAMIA Open, 2025, Vol. 8, No. 4                                                                                                                                                                                                7 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 8 ---
+Figure 5. The different types of error. Some discrepancies between similarity and confidence are legitimate, ie, the generated text is valid, but 
+confidence and similarity (correctness) are not aligned. Other discrepancies are due to the wrong format of generations, for example when LLMs 
+generate more than the solicited answer, but the right answer(s) are contained in the text. When that happens and confidence is high, the final calibration 
+score for this example will point to apparent overconfidence, since the LLM was actually correct (or mostly correct) but was penalized by essentially 
+generating more than it was asked to.
+Table 3. Mean Flex-ECE scores by dataset and families of models (ie, whether LLMs are small [<10B] or large [>10B], and domain-specific [biomedical] 
+or general domain) and confidence elicitation strategy.
+Family of model Confidence elicitation strategy
+NLP task Medical task Dataset Bio-small General-small Bio-large General-large Verbal Self-consistency Hybrid
+Document 
+classification
+Hallmarks of  
+cancer 
+identification
+HoC 41.0 44.2 26.1 39.2 48.1 22.2 51.2
+Named-entity 
+recognition
+Disease 
+recognition
+BC5-disease 35.8 38.2 30.3 36.5 42.7 26.0 40.6
+NCBI-disease 34.0 38.0 30.5 32.3 40.1 22.5 39.6
+Gene recognition BC2GM 33.2 39.4 50.7 37.9 47.5 24.1 46.7
+Molecular biol -
+ogy term 
+recognition
+JNLPBA 41.2 48.7 39.4 46.0 55.4 31.0 52.1
+Chemical 
+recognition
+BC5-chemical 29.5 28.8 43.4 26.6 33.9 18.2 37.8
+PICO 
+extraction
+PICO extraction 
+from abstracts
+EBM-PICO 34.5 40.9 32.9 49.2 48.2 22.2 56.4
+Relation 
+extraction
+Chemical-protein 
+relationship
+ChemProt 49.8 50.8 54.2 50.8 62.2 37.6 55.8
+Drug-drug 
+interaction
+DDI 50.9 48.6 42.4 48.3 56.0 39.6 50.7
+Gene-disease 
+association
+GAD 38.9 44.5 31.0 42.2 41.3 51.7 29.1
+Question 
+answering 
+(QA)
+Biomedical QA 
+without context
+BioASQ 25.9 25.9 28.0 16.1 16.4 17.5 29.1
+Biomedical QA 
+with context
+PubMedQA 38.0 36.0 35.7 38.2 36.6 29.4 45.8
+Sentence 
+similarity
+Biomedical sen -
+tence similarity
+BIOSSES 29.4 29.7 22.3 19.5 17.1 13.2 39.7
+Mean [SD] 37.0 [32.8] 39.5 [23.1] 36.1 [23.3] 37.1 [15.7] 42.0 [19.2] 27.3 [18.0] 44.2 [25.0]
+Only task-model-strategy combinations with a success rate ≥50% are included. Bold values denote the best performing model(s) at each task, as well as the 
+best mean Flex-ECE across all tasks (rightmost column) and models (bottom row). Bio-small: Meditron-7B, Medicine-Llama3-8B; General-Small: Zephyr- 
+7B-Beta, Llama-3-8B-Instruct; Bio-Large: MedLLaMa-13B; General-Large: Flan-T5-XXL, Yi-1.5-34B-Chat, GPT-3.5, GPT-4; PICO: Population, 
+Intevetnion, Comparator, Outcome; QA: Question answering; NLP: Natural language processing; SD: Standard deviation.
+a 
+The calibration scores in the family of models section represent the mean of the Flex-ECE derived from each of the 3 confidence score elicitation 
+strategies.
+8                                                                                                                                                                                               JAMIA Open, 2025, Vol. 8, No. 4 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 9 ---
+was better calibrated than Verbal in 7/13 tasks, suggesting 
+that aggregating multiple verbal confidences scores (Hybrid 
+strategy; see details in Section Confidence Assignment Strat -
+egies) is not clearly superior to eliciting a single verbal confi -
+dence score (Verbal strategy).
+However, this pattern was not observed for all LLMs. Four 
+LLMs had better mean calibration scores across tasks when 
+using the Hybrid strategy compared with the Self-consistency 
+strategy (GPT-3.5, GPT-4, Meta-Llama-3-8B-Instruct, Yi- 
+1.5-34B-Chat). For several models (eg, Meditron-7B and 
+Zephyr-7B-Beta), there was a large difference in the mean 
+scores between the different strategies (mean score by strat -
+egy—Meditron-7B: Self-consistency ¼ 15.6%, Hybrid -
+¼ 82.3%; Zephyr-7B-Beta: Self-consistency ¼ 24.0%, and 
+Hybrid ¼ 66.6% [Verbal not considered for these models due 
+to low success rate]), which was less apparent for other mod -
+els (e.g, Meta-Llama-3-8B-Instruct: Self-consistency ¼ 35.7%, 
+Hybrid ¼ 32.4%, and Verbal ¼ 41.3%).
+RQ2: Can post-hoc calibration techniques mitigate 
+LLM miscalibration?
+When their confidences were calibrated with traditional post- 
+hoc techniques and sufficient data, all LLMs saw substantial 
+reduction in Flex-ECE in all tasks. Histogram binning and 
+isotonic regression were nearly equally effective in improving 
+calibration, reducing the average Flex-ECE across models 
+and datasets by 23.5 percentage points (for histogram bin -
+ning) and 23.6 percentage points (for isotonic regression) 
+when using 1000 calibration examples.
+As shown in Table 4 , using a larger number of calibration 
+examples consistently led to larger improvements in calibra -
+tion. Though using only 10 examples for calibration 
+decreased the mean Flex-ECE for most models, we found the 
+pattern of improvement to be erratic, with many models see -
+ing an increase for several datasets. We found as few as 100 
+examples proved sufficient to provide a large and consistent 
+reduction in Flex-ECE, with the average Flex-ECE falling by 
+over 75% for all models other than Medicine-Llama3-8B and 
+MedLLaMA-13B.
+When a large enough number of calibration examples were 
+used, the average Flex-ECE varied very little between tasks. 
+For example, Flex-ECE ranged from 1.9% to 5.6% (averaged 
+over models) for isotonic regression calibrated with a maxi -
+mum of 500 examples, with QA standing out as being worse 
+calibrated than most other tasks, having a Flex-ECE of 4.2% 
+(though calibration for sentence similarity was technically 
+worse, BIOSSES has far few training examples than other 
+datasets and so cannot be easily compared).
+Discussion
+Key takeaways
+LLM calibration is very poor in BioNLP: The main message 
+from the results is that the current state-of-the-art methods 
+for confidence estimation in LLMs are not trustworthy 
+enough for real-world BioNLP solutions. The best mean 
+Flex-ECE (Medicine-Llama3-8B, 29.8%) is not a comfortable 
+error margin; in practice, this means that LLM confidence in 
+BioNLP is approximately 30% off the target at best. For 
+comparison, the worst ECE scores in Guo et al.
+5
+also for 
+NLP tasks, albeit non-BioNLP, were approximately 8%, far 
+below the best mean Flex-ECE we found in this BioNLP- 
+specific study.
+LLMs tend to be overconfident: The models exhibited gen -
+eral overconfidence (see summary in Table 2 and reliability 
+diagrams in Supplementary File 3 for details) in their answers 
+when questioned. This inability to exhibit uncertainty is a 
+major blocker to the trustworthiness and therefore usability 
+of these models, regardless of accuracy.
+No “one size fits all” approach: We could not establish 
+many reliable patterns between calibration and LLM families 
+or confidence assignment strategies, which suggests that a 
+tailored approach to assigning confidence scores to LLM 
+responses is required in real-world, biomedical applications. 
+The only clear pattern we observed is that Self-consistency 
+was consistently more reliable than other strategies (lowest 
+mean Flex-ECE in 11/13 tasks).
+Post-hoc calibration helps: As a result, users are warned to 
+place the necessary guardrails around LLMs when building 
+LLM-backed, BioNLP solutions that rely on confidence esti -
+mation. Traditional post-hoc calibration techniques proved 
+promising: despite being low-cost, they drastically reduced 
+calibration errors, thereby increasing the degree of reliability 
+of the confidence estimations we investigated in this study.
+Known limitations
+Verbal confidence elicitation: Because LLMs are highly sus -
+ceptible to the wordings of prompts,
+31–33
+it may be that the 
+prompts to elicit verbal confidence estimations can be 
+improved. Techniques such as Chain-of-Thought
+34
+and 
+p-tuning
+35
+have proven useful to increase both LLM perform -
+ance and reliability.
+Table 4. Mean calibrated Flex-ECE scores by model, maximum number of examples, and calibration method.
+# Examples Calibration method F-XXL G-3 G-4 ML-13 ML-8 M-7 L-8 Y-34 Z-7
+Uncalibrated 27.9 32.6 34.0 15.2 17.4 15.6 32.4 35.5 24.0
+10 HB 21.2 20.3 17.1 21.6 29.0 0.4 25.6 28.5 9.7
+IR 17.0 15.6 15.7 10.2 15.1 0.4 15.0 20.0 7.4
+50 HB 9.9 8.5 8.6 7.2 8.4 0.2 12.0 9.5 5.3
+IR 7.9 7.1 7.6 7.4 8.4 0.3 10.1 8.0 4.8
+100 HB 6.2 4.9 6.4 6.9 6.0 0.2 7.6 7.2 2.8
+IR 5.5 4.7 6.3 6.1 6.4 0.2 7.0 7.0 3.1
+500 HB 2.9 2.8 2.9 4.3 3.5 0.1 4.5 3.1 1.8
+IR 2.3 3.2 3.3 3.9 3.0 0.1 4.6 3.5 1.5
+1000 HB 3.3 2.5 3.0 3.7 2.4 0.1 4.4 2.6 1.6
+IR 2.3 2.7 2.8 3.5 2.6 0.1 3.7 2.8 1.6
+Confidences assignment strategy used is the average best strategy for each model in RQ1. Models are abbreviated as above. Calibration methods are 
+abbreviated: HB ¼ Histogram binning; IR ¼ Isotonic regression. Bold values denote the best Flex-ECE score for each model and technique (IR and HB).
+JAMIA Open, 2025, Vol. 8, No. 4                                                                                                                                                                                                9 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 10 ---
+Verbal confidence parsing: Because LLMs can output any 
+text, including unintelligible gibberish, verbal confidence esti -
+mation is often not feasible in an automated framework for 
+confidence estimation, evaluation, and mitigation such as 
+ours. Techniques such as declarative prompting
+36 , 37
+that con -
+straint LLM output may help avoid such scenarios.
+Calibration is not utility: ECE (flex or not) can be a mis -
+leading quantification of reliability, because models can be 
+very well-calibrated, yet have poor performance, ie, low util -
+ity. This is particularly true when confidence scores cluster 
+around a certain range (ie, a bucket), a phenomenon dubbed 
+bucket collapse.
+38
+We observed this mostly with the cali -
+brated scores, ie, after-post-hoc calibration, when we ended 
+up with most confidence scores clumped around the same 
+low range of the LLM’s performance, so that calibration 
+could be improved. We urge users to couple (Flex-)ECE with 
+the usual performance metrics (eg, F1 or accuracy) when 
+judging the reliability of LLMs (and confidence estimation 
+strategies).
+Black-box confidence: All calibration and confidence esti -
+mation methods used in this study are designed to work with 
+black-box access to an LLM, ie, users need not have access to 
+the inner workings of LLMs to quantify and/or mitigate mis -
+calibration. This was a deliberate decision in this study to 
+allow any user to evaluate any LLM and/or apply this frame -
+work in their own work. Advanced users may wish to explore 
+white-box confidence estimation techniques, such as aggre -
+gating token probabilities,
+39
+as they have shown some degree 
+of success. Note that black-box use of closed-source LLMs 
+such as GPT is the only way to use such LLMs by any user, 
+advanced or not.
+Conclusion
+This study assesses the calibration of LLMs in BioNLP. The 
+results corroborate previous studies that neural networks are 
+poorly calibrated but highlights an even more alarming situa -
+tion when networks are LLMs and the tasks are biomedically 
+related: at best, LLMs are approximately 30% off the target 
+in the scenarios we investigated.
+In addition to the above findings, we also introduced Flex- 
+ECE, a calibration metric that more realistically quantifies 
+calibration of NLP models, and indeed any model that can be 
+partially right or wrong. Flex-ECE is a key contribution of 
+this study to the scientific community, as it opens path for 
+future work to explore calibration methods that move away 
+from binary correctness and towards a more continuous 
+notion of correctness.
+Lastly, we would like to reiterate that calibration is but a 
+proxy to the trustworthiness of LLMs and indeed any neural 
+network. Where possible, developers of LLM-backed applica -
+tions should leverage as many metrics as possible to assess 
+both the utility and trustworthiness of LLMs, especially in 
+high stakes scenarios such as healthcare. Thus, the frame -
+work we here propose should not be viewed as the only 
+approach to quantify the trustworthiness of LLMs in 
+BioNLP, but one of the many useful approaches.
+Author contributions
+Rodrigo de Oliveira (Conceptualization, Formal analysis, 
+Investigation, Methodology, Project administration, Soft -
+ware, Supervision, Validation, Writing—original draft, 
+Writing—review & editing), Matthew Garber (Conceptuali -
+zation, Formal analysis, Investigation, Methodology, Soft -
+ware, Validation, Writing—original draft, Writing—review 
+& editing), James M Gwinnutt (Formal analysis, Validation, 
+Writing—original draft, Writing—review & editing), Emaan 
+Rashidi (Conceptualization, Writing—original draft, Writ -
+ing—review & editing), Jwu-Hsuan Shantina Hwang (Soft -
+ware), William Gilmour (Conceptualization), Jay Nanavati 
+(Conceptualization, Methodology, Writing—review & edit -
+ing), Khaldoun Zine El Abidine (Writing—review & editing), 
+and Christina DeFilippo Mack (Writing—original draft, 
+Writing—review & editing)
+Supplementary material
+Supplementary material is available at JAMIA Open online.
+Funding
+This research received no specific grant from any funding 
+agency in the public, commercial or not-for-profit sectors.
+Conflicts of interest
+R.O. has stock in Arria NLG. J.N. has stock in Microsoft, 
+AstraZeneca, Nvidia, Meta, and IQVIA. K.Z. has stock in 
+IQVIA. C.M. has stock in AstraZeneca, Johnson & Johnson, 
+MindMed, and IQVIA. R.O. was previously employed by 
+Arria NLG. J.N. was previously employed by AstraZeneca.
+Data availability
+The data underlying this article are available in HuggingFace, at 
+https://huggingface.co/datasets . The datasets were derived from 
+sources in the public domain: BC2GM, BC5-chemical, BC5-dis -
+ease, JNLPBA, and NCBI-disease can be found at https://hug -
+gingface.co/datasets/bigbio/blurb ; EBM-PICO at https:// 
+huggingface.co/datasets/bigbio/ebm_pico ; DDI at https://hug -
+gingface.co/datasets/bigbio/ddi_corpus ; ChemProt at https:// 
+huggingface.co/datasets/bigbio/chemprot ; GAD at https://hug -
+gingface.co/datasets/bigbio/gad ; BIOSSES at https://huggingface. 
+co/datasets/bigbio/biosses ; HoC at https://huggingface.co/data -
+sets/bigbio/hallmarks_of_cancer ; BioASQ at https://huggingface. 
+co/datasets/Coldog2333/bioasq ; and PubMedQA at https://hug -
+gingface.co/datasets/bigbio/pubmed_qa .
+References
+01. Huang Y, Sun L, Wang H, et al. TrustLLM: trustworthiness in 
+large language models; arXiv preprint arXiv:2401.05561 3, 2024.
+02. Demner-Fushman D, Chapman WW, McDonald CJ. What can 
+natural language processing do for clinical decision support? J 
+Biomed Inform. 2009;42:760-772. https://doi.org/10.1016/j.jbi. 
+2009.08.007
+03. Chen Q, Hu Y, Peng X, et al. Benchmarking large language models 
+for biomedical natural language processing applications and rec -
+ommendations. Nat Commun. 2025;16:3280. https://doi.org/10. 
+1038/s41467-025-56989-2
+04. Li J, Zhou Z, Lyu H, et al. Large language models-powered clinical 
+decision support: enhancing or replacing human expertise? Intell 
+Med. 2025;5:1-4. https://doi.org/10.1016/j.imed.2025.01.001
+05. Guo C, Pleiss G, Sun Y, et al. On calibration of modern neural net -
+works. In: Precup D, Teh YW, eds. Proceedings of the 34th 
+10                                                                                                                                                                                             JAMIA Open, 2025, Vol. 8, No. 4 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 11 ---
+International Conference on Machine Learning. PMLR; 
+2017:1321-1330.
+06. Xiong M, Hu Z, Lu X, et al. Can LLMs express their uncertainty? 
+An empirical evaluation of confidence elicitation in LLMs. In: The 
+Twelfth International Conference on Learning Representations; 
+2024.
+07. Liu Y, He H, Han T, et al. Understanding LLMs: a comprehensive 
+overview from training to inference. Neurocomputing. 
+2024;620:129190.
+08. Geng J, Cai F, Wang Y, et al. A survey of confidence estimation 
+and calibration in large language models. In: Duh K, Gomez H, 
+Bethard S, eds. Proceedings of the 2024 Conference of the North 
+American Chapter of the Association for Computational Linguis -
+tics: Human Language Technologies (Volume 1: Long Papers). 
+Association for Computational Linguistics; 2024:6577–6595.
+09. Savage T, Wang J, Gallo R, et al. Large language model uncer -
+tainty measurement and calibration for medical diagnosis and 
+treatment; 2024. https://doi.org/10.1101/2024.06.06.24308399
+10. Feng H, Ronzano F, LaFleur J, et al. Evaluation of large language 
+model performance on the Biomedical Language Understanding 
+and Reasoning Benchmark; 2024. https://doi.org/10.1101/2024. 
+05.17.24307411
+11. Tunstall L, Beeching E, Lambert N, et al. Zephyr: direct distillation 
+of LM alignment; arXiv preprint arXiv:2310.16944, 2023.
+12. AI@Meta. Llama 3 model card; 2024. Accessed January 10, 2025. 
+https://github.com/meta-llama/llama3/blob/main/MODEL_ 
+CARD.md
+13. Chung HW, Hou L, Longpre S, et al. Scaling instruction—fine -
+tuned language models. J Mach Learn Res. 2024;25:1-53.
+14. Young A, Chen B, Chen C, et al. Yi: open foundation models by 
+01.AI; 2024. Accessed December 17, 2024. http://arxiv.org/abs/ 
+2403.04652
+15. Azure OpenAI Service Models. Accessed December 17, 2024. 
+https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/ 
+models
+16. Chen Z, Hern �andez-Cano A, Romanou A, et al. MEDITRON- 
+70B: scaling medical pretraining for large language models; arXiv 
+preprint arXiv:2311.16079, 2023.
+17. Cheng D, Gu Y, Huang S, et al. Instruction pre-training: language 
+models are supervised multitask learners; arXiv preprint 
+arXiv:2406.14491, 2024.
+18. Cheng D, Huang S, Wei F. Adapting large language models via 
+reading comprehension. In: The Twelfth International Conference 
+on Learning Representations; 2024.
+19. Wu C, Lin W, Zhang X, et al. PMc-LLaMA: toward building open- 
+source language models for medicine. J Am Med Inform Assoc. 
+2024;31:1833-1843. https://doi.org/10.1093/jamia/ocae045
+20. Tian K, Mitchell E, Zhou A, et al. Just ask for calibration: strat -
+egies for eliciting calibrated confidence scores from language mod -
+els fine-tuned with human feedback. In: The 2023 Conference on 
+Empirical Methods in Natural Language Processing (pp. 5433- 
+5442); 2023. Association for Computational Linguistics.
+21. Huang Y, Liu Y, Thirukovalluru R, et al. Calibrating long-form 
+generations from large language models; 2024. Accessed March 
+26, 2024. http://arxiv.org/abs/2402.06544
+22. Fries J, Weber L, Seelam N, et al. BigBio: a framework for data- 
+centric biomedical natural language processing In: Koyejo S, 
+Mohamed S, Agarwal A, et al., eds. Advances in Neural Information 
+Processing Systems. Curran Associates, Inc.; 2022:25792–25806.
+23. Levenshtein VI. Binary codes capable of correcting deletions, inser -
+tions and reversals. Soviet Physics Doklady. 1966;10:707.
+24. Papineni K, Roukos S, Ward T, et al. BLEU: a method for auto -
+matic evaluation of machine translation Proceedings of the 40th 
+Annual Meeting on Association for Computational Linguistics— 
+ACL ’02. Association for Computational Linguistics; 2001:311.
+25. Lin C-Y. ROUGE: a package for automatic evaluation of summa -
+ries. In: Annual Meeting of the Association for Computational 
+Linguistics (pp. 74-81); 2004. Association for Computational 
+Linguistics.
+26. Xia Y, Kim J, Chen Y, et al. Understanding the performance and 
+estimating the cost of LLM fine-tuning. In: 2024 IEEE Interna -
+tional Symposium on Workload Characterization (IISWC). IEEE; 
+2024:210–223.
+27. Zadrozny B, Elkan C. Transforming classifier scores into accurate 
+multiclass probability estimates. In: Proceedings of the Eighth 
+ACM SIGKDD International Conference on Knowledge Discov -
+ery and Data Mining. ACM. 2002:694–699.
+28. Zadrozny B, Elkan C. Obtaining calibrated probability estimates 
+from decision trees and Naive Bayesian classifiers. In: Proceedings 
+of the Eighteenth International Conference on Machine Learning; 
+2001:609–616. Morgan Kaufmann Publishers Inc.
+29. Niculescu-Mizil A, Caruana R. Predicting good probabilities with 
+supervised learning. In: Proceedings of the 22nd International 
+Conference on Machine Learning—ICML ’05. ACM Press; 
+2005:625–632.
+30. Ao S, Rueger S, Siddharthan A. Two sides of miscalibration: iden -
+tifying over and under-confidence prediction for network calibra -
+tion; 2023. Accessed April 11, 2025. http://arxiv.org/abs/2308. 
+03172
+31. Sclar M, Choi Y, Tsvetkov Y, et al. Quantifying language models’ 
+sensitivity to spurious features in prompt design or: how I learned 
+to start worrying about prompt formatting. In: The Twelfth Inter -
+national Conference on Learning Representations; 2024. Accessed 
+January 21, 2025. http://arxiv.org/abs/2310.11324
+32. Zhuo J, Zhang S, Fang X, et al. ProSA: assessing and understand -
+ing the prompt sensitivity of LLMs In: Al-Onaizan Y, Bansal M, 
+Chen Y-N, eds. Findings of the Association for Computational 
+Linguistics: EMNLP 2024. Miami, FL: Association for Computa -
+tional Linguistics 2024:1950–1976.
+33. Anagnostidis S, Bulian J. How susceptible are LLMs to influence in 
+prompts? In: First Conference on Language Modeling; 2024.
+34. Wei J, Wang X, Schuurmans D, et al. Chain-of-thought prompting 
+elicits reasoning in large language models. In: Koyejo S, Mohamed 
+S, Agarwal A, et al., eds. Advances in Neural Information Process -
+ing Systems. Curran Associates, Inc. 2022:24824-24837.
+35. Lester B, Al-Rfou R, Constant N. The power of scale for 
+parameter-efficient prompt tuning. In: Moens M-F, Huang X, Spe -
+cia L, et al., eds. In: Proceedings of the 2021 Conference on Empir -
+ical Methods in Natural Language Processing. Association for 
+Computational Linguistics; 2021:3045–3059.
+36. Willard BT, Louf R. Efficient guided generation for large language 
+models; 2023. Accessed January 21, 2025. http://arxiv.org/abs/ 
+2307.09702
+37. Khattab O, Singhvi A, Maheshwari P, et al. DSPy: compiling 
+declarative language model calls into self-improving pipelines. In: 
+The Twelfth International Conference on Learning Representa -
+tions; 2024.
+38. Spiess C, Gros D, Pai KS, et al. Calibration and correctness of lan -
+guage models for code; 2024. Accessed January 10, 2025. http:// 
+arxiv.org/abs/2402.02047
+39. Kumar A, Morabito R, Umbet S, et al. Confidence under the hood: 
+an investigation into the confidence-probability alignment in large 
+language models; 2024. Accessed January 21, 2025. http://arxiv. 
+org/abs/2405.16282
+JAMIA Open, 2025, Vol. 8, No. 4                                                                                                                                                                                             11 
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026
+
+
+--- PDF PAGE 12 ---
+© The Author(s) 2025. Published by Oxford University Press on behalf of the American Medical Informatics Association.
+This is an Open Access article distributed under the terms of the Creative Commons Attribution-NonCommercial License (https://creativecommons.org/licenses/by-nc/ 
+4.0/), which permits non-commercial re-use, distribution, and reproduction in any medium, provided the original work is properly cited. For commercial re-use, please 
+contact reprints@oup.com for reprints and translation rights for reprints. All other permissions can be obtained through our RightsLink service via the Permissions link 
+on the article page on our site—for further information please contact journals.permissions@oup.com.
+JAMIA Open, 2025, 8, 1–11
+https://doi.org/10.1093/jamiaopen/ooaf058
+Research and Applications
+Downloaded from https://academic.oup.com/jamiaopen/article/8/4/ooaf058/8196848 by guest on 27 January 2026

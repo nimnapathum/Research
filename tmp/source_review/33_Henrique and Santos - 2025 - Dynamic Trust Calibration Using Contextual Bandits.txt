@@ -1,0 +1,710 @@
+--- PDF PAGE 1 ---
+DYNAMICTRUSTCALIBRATIONUSINGCONTEXTUALBANDITS
+Bruno M. Henrique
+Thayer School of Engineering
+Dartmouth College
+Hanover, NH
+bruno.miranda.henrique.th@dartmouth.edu
+Eugene Santos Jr.
+Thayer School of Engineering
+Dartmouth College
+Hanover, NH
+eugene.santos.jr@dartmouth.edu
+September 30, 2025
+ABSTRACT
+Trust calibration between humans and Artificial Intelligence (AI) is crucial for optimal decision-
+making in collaborative settings. Excessive trust can lead users to accept AI-generated outputs without
+question, overlooking critical flaws, while insufficient trust may result in disregarding valuable insights
+from AI systems, hindering performance. Despite its importance, there is currently no definitive and
+objective method for measuring trust calibration between humans and AI. Current approaches lack
+standardization and consistent metrics that can be broadly applied across various contexts, and they
+don’t distinguish between the formation of opinions and subsequent human decisions. In this work,
+we propose a novel and objective method for dynamic trust calibration, introducing a standardized
+trust calibration measure and an indicator. By utilizing Contextual Bandits—an adaptive algorithm
+that incorporates context into decision-making—our indicator dynamically assesses when to trust
+AI contributions based on learned contextual information. We evaluate this indicator across three
+diverse datasets, demonstrating that effective trust calibration results in significant improvements in
+decision-making performance, as evidenced by 10 to 38% increase in reward metrics. These findings
+not only enhance theoretical understanding but also provide practical guidance for developing more
+trustworthy AI systems supporting decisions in critical domains, for example, disease diagnoses and
+criminal justice.
+1 Introduction
+Trust calibration can be defined as the process of achieving appropriate expectations regarding the capabilities of agents,
+whether humans or Artificial Intelligence (AI) autonomous systems (de Visser et al., 2014; Glikson and Woolley, 2020;
+Naiseh et al., 2023; Ma et al., 2023). With this definition in mind, incorrect levels of trust can lead to overreliance
+on flawed agents or, conversely, result in the dismissal of an agent with superior capabilities (Dzindolet et al., 2003).
+Hence, in the context of human-AI interaction for decision-making, trust calibration is a necessary condition for the
+most appropriate decision with respect to a given goal.
+Previous research has recognized the importance of trust calibration between humans and AI. For instance, de Visser et al.
+(2019) state that understanding the trust calibration process will lead to refinements in task division and coordination
+between team members. Also, there may be situations in which decisions should be handled entirely by humans if the
+AI lacks sufficient accuracy to be trusted. Hence, trust calibration can help identify decisions that should be delegated
+to AI or be scrutinized only by the human generalization capacity. Nevertheless, correct trust calibration is a challenge,
+particularly for individuals with limited domain knowledge, who have the burden of gauging the trustworthiness of the
+AI system while estimating their own likelihood of being correct (Ma et al., 2023).
+An objective method to dynamically calibrate trust between humans and AI would provide many advantages to a
+Human-Machine Team (HMT). For example, it would alleviate the cognitive burden of assessing unknown AI properties,
+such as the accuracy on a specific situation. Moreover, it would establish guardrails against potentially harmful agentic
+systems and still indicate situations when to adopt their opinions. Similarly, trust calibration works in the other way too,
+for example, indicating situations in which the human should make decisions with no AI opinion.
+arXiv:2509.23497v1  [cs.AI]  27 Sep 2025
+
+--- PDF PAGE 2 ---
+APREPRINT- SEPTEMBER30, 2025
+Despite the necessity of trust calibration for optimal HMT performance, there is still no definite method for achieving it.
+Previous attempts include displaying uncertainty information alongside AI recommendations (de Visser et al., 2014),
+visual explanations (Karran et al., 2022), soliciting human input (Gomez, Unberath, and Huang, 2023) and outcome
+feedback (Ahn et al., 2024). However, as concluded by Henrique and Santos (2024), AI literature still lacks models and
+measures of trust calibration, especially algorithms and general implementation frameworks. In this context, this paper
+presents a dynamic trust calibration framework, including a calibration measurement definition and a dynamic indicator
+leading to optimal calibration. The framework is designed to be agnostic of the internal workings of AI technology,
+broadening its applicability to any decision-support system.
+Our proposal for a dynamic trust calibration indicator is grounded on multi-armed Contextual Bandits (CB) algorithms.
+Like vanilla multi-armed bandits, CB also present multiple arms/choices, but at each trial the context information is
+relevant for the decision. In this case, the agent making a decision does not change the state, as it happens in a typical
+Reinforcement Learning (RL) scenario, but the context changes. As such, CB algorithms fit perfectly the framework of
+an external trust calibration process (the bandit), with the arms representing the indications to trust or distrust agents’
+opinions based on context variables, but with no changes in state. Despite the diverse applications of CB (Li et al.,
+2010), we are unaware of any previous research applying CB to implement dynamic trust calibration.
+It is worth emphasizing that our proposal is a conceptual advance, providing an objective, performance-based measure
+of trust calibration that can be computed post-hoc based on decisions and their outcomes. With that, it is not our goal to
+uncover or test human cognitive or affective trust states, but to quantify the performance improvement with calibrated
+trust. However, we acknowledge that embedding the indicator into real-time decision-support tools and evaluating its
+impact on actual user behavior and trust remains an important future research direction.
+We evaluate our trust calibration indicator using empirical data obtained from recent studies in decision-making with
+AI assistance. The data cover diverse domains and include multiple treatments, demonstrating the robustness of the
+proposed framework. Specifically, we compare the rewards accumulated by the actions informed by the trust calibration
+indicator with the total rewards obtained in the original studies. In all instances, the dynamic trust calibration indicator
+yields higher rewards, indicating improved trust calibration that enhances performance.
+2 Related work
+Trust in AI research originates from foundational studies on human trust in automation systems (Henrique and Santos,
+2024). Many authors conducted experiments on human reliance on automation (Dzindolet et al., 2003; de Visser et al.,
+2016) and various theoretical trust models were proposed (Lee and See, 2004; de Visser et al., 2014; Hoff and Bashir,
+2014). Other papers sought the factors that influence human trust in autonomous systems (Hancock et al., 2011; Culley
+and Madhavan, 2013). More recently, literature has shifted attention to explicitly studying measures of trust between
+humans and AI (Naiseh et al., 2023; Li, Lu, and Yin, 2023; Leichtmann et al., 2023; Gomez, Unberath, and Huang,
+2023). However, as concluded by Henrique and Santos (2024), the literature still lacks objective methods to calibrate
+trust between humans and AI.
+Some attempts to model trust calibration between humans and AI rely on subjective actions. For example, the theoretical
+model of de Visser et al. (2019) proposes to calibrate trust with actions such as apologies, denials, future promises,
+and warnings aimed at repairing damaged trust or reduce overtrust. Similar actions are explored in experiments by
+Pareek, Velloso, and Goncalves (2024), who demonstrate their influence on trust dynamics. However, these actions are
+inherently subjective and not directly translated by AI recommender systems, which often function as "black-boxes".
+Recent studies on human-AI trust report experiments measuring reliance as a proxy to trust (Yu et al., 2017). For
+instance, Lu and Yin (2021) study human reliance on AI under conditions of limited accuracy information, revealing
+that the level of agreement between humans and AI is very influential on reliance. Also measuring reliance as proxy
+to trust, Zhang, Liao, and Bellamy (2020) show that displaying the AI’s confidence at each task can improve trust
+calibration, but they did not register improvements in performance. Confidence is also examined by Ma et al. (2024),
+who concluded that correct human confidence calibration is necessary for appropriate reliance on AI and, consequently,
+improved performance. However, correct confidence calibration can be as formidable a challenge as trust calibration.
+Reliance on AI recommendations is often viewed as trust behavior in the literature. For instance, Li, Lu, and Yin (2023)
+model human trust levels as a Hidden Markov Model (HMM), using the hidden states as inputs to a likelihood function
+that predicts the human trust behavior of relying on AI recommendations. By their turn, Wang, Lu, and Yin (2022)
+model the human trust behavior based on a reliance utility function. Their experiments suggest that trust calibration is
+influenced by the stakes of the decision. Also experimenting with trust behavior with respect to AI recommendations,
+Noti and Chen (2023) achieve improved team performance by determining when AI opinions should be presented or
+2
+
+--- PDF PAGE 3 ---
+APREPRINT- SEPTEMBER30, 2025
+omitted to human decision-makers. However, this approach requires access to the recommender system to include an
+optimization process responsible to advise when to show AI opinions.
+Regardless of the trust calibration approach proposed, the usual objective of empirical human-AI trust research is to
+increase the HMT performance on a given task (Ahn et al., 2024; Salimzadeh, He, and Gadiraju, 2024; Ma et al., 2024;
+Gomez, Unberath, and Huang, 2023; Ma et al., 2023). As such, it is expected that, when teamed together, humans and
+AI will perform better than acting each by themselves in isolation. To this end, trust is necessary for team members to
+rely on the expertise of each other, with the goal of achieving complementary performance.
+As a meaningful advance to complementary performance, Madras, Pitassi, and Zemel (2018) introduced learning to
+defer, a framework in which an automated model learns to adaptively defer decisions to an external decision maker
+(DM) by considering the DM’s variable accuracy and biases. This approach generalizes traditional rejection learning by
+optimizing system-wide accuracy and fairness within a two-stage decision pipeline, where the DM is treated as a fixed
+and uncontrollable agent. While this method effectively addresses fairness concerns in static decision contexts and
+models the deferral decision as part of the learned predictor, it assumes a largely fixed interaction pattern between the
+model and the DM. As described next, our CB takes a fundamentally different approach by leveraging all individual
+agent opinions at every decision point to estimate an optimal opinion, instead of deferring to one party exclusively.
+3 Methods
+We propose a framework for trust calibration in the traditional model of human and AI agents working as a team,
+referred to as HMT. In this model, the team goal is to make the best possible decision at each time/trial t={1,2, ..., n}
+with respect to the context features, represented by a vector of j independent variables x={x 1, x2, ..., xj} that change
+at each t in a sequence of decisions τ. Before each decision, the team builds a consensus (absolute or relative), after
+considering the opinions from every member. Consequently, the consensual team opinion o will lead to a decision
+and the corresponding perception of a reward r(ot,x t) for the time/trial t. However, this perceived reward may not be
+the maximum R(o∗
+t ,x t), only perceived by making the decision corresponding to an optimal opinion o∗. Therefore,
+r(ot,x t)≤R(o ∗
+t ,x t). In this scenario, there are two potentially distinct quantities: the total amount of rewards possible
+with optimal opinions for the entire sequence presented to the HMT up until t, denoted by G(τt) =P
+t R(o∗
+t ,x t), and
+the actual amount of rewards obtained by the HMT, denoted byg(τ t) =P
+t r(ot,x t), such thatg(τ t)≤G(τ t) 1.
+Following previous definitions, trust calibration is the process of adjusting the agents’ levels of trust in other agents’
+opinions with respect to their capabilities (de Visser et al., 2014; Glikson and Woolley, 2020; Naiseh et al., 2023; Ma
+et al., 2023). As such, correctly calibrated trust levels mean anticipating when the opinions of the agents should be
+trusted or not. For instance, in a human-AI collaboration scenario of sequential decision-making in which the human
+makes each decision after considering the AI opinion, the human calibrates their trust levels with respect to the perceived
+AI capability for correct opinions. Specifically, as the team collaborates towards maximizing the number of optimal
+decisions, the human learns the contexts (i. e., the set of variables for each decision) in which the AI recommender
+system should be trusted or not. In this example, perfectly calibrated trust means that the human can tell when the AI is
+right or wrong, that is, when to trust it or not in order to achieve the optimal reward.
+It should be noted that in the previous paragraph (and throughout the rest of this paper) we refer to trust as behavioral
+trust, that is, observed reliance on AI opinions. Following Ma et al. (2024), Ahn et al. (2024) and Li, Lu, and Yin
+(2023), we use reliance as a proxy to trust since there is no definite measurement of the agents’ inner models of trust
+with respect to their teammates. As such, we rely on the agents’ behavior as an indicator of trust in their teammates’
+opinions: if an agent trusts an opinion, they will follow it; otherwise, they will modify their decision. In this context,
+trust calibration does not translate into just following others’ opinions (for example, a human blindly following the
+AI recommender system). It refers to adjusting the behavioral trust to accept opinions perceived as optimal and deny
+opinions perceived as wrong or sub-optimal. Also, trust calibration should not be confused with individual agents’
+performance (such as AI accuracy).
+With the considerations above, we propose a measure of trust calibration by noticing that R(o∗,x) is only perceived
+when the HMT correctly identifies which individual member’s opinions should be trusted or not with respect to the
+decision variables x, and appropriately follows o∗. That is, R(o∗,x) is perceived when trust is calibrated, regardless
+of how the consensus was achieved. Conversely, if trust is not calibrated, one or more wrong opinions that should
+not be trusted will lead the HMT to decide o sub-optimally, perceiving r(o,x) . Therefore, trust miscalibration can be
+quantified by the regret of the team in choosing to follow one or more wrong opinions. More formally, at any pointt
+1In this paper, we utilize the notation "o" (opinion), contrasting with the traditional Reinforcement Learning literature, which
+commonly uses "a" (action). This distinction is intentional and essential, as our framework emphasizes the need to differentiate
+between the team’s actions and the trust calibration process, which relies on opinions formulated prior to those actions.
+3
+
+--- PDF PAGE 4 ---
+APREPRINT- SEPTEMBER30, 2025
+during the sequence of decisions τ, we define the trust calibration distance T(τ t) as the difference between the total
+perceived rewards with optimal team opinionso ∗ and the actual rewards with team opinionso, up to time/trialt:
+T(τ t) :=|G(τ t)−g(τ t)|
+=
+
+X
+t
+R(o∗
+t ,x t)−
+X
+t
+r(ot,x t)
+ . (1)
+The trust calibration distance can be interpreted as the amount of rewards lost due to trust miscalibration.2 It represents
+how far the agents were from perfect trust calibration in the past sequence of decisions τt. As such, T(τ t) = 0 means
+that the agents had perfect trust calibration in a given sequence τt: in this trajectory of decisions, they chose to trust
+each other’s opinions only when they would result in the highest rewards (or lower regrets) possible. On the other hand,
+T(τ t)increases with every sub-optimal decisiono.
+The definition presented in Equation 1 emphasizes that T is a function of a given past sequence of decisions τ. Hence,
+it is only possible to measure trust calibration regarding past decisions. Moreover, T is a dynamic measure, changing
+with each new trial/time unit t, congruent with previous models of trust in the literature (Yu et al., 2017). It is also
+noteworthy that the trust calibration distance is independent of individual agents’ performance in the HMT. This is
+consistent with the definition of trust calibration as a process that adjusts trust to individual agents’ capabilities, arriving
+at the decision of which agents’ opinions to follow in each case.
+As Equation 1 implies, the trust calibration distanceT is reduced when g(τt)→G(τ t), meaning the HMT has improved
+trust calibration on that sequence of decisions τt. In this case, the team calibrated their decision to trust or distrust each
+others’ opinions in each trial/timet, with respect to the decision variables x, achieving g(τt) close (or equal) to G(τt).
+Specifically, by definition, the team calibrates trust toward the optimal opiniono∗ by deciding which individual agents
+opinions, denoted by o1, o2, ..., om, should be trusted or not in eacht={1, ..., n} with respect to the respective decision
+variables xt. With that in mind, we build a trust calibration indicator by estimating the o∗ before every decision and
+evaluating individual agents’ opinions relative to it (Figure 1). If those individual opinions diverge from the estimated
+o∗, they are deemed distrustful by the indicator at t. On the other hand, individual opinions that align with the estimated
+o∗ at t will be indicated as trusted. Therefore, the proposed trust calibration indicator shows the trust behavior more
+likely to result in the optimal decision, leading tog(τ t)→G(τ t)as intended.
+At this point, it should be noted that the trust calibration indicator is dynamic, changing for every opinion in t and with
+respect to the decision variables xt and the individual agents’ opinionso1, o2, ..., om in an HMT. As such, individual
+opinions in a team are labeled to be trusted or not in the very specific circumstance of t, not for the whole sequence
+τ. With this, the trust calibration indicator is agnostic of perceptions of trustworthiness of individual agents, that is,
+the agents themselves are not judged as trustful or distrustful whatsoever. The only evaluations made by the indicator
+are regarding individual opinions relative to the estimated o∗ at hand, regardless of individual characteristics of the
+agents (such as accuracy). Therefore, the indicator refers to both humans’ and artificial agents’ opinions alike. Also, the
+indicator is calculated before the HMT decision action is issued and the reward is perceived.3
+From the trust calibration indicator perspective, o∗ is estimated according to a dynamically changing context, before
+the team decision is issued and the outcome is known. Therefore, the trust calibration indicator considers the context
+features variables presented to every individual agent of the HMT, as well as their respective opinions, and treats the
+whole as a set of input features necessary to estimate o∗. It should be noted that the context features presented to the
+HMT, as well as the team and individual opinions, are all considered as a whole set of inputs for trust calibration. This
+set of inputs is called augmented context, defined as
+x(c) :={x 1, x2, ..., xj, o1, o2, ..., om, o}.(2)
+The trust calibration indicator relies on estimating o∗ before the HMT action. This estimative is given by a model
+capable of dynamically mapping situations (context) to opinions in order to maximize rewards, such as the RL paradigm
+introduced by Sutton and Barto (1998). In traditional RL, an agent in a given state s selects an action a, transitions
+to a new state s′ and receives a reward r(s, a, s′). However, in the present case of the trust calibration indicator, each
+action does not involve state transitions. Hence, our framework fits the RL sub-field of multi-armed CB, in which the
+estimation of o∗ is only based on (augmented) contextual information x(c) and the corresponding reward (Lu, Pál, and
+Pál, 2010).
+2In the RL paradigm, the trust calibration distance is given by the cumulative regret up untilt.
+3We use o1, o2, ..., om to distinguish the individual opinions of the m agents in a team from the consensus team opinion given by
+o. Notice that, depending on the scenario, o might be the final call made by a human, as in traditional decision-making assisted by AI.
+4
+
+--- PDF PAGE 5 ---
+APREPRINT- SEPTEMBER30, 2025
+Figure 1: The augmented context x(c) includes the original context variables x={x 1, x2, x3, ..., xj} and individual
+agent opinions depicted by {o1, o2, o3, ..., om}, as well as the consensual team opinion {o} before the decision. This
+augmented context is used by the CB algorithm to estimate o∗, which is used to calibrate trust with regards to individual
+opinions. Opinions comparisons to the estimated o∗ are represented by diamonds, indicating to trust an individual
+opinion (clear squares) or not (dark squares).
+A classic stochastic multi-armed bandit problem is defined as K possible actions of a player, each associated with a
+probability distribution of rewards D1, D2, ..., DK, with respective means and variances unknown to the player. The
+usual problem description uses a slot machine analogy, with K arms available to the player, who has to pull one at
+each time/trial t (Kuleshov and Precup, 2014). Since the parameters of the rewards distributions D1, D2, ..., DK are
+unknown, multi-armed bandit algorithms are used to uncover strategies for players to maximize their rewards (or
+minimize their regret). However, when relevant context information is available to the player, the problem becomes
+multi-armed CB, as defined by Langford and Zhang (2007). In the present case, we use the multi-armed CB model to
+estimateo ∗ among theKpossible opinions of actions, using the augmented contextx (c).
+There are many CB algorithms to estimate an optimal opinion o∗
+t considering the context information x(c)
+t (Silva
+et al., 2022; Kuleshov and Precup, 2014). After this estimation, it is just a matter of comparing individual opinions
+o1, ..., om to the estimated o∗ to have the indications of which agents should be trusted in this particular circumstance t,
+completing the trust calibration indicator (Figure 1). For the purposes of demonstrating our approach to dynamic trust
+calibration, we select three popular algorithms to estimate o∗: Linear Upper Confidence Bound (LinUCB) (Li et al.,
+2010), Decision Tree (DT) bandits (Elmachtoub et al., 2017) and Artificial Neural Network (ANN) bandits (Kakade,
+Shalev-Shwartz, and Tewari, 2008).
+3.1 Contextual Bandits algorithms
+The LinUCB approach to CB was originally proposed by Li et al. (2010). It assumes that the expected payoff of an
+opinion o is linear with respect to the augmented context featuresx(c) and unknown coefficientsθo for each opinion/arm
+o∈ {o 1, ..., oK}, that is,
+E
+h
+rt,o|x(c)
+t
+i
+=
+
+x(c)
+t
+⊤
+θo.(3)
+In order to estimateo ∗ at eacht, an Upper Confidence Bound (UCB) is calculated for each possible opinion/armoas
+UCBo,t
+
+x(c)
+t
+
+=θ ⊤
+o x(c)
+t +
+r
+x(c)
+t
+⊤
+A−1o x(c)
+t ,(4)
+whereA o is a positive definite matrix defined as
+Ao :=
+X
+t:ot=o
+x(c)
+t
+
+x(c)
+t
+⊤
+.(5)
+Then, the estimatedo ∗ attfor a givenx t is selected as theothat maximizes the UCB given by Equation 4, that is,
+estimatedo ∗
+t = arg max
+o∈{o1,...,oK }
+UCBo,t
+
+x(c)
+t
+
+.(6)
+5
+
+--- PDF PAGE 6 ---
+APREPRINT- SEPTEMBER30, 2025
+Assuming the algorithm has access to the reward rt,o∗ from the estimated o∗, the matrix Ao, in Equation 5, is updated
+as Ao =A o +x (c)
+t
+
+x(c)
+t
+⊤
+. Similarly, the parameters θo, from Equation 3, are updated as θo =A −1
+o
+
+x(c)
+t
+⊤
+rt,o∗.
+DTs were introduced in the multi-armed CB problem by Elmachtoub et al. (2017) because they are simple, interpretable
+and non-parametric, capable of capturing non-linear relationships between variables. The algorithm consists in using the
+original DT proposed by Breiman et al. (1984) to estimate the o∗ given a vector of augmented context features variables
+x(c). It splits the available previous data into a tree-like structure where each node represents a feature variable, the
+branches represent the decision rules with respect to the values of those variables, and the leaf nodes are the opinions.
+Hence, to decide which opinion is the estimated o∗ for the context variables vector x(c)
+t , the algorithm parses x(c)
+t down
+the tree, deciding which branch to follow based on the values of each variable in x(c)
+t , until the leaf containing the
+estimatedo ∗ is achieved. After perceivingr t,o∗, the tree-like structure is updated to reflect this new data point.
+ANNs are universal approximators of arbitrary functions, particularly useful for complex and high-dimensional data.
+As such, they can be used as a CB approach to approximate the relationship between context variables x(c) and the
+estimated o∗, as demonstrated by Kakade, Shalev-Shwartz, and Tewari (2008). A vanilla neural network consists of
+fully interconnected neurons, organized in input and hidden layers, as well as output neurons. The neurons of the input
+layer correspond to the variables of vector x(c), each connecting to one or more neurons in the hidden layer. The hidden
+layer neurons apply an activation function to their inputs, such as sigmoid, hyperbolic tangent or Rectified Linear Unit
+(ReLU), defined as f(x) := max(0, x). Finally, the output layer neurons produce the estimated o∗ as a function of the
+inputx (c) at eacht.
+Many choices of architecture are possible for ANNs, including multiple hidden layers for deep learning (Schmidhuber,
+2015). To demonstrate the estimations of o∗ for the trust calibration indicator, we select a vanilla neural network CB
+composed of an input layer fully connected with weights w to a single hidden layer with 15 neurons implementing
+ReLU. Each hidden neuron zh receives the weighted sum of the input layer variables, such that zh =P
+i wi,hxi, for
+h={1, ...,15} and all i variables from vector x(c) in Equation 2. Since we select ReLU as activation, the output layer
+is given by the linear combination of f(z h) = max(0, z h). Finally, for updating the ANN with each new datapoint, we
+select the Mean Squared Error (MSE) loss function and Adam optimization (Kingma and Ba, 2015).
+3.2 Data
+We evaluate the trust calibration indicator over data from previous studies in decision-making assisted by AI. Specifically,
+we use data from experiments conducted by Lu and Yin (2021), Noti and Chen (2023) and Reverberi et al. (2022).
+These datasets were selected due to their availability and diversity in domains, experimental treatments, and feature
+sets. In all cases, the teams consist of one human and one AI agent, with the human having the final decision-making
+authority after considering the AI’s opinion. We treat the recorded decisions in these studies as the individual opinions
+of this HMT for our analysis.
+Lu and Yin (2021) experiment with speed dating data, asking a total of 1,169 human subjects to predict at each trial t if
+a person, according to a set of 22 known features x={x 1, x2, ..., x22}, would want to see their date again or not. 4
+After the human subjects have an initial binary opinion o1, they are given an opinion from a Machine Learning (ML)
+algorithm, which we refer to as the AI opinion o2. Finally, the HMT achieves a consensual opinion o. Also, the authors
+evaluate different levels of agreement between humans and AI in one phase and use that information to vary treatments
+in the next phase of experiments. Similarly, they also vary levels of human confidence in their own responses.
+By their turn, Noti and Chen (2023) work with the risk of released defendants violating the release terms. In their
+experiments, 1,096 human subjects are asked to estimate that risk, from 0 to 100% in increments of 10%, for n released
+defendants. Similarly to other experiments, humans are aided by a risk assessment tool developed previously, which,
+for our purposes, will be considered the AI recommender system issuing opinions o2. Subjects observe a set of features
+x={x 1, x2, ..., x7}, then the AI opinion o2 is shown according to different treatments.5 The treatments are: update,
+which shows the recommendedo 2 after the humans had a first opiniono 1, giving them the opportunity to update their
+team opinion o; learned (the authors’ novel approach), which shows the opinion o2 only when their AI algorithm
+estimates that the information might improve the final opinion o (according to a previously trained policy); omniscient,
+very similar to the learned treatment, but the recommender system will always show the optimal suggestion to the
+4For illustration, features include attractiveness, intelligence, shared interests, sincerity, ambition. Please refer to Lu and Yin
+(2021) for the full set of features.
+5Features are: ethninicy, gender, age, offense type, number of prior arrests, number of previous failures to appear in court and
+number of prior convictions.
+6
+
+--- PDF PAGE 7 ---
+APREPRINT- SEPTEMBER30, 2025
+human when it might improve the opinion o. We note that traditional human decision-making assisted by AI fits the
+update treatment, but, for the sake of completion, we evaluate the trust calibration indicator over all treatments.6
+Still with respect to the data from Noti and Chen (2023), it should be noted that the opinions in this case are not binary,
+but multi-valued. Specifically, the risk value given byo1, o2 and o can be any integer V∈ {0,10,20, ...,100} . However,
+the trust calibration indicator is designed to show which individual agents should be trusted or not by comparing o1, o2
+and o to the estimated o∗. As such, just indicating trust behavior with respect to o, o1 and o2 might not be enough to
+decrease the trust calibration distance T (Eq. 1). For example, the trust calibration indicator might deem ot, o1,t and
+o2,t untrustworthy, leaving no opinion to be trusted. However, in cases like this, with non-binary opinions, the indicator
+can readily provide the estimatedo ∗
+t if no agent’s individual opinion is to be trusted.
+The final dataset comes from the experiments of Reverberi et al. (2022). They experiment with 21 endoscopists who are
+asked to diagnose colorectal lesions based on 504 real colonoscopies videos, each with one lesion (the diagnosis is
+either true or false). They first diagnose o1 with no decision support system and, then, they receive a report from an AI
+with a recommended diagnosiso 2. After considering the AI recommendation, the endoscopists issue a final diagnosis
+o. The variables x={x 1, x2, ..., x11} available to the trust calibration indicator at each trial t are relative to AI and
+human confidence levels, endoscopists’ expertise and their beliefs regarding the diagnoses.7 For the HMT’s opiniono,
+we consider the endoscopists’ diagnoses after they have seen the AI opinionso2.
+The selected datasets come from diverse domains and treatments. For each of them, we build the augmented context
+xc
+t (Eq. 2) and run the selected CB approaches to estimate o∗
+t . Since the estimated o∗
+t leads to the indication of
+which individual members’ opinions should be trusted or not in the HMT for the best possible decision, we expect
+reductions in trust calibration distances T . It should be noted, however, that our goal is to evaluate the trust calibration
+indicator, not the actual performance of HMTs making real-time decisions. Such interactions of HMTs and a real-time
+implementation of the indicator are left for future studies.
+4 Evaluations
+Due to their dynamics, CB models will change with each new data presented to them. Different from traditional
+supervised ML approaches, CB algorithms will dynamically learn the best possible opinions with respect to the context
+considering all previous experiences with the perceived rewards, as opposed to ML models trained with a fixed dataset.
+Since no ground truth is given at each trial, only rewards, CB algorithms will seek to maximize rewards (or minimize
+regrets with respect to the optimal opinions), updating their internal models at each trial t. Hence, the order of the
+trials might affect the learning dynamics and the total rewards obtained by the algorithm. Therefore, in the following
+evaluations, we run the CB algorithms 100 times each, shuffling the data and reporting the sample mean and standard
+error of the total obtained rewards perceived with the decisions led by the opinionso 1,o 2,oand estimatedo ∗.
+We start by evaluating the trust calibration indicator using the data provided by Lu and Yin (2021). As described before,
+the authors work with speed dating data, having the human subjects, assisted by AI, predict if a person in the database
+would meet their date again in the future. For each correct assessment of the future date possibility, the HMT perceived
+a unit reward.
+Table 1 shows results from the first experiments of Lu and Yin (2021) (upper part) and the trust calibration indicator
+(lower part) using the same data, with estimations of o∗ given by LinUCB, DT and ANN CB implementations. The trust
+calibration distances (Eq. 1) for the HMT are T= 863; 1,215; 1,186 for high, medium and low levels of agreement,
+respectively. However, by estimating o∗ with CB LinUCB, the trust calibration distances are greatly reduced to
+T≈137; 120; 143 , showing the effectiveness of trust calibration. Results using data from the other experiments from
+Lu and Yin (2021) are very similar (see Appendix).
+The next dataset brings an example of the trust calibration indicator applied to multi-valued decision-making (as
+opposed to binary). In this case, the perceived reward of a decision associated with the opinion ot is given by
+r(ot,x t) = 100−(|y t −ˆyt|), where, for a trial t, ˆyt is the opinion of the risk (% likelihood of violation of release
+terms) issued by the agent/team and yt is the corresponding opinion leading to the ground truth (either 0% or 100%).
+For this dataset, the augmented context x(c)
+t for the trust calibration indicator at trial t is composed of the classification
+variables xt presented to the human subjects, the AI opinion o2,t and the consensual decision ot of the HMT. However,
+the output of the trust calibration indicator is not only which opinions should be trusted or not, but also an alternative
+opinion (estimatedo ∗
+t ) in caseo t,o 1,t ando 2,t are tagged as untrustworthy for a particular trialt.
+6Learned and omniscient treatments impose conditions on the AI recommender system that might not be realistic when the
+system is given as a black-box, with no access to its inner models.
+7Please refer to Reverberi et al. (2022) for the full set of features.
+7
+
+--- PDF PAGE 8 ---
+APREPRINT- SEPTEMBER30, 2025
+Level of agreement
+High Medium Low
+Trials [n] 2,400 3,390 3,240
+Maximum [G(τ)] 2,400 3,390 3,240
+AIo 2 [g(τ)] 1,680 2,373 2,268
+HMTo[g(τ)] 1,537 2,175 2,054
+Indicator results(estimatedo ∗ [g(τ)])
+CB LinUCB 2,263.48/ 3,270.09/ 3,097.06/
+10.28 79.94 11.61
+CB DT 960.00/ 1,356.00/ 1,296.00/
+0 0 0
+CB ANN 1,880.20/ 2,749.93/ 2,549.50/
+43.62 63.79 62.67
+Table 1: Trust calibration indicator results (mean/standard error of total rewards) using data from Lu and Yin (2021),
+experiment 1. CB LinUCB achieves significantly higher results than the HMT (t-tests).
+Treatment
+Update Learned Omniscient
+n11,000 4,031 3,940
+G(τ)1,100,000 403,100 394,000
+o2 [g(τ)] 663,560 238,970 235,350
+o[g(τ)] 635,340 231,760 213,970
+Indicator(estimatedo ∗(g(τ)))
+CB LinUCB 726,312.70/ 256,432.70/ 248,506.30/
+1,878.04 705.01 655.18
+CB DT 744,700.00/ 263,800.00/ 252,800.00/
+0 0 0
+CB ANN 546,799.60/ 200,619.10/ 217,289.10/
+11,114.83 3,295.79 2,767.00
+Table 2: Trust calibration indicator results (mean/standard error of total rewards) using data from Noti and Chen (2023).
+CB DT achieves significantly higher results than the HMT (t-tests).
+Results for the experiments considering data from Noti and Chen (2023) are shown in Table 2. In this case, because
+the perceived reward is given by r(ot,x t) = 100−(|y t −ˆyt|), the maximum rewards are given by G(τ) = 100n
+in all treatments, since R(o∗
+t ,x t) = 100 when ˆyt =y t. The trust calibration distances for the HMT are T=
+464,660; 171,340; 180,030 for the update, learned and omniscient treatments, respectively. In contrast, the estimation
+ofo ∗ for the trust calibration indicator results inT≈355,300; 139,300; 141,200using the DT CB algorithm.
+Finally, we evaluate the trust calibration indicator using data from Reverberi et al. (2022), which contains diagnoses
+of colorectal lesions given by endoscopists assisted by AI, therefore HMTs. A correct diagnosis was rewarded by 1
+point and an incorrect was penalized by 1 point. Results are summarized in Table 3. The trust calibration distance is
+Number of trials [n] 8,619
+Maximum rewards [G(τ)] 8,619
+Humano 1 rewards [g(τ)] 5,229
+AIo 2 rewards [g(τ)] 6,303
+HMTorewards [g(τ)] 5,979
+Indicator results(estimatedo ∗ [g(τ)])
+CB LinUCB (mean/se) 6,886.64/28.61
+CB DT (mean/se) 4,380.38/447.62
+CB ANN (mean/se) 7,857.62/16.48
+Table 3: Trust calibration indicator results (mean/standard error of total rewards) using data from Reverberi et al. (2022).
+CB ANN achieves significantly higher results than the HMT (t-tests).
+8
+
+--- PDF PAGE 9 ---
+APREPRINT- SEPTEMBER30, 2025
+given by T= 3,390; 2,316; 2,640 for the decisions led by o1, o2 and o opinions, respectively. However, complementary
+performance is achieved by improved trust calibration (lower part of Table 3), with the trust calibration distance reduced
+toT≈761using CB ANN.
+As shown, the trust calibration indicator successfully reduces the trust calibration distance, leading to complementary
+performance. Overall, the total rewards increased by 10 to 38%. For each dataset, one of the CB algorithms outperformed
+the others in estimating o∗: CB ANN excelled with data from Reverberi et al. (2022); CB DT was superior with data
+from Noti and Chen (2023); and CB LinUCB was the best approach with data from Lu and Yin (2021). This is expected
+since the domains, variables and decisions are different in each dataset.
+5 Discussion and conclusion
+The key insight of our trust calibration framework is the distinction between opinions and decisions. We notice that
+before issuing a decision, each opinion is judged with respect to the current decision variables in order to derive a
+global team opinion that will subsequently translate into a decision. This internal process of trust calibration is highly
+subjective due to the nature of individual opinion-formation processes of each member. Despite its subjective nature, we
+model the trust calibration process externally by anticipating which opinions can be trusted to achieve the best outcome.
+The proposed trust calibration indicator is oblivious to the models governing the formation of individual HMT agents’
+opinions, including the AI’s implementation. As such, it can be applied to any AI-supported decision-making scenario,
+irrespective of the AI technology. However, one limitation of our approach is that the indicator relies on the estimation of
+o∗ by a CB algorithm. Our findings indicate that no single algorithm consistently outperforms others across the examined
+domains. This variability suggests that the trust calibration indicator estimation of o∗ by CB is domain-dependent
+and influenced by the corresponding rewards structure. As with any ML deployment, practical implementations of
+the indicator should investigate the most appropriate CB algorithm for estimating o∗ on a given domain. Therefore,
+prior datasets or simulated data should be utilized to evaluate models before deployment, also mitigating the cold start
+problem (limited prior information).
+A core assumption of our framework is that reward feedback for each decision is immediately and accurately observable,
+enabling timely updates of the trust calibration indicator via CB. While this assumption holds in controlled experimental
+environments or domains with clear, instantaneous outcomes, it may not apply universally, since reward signals can be
+significantly delayed, noisy, or unavailable. Addressing these challenges requires adaptations of our method, such as
+integrating delayed calibration, or leveraging proxy or intermediate feedback signals. Those are important directions for
+future work to broaden the framework’s practical applicability.
+Finally, our trust calibration framework opens several avenues for future research and application. For example, it
+can be applied to team composition analysis to evaluate individual contributions or integrated into real-time decision
+support to guide trust behavior by displaying the indicator prior to decisions. However, realizing these applications will
+require future studies involving human participants to identify effective ways to present the indicator to HMTs. This
+next step is essential to gain deeper insights into the practical usability, user acceptance, and overall effectiveness of our
+framework in live operational settings.
+9
+
+--- PDF PAGE 10 ---
+APREPRINT- SEPTEMBER30, 2025
+References
+Ahn, D.; Almaatouq, A.; Gulabani, M.; and Hosanagar, K. 2024. Impact of Model Interpretability and Outcome
+Feedback on Trust in AI. InProceedings of the CHI Conference on Human Factors in Computing Systems, volume 11
+ofCHI ’24, pp. 1 – 25.
+Breiman, L.; Friedman, J.; Olshen, R.; and Stone, C. 1984.Classification and regression trees. CRC Press.
+Culley, K. E.; and Madhavan, P. 2013. A note of caution regarding anthropomorphism in HCI agents.Computers in
+Human Behavior, 29(3): pp. 577 – 579.
+de Visser, E. J.; Cohen, M.; Freedy, A.; and Parasuraman, R. 2014. A Design Methodology for Trust Cue Calibration in
+Cognitive Agents. InLecture Notes in Computer Science, pp. 251 – 262.
+de Visser, E. J.; Monfort, S. S.; McKendrick, R.; Smith, M. A. B.; McKnight, P. E.; Krueger, F.; and Parasuraman, R.
+2016. Almost human: Anthropomorphism increases trust resilience in cognitive agents.Journal of Experimental
+Psychology: Applied, 22(3): pp. 331 – 349.
+de Visser, E. J.; Peeters, M. M. M.; Jung, M. F.; Kohn, S.; Shaw, T. H.; Pak, R.; and Neerincx, M. A. 2019. Towards a
+Theory of Longitudinal Trust Calibration in Human–Robot Teams.International Journal of Social Robotics, 12(2):
+pp. 459 – 478.
+Dzindolet, M. T.; Peterson, S. A.; Pomranky, R. A.; Pierce, L. G.; and Beck, H. P. 2003. The role of trust in automation
+reliance.International Journal of Human-Computer Studies, 58(6): pp. 697 – 718.
+Elmachtoub, A. N.; McNellis, R.; Oh, S.; and Petrik, M. 2017. A Practical Method for Solving Contextual Bandit
+Problems Using Decision Trees. InProceedings of the 33rd Conference on Uncertainty in Artificial Intelligence
+(UAI).
+Glikson, E.; and Woolley, A. W. 2020. Human Trust in Artificial Intelligence: Review of Empirical Research.Academy
+of Management Annals, 14(2): pp. 627 – 660.
+Gomez, C.; Unberath, M.; and Huang, C.-M. 2023. Mitigating knowledge imbalance in AI-advised decision-making
+through collaborative user involvement.International Journal of Human-Computer Studies, 172: 102977.
+Hancock, P. A.; Billings, D. R.; Schaefer, K. E.; Chen, J. Y . C.; de Visser, E. J.; and Parasuraman, R. 2011. A
+Meta-Analysis of Factors Affecting Trust in Human-Robot Interaction.Human Factors: The Journal of the Human
+Factors and Ergonomics Society, 53(5): pp. 517 – 527.
+Henrique, B. M.; and Santos, E. 2024. Trust in artificial intelligence: Literature review and main path analysis.
+Computers in Human Behavior: Artificial Humans, 2(1): 100043.
+Hoff, K. A.; and Bashir, M. 2014. Trust in Automation: Integrating Empirical Evidence on Factors That Influence Trust.
+Human Factors: The Journal of the Human Factors and Ergonomics Society, 57(3): pp. 407 – 434.
+Kakade, S. M.; Shalev-Shwartz, S.; and Tewari, A. 2008. Efficient Bandit Algorithms for Online Multiclass Prediction.
+InICML ’08: Proceedings of the 25th international conference on Machine learning, volume V olume, pp. 440 – 447.
+Karran, A. J.; Demazure, T.; Hudon, A.; Senecal, S.; and Léger, P.-M. 2022. Designing for Confidence: The Impact of
+Visualizing Artificial Intelligence Decisions.Frontiers in Neuroscience, 16.
+Kingma, D. P.; and Ba, J. 2015. Adam: A Method for Stochastic Optimization. InInternational Conference on Learning
+Representations.
+Kuleshov, V .; and Precup, D. 2014. Algorithms for multi-armed bandit problems.arXiv preprint arXiv:1402.6028.
+Langford, J.; and Zhang, T. 2007. The Epoch-Greedy Algorithm for Multi-armed Bandits with Side Information. In
+Advances in Neural Information Processing Systems, volume 20.
+Lee, J. D.; and See, K. A. 2004. Trust in Automation: Designing for Appropriate Reliance.Human Factors: The
+Journal of the Human Factors and Ergonomics Society, 46(1): pp. 50 – 80.
+Leichtmann, B.; Humer, C.; Hinterreiter, A.; Streit, M.; and Mara, M. 2023. Effects of Explainable Artificial Intelligence
+on trust and human behavior in a high-risk decision task.Computers in Human Behavior, 139: 107539.
+Li, L.; Chu, W.; Langford, J.; and Schapire, R. E. 2010. A contextual-bandit approach to personalized news article
+recommendation. InProceedings of the 19th international conference on World wide web, WWW ’10.
+Li, Z.; Lu, Z.; and Yin, M. 2023. Modeling Human Trust and Reliance in AI-Assisted Decision Making: A Markovian
+Approach. InProceedings of the AAAI Conference on Artificial Intelligence, volume 37, pp. 6056 – 6064.
+Lu, T.; Pál, D.; and Pál, M. 2010. Contextual multi-armed bandits. InProceedings of the Thirteenth international
+conference on Artificial Intelligence and Statistics, pp. 485 – 492.
+10
+
+--- PDF PAGE 11 ---
+APREPRINT- SEPTEMBER30, 2025
+Lu, Z.; and Yin, M. 2021. Human Reliance on Machine Learning Models When Performance Feedback is Limited:
+Heuristics and Risks. InProceedings of the 2021 CHI Conference on Human Factors in Computing Systems, pp. 1 –
+16.
+Ma, S.; Lei, Y .; Wang, X.; Zheng, C.; Shi, C.; Yin, M.; and Ma, X. 2023. Who Should I Trust: AI or Myself?
+Leveraging Human and AI Correctness Likelihood to Promote Appropriate Trust in AI-Assisted Decision-Making.
+InProceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 29 ofCHI ’23, pp. 1 –
+19.
+Ma, S.; Wang, X.; Lei, Y .; Shi, C.; Yin, M.; and Ma, X. 2024. “Are You Really Sure?” Understanding the Effects of
+Human Self-Confidence Calibration in AI-Assisted Decision Making. InProceedings of the CHI Conference on
+Human Factors in Computing Systems, volume 63 ofCHI ’24, pp. 1 – 20.
+Madras, D.; Pitassi, T.; and Zemel, R. 2018. Predict responsibly: improving fairness and accuracy by learning to defer.
+Advances in neural information processing systems, 31.
+Naiseh, M.; Al-Thani, D.; Jiang, N.; and Ali, R. 2023. How the different explanation classes impact trust calibration:
+The case of clinical decision support systems.International Journal of Human-Computer Studies, 169: 102941.
+Noti, G.; and Chen, Y . 2023. Learning When to Advise Human Decision Makers. InProceedings of the Thirty-Second
+International Joint Conference on Artificial Intelligence.
+Pareek, S.; Velloso, E.; and Goncalves, J. 2024. Trust Development and Repair in AI-Assisted Decision-Making during
+Complementary Expertise. InThe 2024 ACM Conference on Fairness, Accountability, and Transparency, FAccT ’24,
+pp. 546 – 561.
+Reverberi, C.; Rigon, T.; Solari, A.; Hassan, C.; Cherubini, P.; Antonelli, G.; Awadie, H.; Bernhofer, S.; Carballal, S.;
+Dinis-Ribeiro, M.; Fernández-Clotett, A.; Esparrach, G. F.; Gralnek, I.; Higasa, Y .; Hirabayashi, T.; Hirai, T.; Iwatate,
+M.; Kawano, M.; Mader, M.; Maieron, A.; Mattes, S.; Nakai, T.; Ordas, I.; Ortigão, R.; Zúñiga, O. O.; Pellisé, M.;
+Pinto, C.; Riedl, F.; Sánchez, A.; Steiner, E.; Tanaka, Y .; and Cherubini, A. 2022. Experimental evidence of effective
+human–AI collaboration in medical decision-making.Scientific Reports, 12(1).
+Salimzadeh, S.; He, G.; and Gadiraju, U. 2024. Dealing with Uncertainty: Understanding the Impact of Prognostic
+Versus Diagnostic Tasks on Trust and Reliance in Human-AI Decision Making. InProceedings of the CHI Conference
+on Human Factors in Computing Systems, volume 7 ofCHI ’24, pp. 1 – 17.
+Schmidhuber, J. 2015. Deep learning in neural networks: An overview.Neural Networks, 61: pp. 85 – 117.
+Silva, N.; Werneck, H.; Silva, T.; Pereira, A. C.; and Rocha, L. 2022. Multi-Armed Bandits in Recommendation
+Systems: A survey of the state-of-the-art and future directions.Expert Systems with Applications, 197: 116669.
+Sutton, R. S.; and Barto, A. G. 1998.Introduction to reinforcement learning, volume 135. MIT press Cambridge.
+Wang, X.; Lu, Z.; and Yin, M. 2022. Will You Accept the AI Recommendation? Predicting Human Behavior in
+AI-Assisted Decision Making. InProceedings of the ACM Web Conference 2022, WWW ’22, pp. 1697 – 1708.
+Yu, K.; Berkovsky, S.; Taib, R.; Conway, D.; Zhou, J.; and Chen, F. 2017. User Trust Dynamics: An Investigation
+Driven by Differences in System Performance. InProceedings of the 22nd International Conference on Intelligent
+User Interfaces, IUI ’17, pp. 307 – 317.
+Zhang, Y .; Liao, Q. V .; and Bellamy, R. K. E. 2020. Effect of confidence and explanation on accuracy and trust
+calibration in AI-assisted decision making. InProceedings of the 2020 Conference on Fairness, Accountability, and
+Transparency, FAT* ’20, pp. 295 – 305.
+11
+
+--- PDF PAGE 12 ---
+APREPRINT- SEPTEMBER30, 2025
+Agreement %/Accuracy %
+80/80 80/50
+Trials [n] 3,030 3,630
+Maximum [G(τ)] 3,030 3,630
+AIo 2 [g(τ)] 1,717 2,057
+HMTo[g(τ)] 1,862 2,223
+Indicator results(estimatedo ∗ [g(τ)])
+CB LinUCB 2,864.34/12.39 3,442.53/14.54
+CB DT 1,212.00/0 1,452.00/0
+CB ANN 2,422.61/56.11 2,727.35/77.04
+Table 4: Trust calibration indicator results (mean/standard error) using data from Lu and Yin (2021), experiment 2,
+Agreement % / Accuracy % treatments of 80/80 and 80/50. CB LinUCB achieves significantly higher results than the
+HMT (t-tests).
+Agreement %/Accuracy %
+50/80 50/50
+Trials [n] 3,390 3,930
+Maximum [G(τ)] 3,390 3,930
+AIo 2 [g(τ)] 1,921 2,227
+HMTo[g(τ)] 2,140 2,414
+Indicator results(estimatedo ∗ [g(τ)])
+CB LinUCB 3,263.83/90.77 3,774.43/12.23
+CB DT 1,356.00/0 1,572.00/0
+CB ANN 2,561.46/71.20 3,051.70/82.55
+Table 5: Trust calibration indicator results (mean/standard error) using data from Lu and Yin (2021), experiment 2,
+Agreement % / Accuracy % treatments of 50/80 and 50/50. CB LinUCB achieves significantly higher results than the
+HMT (t-tests).
+6 Appendix
+In this Appendix, we present the trust calibration indicator evaluations using the dataset from Lu and Yin (2021),
+experiments 2 (Tables 4 and 5) and 3 (Tables 6 and 7). For the evaluations using experiments 1 data, please refer to the
+Evaluations section of the main paper.
+The second experiment conducted by Lu and Yin (2021) had a 2×2 factorial design, varying levels of agreement
+of humans and the underlying ML classifiers accuracy. Results are shown in the upper parts of Tables 4 and 5. It is
+remarkable, in these cases, that the HMT consensual opinions o led to the perception of more rewards than the decisions
+led by the AI opinions o2 in all four treatments. However, performance would be greatly increased by improved
+trust calibration, as shown by the rewards from decisions led by o∗ (means and standard errors in the lower parts of
+Tables 4 and 5). In these cases, the trust calibration distances for the HMT are T= 1,168; 1,407; 1,250; 1,516 for the
+agreement/accuracy treatments of 80/80, 80/50, 50/80 and 50/50, respectively. In contrast, trust calibration distance is
+reduced toT≈166; 188; 126; 156with the estimations ofo ∗ given by CB LinUCB in the trust calibration indicator.
+The final experiment of Lu and Yin (2021) varies human confidence in their decisions when they agree and when they
+disagree with the AI opinions. Tables 6 and 7 show the results of the trust calibration indicator across the four treatments
+considered by the authors. As shown in the upper parts of the tables, the total rewards perceived by decisions led by the
+HMT consensual o are less than the total rewards perceived by the decisions led by AI’so2 in all cases. Regarding the
+trust calibration distance for opinions o, T= 743; 624; 752; 777 for the treatments of high confidence agreement, low
+confidence agreement, high confidence disagreement and low confidence disagreement, respectively. Again, the trust
+calibration indicator, usingo ∗ estimated by CB LinUCB, reduces the trust calibration distances toT≈35; 11; 18; 10.
+12
+
+--- PDF PAGE 13 ---
+APREPRINT- SEPTEMBER30, 2025
+Treatment
+High confidence Low confidence
+agreement agreement
+Trials [n] 2,288 1,958
+Maximum [G(τ)] 2,288 1,958
+AIo 2 [g(τ)] 1,768 1,513
+HMTo[g(τ)] 1,545 1,334
+Indicator results(estimatedo ∗ [g(τ)])
+CB LinUCB 2,253.13/4.80 1,947.10/0.22
+CB DT 832.00/0 712.00/0
+CB ANN 1,910.67/40.11 1,643.68/34.71
+Table 6: Trust calibration indicator results (mean/standard error) using data from Lu and Yin (2021), experiment 3,
+agreements treatments. CB LinUCB achieves significantly higher results than the HMT (t-tests).
+Treatment
+High confidence Low confidence
+disagreement disagreement
+Trials [n] 2,244 2,354
+Maximum [G(τ)] 2,244 2,354
+AIo 2 [g(τ)] 1,734 1,819
+HMTo[g(τ)] 1,492 1,577
+Indicator results(estimatedo ∗ [g(τ)])
+CB LinUCB 2,225.98/2.28 2,344.45/0.24
+CB DT 816.00/0 856.00/0
+CB ANN 1,780.35/51.08 1,905.66/48.43
+Table 7: Trust calibration indicator results (mean/standard error) using data from Lu and Yin (2021), experiment 3,
+disagreement treatments. CB LinUCB achieves significantly higher results than the HMT (t-tests).
+13

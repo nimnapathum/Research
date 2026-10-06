@@ -1,0 +1,22 @@
+export const resources = [
+  [1, 'Algebra Basics', 'math', 'Asha', 'algebra.txt'],
+  [2, 'Arithmetic Patterns', 'math', 'Bela', 'arithmetic.txt'],
+  [3, 'Geometry Notes', 'math', 'Chen', 'geometry.txt'],
+  [4, 'Statistics Primer', 'math', 'Dev', 'statistics.txt'],
+  [5, 'Biology Field Guide', 'science', 'Eli', 'biology.txt'],
+  [6, 'Chemistry Lab Notes', 'science', 'Farah', 'chemistry.txt'],
+  [7, 'Physics Concepts', 'science', 'Gita', 'physics.txt'],
+  [8, 'Solar System Map', 'science', 'Hari', 'solar.txt'],
+  [9, 'Ancient Cities', 'history', 'Ira', 'cities.txt'],
+  [10, 'Trade Routes', 'history', 'Jai', 'trade.txt'],
+  [11, 'World Timelines', 'history', 'Kira', 'timelines.txt'],
+  [12, 'Writing Systems', 'history', 'Liam', 'writing.txt'],
+  [13, 'Colour and Form', 'art', 'Maya', 'colour.txt'],
+  [14, 'Drawing Practice', 'art', 'Nora', 'drawing.txt'],
+  [15, 'Music Theory', 'art', 'Omar', 'music.txt'],
+  [16, 'Photography Guide', 'art', 'Pia', 'photo.txt'],
+  [17, 'Algorithms Intro', 'computing', 'Quin', 'algorithms.txt'],
+  [18, 'Data Structures', 'computing', 'Ravi', 'structures.txt'],
+  [19, 'Networks Overview', 'computing', 'Sara', 'networks.txt'],
+  [20, 'Web Basics', 'computing', 'Tara', 'web.txt']
+];

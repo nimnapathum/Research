@@ -1,0 +1,2317 @@
+--- PDF PAGE 1 ---
+Noname manuscript No.
+(will be inserted by the editor)
+A Systematic Literature Review on Trust in the
+Software Ecosystem
+Fang Hou · Slinger Jansen
+Received: date / Accepted: date
+Abstract
+Background: The worldwide software ecosystem is a trust-rich part of the world.
+Throughout the software life cycle, software engineers, software end-users, and
+other stakeholders collaboratively place their trust in major hubs in the ecosystem,
+such as package managers, repository services, and software components. However,
+as our reliance on software grows, this trust is frequently violated by bad actors and
+crippling vulnerabilities in the software supply chain, endangering our livelihoods
+and the resilience of our society.
+Purpose: The purpose of this study is to deﬁne trust in the worldwide software
+ecosystem, that is, to determine what signiﬁes a trustworthy system or actor.
+By improving our understanding of trust, we can create novel mechanisms for
+protecting the software ecosystem from vulnerabilities and attacks.
+Methods: We conduct a systematic literature review on the concept of trust in the
+worldwide software ecosystem. We acknowledge that trust is something between
+two actors in the software ecosystem, and we examine what role trust plays in the
+relationships between end-users and (1) software products, (2) package managers,
+(3) software producing organizations, and (4) software engineers.
+Results: Two major ﬁndings emerged from the systematic literature review. To
+begin, we provide a deﬁnition of trust in the software ecosystem, including a
+theoretical framework that decomposes and signiﬁes a theoretical understanding of
+trust. Second, we provide a list of trust factors that can be used to assemble an
+overview of software trust.
+Conclusion: Trust is critical in the communication between actors in the worldwide
+software ecosystem, particularly regarding software selection and evaluation, and
+can aﬀect the outcome either positively or negatively. According to the frequency
+Fang Hou
+Department of Information and Computer Science, Utrecht University, the Netherlands
+E-mail: h.fang@uu.nl
+Slinger Jansen
+Department of Information and Computer Science, Utrecht University, the Netherlands
+School of Engineering Science, Lappeenranta University of Technology, Finland E-mail:
+slinger.jansen@uu.nl
+arXiv:2203.05678v1  [cs.SE]  14 Feb 2022
+
+--- PDF PAGE 2 ---
+2 Fang Hou, Slinger Jansen
+of the trust factors in the literature, the most signiﬁcant determinants of trust
+are software quality, code and structure, and the reputation of software producing
+organizations. With this comprehensive overview of trust, a new foundation is laid
+for software engineering researchers to understand and use trust to create a reliable
+software ecosystem.
+Keywords Software ecosystem · Software trust · Software security · Software
+package evaluation
+Statements and Declarations
+The authors have no relevant ﬁnancial or non-ﬁnancial interests to disclose.
+No funding was received to assist with the preparation of this manuscript.
+Author Slinger Jansen is an Editorial Board Member of Empirical Software Engin-
+eering.
+1 Introduction
+When software engineers are building software, for example, in-house software, they
+are constantly being confronted with a choice: build it themselves or integrate a
+component from another software producing organization. If the choice is made to
+integrate a component, the second choice is a selection problem: there are typically
+many options to select from and it depends on the software engineer’s perspective
+which factors heaviest in the selection process. Factors such as feature completeness,
+software component quality, and technology can all determine whether the software
+engineer selects a component, while researchers have called for more structured
+approaches to software selection (Farshidi, S. Jansen and Deldar, 2021), the selection
+process is typically completely dependent on the context of the software engineer.
+The software ecosystem is a trust-rich part of the world. End-users expect a
+certain trustworthiness when downloading apps from their favorite application store.
+For instance, when the appstore provides checksums, a technology to determine
+the authenticity of the received data, for each deliverable, the end-user can ensure
+that the data she receives is the same data that came from the software engineer.
+Nevertheless, it is more often than not the case that trust is put into Software
+Ecosystem (SECO) hubs such as package managers and appstores, without there
+actually being a good basis for this trust. Trust can be considered as founded and
+unfounded. There are also more soft ways to create founded trust, e.g., ensuring
+that the software engineer has been a productive member of the SECO for a
+long time, or ensuring that the software developed achieves established quality
+levels. Both soft and hard ways do not provide watertight guarantees, as the
+external environment can also have an impact on trust, e.g., new attacks from
+the external world. According to Sonatype (2021), the number of supply chain
+attacks is dramatically increasing, posing signiﬁcant security risks to both software
+producing organizations and end-users. For example, bad actors shift their attacks
+“upstream” by inserting malicious code to the source code repositories to acquire
+a critical advantage of time, allowing malware to spread throughout the supply
+chain.
+Since we have already mentioned trustworthiness and trust, it is necessary to
+explain their diﬀerences, as we found that trust and trustworthiness are used inter-
+changeably, and often trustworthiness is mistakenly interpreted as trust (Wright,
+
+--- PDF PAGE 3 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 3
+2010). Typically, trust is from the trustor’s perspective, it is a belief
+that the trusted person will actually do what is expected of her (P. C.
+Bauer, 2019; Guo et al., 2014; Jadhav and Sonar, 2011; Mcknight et al., 2011),
+while the concept of trustworthiness can be viewed as a probability, i.e.,
+the probability that a trustee will act as expected by the trustor (P. C.
+Bauer, 2019). Hence, a trustee’s trustworthiness and a trustor’s trust may diﬀer.
+In addition, it is found that trustworthiness can be seen as a characteristic of
+trust (Becerra, Lunnan and Huemer, 2008), which means trust cannot exist without
+a high level of trustworthiness (Heyns and Rothmann, 2015).
+Extensive research has shown that trust is crucial in software selection and
+evaluation (Bugiel, Davi and Schulz, 2011). Typically, end-users trust in software
+is built upon the two following aspects: one is the product should perform its
+desired functions and meet their speciﬁc needs; the other is the software producers
+should provide reliable services. Software trust diﬀers from software ecosystem
+trust in that it concentrates on the software products and their producers. More
+information on software trust and software ecosystem trust can be found in Section
+4.1.3.
+Currently, standards and models have been proposed to assess software trust,
+for instance, the Trusted Computer System Evaluation Criteria (Fogel, 2009) and
+the Reliability Growth Model (Littlewood, 1994). However, they are not widely
+used. The primary reasons are :
+– In light of the diﬀerences in the needs of end-users for various software products,
+these models lack comprehensive and uniform criteria for measuring the trust
+in all software products (Yan, 2008);
+– Most of the factors are abstract and lack clarity or guides that can be used to
+quantify trust factors (X. Li et al., 2021);
+– There is a lack of breadth of perspective among the criteria for judging the
+trustworthiness of software that practitioners would expect. For example, we
+rarely receive ratings for various package versions and a few comparable software
+producer ratings. Yet, this is precisely what software practitioners are concerned
+about when assessing software quality (Goode et al., 2015).
+In this context, we conduct a systematic review of the literature (SLR) to better
+understand software trust in the software ecosystem and summarize the key impact
+factors based on the frequency with which they were mentioned in the studies.
+The SLR presented here is part of a larger study of software trust that breaks
+a lance by giving trust a proper role in this selection process. By analyzing the
+perception and trust of various stakeholders, we provide a comprehensive overview
+of the relevant trust concepts. The purpose is to lay the groundwork for research
+on the design of trust assessment mechanisms that will place trust at the center of
+the selection process for software engineers.
+To help understand this study, we develop a model in Figure 1 to depict the
+relationship between signiﬁcant trust impact factors and actors in the software
+ecosystem. It can serve as a brief overview of the results of this study, a detailed
+discussion of which is provided in Section 4.
+This research begins with the following outline:
+• Section 2 introduces the actors and hubs involved in software selection and
+evaluation in the software ecosystem, as well as the workﬂow of the software
+
+--- PDF PAGE 4 ---
+4 Fang Hou, Slinger Jansen
+packages management. The purpose is to identify relevant trust impacted
+elements in the software ecosystem;
+• Section 3 presents the research method we used in this literature review, which
+works as an acquisition process to collect the software trust concept and trust
+factors considered by the software end-users during the software selection;
+• Section 4 provides a deﬁnition of software trust as well as a discussion on the
+intrinsic and extrinsic trust factors in terms of software components, package
+administrators, software production organization, and engineers, respectively.
+The results show that quality is the decisive factor for software trust, followed
+by software producers and code & structure. Additionally, trust assessment
+models typically focus on security, such as data access or user entitlement,
+rather than vulnerabilities and attacks;
+• Section 5 highlights the eﬀect of trust factors on the software selection, validity,
+consideration, and challenges of this work, as well as our future work. It is
+diﬃcult to develop a consistent set of criteria for assessing software trust; there-
+fore, our view is that trust assessment should be synthetic and drawn on from
+diﬀerent perspectives and channels. When collecting and sharing information,
+we need to exercise caution to protect both the privacy of individuals and
+the objectivity of the data. Additionally, collecting data on the trust of closed
+software may be challenging.
+Finally, in Section 6, we conclude that current research on software trust is
+limited to software quality, ignoring the impact of other hubs or actors in SECO,
+e.g., software packages, package managers, or software producers the future research
+should expand on this topic.
+2 Background of Software Ecosystem
+To assist in understanding what aspects of SECO can aﬀect software trust, we
+present here an overview of the package management workﬂow, as well as the
+concepts used in the study. We sketch the primary entities and stakeholders in the
+software ecosystem in Figure 2, along with their simpliﬁed relationships.
+2.1 Actors in the Software Ecosystem
+Software Product - The deﬁnition of the software product is based on Xu
+and Brinkkemper’s concept of a software product. It is deﬁned as “a packaged
+conﬁguration of software components or a software-based service, with auxiliary
+materials released for and traded in a speciﬁc market” (L. Xu and Brinkkemper,
+2007). The deﬁnition emphasizes four elements: “ packaged components” refer to
+software, packages, components, libraries, or codes; “ software-based services” refer
+to the independent, small piece of functionality accessed through internet, “auxiliary
+materials” refer to documentation, user manual or other materials which need to
+be implemented with the software or delivery to the end-users , and “ release and
+trading” refer the activities that release the software to the market and related
+commercial value. To this, we add another independent element -“distribution tools”,
+emphasize channels that facilitate distribution downstream of the software supply
+
+--- PDF PAGE 5 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 5
+Extrinsic 
+Trust 
+Factors 
+- 
+SPO
+Intrinsic 
+Trust 
+Factors 
+- 
+Software 
+Product
+Product 
+Quality 
+Structural 
+Factors
+Form
+Develop 
+and 
+Maintain
+Type 
+of
+Type 
+of
+include 
+facts 
+from
+From
+From
+Use
+From
+End-user
+Evidence
+End-users' 
+Propensity
+Stakeholders
+Portals
+Analysis 
+Tools
+Trust
+Software 
+Ecosystem 
+Trust
+Software 
+Trust
+Cost
+Human
+Structural 
+Assurance
+Popularity
+Reputation
+Docmentation
+Source 
+Code
+Programming 
+Language
+Architecture
+Dependency
+Version
+Reliability
+Efficiency
+Portability
+Usability
+Functionality
+Maintability
+Correctness
+Testability
+Security, 
+Vulnerability, 
+and 
+Attacks
+Software 
+Development 
+Process
+Extrinsic 
+Trust 
+Factors 
+- 
+Software 
+Product
+Intrinsic 
+Trust 
+Factors 
+- 
+Pakage 
+Manager
+Dependency 
+hell
+Security 
+vulnerability
+Vulnerability 
+detection 
+and 
+prevention
+Extrinsic 
+Trust 
+Factors 
+- 
+Engineer
+Abilities 
+and 
+Skills
+Satisfaction 
+and 
+Happiness
+Software 
+Product
+Packaged 
+Components
+Software-based 
+Services
+Auxiliary 
+Materials
+Release 
+and 
+Trading
+Processing 
+or 
+Distribution 
+Tools
+Software 
+Producer
+Software 
+Producing 
+Organizations 
+(SPO)
+Package 
+Maintainers
+Software 
+Engineers
+From
+Figure 1 The meta-model can be used as a reading guide for this article, as it mentions all
+the relationships between the main entities in our research. For instance, the relationships
+between trust types, trust sources, major trust impact factors, hubs, and stakeholders in the
+software ecosystem.
+
+--- PDF PAGE 6 ---
+6 Fang Hou, Slinger Jansen
+chain, meaning the systems or tools that assist in the processing or distribution of
+the packaged components that comprise a software product, e.g., package managers.
+Component - Based on Software Engineering Body Of Knowledge (SWEBOK),
+“a software component is an independent unit, having well-deﬁned interfaces and
+dependencies that can be composed and deployed independently” (Bourque and
+R.E. Fairley, 2014). The signiﬁcant characteristic of a component is that it can be
+reused, can interact with and interact with other objects, and can be combined
+with other components to form a system or application. For instance, a menu class
+or a button class.
+Library - A library is a collection of prewritten functions or data structures that
+are organized to perform the same technically essential functions, such as functions
+that handle compatibility issues (V. Bauer, Heinemann and Deissenboeck, 2012).
+Sometimes a library is referred to as a package in programming language directives,
+such as npm, RubyGems, and Maven (Zerouali et al., 2018).
+Package - A package is simply a collection that contains software, libraries and
+metadata. The metadata includes, for example, the name of the software, a descrip-
+tion of its purpose, version number, providers, checksum, and a list of dependencies
+for the software or library version. Packages are in general versioned, which fre-
+quently adhere to de facto conventions, such as semantic versioning (Hanus, 2018).
+A distribution of packages can be considered as being a software ecosystem, with a
+collection of interdependent software projects that are developed and maintained
+within the same environment (Decan and Mens, 2019).
+Package Manager - A package manager provides a privileged, central mechanism
+for managing the installation and upgrade of packages on a computer’s operating
+system automatically (Cappos et al., 2008a). Sometimes it is referred to as Software
+Manager or Application Manager, depending on the context. The preferred term is
+Package Manager in programming languages since the installed software is often just
+a set of libraries rather than a directly executable application. Package managers
+have a major contribution in that they retrieve the speciﬁc versions of the libraries
+that are required to build client applications and the libraries they depend on, and
+install the required libraries based on their dependencies (Hejderup, Deursen and
+Gousios, 2018).
+Package Repository - Typically, a package repository is just a web server that
+hosts packages and their associated metadata (Cappos et al., 2008b). Package
+managers rely on package repositories to install packages and resolve any dependency
+requirements.
+End-user - A software end-user is an individual or organization that adopts or
+intends to adopt a software product into their applications. Usually, the majority
+of end-users are software engineers, who are concerned with the functionality of a
+package and its integration into their existing projects (Chinthanet et al., 2021).
+Alternatively, they could be individuals who lack development experience and rely
+on a software component to fulﬁll a speciﬁc requirement. The distinction between
+these two types of end-users is not emphasized in our study. However, in our
+literature review, we found that most of the interview or survey participants are
+experienced software engineers.
+Software Producer - The term software producer refers to both software pro-
+ducing organizations (SPOs) and software engineers who are involved in its de-
+velopment. An SPO is an organization that builds and maintains software with
+a view to getting the software created, adopted as widely as possible (S. Jansen
+
+--- PDF PAGE 7 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 7
+et al., 2012). As software engineers, whether they are employed by an SPO or as
+independent contractors, they contribute to the development and maintenance of
+software products.
+Additionally, package maintainers are a subset of software producers. Pack-
+age maintainers are responsible for the development and maintenance of software
+packages and their frameworks. They develop and maintain source code, pack-
+age builders, and installers, including bug ﬁxes and patch releases. Additionally,
+they conﬁgure package builds to ensure that packages can be sourced from the
+distribution by extracting the source code from the collection of binaries in the
+distribution (Duan et al., 2021).
+2.2 Workﬂow of Package Management
+In Figure 2 we describe the package management process. When an end-user uses
+a package manager to download a library, ﬁrst, the package manager searches
+the relevant conﬁguration ﬁle maintained by itself for ﬁles that point to the
+location of the repository, e.g., Apple Store or SourceForge, to retrieve the package.
+Subsequently, the package manager downloads the relevant packages from the
+repository. When the end-user conﬁrms the installation of the selected package, the
+package manager installs the relevant packages according to the package dependency
+order. After a successful package installation, the package installation information
+is stored in the metadata of the local package database and managed by the
+package manager to maintain software dependency and version information. End-
+users can modify the conﬁguration ﬁle to retrieve packages from other repositories.
+Alternatively, they can search and download packages directly from repositories,
+such as Github.
+A trustworthy program or application cannot depend on untrustworthy com-
+ponents or services (Bourque and R.E. Fairley, 2014). To this end, in addition to
+the trustworthiness of the software product itself, we should also be concerned
+about the reliability of the reusable components, such as components and librar-
+ies, as well as the the trustworthiness of the tools that distribute or store them,
+such as packages and package managers, and repositories that host these reusable
+components. These elements are taken into account in the study of software trust.
+3 Research Method
+Systematic Literature Review (SLR) is a term used to describe the process of
+collecting, reading, analysing, reﬁning, and organizing of data in the existing
+literature to provide a comprehensive introduction, elaboration, and evaluation
+on a speciﬁc research topic or phenomenon of interest (Keele et al., 2007). We
+performed an SLR following the guidelines and steps of (Kitchenham (2004)) to
+gain the knowledge in the existing literature on the concepts and inﬂuences of
+trust within the software ecosystem domain to understand and reveal the current
+relationships between software end-users and software producers. It followed the
+outline of the following six activities in this review:
+– Deﬁning the research question;
+
+--- PDF PAGE 8 ---
+8 Fang Hou, Slinger Jansen
+Package ManagerPackageLocal DatabaseRepositoryEnd-userSoftwareLibraryComponentRequest a package’s installationLooking up, downloading, installing, or updating software/libraryVerify digital certification, checksumsMaintainIncludeStore location for packageContain installation informationBe containedBe storedDependencyVersionSoftware ProducerSearch and download packageProvide search and install capabilitiesDevelop and maintainPackage MaintainerMaintain
+Figure 2 The model shows the package management process, and it includes relevant stake-
+holders, software end-users and package maintainer, essential entities, package manager,
+package, local database, and repository.
+– Searching for relevant studies;
+– Applying inclusion and exclusion criteria;
+– Assessing study quality;
+– Extracting and analyzing data;
+– Coding scheme.
+3.1 Research Questions
+We construct the following research questions (RQ) to get an overview of software
+trust in worldwide SECO:
+RQ1: How is the concept of software trust deﬁned in literature?
+We deﬁne the concept of software trust as the ﬁrst object of this study. This is
+achieved by reviewing and comparing the deﬁnitions of software trust in the
+literature and examining the sources, types, and attributions of software trust.
+In addition, we extend the deﬁnition of software trust based on the relationships
+between software end-users and producers in the software ecosystem.
+RQ2: What trust factors do end-user organizations consider when se-
+lecting software products?
+RQ2 takes into account end-user organizations’ trust factors when making
+software product selection decisions, which can be regarded in the following
+four sub-research questions. Their impact on software trust may be positive or
+negative, in varying degrees.
+SubRQ2.1: What trust factors do end-user organizations consider when
+selecting software products and versions?
+RQ2.1 addresses the factors in software and software packages that aﬀect trust.
+These factors are comprehensive in that part of them can originate from the
+software and software packages themselves, primarily the quality of the source
+code (e.g., integrity, re-usability), known defects and vulnerabilities, packages’
+versions and dependencies, and the development process that aﬀects the quality
+
+--- PDF PAGE 9 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 9
+and security of these source codes; another part of them can come from the
+outside world, such as the reputation, popularity, and structural assurance of
+the software.
+SubRQ2.2: What trust factors do end-user organizations consider when
+selecting software package managers?
+RQ2.2 is concerned with package managers. Since the major role of package
+managers is to manage dependencies in order to ensure that packages are
+installed with all dependencies they require, the ability to manage package
+dependencies becomes a critical factor aﬀecting the trust in package managers.
+Additionally, the trust in package managers is also aﬀected by security risks, such
+as consistently detected attacks on metadata, dependencies, and repositories, as
+well as known design ﬂaws, such as the lack of eﬀective protection mechanisms
+to detect and undo suspicious package installations.
+SubRQ2.3: What trust factors do end-user organizations consider when
+selecting software producing organizations?
+RQ2.3 focuses on how software producers, organizations/ communities build
+trust in software and software packages. It focuses primarily on their man-
+agement and strategy, such as follow-up of their products, reputation, and
+popularity.
+SubRQ2.4: What trust factors do end-user organizations consider when
+selecting software engineers?
+RQ2.4 is concerned with the professionalism of software engineers, especially
+their knowledge, experience, and skills, as these factors all contribute to their
+ability to develop high-quality software, eﬀectively resolve unexpected problems,
+and provide follow-up services. Engineers’ satisfaction and happiness are also
+beneﬁcial for developing quality software.
+3.2 Search Strategy
+Literature review articles are identiﬁed by using search strings from scientiﬁc lib-
+raries. First, we deﬁne the object of study, including software and related concepts,
+such as software packages, components, and dependencies. Then, in conjunction
+with software supply chain processes, we include software management, proven-
+ance, and engineers, considering that software trust may be inﬂuenced by project
+management and other human factors. Finally, after examining a few deﬁnitions of
+trust, we include concepts related or similar to trust based on the understanding of
+the nature of trust, such as credibility, reputation, and uncertainty. This resulted
+in the following block.
+software AND (package OR component OR dependency OR management
+OR provenance OR engineer) AND (trust OR credibility OR reputation
+OR uncertainty)
+
+--- PDF PAGE 10 ---
+10 Fang Hou, Slinger Jansen
+Software trust has been studied within software engineering, and related research
+can be found in any software engineering-related digital library. To ensure that
+no studies were missed, we adopted both manual search, automatic search, and
+snowballing technique. We began by manually searching for primary and secondary
+studies from the Journal of Systems and Software and Information and Software
+Technology. However, it was found that the articles we searched manually were
+included in the automatic search results, and they also incorporated a wider range
+of articles. Thus, we decided to use automatic search as the main search method,
+kept automatic search results from IEEExplore and ScienceDirect as the academic
+sources, as well as Google Scholar as a secondary source. Then, the ﬁrst author
+obtained the initial list of articles from the search engine and eliminated duplicates.
+592 articles were chosen based on their titles, excluding articles that clearly do
+not belong to software engineering, for example, we encountered titles containing
+community environmental health, ﬁsh, and patients. In the following process, ﬁve
+members of our research team applied inclusion and exclusion criteria to each
+article, and if all the criteria were met, the article was then included. After that,
+the ﬁve researchers scanned the remaining articles to exclude more articles, then
+read the articles completely, and performed the quality assessment. Upon reading
+the articles in their entirety, we used a snowballing technique to include another
+seven articles related to our topic, such as supplements and prior research, ensuring
+that we did not miss any extensive versions of the articles. The steps of the search
+process are depicted in Figure 3 along with the number of primary and secondary
+studies conducted at each step. Note that there is considerable overlap between
+articles in diﬀerent digital libraries, resulting in the inclusion of numerous irrelevant
+studies.
+Figure 3 This ﬁgure indicates the stages of the search process and the number of publications
+at each stage.
+3.3 Inclusion and Exclusion Criteria
+The inclusion and exclusion criteria ensure that relevant studies are included, and
+studies that do not answer research questions are excluded. If the inclusion criteria
+are too broad, poor-quality studies may be included, lowering the overall quality of
+
+--- PDF PAGE 11 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 11
+the study’s results. If the inclusion criteria are too stringent, the resulting studies
+are likely to be small and therefore not generalizable(Meline, 2006).
+The given inclusion criteria adopted in this research are:
+– Studies published since 1990s;
+– Studies that addressed at least one research question;
+– When studies reported the same research, only the most recent one was included;
+– Studies that appropriately addressed software trust in software ecosystems.
+The given exclusion criteria selected in this research are:
+– Studies that published in a language other than English;
+– Studies that incomplete or only provided literature in the form of abstracts or
+presentation slides;
+– Studies that concentrated on the development of a single tool for a particular
+domain;
+– Studies that lacked an adequate description of their objectives or context;
+– Studies that were not speciﬁcally related to software engineering or software
+ecosystem.
+We include books, articles, and a variety of grey literature, e.g., working
+papers or dissertations/theses, on software trust, software selection, and software
+evaluation. These search results were published after the 1990s, as the Internet
+revolutionized the relationship between people, as well as the relationship between
+people and software since then. Meanwhile, to avoid results from other disciplines
+interfering with this study, we excluded search results that did not pertain to
+software engineering or software ecosystems, such as software packages that are
+explicitly applied to medical or mathematical sciences. Additionally, we excluded
+search results that were either incomplete or lacked detailed descriptions.
+3.4 Quality Assessment
+The quality assessment guides the interpretation of the ﬁndings (Keele et al., 2007).
+In this study, ﬁve researchers were involved in the quality assessment by adopting
+the double data extraction method (Buscemi et al., 2006), which means the quality
+of each article was assessed by two researchers. We organized discussions to reach a
+consensus on quality assessment and read three articles to cross-check and compare
+the results to use this mechanism to eliminate any doubts about the selection
+process. Our quality assessment focuses on the following questions:
+QA1. Does the study address at least one research question?
+QA2. Is the study based on research or expert opinion?
+QA3. Is there a clear statement of the purpose of the study?
+QA4. Was the data collection rigorous?
+QA5. Are the ﬁndings of the study clear?
+Each member of the research team was then randomly assigned a subset of these
+592 articles. The ﬁrst author then conducted a quality assessment of all researchers’
+derived results, discovering that 28 articles received varying quality assessment
+scores. These 28 articles included six Google Patents, four articles about speciﬁc
+software systems, such as mobile applications or enterprise resource planning, and
+19 articles about topics other than software trust, such as hardware and internet
+
+--- PDF PAGE 12 ---
+12 Fang Hou, Slinger Jansen
+trust, or how to estimate maintenance. Following a discussion of these distinctions,
+we arrived at 112.
+3.5 Data Extraction and Synthesis
+The research methods were classiﬁed according to the categories listed in Table
+1. The majority of the search results are empirical research. Theories, models, or
+frameworks that analyze or evaluate software trust or speciﬁc aspects of software
+products contributed most of the trust factors to our study. The remaining factors
+came from theoretical studies and exploratory research, e.g., literature review. The
+results can be seen in Table 2.
+Two data sets have been created to compile the impact factors found in the
+literature.
+The qualitative data set - The analysis of the literature or its ﬁndings can
+be used to deduce the factors aﬀecting software trust. The majority of signiﬁcant
+factors are listed in tables or explicit categories, while others were analyzed and
+extracted from the literature’s context, ﬁndings, and conclusions.
+The quantitative data set - The impact factors for software trust are de-
+termined from the models, frameworks, formulas, or test results shown in the
+search results. The quantitative data set was composed of works that employed
+experimental and statistical data collection methods. Typically, the impact factors
+are presented graphically in tables, or as formulas, or they are classiﬁed within the
+discussion and context of such literature.
+Table 1 Summary of types of the search res-
+ults
+Research types Total
+Empirical Research 83
+Theoretical Research 18
+Exploratory Research 10
+Table 2 Methods of data collection used in
+the empirical research
+Data collection methods Total
+Experiment 42
+Case Study 19
+Survey/Interview 18
+Statistic 4
+User study 1
+Data synthesis was performed using a frequency analysis technique to aggregate
+the extracted data. All included articles were analyzed and extracted. It should be
+noted that because some models or criteria have been proposed based on the results
+of previous research, several trust factors are duplicated. In the data synthesis, we
+still counted and accumulated these trust factors. The reason is that we believe the
+trust factors that are repeatedly referred to must be signiﬁcant. Section 4 presents
+the synthesis results of the data extracted from the selected studies and answers
+the research questions.
+3.6 Coding Scheme
+To analyse what trust factors end-user organizations consider when selecting
+software products, we classiﬁed the impact factors and tried to ﬁnd the relationships
+
+--- PDF PAGE 13 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 13
+between them. We adopted inductive coding method to analyze the data from
+each study. Inductive coding is a type of data analysis in which the researcher
+reads and interprets raw textual data to develop concepts, themes, or a process
+model based on the data (Chandra and Shang, 2019). In addition, considering our
+topic, software trust, used combining Cue Utilization Theory (CUT) to categorize
+trust factors (Midha and Palvia, 2012). As CUT is well-known as a framework for
+understanding and analyzing the diﬀerent factors that inﬂuence the subject matter
+as well as evaluating products. We classiﬁed the cues we selected from the search
+results using CUT and divided the impact factors into intrinsic and extrinsic trust
+factors for the previously proposed research questions. Intrinsic trust factors have
+been used to represent a product’s physical attributes, which refer to source code or
+architecture-related attributes or factors, such as technical factors or vulnerabilities;
+and extrinsic trust factors have been used to represent external attributes, such as
+the product’s reputation, cost, licenses, or capability of the software producer. In
+addition, we focus on each actor in the SECO and their relationships, for example,
+the reputation or popularity of software producers, which are also categorized in
+extrinsic trust factors.
+After conducting a systematic review of all impact factors, we assigned them
+to our CUT categories as well as to the research questions based on the themes
+of each study. We then labeled the codes using the words from both datasets, as
+well as their CUT and semantic counterparts and then adapted and reﬁned them.
+Additionally, we determined the relative importance of each category by counting
+the frequency of the words. If a theme appears frequently, it indicates that it is
+signiﬁcant in the research on software trust and may have a signiﬁcant impact on
+software trust. In Figure 7 we show the major trust impact factor according to the
+word frequency. The coding scheme of trust impact factors is available at this link.
+3.7 Biases in the SLR Process
+Bias is one of the biggest challenges faced by all researchers. For example, researchers
+may be unaware of previous research on a subject or maybe aware but unable
+to access the ﬁndings, or the report may be missing critical data points. Thus,
+when data are missing, not only does the size of the collected sample decrease, but
+the sample’s validity gets smaller as well (Cooper, Lindsay and Patall, 2008). In
+this study, we faced two sampling biases: Publication bias refers the problem
+that positive results tend to be published more frequently than negative results,
+if negative results are not published widely enough, false conclusions could be
+attributed to them as true (Keele et al., 2007), and Retrieval bias, Typically,
+retrieval bias refers to the risk that the sample used in the synthesis does not
+appropriately represent the literature available (Durach, Kembro and Wieland,
+2017). In order to mitigate them we did the following:
+– Conduct both automatic search and snowballing technique. The automated
+search we conducted includes a broader search of articles about software trust,
+which is supplemented by snowballing techniques to make the search more
+comprehensive in content and scope.
+– Obtain articles from published and unpublished articles. In this study, along
+with articles from peer-reviewed journals, we included grey literature, such as
+pre-prints and post-prints of articles, theses, and dissertations.
+
+--- PDF PAGE 14 ---
+14 Fang Hou, Slinger Jansen
+4 Results
+This section reports our ﬁndings of software trust. Figure 4 illustrates the structure
+and relationships of our research questions, thereby contributing to our overall
+understanding of our study. It also shows the order we answer the RQs. First, we
+provide the deﬁnition and attributes of software trust (RQ1) to understand its
+underlying constructs (RQ2), which are software products and software producers.
+Following this, we examine the software products and their producers to discover the
+factors that may inﬂuence software trust in the SECO during the selection process.
+In terms of software products and software producers, we analyze the trust factors
+aﬀecting software and software packages (RQ2.1) and package administrators
+(RQ2.2), as well as software production organizations (RQ2.3) and engineers
+(RQ2.4). Numbers of search results for each research question are given in Table 3.
+Figure 4 This model shows the structure of this study, including the relationship between the
+research questions.
+Table 3 Overview of selected studies per research question. It is possible for a publication to
+address more than one research question.
+Research Question Total
+RQ1:How is the concept of software trust deﬁned in literature? 39
+RQ2.1:What trust factors do end-user
+organizations consider when selecting
+software products and versions?
+Software development
+governance
+40
+Software 62
+Package and version 7
+RQ2.2:What trust factors do end-user organizations consider
+when selecting software package managers? 4
+RQ2.3:What trust factors do end-user organizations consider
+when selecting software producing organizations? 16
+RQ2.4:What trust factors do end-user organizations consider
+when selecting software engineers? 17
+
+--- PDF PAGE 15 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 15
+4.1 Concept of Software Trust in Literature
+In this subsection, we focus on answering RQ1: How is the concept of software trust
+deﬁned in literature?
+As we introduced in the introduction section, the common perception of trust
+is that it is a belief that the trusted person will actually do what is expected by
+trustor. In fact, researchers have interpreted trust diﬀerently in various domains.
+In software engineering alone, trust is understood diﬀerently. For example, Garcı´ ea
+(2015), Grodzinsky, Miller and Wolf (2011) and Jadhav and Sonar (2011) emphasize
+that trust involves risks, defects, and vulnerabilities; Garcı´ ea (2015), Ghapanchi
+and Tavana (2015), Nunes et al. (2019) and B. Wang et al. (2019) argue that trust
+is viewed as a function of quality of service; Alarcon et al. (2020), Jackson (2009)
+and Trˇ cek (2018) state that software trust encompasses trust in software producers.
+Table 4 gives the attribution of software trust we collected from the literature. This
+table only contains several high frequency attributions, understandings of trust
+can be found more in the literature.
+Software trust is inherently predictive based on historical data, regardless of its
+focus (Jadhav and Sonar, 2011; Kula, German et al., 2015; Jackson, 2009; Alarcon
+et al., 2020; Trˇ cek, 2018; Mcknight et al., 2011). According to this interpretation, we
+need to pay attention to two aspects: the source of historical data and which aspects
+will have an impact on trust, which we are basing our judgments and predictions
+about trust. In Section 4.1.1, we discuss the source of interaction histories, in
+Section 4.1.2, we explain three aspects that require prediction, i.e., software, human
+and structural assurance (the third column in Figure 6).
+4.1.1 Source of Software Trust
+Software trust is established through the software producer’s and the software’s
+characteristics, e.g., how the ﬁrst impressions of the software are, which features of
+the software are more important, or which are regarded as low priority or irrelevant.
+Sometimes, end-user ﬁrst impression may inﬂuence the ﬁnal choice. For instance,
+while a project with spelling errors in the README.md ﬁle does not necessarily
+indicate poor quality, an observer may conclude that there is insuﬃcient attention
+given to the project by software producers.
+As shown in Figure 5, trust is based on either evidence or propensity. Evidence
+includes information from the outside world, such as vulnerability reports from
+various trusted repositories, for example, Common Vulnerabilities and Exposures
+database (CVE) and National Vulnerability Database (NVD); portals for software
+reviews, or communities. However, for proprietary products, since such data is
+not open to the public, the way for end-users to get relevant information is from
+the software or organization portals, or from other users’ experience with the
+software. The issue then is that information from the software producers directly
+could be one-sided and unveriﬁed, insuﬃciently reﬂecting the reliability of the
+software product. In contrast, open-source software products provide evidence in
+the form of project data, source code, and bug reports, that are easily accessible
+since the repositories, e.g., Github, GitLab, or BitBucket are public and end-users
+do not require authorization to access them (Manikas and Hansen, 2013). End-
+users can analyze this “raw data” to determine the trust of the product easily.
+Additionally, evidence may come from stakeholders, such as internal experts or
+
+--- PDF PAGE 16 ---
+16 Fang Hou, Slinger Jansen
+Table 4 Attribution of software trust based on the frequency of metrics in the deﬁnitions of
+software trust from the literature.
+Attribution Deﬁnition Source
+Availability Trust is A capability of delivering requested functionality
+or services.
+Boyes et al.,
+2014
+Boundary It is important to identify the critical properties and de-
+termine what level of conﬁdence is required in addition to
+software, physical equipment and humans.
+Ghebremedhin,
+2012; Jack-
+son, 2009
+Calculated,
+measured,
+evaluated
+Though software cannot be seen or touched, there must be
+an evaluation and measurement of its trustworthiness in
+order to ensure the success of the software.
+Rosenberg,
+Hammer
+and Shaw,
+1998
+Conﬁdence Trustworthiness of software is determined by the degree of
+conﬁdence that exists that it meets certain requirements.
+Del Bianco
+et al., 2011
+Credibility A comprehensive qualitative description of the software’s
+availability, stability, performance, security, durability, and
+supportability under speciﬁed conditions and speciﬁed
+time.
+Hong,
+Chang-hui
+and Ben,
+2011
+Dependability A system is dependable means it can be relied upon or
+trusted to perform a certain task. In other word, it only
+be justiﬁed if there is evidence that the system has the
+capability to function without certain failures.
+Jackson,
+2009
+Evidence, Ob-
+servation
+Trust refers to an aspect that is based on evidence or
+observation. Alternatively, it includes subjective aspects
+of an entity’s opinion, such as the presence of human
+information that indicates that such incidents will not
+occur.
+Jackson,
+2009
+Weakness Trust is the ability of a system to perform its required
+functions despite disruptions brought about by natural or
+human-made events, hostile attacks by internal or external
+parties, and/or system errors caused by hardware and
+software issues.
+Jadhav and
+Sonar, 2011
+Human, vendor One trust is about trust in technological artifacts, while
+the other is about trusting the vendor’s capability to fulﬁll
+the outsourced task and provide quality services.
+Goode
+et al., 2015
+Reputation Reputation complements trust and can be seen as public
+perception of trust.
+Nunes et
+al., 2019
+Quality The notion of trust represents the overall system quality
+indicator, which should reﬂect the quality of performance
+and security, reﬂecting their static and dynamic nature.
+Jadhav and
+Sonar, 2011
+Structural As-
+surance
+No matter the speciﬁc characteristics of the technology,
+there are structural conditions such as contracts, guaran-
+tees, support, and other safeguards that should guarantee
+the success of the technology in general.
+Guo et al.,
+2014
+Subjectivity Software trust depends on the individual’s past experi-
+ences, their biases, their education, and so forth. It is only
+through the provision of speciﬁc, detailed guidelines that
+this subjective emphasis can be removed.
+Guo et al.,
+2014
+Temporal, Dy-
+namicity
+Software trust is built continuously and gradually, and
+changed over time as more evidence or experience arrives.
+More evidence is needed to form a high trust.
+Guo et al.,
+2014
+Transitivity If A trusts B and B trusts C, then it may be concluded that
+A trusts C to a certain degree. Transitivity is widely used in
+trust-based recommender systems and systems authorized
+by certiﬁcate authorities.
+Guo et al.,
+2014
+Transparency A computer is inherently opaque, and one must determine
+whether the level of transparency provided is suﬃcient
+for the system to be trusted. Therefore stakeholders have
+to communicate the truth, keep their commitments , and
+consider the interests of each other.
+Mercuri,
+2005
+Uncertainty Trust is essential for almost every situation where either
+uncertainty exists, or undesirable outcomes are possible,
+meaning that the end-user is exposed to the risk that the
+software might fail to fulﬁll its prescribed responsibilities
+whether intentionally or unintentionally.
+Mcknight
+et al., 2011
+Vulnerability As a result, end-users accept any vulnerabilities as a part
+of the software. An alternative understanding is that a
+system is trustworthy when it functions as intended without
+unnecessary problems.
+Rosenberg,
+Hammer
+and Shaw,
+1998;Jadhav
+and Sonar,
+2011
+
+--- PDF PAGE 17 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 17
+EvidencePortalEvaluation, recommendation toolAudit and analysis database, e.g., CVE, NVDQuestions and answers portal, e.g., Stack ExchangeSoftware Producer PortalSoftwareTrust SourcePropensity, e.g., knowledge, experienceToolsData mining tools, e.g., software repository miningResearch PortalProject DataSource codeProject repositoriesBug and event monitoringRecommendation from stakeholders, e.g., end-users, experts
+Figure 5 In this model, we outline the main sources of trust, split into evidence, e.g., portals of
+software products or software producing organizations, and propensity, e.g., software end-users’
+knowledge or experience (Amoroso et al., 1991).
+external consultants for advice or evaluation, or experienced end-users or experts,
+such as knowledge sharing or questions and answers from stack exchange or stack
+overﬂow. Besides, various analytics tools and recommendation systems are sources
+of trust. For example, the social network-based recommendation system, which
+aims to make personalized recommendations by providing users with the most
+relevant data from friends (Krishnan et al., 2008).
+The other part is the propensity of software end-users, shaped by their experi-
+ence, education (Amoroso et al., 1991), cognition, and rationality. Rationality stems
+from the collection of information, nevertheless, there are situations, such as when
+faced with a high level of uncertainty or a time constraint, in which rationality
+may not lead to the optimal decisions (Evans and Over, 1996). Similarly, in the
+presence of factors such as preconceptions, memory, or responsibility, cognition may
+inﬂuence the probability of making an incorrect decision by the end-user (Chat-
+topadhyay et al., 2020). However, cognition is not always wrong (Decan, Mens
+and Constantinou, 2018; Jadhav and Sonar, 2011). For example, a knowledgeable
+end-user can determine whether a software package is trustworthy and appropriate
+for the current project based on his previous experience. Correspondingly, a person
+without any IT background and experience in using software packages cannot be
+expected to ﬁnd a trustworthy one. An interesting fact about propensity is that
+when end-users are gathering information, they tend to be biased and suspicious of
+positive information, perhaps because producers eliminate negative information
+on a large scale, causing end-users to distrust them (Tavakolifard and Almeroth,
+2012).
+Preference is another kind of propensity. All attributes should be weighed
+according to stakeholders’ value propositions (J. Li et al., 2012). A software product
+may not give the same level of conﬁdence across all functions but still remain
+dependable (Jackson, 2009). For example, a bank system may incorrectly calculate
+the expiration date of a credit card but must not disclose the customer’s information;
+or a cellphone may be unable to change the ringtone, but it can deﬁnitely make
+a call. Software trust has boundaries, which encompass the speciﬁc functionality,
+
+--- PDF PAGE 18 ---
+18 Fang Hou, Slinger Jansen
+timing, user roles, experience, and requirements of the software (Jackson, 2009).
+Deﬁning the boundaries of software trust facilitates the focus of the analysis on
+speciﬁed areas (Ghebremedhin, 2012), as well as clarifying the priority requirements
+and what level of trust. All software trust we discuss should be predicated on the
+boundaries of software.
+4.1.2 Types of Trust
+There is a large volume of publications describing trust. Das and Teng (2001)
+describe trust as goodwill trust and competence trust; Sheppard and Tuchin-
+sky (1996) deﬁne trust as deterrence-based trust, knowledge-based trust, and
+identiﬁcation-based trust; and Sabherwal (1999) speciﬁes trust as calculus-based,
+knowledge-based, identiﬁcation-based, and performance-based trust. Till now,
+there is still no consensus on the deﬁnition, as trust is diﬀerent in diﬀerent con-
+texts (Heiskanen, Newman and Eklin, 2008). When extended to software trust, we
+ﬁnd that identiﬁcation-based trust proposed by Sheppard and Tuchinsky (1996)
+coincides with traditional social science trust, which is stakeholder-oriented trust,
+i.e., trust related to software engineers, organizations, and communities, referred
+to software producing organizations in this study. Another one, knowledge-based
+trust, is in line with the trust in software artifacts and products, which is based
+on knowledge of a technology or product to predict whether it will function as
+intended (Alarcon et al., 2020; Jackson, 2009; Jadhav and Sonar, 2011; Kula,
+German et al., 2015; Mcknight et al., 2011; Trˇ cek, 2018. The subject of this study is
+software trust in the context of SECO, hence, as shown in the Figure 6, we refer to
+the classiﬁcation proposed by Sheppard and Tuchinsky (1996). These three types
+of trust correspond to trust in software product, structural assurance, and trust
+in human, respectively. The correspondence is described in the following section.
+We highlight the major factors as boldface text (the fourth column in Figure 6),
+sub-factors as italics text (the ﬁfth column in Figure 6).
+Knowledge-based Trust - Trust in Software
+In Figure 6, trust in software is a kind of knowledge-based trust. Based on
+the amount of citations, it primarily arises from the quality, reputation, and
+weakness of software products.
+Quality is crucial to knowledge-based trust. In software evaluation, it refers to
+the functionality, reliability, and helpfulness (Mcknight et al., 2011). Function-
+ality is the most basic condition of a trustworthy software product, Moumane,
+Idri and Abran (2016) deﬁnes it as the purpose of the system and what it
+does. Thus, the software product should provide conﬁdence to the end-users
+that this product is what the end-users want. According to IEEE, reliability
+refers to the capacity of a system or component to perform speciﬁed functions
+for a speciﬁed period of time under speciﬁed conditions (Rosenberg, Hammer
+and Shaw, 1998). Most software development managers equate reliability with
+correctness, they use frequency of failure, fault tolerance and recoverability to
+gauge how reliable a software product is (Berander et al., 2005). Helpfulness
+refers to the software product providing adequate and responsive guidance
+to users, for instance, if a help function supports users independently ﬁnding
+their way in the product (Mcknight et al., 2011; Lankton, McKnight and Tripp,
+2015). These three are the most mentioned subfactors in the literature, some
+
+--- PDF PAGE 19 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 19
+Figure 6 This model depicts the three types of software trust: knowledge-based trust,
+deterrence-based trust, and identiﬁcation-based trust (Sabherwal, 1999), as well as the corres-
+ponding factors that aﬀect software trust, i.e., software products, structural assurance, and
+human.
+attributes, such as security, resilience, and safety , are also mentioned in the
+literature (Jadhav and Sonar, 2011; Del Bianco et al., 2011; I. K. Lai, Tong and
+D. C. Lai, 2011). Although they are not included in the Figure 6, we believe
+that they are critical to ensuring software trust as well.
+Reputation is the average belief of the relevant audience that you do or do
+not possess a particular trait, and it is built gradually over time (Barclay, 2015).
+Therefore, reputation is believed by the majority of people. (Nunes et al. (2019))
+believe “reputation complements trust, and can be seen as a public perception
+of trustworthiness ”, hence, software trust is built on a public foundation,
+accumulating a reputation for continuous, high-quality performance (Mailath
+and Samuelson, 2001). This performance is not only about the high quality of
+the software itself, but also encompasses whether the software producer can
+deliver high-quality services.
+Weakness refers to risk or uncertainty, anything predictable or unpredictable
+that would cause problems or failure of the software or software producer.
+Some studies have argued that ‘‘trust is the willingness to take risks under
+uncertainty” (Cho, Chan and Adali, 2015), it describes “ the probability of a
+particular piece of software to elicit a security failure within a certain time
+frame” (Bugiel, Davi and Schulz, 2011). Trust constitutes a distributed, ﬂex-
+ible concept that improves the decision-making process without the need for
+heavy management, given the various risks and uncertainties from the software
+itself or from the software vendor (Moyano, Fernandez-Gago and Lopez, 2016).
+These uncertainties can entail requirements, technology, cost, schedule, support
+resources, project management, and external attacks. We look at separately
+the relationship between risk and software trust and the relationship between
+uncertainty and software trust. Risk is the situation where the decision-maker
+knows the possible outcome of the decision and the probability of its occur-
+rence (Park and Shapira, 2017). Therefore, risk is predictable. Trust comes
+
+--- PDF PAGE 20 ---
+20 Fang Hou, Slinger Jansen
+with risk, and the greater the risk, the greater the trust required. There is
+no doubt that there is risk in using software (Song et al., 2010). Therefore,
+we should focus on how software producers control risks and how software
+end-users predict risks and understand how software producers control risks.
+For example, it is common that expecting zero-defect software is unrealistic,
+so instead of being concerned about the presence of vulnerabilities in software,
+end users are more interested in when the vulnerabilities found can be resolved
+in a timely manner. Uncertainty has been mentioned in several studies on
+software trust. The sources of uncertainty are diverse and can be either the
+quality of the software or the reputation of the software vendor. Although it
+is unpredictable (Park and Shapira, 2017), a large part of this uncertainty
+is not caused by the internal problems of the software but by the external
+environments in which it is deployed. This is because, a part of the uncertainty
+can be exposed during the software testing phase or in the interaction with the
+external environment that may produce unexpected disturbances (M¨ uller et al.,
+2021), timely ﬁxes and remedies can eliminate this part of the uncertainty.
+In addition, modeling and predicting disruptions or impacts from unknown
+external environments can be diﬃcult, such as the multi-vector attacks on the
+software supply chain. Therefore,more uncertainty comes from these external
+environments. However, the signiﬁcance of uncertainty for trust is that if there
+was no uncertainty, all information would be objectively available, and end-users
+could make judgments independently and with conﬁdence, then trust is not
+needed.
+Identiﬁcation-based Trust - Trust in Human
+In the model in Figure 6, trust in human is a type of identiﬁcation-based trust.
+The identiﬁcation-based trust exists because when all stakeholders understand
+each other’s intentions and expectations, a connection is built (Sheppard and
+Tuchinsky, 1996). Considering the connection between software end-users and
+software producers, software producers need to understand end-users need
+and their expectations; in turn, end-users need to understand the performance
+of software producers. That is, knowledge of software producers’ intentions and
+expectations is based on a good understanding of their characteristics, such as
+prior performance, experience, skills, and team size. Therefore, it can be seen
+that identiﬁcation-based trust is built on knowledge-based trust (Sabherwal,
+1999), based on a full understanding between the software producers and
+end-users.
+Trust in software producers is discussed in the literature by examining whether
+they are considered professional and reliable and can produce high-quality
+software products and provide quality services (Jadhav and Sonar, 2011). In
+addition, how software producers remediate and recover from risks and problems
+is also considered to be a factor that has an impact on the reputation of software
+producers as it aﬀects the end-user’s willingness to maintain a long-term service
+relationship with the software producer (Bennett et al., 2000).
+Deterrence-based Trust - Trust in Structural Assurance
+Deterrence-based trust is built by the trustee’s fear of the consequences of
+breaking a rule, law, or contract. That is, there are licenses, regulations,
+or contracts in place in order to prevent someone from harming another,
+
+--- PDF PAGE 21 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 21
+so the trustor can trust that the trustee will not do anything that could
+cause her harm (Sheppard and Tuchinsky, 1996). Therefore, to ensure that all
+stakeholders’ interests are not compromised, clear premises or assumptions,
+clear responsibilities to be fulﬁlled by stakeholders, and contracts or clauses
+with clear penalties are required. When end-users encounter an unknown
+software producer or software, the emergence of such assurance protects the
+expectations and interests of end-users (Wright, 2010). Here we call them
+structural assurance (SA), deﬁned as “ the degree to which consumers believe
+that institutional structures like guarantees, regulations, promises, legal recourse,
+or other procedures are in place to promote success ” (Sha, 2009).
+4.1.3 Deﬁnition of Software Trust
+Software ecosystems are complex networks of overlapping supply chains of software,
+data, and services. These supply chains have upstream ﬂows from end-users to
+software engineers, that for instance contain money and data, and downstream
+ﬂows, that for instance contain source code and packages. Software ecosystem
+trust constitutes all upstream and downstream trust that is present between the
+stakeholders that make up the SECO. This includes, for instance, the trust of
+end-users in software engineers to build solutions for their (business) problems,
+and the trust of software engineers in software package management systems to
+correctly transfer their software to end-users. The concept of software ecosystem
+trust is relevant, because without software ecosystem trust, it becomes impossible
+for the SECO to ﬂuently deliver value to its stakeholders. Software trust is diﬀerent
+from software ecosystem trust. The deﬁnition of software trust is based on the
+complex relationships between software end-users and producers in the software
+ecosystem. To deﬁne software trust in this context, we refer to the deﬁnitions and
+attributions of trust, and deﬁne software trust as follows:
+Software trust refers to the willingness of software ecosystem actors to accept
+risks based on subjective beliefs. It is essentially an upstream trust in that
+actors expect assurance that other actors on top of a common technology
+platform can exhibit reliable behavior and provide them valuable software
+products. Software products are expected to be able to carry out their
+intended functions in the presence of uncertainty, and run consistently and
+reliably without interruption.
+4.2 Trust Factors of Software Products
+This subsection argues RQ2.1 - What trust factors do end-user organizations
+consider when selecting software products and versions? As discussed in Section 3.6,
+based on CUT, we classify the trust factors as intrinsic trust factors and extrinsic
+trust factors. Intrinsic trust factors refer to the features, code, and architecture of the
+software product, such as software quality, code quality, and known vulnerabilities.
+And extrinsic trust factors refer to attributes bestowed on the software product
+by the outside world, such as popularity or reputation, as well as software-based
+
+--- PDF PAGE 22 ---
+22 Fang Hou, Slinger Jansen
+services and auxiliary materials that need to be delivered to the end-users. We
+highlight the major factors as boldface, as we do in the subsequent sections.
+4.2.1 Intrinsic Trust Factor
+Intrinsic trust factors represent internal physical attributes, rather than being
+determined by the environment. The following factors are most frequently discussed
+in the literature:
+Security, Vulnerability, and Attack Proneness - Security is one of the main
+challenges in software. With the continuous emergence of new types of cyber-attacks,
+software attacks show a gradual trend of a large-scale, multi-vector, designed to
+infect multiple components of the SECO. According to Sonatype, in 2021 the world
+witnessed a 650% increase in software supply chain attacks, aimed at exploiting
+weaknesses in upstream open source ecosystems (Sonatype, 2021).
+Typically, software engineers are not qualiﬁed to spot vulnerabilities in code,
+community knowledge, such as publicly accessible vulnerability databases, can
+help (Viertel et al., 2019). Literature shows that there are three sources of vul-
+nerability data; the ﬁrst is public databases, such as CVE, NVD, or snyk.io; the
+second is software producers’ databases, such as Microsoft security bulletins; the
+third is specialized databases (Massacci and Nguyen, 2010). Yet, the quality of the
+data in the vulnerability database, in particular the timeliness, consistency, and
+integrity, is an issue that requires immediate attention (Anwar et al., 2021).
+Vulnerabilities are not addressed in a timely manner. The results of a study of
+Node Package Manager (npm) showed that most of the reported vulnerabilities
+were moderately or highly critical, and while the time required to ﬁx them varied
+by severity, ﬁxing them all took a long time. The probability of a vulnerability
+being ﬁxed within one month of discovery is 50%, while the probability of a ﬁx after
+only 6 months is 74%. Furthermore, more than half of all dependency packages are
+aﬀected by vulnerabilities in upstream packages. One interesting aspect is that most
+of the aﬀected dependency packages are not automatically ﬁxed with the ﬁx of an
+upstream package. The reasons typically are the lack of proper maintenance of the
+package or strict dependencies (Decan, Mens and Constantinou, 2018). However,
+not all vulnerable packages or libraries will propagate vulnerabilities since not
+all code in the package or library will actually be used (Hejderup, Deursen and
+Gousios, 2018). In addition, a number of organizations defense approaches are more
+oriented towards preventing access to sensitive data or ﬁnding bugs in software
+and software packages than malicious packages (Duan et al., 2021).
+Unfortunately, there is still no uniform standard to measure software security (H.
+Wang et al., 2015). This may be because software security is inﬂuenced by too many
+factors, such as environmental factors, complex software supply chains, project
+management, or the adoption of programming languages. For the software itself,
+the complexity of the requirements, the complexity of the code, the technology
+used, and even the skills of the engineers all have an impact on software security,
+with the problem being that these factors are hard to quantify. Meanwhile, it is
+unrealistic to request software testers to cover all security requirements perfectly.
+In addition, diﬀerent stakeholders have diﬀerent perceptions of software security.
+Although organizations and governments tend to place a high priority on software
+security (H. Wang et al., 2015), typically, software engineers do not it put in the
+ﬁrst place (Vargas et al., 2020). In particular, software security requires signiﬁcant
+
+--- PDF PAGE 23 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 23
+resources to develop, evaluate, and defend, small and medium-sized companies may
+not be able to aﬀord this investment.
+Quality and Development Process - Factors regarding quality revolve around
+the quality characteristics of the software itself and about the activities of the
+software during its life cycle. Base on ISO/IEC 9126:2001, software quality has
+been deﬁned as “the totality of characteristics of a software product that satisfy
+stated or implied needs” (Coallier, 2001), which means the software product and
+process should satisfy (1) speciﬁc functional requirements and; (2) end-user needs
+or expectations (Miguel, Mauricio and Rodrı´ eguez, 2014).
+There are various well-known software quality models. McCall’s Quality Model
+proposes 11 factors that describe the external view of the software (user view) and
+23 factors that describe the internal view of the software (developer view) (Al-
+Badareen et al., 2011). Similarly, Boehm’s Quality Model uses a hierarchical
+quality model structure but focuses on a wider range of characteristics, i.e., as-is
+utility, maintainability, and portability (Berander et al., 2005). FURPS & FURPS+
+are developed by Hewlett-Packard, identifying software quality factors through
+functional requirements and non-functional requirements (Khosravi and Gu´ eh´ eneuc,
+2004). Dromey’s Quality Model recognizes that quality is assessed diﬀerently for each
+product and therefore requires a combination of product characteristics and quality
+attributes to determine how each attribute aﬀects quality attributes and identify
+software shortcomings (Berander et al., 2005). ISO/IEC 9126:2001 incorporates
+these models, it has four parts (quality model, external and internal metrics, and
+quality metrics) covering six signiﬁcant areas of software evaluation: functionality,
+reliability, eﬃciency, maintainability, portability, and usability (Berander et al.,
+2005). However, there are no indications on how to quantify these factors and
+subfactors, and this model may reﬂect the perception of software engineers instead
+of end-users (Challa et al., 2011; Cˆ ot´ e et al., 2005). It has been replaced by ISO/IEC
+25010, which focuses on the characteristics of software internal quality, software
+external quality, and software usage quality. The most important point is that
+ISO/IEC 25010 proposes trust as “the degree to which a user or other stakeholder
+has conﬁdence that a product or system will behave as intended” in quality of
+use. Several studies have extended based on these well-known models, such as the
+Fuzzy Software Quality Quantiﬁcation Tool (FSQQT), it takes as input several
+real-time values of metrics and uses as output quantiﬁed software quality based
+on end-user, and engineers’ perspectives. This study shows that end-users care
+more about reliability and usability, while engineers focus more on functionality,
+eﬃciency, portability, and maintainability (Challa et al., 2011). This is probably
+because end-users do not know the software’s code, architecture, or eﬃciency, so
+they are more interested in the maturity of the software, fault tolerance, and ease
+of operation and learning.
+Table 5 shows the number of primary factors and subfactors stated in the models
+of McCall’s Model, Boehm’s Quality Model, Dromey’s Quality Model, ISO/IEC
+9126:2001, ISO/IEC 25010, FURPS & FURPS+, and FSQQT Model. We found
+that reliability is the most critical primary factor in quality models, the following
+are eﬃciency, portability, and usability, accuracy, testability, and adaptability are
+the most stated subfactors.
+Software quality is not accidental; it is achieved through management and must
+be assured throughout the entire product life cycle. Reliability is an attribute of
+quality, the quality attributes applied at each stage of the SDLC determine the
+
+--- PDF PAGE 24 ---
+24 Fang Hou, Slinger Jansen
+Table 5 The table shows the primary factors and counts base on McCall’s Model, Boehm’s
+Quality Model, Dromey’s Quality Model, ISO/IEC 9126:2001, ISO/IEC 25010, FURPS &
+FURPS+, and FSQQT Model.
+Primary Factor Total
+Reliability 6
+Eﬃciency 5
+Portability 5
+Usability 5
+Functionality 4
+Maintainability 4
+Correctness 2
+Testability 2
+Subfactor Total
+Accuracy 5
+Testability 4
+Adaptability 4
+Interoperability 3
+Security 3
+Maturity 3
+Fault tolerance 3
+Operability 3
+Installability 3
+Replaceability 3
+Reusability 3
+Consistency 3
+Completeness 2
+software reliability, the focus is on error prevention, especially the early stages of
+the lifecycle (Rosenberg, Hammer and Shaw, 1998). The advantage of the OSS
+project is that the project data is public, so there are “many eyeballs” to help
+ﬁnd and ﬁx defects (Mohagheghi and Conradi, 2007), thus ensuring more credible
+software quality.
+It is suggested by models or standards that evidence of software quality or
+software trust should cover the information obtained at each stage of the develop-
+ment process. For instance, IEEE Std 982.2-1988 indicates the relationship between
+software reliability and each life cycle phase, including concept, requirement, design,
+implementation, test, installation and checkout, operation and maintenance, and
+retirement. In spite of the fact that this standard was published in 1988, it does,
+to some extent, reﬂect the information at each stage of the software development
+life cycle that inﬂuences the measurement of quality. Additionally, a number of
+Capability Maturity Models (CMM) address quality issues from ﬁve maturity levels
+of software development processes, i.e., initial level, repeatable level, deﬁned level,
+managed level, and optimizing level (Ellison, Nichols and Woody, 2016; Berander
+et al., 2005). Repeatable level focuses on project management, the deﬁned level
+focuses on engineering process, managed level focuses on product and process
+quality, and the optimizing level focuses on continuous improvement. He et al.
+(2009) argue that trusted components is aﬀected by the development process,
+therefore, the trustworthy proof should be collected through three phases, i.e.,
+development phase, submission phase, application phase. Submissions and applica-
+tions are primarily concerned with the quality factors in the quality models, for
+instance, submission phase includes the proof of functionality, reliability, and usab-
+ility, application phase emphasizes the proof of eﬀectivity, security, and eﬃciency.
+Similiarly, H. Wang (2011) states that trustworthiness evidence includes three as-
+pects, development-stage evidences, delivery-stage evidences, and application-stage
+evidences.
+Additionally, with the introduction of third-party components, their features
+cannot be assessed using traditional quality attributes. Additional concepts of
+software quality arise, such as conﬁgurability, customizability, reusability, scalability,
+
+--- PDF PAGE 25 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 25
+availability, trackability, and compatibility to the quality requirements for software
+products produced by traditional software development processes (Miguel, Mauricio
+and Rodrı´ eguez, 2014; Chau, 1994; Challa et al., 2011). These concepts emphasize
+the need for third-party components to be ﬂexible in design and application,
+easy to reuse, change, and extend. The object is not only making the third-party
+components reusable, but also making them adapt components to end-users’ systems
+and requirements (B. Wang et al., 2019).
+Source Code Quality and Architecture - Several researchers calculate soft-
+ware quality as the ratio of the total number of defects identiﬁed in a certain period
+of time to the total number of code lines (Liu and Iyer, 2007). Thus, it is not hard to
+ﬁnd that software quality, especially for open-source software, depends on the qual-
+ity source code (Ghebremedhin, 2012) and its attributes, for instance, availability,
+understandability, completeness, conciseness, portability, consistency, maintain-
+ability, testability, usability, reliability, structuredness, and eﬃciency (Crowston,
+Annabi and Howison, 2003; Jadhav and Sonar, 2009; Wheeler, 2011). The most
+frequently stated impact aspect concerning source code in the literature is availab-
+ility. Reasons abound for this, one of which may be that end-users or downstream
+engineers need to inspect or analyze source code in order to determine code quality
+as well as software quality.
+Programming languages may not directly aﬀect software trust. Still, the experts
+believed that 68% percent of the programming language features, for instance,
+application domain, platforms, maturity level, and comprehensiveness, have impacts
+on the aspects of usability, cost, stability, ownership, guarantee, reputation, support,
+and maintainability (Farshidi, S. Jansen and Deldar, 2021). Projects written in
+more popular programming languages, are more successful in market penetration
+and attracting human resources (Ghapanchi and Tavana, 2015), which indirectly
+gives end-users greater conﬁdence to choose their software. In addition, several
+aspects need to be considered: (1) the project itself, for instance, as a back-end
+server, it is not possible to consider a low performance interpreted language like
+Python; (2) support of programming languages; whether in-house developers are
+proﬁcient in the language; (3) whether subsequent software packages need to be
+purchased or used, and the interfaces.
+We try to collect a set of indicators for source code analysis, result can be found
+in this link, which are also the most commonly used ﬁelds in various source code
+analysis tools. Examples include STRAM (Security, Trust, Resilience, and Agility
+Metrics), a system-level trustworthiness metric framework (Cho, S. Xu et al., 2019),
+and a framework proposed by Jadhav and Sonar for the evaluation and selection
+of software packages (Jadhav and Sonar, 2011), and an updating model based on
+Meyer’s ABCDE(Acceptance, Behavior, Constraints, Design, Extension) model of
+software component trustworthiness per users feedback (B. Wang et al., 2019). In
+forming this set of indicators, we considered, as much as possible, both the goal of
+the analysis (i.e., to be able to describe the quality aspects of the software process
+and the resulting product) and the availability of metrics in the data (Koch and
+Neumann, 2008), assessing process and product evidence (Donohue, Dugan and
+Brown, 2005), and product metrics (Gopalakrishna, Spaﬀord and Vitek, 2005).
+The architecture comprises “a collection of software and system components,
+connections, and constraints; a collection of system stakeholders’ need statements;
+and a rationale that demonstrates that the components, connections, and constraints
+deﬁne a system that, if implemented, would satisfy the collection of system stake-
+
+--- PDF PAGE 26 ---
+26 Fang Hou, Slinger Jansen
+holders’ need statements” (Gacek et al., 1995). It holds a great deal of importance
+to ensure software quality. It is reported that “engineers will dismiss an unfamil-
+iar framework and library if they cannot make it work within an hour” (Haenni
+et al., 2014; Haenni et al., 2013). Sometimes, end-users just select a package or
+a library to implement a single function instead of a large system or application,
+for instance, for brownﬁeld development, the existing software architecture of the
+project imposes constraints on the selection of the subsequent software package
+or library, the selected package or library must ﬁt into the existing technology
+stack of the project (Vargas et al., 2020). In addition, as software packages are
+hosted oﬀ-premises, they are diﬃcult to integrate with other systems or software
+packages. End-users and software producers should pay additional attention to
+the architecture’s integration, scalability, and reliability. Software should have the
+ability to remain available to users within a given time window and maintain a
+reasonable response time for users even during peak periods (Godse and Mulik,
+2009).
+Versions and Dependencies - The distribution, installation, and updating of
+software packages or components also have an impact on the integrity and reliability
+of the software. Distribution requires that the package or component is in the
+format provided by the software producer, does not contain any malformations
+or corruptions, and that the installation and updates must also be in compliance
+with the requirements set forth by the software producer (Catuogno, Galdi and
+Persiano, 2017). However, dependencies complicate the software components distri-
+bution. Dependencies connect various system components, thus forming a highly
+interconnected ecosystem (Hejderup, Deursen and Gousios, 2018). However, the
+version of the package it depends on is speciﬁc, hence, a critical activity that must
+be carried out at each stage of the SDLC is ensuring the integrity and coherence
+of dependencies with deployment tasks, as a failure in this process can result in
+disastrous consequences (Catuogno, Galdi and Persiano, 2017).
+Considerable security vulnerabilities are caused by aging libraries (Kula, De
+Roover et al., 2017), however, it does not mean a new version does not guarantee
+bug-free software. In addition, the most recent release may break dependencies
+and result in incompatibility (Decan, Mens, Claes et al., 2016). Thus, considerable
+organizations choose the stable version over the latest version, they prohibit
+updates in case of dependency updates (Pashchenko, Vu and Massacci, 2020). The
+dependency hell occurs when several packages have dependencies on the same
+package or library, relying on diﬀerent incompatible versions. Dependency hell can
+cause a lot of trouble for installation and subsequent maintenance, and can create
+security risks (Abate et al., 2011). Still, numerous software engineers are unwilling
+to update to newer versions, they downgrade package versions to avoid dependencies
+and conﬂicts introduced by the latest versions (Chinthanet et al., 2021), even at
+the expense of some software security, because they are overwhelmed by the burden
+of maintaining dependencies (Gkortzis, Feitosa and Spinellis, 2021). Therefore,
+the requirements for a package or component are: (1) it has to be authentic; (2)
+unmodiﬁed; (3) fresh; (4) all required dependencies are properly satisﬁed and
+ensure dependency, integrity, and consistency; (5) unauthorized installation is
+prohibited (Catuogno, Galdi and Persiano, 2017).
+
+--- PDF PAGE 27 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 27
+4.2.2 Extrinsic Trust Factors
+Extrinsic trust factors refer to the external environment characteristics that inﬂu-
+ence software selection. Although the majority of articles discuss intrinsic trust
+factors, numerous studies have concluded that end-users prioritize extrinsic trust
+factors during the software selection process. In comparison to intrinsic trust factors,
+which lack quantitative indicators or detailed data, extrinsic trust factors have a
+plethora of data sources on openly accessible portals.
+Structural Assurance - In Section 4.1 we underlined that structural assurance is
+believed to increase software trust. It includes licenses (e.g., GNU General Public
+License 2.0, and Apache License 2.0), contracts, regulations, or other safeguards
+(e.g., package promises and legal considerations) (Guo et al., 2014). End-users
+may perceive that they are using software in a secure, protected environment as a
+result of compliance, policies or laws. Contracts deﬁne the rights and obligations of
+the software product, including what each stakeholder expects to accomplish, the
+feasibility of the goals and respective roles, the actions that must be taken, as well
+as the responsibilities of the software producer and the solutions to anticipated
+risks or problems. License is the most important type of structural assurance,
+it is based on copyright law and confers certain exclusive rights on the software
+producer of a work, including the right to use, reproduce, modify, merge, publish,
+distribute, sub-licenses, and sell copies (Alspaugh, Asuncion and Scacchi, 2009).
+This means that the license restricts the end-user’s ability to use the software.
+For instance, the General Public License (GPL) speciﬁes what end users may do
+with the software, such as modify the program and distribute the modiﬁed version,
+which protects not only the copyright of software producers but also the interests
+of both software producers and end-users, thereby reducing the perceived risk
+between end-users. Hence, it is reported that end-users are more likely to trust
+a licensed product (Osterloh and Rota, 2005; Chinthanet et al., 2021). Besides,
+diﬀerent versions of the same software may have diﬀerent license, which end-users
+should be aware of during the software selection.
+Documentation - Documentation provides the ﬁrst impression to end-users of a
+product’s quality (Vargas et al., 2020). It includes the oﬃcial project documentation,
+e.g., requirement descriptions, code comments, or testing results (Jackson et al.,
+2007), and broader forms of documentation, e.g., documentation translation, user
+comments, or discussion in the forums (Ayala et al., 2011; Chau, 1994). A survey of
+npm developers initiated by Chinthanet et al. (2021) revealed that 73% of developers
+believe that the documentation is highly relevant to package quality assessment,
+with the existence of a run example, and the existence of the README.md
+ﬁle in the root directory of the package considering the top two documentation
+features. Similarly, as part of our previous study, we interviewed 12 participants,
+including software engineers, DevOps, architects, and other experts, and ten of them
+considered documentation crucial to package selection. Typically, they examine
+data structures, the functionality of features, and the package’s compatibility with
+the project via documentation, one of them conﬁrmed that packages requiring 2
+days of reverse engineering due to unclear documentation would be eliminated (F.
+Jansen, S. Jansen and Hou, 2021).
+However, there is a problem with both oﬃcial documentation and broader
+forms of documentation. In terms of oﬃcial documentation, not all types of doc-
+umentation are available to the public due to software producers do not share
+
+--- PDF PAGE 28 ---
+28 Fang Hou, Slinger Jansen
+project data and source code for free commercial software. In terms of broader
+forms of documentation, although the documentation for open-source software
+or packages is free and open, much of the technical information and discussion
+occurs on mailing lists or forums, making it diﬃcult to collect and maintain valid
+information, let alone version control of the documentation.
+Popularity - Popularity is deﬁned as the perceived frequency of use of a tool
+among members of the community (Xie, Jauhari and Mora, 2021). It represents a
+software product’s popularity and is the most straightforward way to determine
+how widely used and popular the product is in the public. Popularity can be
+measured as the number of likes or downloads of the software product, and the
+number of subscribers or views of the information page. Additionally, the number of
+dependencies reﬂects the popularity of the software, as a component or library, with
+more dependencies means more people are using it and it is more stable (Vargas
+et al., 2020).
+Reputation - Reputation is an estimation of the nature and values of a person, a
+group, an organization, an object, an event, or an activity that is widely shared
+in a group (Watson, 2005). It is a judgment about the quality of a product and
+future behavior (Farooq et al., 2016). Reputation can be at the software level
+or human level. Human-level reputation is discussed in Section 4.4, The focus
+here is on the reputation of software. The most direct reputation indicator is
+the average software product ratings (Alarcon et al., 2020). The reputation of a
+software product may include the number of releases or versions, product history,
+and open/closed issues(Alarcon et al., 2020), programming language used, clarity
+of comments, number of bugs reported, tests performed, number of versions,
+and eﬃcacy (Grachkov and Malyuk, 2020) from users who used the software or
+stakeholders who participated in the development or testing. Reputation has a
+positive impact on software trust. A good reputation represents a good rating
+by a certain size of users over a given period of time, and it represents a lower
+risk of choosing the software. Therefore, in similar software quality, the end-user
+will choose the software with a higher reputation. However, almost all reputation
+information is based on a web source, and one of the signiﬁcant issues with single-
+source reputation is the vulnerability to falsiﬁed information (Farooq et al., 2016),
+which means that software producers are likely to falsify information or provide only
+one-sided information to achieve a higher reputation. Besides, numerous proprietary
+product licenses contain clauses prohibiting public criticism of the product without
+the software producers’ prior permission (Wheeler, 2011). As a result, it becomes
+more diﬃcult for end-users to obtain real feedback from other users, making it
+diﬃcult to be able to assess the trustworthiness of proprietary products diﬃcult.
+Cost Factors - Although it is widely accepted that cost is associated with software
+selection because solution selection frequently involves a trade-oﬀ between quality
+and cost (Limam and Boutaba, 2010), they do not believe that cost is associated
+with software trust. This is most evident in the growing awareness of software,
+particularly open-source software, across a range of industries. However, for several
+specialized industries, such as banking, they resisted adopting free/open source
+software despite the high cost of customizing and maintaining the software. This is
+because they are concerned about the lack of support in the event of a failure or
+additional damage to their core systems due to a security breach. Even if they adopt
+free/open source software, it is more likely that they will use it for visualization
+than for core banking modules.
+
+--- PDF PAGE 29 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 29
+Many IT companies and open-source platforms currently use Return on invest-
+ment (ROI) to evaluate related cost factors, divided into cost of investment, cost
+of reuse assets, and rework savings. The cost of the investment includes defense
+cost, which refers to the cost of deploying various alternative solutions; decision
+cost, which refers to the administrative delays, complexity, and eﬀort incurred in
+the decision process; recovery cost, which refers to the costs associated with the
+recovery process to back to a normal operating system state; and defense costs
+which refers to the cost of defending the system against attackers (Cho, S. Xu et al.,
+2019). Defense cost is the critical one, it includes, for instance, license cost, training
+cost, installation and implementation cost, maintenance cost, mitigation cost, and
+upgrading cost (Jadhav and Sonar, 2009; Jadhav and Sonar, 2011). Cost of reuse
+assets and rework savings easily reﬂect whether the software is trustworthy or not,
+they measure the cost savings when adopting a trusted library or package, as well
+as the rework cost savings due to reduced system errors (Mohagheghi and Conradi,
+2007). Usually, the two factors are as diﬃcult to gather before the end-users select
+a software or component. The possibility is that they are predicted or calculated
+after the software has been in use for a time.
+In addition to the ﬁnancial cost, the time cost and potential cost risks that can
+impact the cost also need to be considered (Vargas et al., 2020). For instance, the
+software will decommission in one year or if the supporting team will be available
+in a long time.
+4.3 Trust Factors of Software Package Managers
+This subsection focuses on addressing RQ2.2: What trust factors do end-user
+organizations consider when selecting software package managers?
+A package manager is a software tool used to search, install, track, upgrade, and
+delete packages on the operating system. It automatically connects to a repository
+and downloads the requested and additional packages needed to build the client
+application (Cappos et al., 2008a). During the study, we found the current research
+on software packages is inadequate. Of the 112 articles, only four are about package
+managers, explicitly refer to Table 3 for details. These articles on the impact of
+software trust focus on three aspects: (1) dependency hell; (2) Security vulnerability;
+(3) Vulnerability Detection in the package manager. All three aspects are related to
+the design of the package manager and the vulnerabilities of the package manager,
+they are all intrinsic trust factors.
+Dependency Hell - As previously stated, installations are currently experiencing
+dependency hell, end-users become trapped in a dead-end loop that state-of-the-art
+package managers are unable to resolve (Abate et al., 2011). Several researchers
+argue that a trusted package manager should avoid the dependency hell by selecting
+the right package sources and versions, especially guaranteeing conﬁdentiality,
+integrity, freshness, and authenticity of the package and dependency (Catuogno,
+Galdi and Persiano, 2017). Currently, attempts have been made, for instance, Nix, a
+Linux distribution, installs software packages in a purely functional way to avoid the
+dependency hell associated with the traditional upgrading of /usr/bin/perl(Dolstra,
+L¨ oh and Pierron, 2010).
+Security Vulnerability - Security vulnerability includes two aspects, bugs and
+attacks on the metadata and on the repository. In terms of metadata, as explained
+
+--- PDF PAGE 30 ---
+30 Fang Hou, Slinger Jansen
+Figure 7 This sunburst chart shows the major impact factors for RQ2 in hierarchies. Product
+segments are intrinsic trust factors, Software Product, Human, Structural Assurance, and
+Cost are extrinsic trust factors. The size of each segment in this sunburst chart indicates the
+frequency with which this factor appears in the 112 articles selected.
+Section 2, metadata includes the version of a package and a set of dependencies.
+An attack on metadata may result in an attacker changing the package’s metadata
+to indicate that it depends on a package containing malicious code formulated
+by the attacker, or the attacker, introducing unsolvable dependencies or a large
+number of virtual dependencies that make the installation impossible (Ayala et al.,
+2011). In terms of the repository, if an online repository contains malicious code
+when downloading and upgrading packages, it will be imported into the end-user’s
+computer through transitive dependencies (Hejderup, Deursen and Gousios, 2018).
+For example, GitHub, an online service based on the code version control system,
+experienced a malware attack in 2020. The malware identiﬁes the NetBeans project
+ﬁle, copies the malicious payload to the project ﬁle, executes the code once the
+NetBeans project is built (Gonzalez et al., 2021). Once the GitHub repository is
+successfully compromised, the cybercriminals behind the malware have full control
+over the target open-source project, ensuring that any new build project cannot
+replace the infected project, and malicious build artifacts remain the same.
+Vulnerability Detection - The major problem of the package manager design
+is the lack of vulnerability detection and protection mechanisms. Vulnerability
+detection tools are generally based on known vulnerability disclosure scanning
+software components to ﬁnd vulnerabilities (Kaminsky et al., 2002). However, those
+
+--- PDF PAGE 31 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 31
+tools do not work eﬃciently, detecting a limited number of possible errors based
+on predeﬁned rules (Russell et al., 2018). In addition, they also lack oversight of
+the packages, as well as a mechanism to undo malicious packages after they were
+installed. For example, when an attacker wants to prevent the package manager,
+APT or YUM, updating a package from another repository, he refuses to send
+data or sends data at a very slow rate to the client’s open connection, but the
+package manager lacks monitoring and screening of such situations, does not have
+any output to indicate problems or forcibly closes the connection (Ayala et al.,
+2011).
+4.4 Trust Factors of Software Producing Organizations
+This subsection focuses on addressing RQ2.3. What trust factors do end-user
+organizations consider when selecting software producing organizations?
+If a product is managed by an organization, it will be more popular (Jarczyk et
+al., 2014, as it gives the end-users the conﬁdence that this product will be produced
+and maintained by professional staﬀ. However, it is often diﬃcult to determine if
+an organization is a good self-promoter or a truly reputable organization. Next,
+we discuss the role that software producing organizations (SPOs) play in software
+trust assessment.
+Reputation - Reputation means a publicly recognized judgment about the char-
+acter or status of a person or thing (Immonen and Palviainen, 2007). It is an asset
+for software producing organizations and gives the organization a competitive edge
+over others (Pollock and Williams, 2007; Hoxmeier, 2000). Studies have shown that
+software quality has a positive relationship with an SPO’s reputation (Cai and
+Zhu, 2016), while an organization’s reputation depends not only on the quality
+of the products it produces, but also on other aspects (Vargas et al., 2020), for
+instance, the services they provide (Jadhav and Sonar, 2011), end-user’s feedback,
+and their rating values (Grachkov and Malyuk, 2020), positive and timely response,
+compliance with contracts, and length of experience (Chau, 1994; Vargas et al.,
+2020; Jadhav and Sonar, 2009; Challa et al., 2011; Capra et al., 2011). Length of
+experience, from the point of view of the SPO, means that the company or organ-
+ization has experience in product manufacturing, project management, business
+operations, industry, and experienced in-house experts and engineers (Chau, 1994).
+This extensive experience results in the company or organization developing higher
+quality and trustworthy software, especially when risks and uncertainties come.
+They can deal with problems or avoid them more eﬀectively, increasing end-user
+conﬁdence in their products and services.
+SPO’s Capability - SPO’s capability is the degree of proﬁciency in adapting
+skills to a wide range of activities (Goles, Hawk and Kaiser, 2008). It arises from
+diﬀerent factors, including technology skills, ﬁrm’s strategy, maturity, and scale.
+Technology is undoubtedly the capital of enterprises to achieve success and is the
+core competence.
+Technology skills emphasize technical knowledge in software project manage-
+ment, including programming and system development knowledge, R&D capability,
+training, and support. Trustworthy software cannot be developed without pro-
+gramming and system development knowledge, which is the physical guarantee
+of software production (I. K. Lai, Tong and D. C. Lai, 2011; Cho, S. Xu et al.,
+
+--- PDF PAGE 32 ---
+32 Fang Hou, Slinger Jansen
+2019; Sarrab and Rehman, 2014). This means that the organization must have
+qualiﬁed employees who are proﬁcient in programming, system analysis and design,
+project management, and other soft skills in order to deliver software on time, on
+quality, and on schedule, and to eﬀectively control and resolve all risks and issues
+in the SDLC (Amoroso et al., 1991). It is however not directly measurable, we
+need to examine the software products they produce and the services they provide
+instead. R&D capability shows whether the company can develop and maintain
+current projects and has the potential and innovation to develop new products. It
+keeps the organization ahead of the competition by continuously innovating and
+introducing new products and services or improving its existing oﬀerings. End-users
+prioritize getting training and guidance in the assistance process (Vargas et al.,
+2020; Jadhav and Sonar, 2011; Del Bianco et al., 2011; Sarrab and Rehman, 2014),
+which include: (1) training and documentation, for example, user manual, tutorials,
+troubleshooting guide, and training; (2) maintenance and up-gradation, such as
+technical support and consultancy, communication with end-users, on-site demo
+and free-trial version, rapid responsiveness, business skills (Jadhav and Sonar, 2009;
+Jadhav and Sonar, 2011), management, and operation (Hunter and Walli, 2013);
+(3) social network-continued activity; (4) knowledge-sharing user-base (J. Wang
+et al., 2015), e.g., Discussion forums, signs of a functional community (Fogel, 2009).
+Especially for OSS, a guaranteed, long-term technical support is an important
+indicator for selecting an OSS software (Alarcon et al., 2020).
+Current software products rely to some extent on third-party components, or
+many large IT companies outsource all or part of their projects to third-party
+companies, hence, SPO’s technology skills should consider the skills to manage
+suppliers. For instance, how to select third-part components, how to manage third-
+part producers, or how to maintain the sourcing strategy. A ﬁrm’s strategy includes
+the management and strategy of the company, the organizations’ culture, and
+the type of industry. Most organizations and end-users consider inﬂuencing the
+selection process, but they are not the major factors (Vargas et al., 2020).
+Organizational maturity shows that SPOs have the capability to manage
+the product well, which is essential to ensure product quality. It is abstract,
+including, for instance, content management systems, partnership models, rules,
+and regulations (S. Jansen, 2014). Although there is no consensus on how to
+measure it, from the perspective of software end-users, formal procedures and
+standard security policies will help them evaluate and select software products that
+are suited for them (Vargas et al., 2020).
+The scale of the organization is presented by, such as how many people write
+the code, report problems, and repair defects (Mockus, Fielding and Herbsleb,
+2002), number of members contributing (Bogart et al., 2016), and average quality
+of members (Challa et al., 2011). The number of engineers working on a project is
+the most frequently cited factor (Crowston, Annabi and Howison, 2003; S. Jansen,
+2014; Sen, Singh and Borle, 2012; McClean, Greer and Jurek-Loughry, 2020; Midha
+and Palvia, 2012; Koch and Neumann, 2008; Walt Scacchi, 2007). These studies
+show that engineers positively impact the success of a project, especially for open
+source projects. In particular, by modeling both the number of engineers and
+subscribers, the results suggest that more engineers in a project may increase the
+project activity and thus increase the number of subscribers. Similarly, an increase
+in subscribers may aﬀect the number of engineers by attracting new engineers and
+contributing new engineers from the subscriber base (Sen, Singh and Borle, 2012).
+
+--- PDF PAGE 33 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 33
+Hence, along with the program activity, the number of subscribers, the engineer
+base is considered by sources of trust information as an indicator of the success
+of the OSS project (Subramaniam, Sen and Nelson, 2009), as it is obvious that
+they will increase the popularity of the project. Most studies do not explicitly
+categorize the engineering base as an attribute of software trust. However, it is
+often mentioned in studies measuring project success and studies of software trust
+regarding organizations and communities.
+4.5 Trust Factors of Engineers
+This subsection answers RQ2.4. What trust factors do end-user organizations
+consider when selecting software engineers?.
+17 selected studies discuss how engineers inﬂuence software trust. The identiﬁed
+impact factors are extrinsic trust factors, which are focusing on the following points.
+Engineer Abilities and Skills - Engineer abilities and skills are also related to
+software trust. Engineering abilities and skills refer to the knowledge and abilities
+that an individual engineer or a group of engineers should possess throughout the
+product’s lifecycle, they stem from a good working knowledge and experience of
+diﬀerent types of operating systems and the ability to learn from others (Sarrab
+and Rehman, 2014) These skills and abilities are used to develop and integrate
+new and stable modules that meet end-user requirements, which includes, for
+instance, deploying and maintaining software, monitoring news posts and messages
+in user forums and mailing lists on a regular basis and promptly responding to
+bug reports (Norris, 2004). Several researchers believe that they have a signiﬁcant
+impact on the quality of the product they create (Mcknight et al., 2011; Norris,
+2004; Sarrab and Rehman, 2014; Donohue and Dugan, 2003). Engineer respons-
+iveness, in particular, is viewed as critical regardless of whether end-users trust
+the software or its output (Gefen and Keil, 1996). If software engineers are unable
+to respond promptly to end-users, they will be viewed negatively by end-users
+and their products, resulting in distrust. Despite the fact that the response time
+is contingent on the availability of engineers in the project and the priority of
+end-user problems (Mockus, Fielding and Herbsleb, 2002). In most cases, end-users
+are unconcerned with the severity of defects, what matters is that they can be
+resolved in a short time. In this context, their soft skills are particularly important.
+Numerous researchers disagree on the importance of end-users knowing who
+developed the software. According to a set of interviews with 75 engineers that had
+been conducted in (Haenni et al., 2013; Haenni et al., 2014), when the end-users
+select a component or library, they are not concerned with the engineer’s identity but
+with the code’s quality and level of maintenance, e.g., the engineer’s responsibilities
+and their response time. The opposite opinion is that the names and numbers
+of people working on code development and testing must be public, as reputable
+engineers contribute to the code being more reliable and less defective (Madanmohan
+and De, 2004). Both views imply that how engineers maintain the project is crucial
+for software selection.
+Engineers’ Satisfaction and Happiness - Besides that, several researchers
+believe that engineers’ satisfaction and happiness with working signiﬁcantly af-
+fect the product quality of their products and the trust that end-users place in
+
+--- PDF PAGE 34 ---
+34 Fang Hou, Slinger Jansen
+them (Crowston, Annabi and Howison, 2003; Walt Scacchi, 2007). Engineer satis-
+faction and happiness have a positive eﬀect on software quality (Crowston, Annabi
+and Howison, 2003). The most obvious beneﬁt is increased productivity, they will
+stay on tasks longer and concentrate more intently, resulting in signiﬁcantly more
+eﬃcient coding and problem-solving (Graziotin et al., 2018). As a result, both the
+software’s quality and the project’s success will be signiﬁcantly enhanced. Engineer
+satisfaction and happiness are highly subjective factors because each individual’s
+satisfaction and happiness are unique, they cannot be collected and analyzed via
+speciﬁc documents or ﬁelds, as test results are. The feasible method is to conduct
+sentiment analysis on engineers’ feelings, for example, through their comments on
+project portals or websites, to ascertain their level of satisfaction or happiness.
+5 Discussion
+5.1 Impact on the Software Selection
+The factors discussed in this study may have a positive or negative eﬀect on the
+software selection outcome. No factor, on the other hand, can have an absolute
+positive or negative eﬀect. For instance, vulnerabilities and attacks appear to be
+detrimental to software trust, as their presence has a signiﬁcant impact on the
+quality and credibility of software (Cho, S. Xu et al., 2019) and the reputations of
+software producers (Vargas et al., 2020). With the advancement of attack techniques
+and the expansion of scale and scope, no software can now claim to be secure
+enough on its own. However, if the software can employ an eﬀective defense to
+ensure a lower number of attacks over time, and if it is capable of employing
+more rapid means of resolving the situation following an attack, we can assert
+that although vulnerabilities and attacks undermine the software, their eﬀect on
+selection and trust is actually positive (Gefen and Keil, 1996). Similarly, factors,
+such as the software’s quality, reputation, or the skills of the software producer
+can have a positive or negative eﬀect, i.e., if the software is of high quality, has
+a positive reputation, and is provided by a competent provider, they will have a
+beneﬁcial eﬀect on the software, and vice versa.
+The negative or positive impact is determined by how the end-user perceives
+those factors for a variety of reasons. For instance, several end-users choose low-
+cost software, whereas several industries, such as banking, in order to get enough
+resources to develop and maintain the software, choose those with high costs.
+There is one situation in which the impact is neither positive nor negative: end-
+user propensity, as it aﬀects the end-user to conduct the trust process professionally
+and rationally. The resulting eﬀect on decision-making should be beneﬁcial. However,
+if the technology of the software evaluation exceeds, such as end-user experience,
+it may have no eﬀect on decision-making (Moyano, Fernandez-Gago and Lopez,
+2016).
+5.2 Validity Consideration
+We considered validity from the following points. First, our selection of articles
+was inevitably subjective due to bias and understanding of the articles and several
+
+--- PDF PAGE 35 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 35
+concepts, especially the large number of diﬀerent similar names for the same
+concept in the literature, so we could not include all relevant studies included in
+this SLR. Second, most of the studies and models that we know focus on software
+quality. There is relatively little research on other hubs in the software ecosystem,
+stakeholders, and their relationships. The search results are more relevant to FOSS-
+based discussions because FOSS provides public access to technical data, whereas
+proprietaries have restricted access. Hence, the analysis of the results may not
+cover proprietary SECO. Additionally, a considerable number of studies are based
+on interviews or questionnaires, which may cause the results they present to be
+not generalized. Moreover, most models are not yet widely adopted in the the
+open source ecosystem, which means that although the results of several current
+studies and models come from questionnaires or interviews or are further validated
+by them, they still lack validation and application in real-world projects, which
+also further suggests that the results based on questionnaires or interviews may
+be problematic in terms of generalizability. Finally, we categorized software trust
+as intrinsic trust factor and extrinsic trust factor, and several subfactors, while
+this allows for a clariﬁed and focused presentation of the results, we may have
+inevitably removed several factors that could not be categorized and may have
+overlooked several speciﬁc scenarios that end-users trust.
+Next, we will further discuss the role and severity of these factors in the SECO
+with diﬀerent stakeholders and experts to ensure that our understanding of these
+factors is correct and will continue to focus on and supplement with additional
+impact factors.
+5.3 Lessons and Research Challenges
+Software trust is comprehensive and its factors cover all actors in the software
+ecosystem. In this subsection, we identify several challenges that make the research
+more complicated. The ﬁrst complicating factor is that end-user’s propensity to
+trust is subjective, and even when diﬀerent end-users are given the same information,
+the trust they place will be diﬀerent, and this trust can change over time, the
+judgment depends on the information they access. Therefore, it is impossible to
+assign a ﬁxed priority or weight to the factors.
+Second, it is diﬃcult, if not impossible, to ﬁnd a comprehensive set of models to
+measure software trust objectively and fairly. The measurement and interpretation
+of software trust must be dynamic. Third, the interpretation of trust factors should
+be multi-faceted. It may be diﬃcult to obtain or apply project data as the factor
+determining trust in closed software, but these data can be used to calculate trust
+in open source software.
+The digitization of society has provided us many aﬀordances and the penetration
+of IT in it should be considered an unprecedented development in history. However,
+we are standing at the advent of a new period in history, where societal trust in IT
+is dropping at an alarming rate. We can say the hay-day of society’s willingness to
+adopt new IT solutions and trust the older ones are over (Hayes, Poel and Steen,
+2020). With this problem statement in mind, we have set ourselves a research
+challenge.
+The ambitious goal that we have set is to raise the accessibility, reliability, and
+use of trust data in the worldwide software ecosystem (Hou, Farshidi and S. Jansen,
+
+--- PDF PAGE 36 ---
+36 Fang Hou, Slinger Jansen
+2021). We envision a future where software can be rapidly and even automatically
+assessed in a fair and equal manner, using a shared understanding of trust that is
+collaboratively created and maintained. However, before creating such a free and
+common infrastructure, several challenges need to be tackled. We deﬁne a set of
+research challenges for the future in bold typeface.
+The ﬁrst challenge is that we are collecting and sharing software engineer data,
+i.e., data that could reveal their identities and break their privacy (Poel, 2020). This
+would directly contradict the goals of this project, so we need to ﬁnd mechanisms
+for protecting personal data long ethical and legal boundaries , such as
+the General Data Protection Regulation (GDRP).
+There is an inherent problem with sharing information with a community, as
+actors could misjudge or misuse the information. It must be noted that observed
+vulnerabilities are not a sign of untrustworthy software and that if these
+vulnerabilities are rapidly identiﬁed and eliminated, they actually might be a sign
+of trustworthy software. Furthermore, we need to ensure that vulnerabilities can
+be shared openly within the community without them falling into the
+‘wrong’ hands.
+We have performed two preliminary interview studies to assess how software
+engineers and end-user organizations would use trust data in their work. These
+interview studies showed that while trust facts may be irrefutable, the perception of
+trust is a moving target for diﬀerent actors. One actor may be satisﬁed with using
+a bleeding-edge version of a software package that updates often, while another
+wants an old version of a patched but reliable package. We are currently exploring
+if diﬀerent categorizations of trust ratings are necessary , such as “project
+evolution speed”, “vulnerability ﬁx time”, and “team liveliness”.
+While we respect tools that centrally collect trust data, we believe that trust
+data should be part of a zero-trust community. We observe that it isimpossible to
+observe correct trust data as one central party objectively and consensus
+mechanisms are necessary to observe that a software package version is trustworthy
+objectively.
+The data collection process itself is challenging. We should be cognizant that a
+set of impact factors under security in Figure 7, for instance, will be challenging
+to operationalize. Once we have identiﬁed the values (i.e., trust facts) necessary
+to collect, we will have to tackle the challenge of the availability of these data.
+Data needed to judge the software trust can come from usage data, source code,
+build systems, test systems, etc. It will thereby be challenging to judge the
+trust of closed software . Furthermore, it is hard, if not impossible, to get
+data from closed reputation databases, such as app store ratings. Finally, the
+operationalization of the impact factors is a major challenge in this work. We
+plan to perform a large-scale survey study with software engineers as an approach
+to this problem to identify a minimal collectible set of trust facts useful for software
+engineers.
+5.4 Future Work
+Our near-future works consist roughly of two parts.
+First, we plan to launch a software engineer survey based on the out-
+comes of this SLR . The developer survey intends to determine a prioritized and
+
+--- PDF PAGE 37 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 37
+categorized list of trust criteria. Furthermore, we want to use the survey to gauge
+and create awareness amongst software engineers about the role of trust in their
+software engineering processes.
+Secondly, using the list of prioritized trust factors, we develop a tool for
+automatically gathering trust scores for diﬀerent trust impact categor-
+ies (Hou, Farshidi and S. Jansen, 2021). Software engineers must evaluate the
+tool to decide whether it eﬀectively supports them in downloading and depending
+on a particular software package. Finally, we aim to store these trust scores in a
+distributed ledger, to make trust common for all software engineers. The community
+that uses the ledger can contribute openly observable facts to the ledger, to increase
+or decrease trust scores for software packages.
+6 Conclusion
+Although prior work has developed a number of models for quantifying software
+trust or other related attributes, only a few have been widely used in real-world
+projects. We discovered that the majority of them are oriented around software
+quality measurement, ignoring the impact of related actors in SECO on trust, and
+omitting the role of attacks and vulnerabilities in measuring trust.
+In this paper, we examined the role of trust in SECO by starting with the
+selection and measurement of software products. Our goal is to devise a strategy
+for resolving the trust erosion issue raised in the introduction, speciﬁcally the harm
+caused to SECO’s health by vulnerabilities and attacks. This study adopted a
+systematic literature review approach to review trust in SECO from a selected 112
+articles. On this basis, we discussed the deﬁnition, types, and sources of software
+trust and proposed a deﬁnition for software trust in the context of SECO. Addi-
+tionally, we classiﬁed the impact factors on software trust from the standpoints of
+software and packages, software package managers, software producers, and soft-
+ware end-users. We analyzed the existing literature for relevant impact factors and
+counted their frequencies. Software quality, SPO, code & structure, documentation,
+and structural assurance are the top ﬁve impact factors. Furthermore, based on
+these studies, we compiled a comprehensive table of software trust impact factors
+and identiﬁed as many practical metrics as possible for each factor to be measured.
+Although the majority of the trust factors we collected are based on empirical
+research, and only a few models or metrics are widely used in real-world projects,
+they reﬂect, to some extent, the concerns expressed by software engineers or
+end-users during the software selection or evaluation process.
+According to the literature, software trust serves as the foundation for coopera-
+tion between hubs and stakeholders in SECO, while software trust is critical for
+cooperation between actors, current research on software trust focuses exclusively
+on software and components, particularly software quality. Limited measures of
+trust assessment cannot be the ﬁnal word to success, it should be expanded to
+include other entities to analyze trust in the software ecosystem in a multi-level,
+multi-perspective manner. Next, we will conduct a survey of software engineers
+to ascertain their perceptions of software trust in the future, paving the way for
+the design of a community-managed infrastructure that serves as a trust layer for
+SECO.
+
+--- PDF PAGE 38 ---
+38 Fang Hou, Slinger Jansen
+Acknowledgements We thank the SecureSECO team for their constructive feedback and
+help in the creation of this article. In particular, we thank Donny Groeneveld, Venja Beck, and
+Floris Jansen for their diligence in performing their part of the literature review, i.e., ﬁltering,
+double-checking, and processing the articles. Furthermore, we thank them for the lengthy and
+productive discussions that led to an inter-rater agreement between the SLR team members.
+Finally, we thank Hidde Reeskamp and Joost Gadellaa for their excellent comments on the
+early versions of this article.
+Systematic Literature Review Articles
+Abate, Pietro et al. (2011). ‘MPM: a modular package manager’. In: Proceedings of
+the 14th international ACM Sigsoft symposium on Component based software
+engineering, pp. 179–188.
+Alarcon, Gene M et al. (2020). ‘Trust Perceptions of Metadata in Open-Source
+Software: The Role of Performance and Reputation’. In: Systems 8.3, p. 28.
+Amoroso, Ed et al. (1991). ‘Toward an approach to measuring software trust’. In:
+Proceedings. 1991 IEEE Computer Society Symposium on Research in Security
+and Privacy. IEEE Computer Society, pp. 198–198.
+Ayala, Claudia et al. (2011). ‘Selection of third party software in Oﬀ-The-Shelf-
+based software development—An interview study with industrial practitioners’.
+In: Journal of Systems and Software 84.4, pp. 620–637.
+Bennett, Keith et al. (2000). ‘Service-based software: the future for ﬂexible software’.
+In: Proceedings Seventh Asia-Paciﬁc Software Engeering Conference. APSEC
+2000. IEEE, pp. 214–221.
+Berander, Patrik et al. (2005). ‘Software quality attributes and trade-oﬀs’. In:
+Blekinge Institute of Technology 97.98, p. 19.
+Bogart, Christopher et al. (2016). ‘How to break an API: cost negotiation and
+community values in three software ecosystems’. In: Proceedings of the 2016
+24th ACM SIGSOFT International Symposium on Foundations of Software
+Engineering, pp. 109–120.
+Boyes, HA et al. (2014). ‘Trustworthy Software: lessons fromgoto fail’& Heart-
+bleed bugs’. In: 9th IET International Conference on System Safety and Cyber
+Security, pp. 1–7.
+Bugiel, Sven, Lucas Vincenzo Davi and Steﬀen Schulz (2011). ‘Scalable trust
+establishment with software reputation’. In: Proceedings of the sixth ACM
+workshop on Scalable trusted computing , pp. 15–24.
+Capra, Eugenio et al. (2011). ‘Firms’ involvement in Open Source projects: A
+trade-oﬀ between software structural quality and popularity’. In: Journal of
+Systems and Software 84.1, pp. 144–161.
+Catuogno, Luigi, Clemente Galdi and Giuseppe Persiano (2017). ‘Secure depend-
+ency enforcement in package management systems’. In: IEEE Transactions on
+Dependable and Secure Computing 17.2, pp. 377–390.
+Challa, Jagat Sesh et al. (2011). ‘Integrated software quality evaluation: a fuzzy
+multi-criteria approach’. In: Journal of Information Processing Systems 7.3,
+pp. 473–518.
+Chau, PYC (1994). ‘Selection of packaged software in small businesses’. In:European
+Journal of Information Systems 3.4, pp. 292–302.
+Cho, Jin-Hee, Kevin Chan and Sibel Adali (2015). ‘A survey on trust modeling’.
+In: ACM Computing Surveys (CSUR) 48.2, pp. 1–40.
+
+--- PDF PAGE 39 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 39
+Cho, Jin-Hee, Shouhuai Xu et al. (2019). ‘Stram: Measuring the trustworthiness of
+computer-based systems’. In: ACM Computing Surveys (CSUR) 51.6, pp. 1–47.
+Crowston, Kevin, Hala Annabi and James Howison (2003). ‘Deﬁning open source
+software project success’. In: ICIS 2003 Proceedings, p. 28.
+Das, Tushar Kanti and Bing-Sheng Teng (2001). ‘Trust, control, and risk in strategic
+alliances: An integrated framework’. In: Organization studies 22.2, pp. 251–283.
+Decan, Alexandre, Tom Mens and Eleni Constantinou (2018). ‘On the impact of
+security vulnerabilities in the npm package dependency network’. In:Proceedings
+of the 15th International Conference on Mining Software Repositories , pp. 181–
+191.
+Del Bianco, Vieri et al. (2011). ‘A survey on open source software trustworthiness’.
+In: IEEE software 28.5, pp. 67–75.
+Donohue, Susan K and Joanne Bechta Dugan (2003). ‘Modeling the” good enough to
+release” decision using V &V preference structures and Bayesian belief networks’.
+In: Annual Reliability and Maintainability Symposium, 2003. IEEE, pp. 568–
+573.
+Donohue, Susan K, Joanne Bechta Dugan and Charles L Brown (2005). ‘Is My
+Software” Good Enough” to Release?- A Probabilistic Assessment’. In: 29th
+annual IEEE/NASA Software engineering workshop . IEEE, pp. 5–13.
+Duan, Ruian et al. (2021). ‘Towards Measuring Supply Chain Attacks on Package
+Managers for Interpreted Languages’. In: Network and Distributed Systems
+Security (NDSS) Symposium 2021 .
+Ellison, Robert, William Nichols and Carol Woody (2016). ‘Measuring software
+assurance’. In: 2016 IEEE 40th Annual Computer Software and Applications
+Conference (COMPSAC). Vol. 2. IEEE, pp. 359–364.
+Fogel, Karl (2009). How To Run A Successful Free Software Project - Producing
+Open Source Software. Scotts Valley, CA: CreateSpace. isbn: 1441437711.
+Garcı´ ea, C (2015).Reputation management of an Open Source Software system
+based on the trustworthiness of its contributions . Tech. rep. Technical report,
+Technical University of Denmark & Universida de Oviedo.
+Gefen, David and Mark Keil (1996). ‘DEVELOPER RESPONSIVENESS AND
+PERCEIVED USEFULNESS.’ In:Academy of Management Proceedings. Vol. 1996.
+Academy of Management Briarcliﬀ Manor, NY 10510, pp. 313–317.
+Ghapanchi, Amir Hossein and Madjid Tavana (2015). ‘A longitudinal study of the
+impact of open source software project characteristics on positive outcomes’.
+In: Information Systems Management 32.4, pp. 285–298.
+Ghebremedhin, Abraham Ghebrehiwet (2012). ‘Combining static source code
+analysis and threat assessment modeling for testing open source software
+security’. PhD thesis. Thesis, Information and Communication Technology,
+University of Agder.
+Godse, Manish and Shrikant Mulik (2009). ‘An approach for selecting software-as-
+a-service (SaaS) product’. In: 2009 IEEE International Conference on Cloud
+Computing. IEEE, pp. 155–158.
+Goode, Sigi et al. (2015). ‘Rethinking the Role of Security in Client Satisfaction
+with Sof tware-as-a-Service (SaaS) Providers’. In: Decision Support Systems
+70, pp. 73–85. doi: 10.1016/j.dss.2014.12.005.
+Gopalakrishna, Rajeev, E Spaﬀord and Jan Vitek (2005). ‘Vulnerability likelihood:
+A probabilistic approach to software assurance’. In: CERIAS, Purdue Univeristy
+Tech. Rep 6, p. 2005.
+
+--- PDF PAGE 40 ---
+40 Fang Hou, Slinger Jansen
+Grachkov, IA and AA Malyuk (2020). ‘Development Problems of Trusted Software
+in Critical Information Infrastructure Systems’. In: Advanced Technologies in
+Robotics and Intelligent Systems . Springer, pp. 55–62.
+Grodzinsky, Frances S, Keith W Miller and Marty J Wolf (2011). ‘Developing
+artiﬁcial agents worthy of trust:“Would you buy a used car from this artiﬁcial
+agent?”’ In: Ethics and information technology 13.1, pp. 17–27.
+Guo, Guibing et al. (2014). ‘From ratings to trust: an empirical study of impli-
+cit trust in recommender systems’. In: Proceedings of the 29th annual acm
+symposium on applied computing , pp. 248–253.
+Haenni, Nicole et al. (2013). ‘Categorizing developer information needs in software
+ecosystems’. In: Proceedings of the 2013 international workshop on ecosystem
+architectures, pp. 1–5.
+— (2014). ‘A quantitative analysis of developer information needs in software
+ecosystems’. In: Proceedings of the 2014 European Conference on Software
+Architecture Workshops, pp. 1–6.
+He, JiuSong et al. (2009). ‘Reference Model of Trustworthy Proof for Trusted
+Components’. In: 2009 Second International Conference on Future Information
+Technology and Management Engineering. IEEE, pp. 136–139.
+Heiskanen, Ari, Mike Newman and Merja Eklin (2008). ‘Control, trust, power, and
+the dynamics of information system outsourcing relationships: A process study
+of contractual software development’. In: The Journal of Strategic Information
+Systems 17.4, pp. 268–286.
+Hejderup, Joseph, Arie van Deursen and Georgios Gousios (2018). ‘Software eco-
+system call graph for dependency management’. In: 2018 IEEE/ACM 40th
+International Conference on Software Engineering: New Ideas and Emerging
+Technologies Results (ICSE-NIER). IEEE, pp. 101–104.
+Hong, Huang, Wang Chang-hui and Wang Ben (2011). ‘Research on Management
+Scheme of Trusted Application Software’. In: 2011 International Conference on
+Network Computing and Information Security . Vol. 1. IEEE, pp. 311–315.
+Hoxmeier, John A (2000). ‘Software preannouncements and their impact on custom-
+ers’ perceptions and vendor reputation’. In: Journal of Management Information
+Systems 17.1, pp. 115–139.
+Hunter, Paula and Stephen Walli (2013). ‘The Rise and Evolution of the Open
+Source Software Foundation’. In: IFOSS L. Rev. 5, p. 31.
+Immonen, Anne and Marko Palviainen (2007). ‘Trustworthiness evaluation and
+testing of open source components’. In: Seventh International Conference on
+Quality Software (QSIC 2007) . IEEE, pp. 316–321.
+Jackson, Daniel (2009). ‘A direct path to dependable software’. In: Communications
+of the ACM 52.4, pp. 78–88.
+Jackson, Daniel et al. (Sept. 2007). Software for dependable systems: Suﬃcient
+evidence? National Research Council, pp. 1–148. doi: 10.17226/11923.
+Jadhav, Anil S and Rajendra M Sonar (2009). ‘Evaluating and selecting software
+packages: A review’. In: Information and software technology 51.3, pp. 555–563.
+— (2011). ‘Framework for evaluation and selection of the software packages: A
+hybrid knowledge based system approach’. In: Journal of Systems and Software
+84.8, pp. 1394–1407.
+Jansen, Slinger (2014). ‘Measuring the health of open source software ecosystems:
+Beyond the scope of project health’. In: Information and Software Technology
+56.11, pp. 1508–1519.
+
+--- PDF PAGE 41 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 41
+Jarczyk, Oskar et al. (2014). ‘Github projects. quality analysis of open-source
+software’. In: International Conference on Social Informatics . Springer, pp. 80–
+94.
+Koch, Stefan and Christian Neumann (2008). ‘Exploring the Eﬀects of Process
+Characteristics on Products Quality in Open Source Software Development’.
+In: Journal of Database Management (JDM) 19.2, pp. 31–57.
+Kula, Raula Gaikovina, Coen De Roover et al. (Sept. 2017). ‘Modeling library
+dependencies and updates in large software repository universes’. In: arXiv
+preprint arXiv:1709.04626.
+Kula, Raula Gaikovina, Daniel M German et al. (2015). ‘Trusting a library: A
+study of the latency to adopt the latest maven release’. In: 2015 IEEE 22nd
+International Conference on Software Analysis, Evolution, and Reengineering
+(SANER). IEEE, pp. 520–524.
+Lai, Ivan KW, Viny WL Tong and Donny CF Lai (2011). ‘Trust factors inﬂuencing
+the adoption of internet-based interorganizational systems’. In: Electronic
+Commerce Research and Applications 10.1, pp. 85–93.
+Lankton, Nancy K, D Harrison McKnight and John Tripp (2015). ‘Technology,
+humanness, and trust: Rethinking trust in technology’. In: Journal of the
+Association for Information Systems 16.10, p. 1.
+Limam, Noura and Raouf Boutaba (2010). ‘Assessing software service quality and
+trustworthiness at selection time’. In:IEEE transactions on software engineering
+36.4, pp. 559–574.
+Littlewood, Bev (1994). ‘Learning to Live with Uncertainty in our Software’. In:
+Proceedings of 1994 IEEE 2nd International Software Metrics Symposium. IEEE,
+pp. 2–8.
+Liu, Xiang and Bala Iyer (2007). ‘Design architecture, developer networks and
+performance of open source software projects’. In: ICIS 2007 Proceedings, p. 90.
+Madanmohan, T.R. and Rahul De (Dec. 2004). ‘Notice of Violation of IEEE
+Publication Principles Open source reuse in commercial ﬁrms’. In: Software,
+IEEE 21, pp. 62–69. doi: 10.1109/MS.2004.45.
+McClean, Kelvin, Des Greer and Anna Jurek-Loughry (2020). ‘Social Network Ana-
+lysis of Open Source Software: A Review and Categorisation’. In: Information
+and Software Technology, p. 106442.
+Mcknight, D Harrison et al. (2011). ‘Trust in a speciﬁc technology: An investiga-
+tion of its components and measures’. In: ACM Transactions on management
+information systems (TMIS) 2.2, pp. 1–25.
+Midha, Vishal and Prashant Palvia (2012). ‘Factors aﬀecting the success of Open
+Source Software’. In: Journal of Systems and Software 85.4, pp. 895–905.
+Mockus, Audris, Roy T Fielding and James D Herbsleb (2002). ‘Two case studies of
+open source software development: Apache and Mozilla’. In: ACM Transactions
+on Software Engineering and Methodology (TOSEM) 11.3, pp. 309–346.
+Mohagheghi, Parastoo and Reidar Conradi (2007). ‘Quality, productivity and
+economic beneﬁts of software reuse: a review of industrial studies’. In: Empirical
+Software Engineering 12.5, pp. 471–516.
+Moyano, Francisco, Carmen Fernandez-Gago and Javier Lopez (2016). ‘A model-
+driven approach for engineering trust and reputation into software services’. In:
+Journal of Network and Computer Applications 69, pp. 134–151.
+Norris, Jeﬀrey S (2004). ‘Mission-critical development with open source software:
+Lessons learned’. In: IEEE software 21.1, pp. 42–49.
+
+--- PDF PAGE 42 ---
+42 Fang Hou, Slinger Jansen
+Nunes, Ingrid et al. (2019). ‘Explaining reputation assessments’. In: International
+Journal of Human-Computer Studies 123, pp. 1–17.
+Pollock, Neil and Robin Williams (2007). ‘Technology choice and its performance:
+Towards a sociology of software package procurement’. In: Information and
+Organization 17.3, pp. 131–161.
+Rosenberg, Linda, Ted Hammer and Jack Shaw (1998). ‘Software metrics and
+reliability’. In: 9th International Symposium—Best Paper Award, page 8p .
+Sabherwal, Rajiv (1999). ‘The role of trust in outsourced IS development projects’.
+In: Communications of the ACM 42.2, pp. 80–86.
+Sarrab, Mohamed and Osama M Hussain Rehman (2014). ‘Empirical study of open
+source software selection for adoption, based on software quality characteristics’.
+In: Advances in Engineering Software 69, pp. 1–11.
+Scacchi, Walt (2007). ‘Free/open source software development: Recent research
+results and methods’. In: Advances in Computers 69, pp. 243–295.
+Sen, Ravi, Siddhartha S Singh and Sharad Borle (2012). ‘Open source software
+success: Measures and analysis’. In: Decision Support Systems 52.2, pp. 364–372.
+Sheppard, Blair H and Marla Tuchinsky (1996). ‘Micro-OB and the network
+organization’. In: Trust in Organizations: Frontiers of Theory and Research.
+Thousand Oaks CA, Sage Publications , pp. 140–65.
+Song, Hao et al. (2010). ‘An entropy based approach for software risk assessment:
+A perspective of trustworthiness enhancement’. In: The 2nd International
+Conference on Software Engineering and Data Mining . IEEE, pp. 575–578.
+Trˇ cek, Denis (2018). ‘A brief overview of trust and reputation over various domains’.
+In: Trust and Reputation Management Systems , pp. 5–19.
+Vargas, Enrique Larios et al. (2020). ‘Selecting third-party libraries: The practi-
+tioners’ perspective’. In: CoRR.
+Wang, Baohua et al. (2019). ‘Updating model of software component trustworthiness
+based on users feedback’. In: IEEE Access 7, pp. 60199–60205.
+Wang, Huaimin (2011). ‘TRUSTIE: design of a trustworthy software production
+environment’. In: 2011IEEE 10th International Conference on Trust, Security
+and Privacy in Computing and Communications . IEEE, pp. 3–4.
+Wang, Huaimin et al. (2015). ‘TRUSTIE: a software development platform for
+crowdsourcing’. In: Crowdsourcing. Springer, pp. 165–190.
+Wang, Jing et al. (2015). ‘Comparative case studies of open source software peer
+review practices’. In: Information and Software Technology 67, pp. 1–12.
+Wheeler, David A (2011). Why Free-Libre/Open Source Software (FLOSS)? Look
+at the Numbers! url: https://dwheeler.com/oss_fs_why.html.
+Yan, Zheng (2008). ‘A comprehensive trust model for component software’. In:
+Proceedings of the 4th international workshop on Security, privacy and trust in
+pervasive and ubiquitous computing , pp. 1–6.
+Other Sources
+Alspaugh, TA, HU Asuncion and W Scacchi (2009). ‘The role of software licenses in
+open architecture ecosystems. 1st Int’l Work. Soft’. In: Ecosystems (IWSECO-
+2009), pp. 4–18.
+
+--- PDF PAGE 43 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 43
+Anwar, Afsah et al. (2021). ‘Cleaning the NVD: Comprehensive quality assessment,
+improvements, and analyses’. In: IEEE Transactions on Dependable and Secure
+Computing.
+Al-Badareen, Anas Bassam et al. (2011). ‘Software quality models: A comparative
+study’. In: International Conference on Software Engineering and Computer
+Systems. Springer, pp. 46–55.
+Barclay, Pat (2015). ‘Reputation’. In: The handbook of evolutionary psychology ,
+pp. 1–19.
+Bauer, Paul C (2019). ‘Conceptualizing trust and trustworthiness’. In: Political
+Concepts Working Paper Series .
+Bauer, Veronika, Lars Heinemann and Florian Deissenboeck (2012). ‘A structured
+approach to assess third-party library usage’. In: 2012 28th IEEE International
+Conference on Software Maintenance (ICSM) . IEEE, pp. 483–492.
+Becerra, Manuel, Randi Lunnan and Lars Huemer (2008). ‘Trustworthiness, risk,
+and the transfer of tacit and explicit knowledge between alliance partners’. In:
+Journal of Management Studies 45.4, pp. 691–713.
+Buscemi, Nina et al. (2006). ‘Single data extraction generated more errors than
+double data extraction in systematic reviews’. In: Journal of clinical epidemi-
+ology 59.7, pp. 697–703.
+Cai, Yuanfeng and Dan Zhu (Aug. 2016). ‘Reputation in an open source software
+community: Antecedents and impacts’. In:Decision Support Systems 91, pp. 103–
+112. doi: 10.1016/j.dss.2016.08.004.
+Cappos, Justin et al. (2008a). ‘A look in the mirror: Attacks on package managers’.
+In: Proceedings of the 15th ACM conference on Computer and communications
+security, pp. 565–574.
+— (2008b). ‘Package management security’. In: University of Arizona Technical
+Report, pp. 08–02.
+Chandra, Yanto and Liang Shang (2019).Qualitative research using R: A systematic
+approach. Springer.
+Chattopadhyay, Souti et al. (2020). ‘A tale from the trenches: cognitive biases and
+software development’. In: Proceedings of the ACM/IEEE 42nd International
+Conference on Software Engineering, pp. 654–665.
+Chinthanet, Bodin et al. (2021). ‘What makes a good Node. js package? Investigating
+Users, Contributors, and Runnability’. In: arXiv preprint arXiv:2106.12239 .
+Coallier, Francois (2001). ‘Software engineering–product quality–part 1: quality
+model’. In: International Organization for Standardization: Geneva, Switzerland .
+Cooper, Harris M, James L Lindsay and Erika A Patall (2008). ‘Research synthesis
+and meta-analysis’. In: Applied Methods, p. 344.
+Cˆ ot´ e, Marc-Alexis et al. (2005). ‘The evolution path for industrial software quality
+evaluation methods applying ISO/IEC 9126: 2001 quality model: example of
+MITRE’s SQAE method’. In: Software Quality Journal 13.1, pp. 17–30.
+Decan, Alexandre and Tom Mens (2019). ‘What do package dependencies tell us
+about semantic versioning?’ In: IEEE Transactions on Software Engineering .
+Decan, Alexandre, Tom Mens, Ma¨ elick Claes et al. (2016). ‘When GitHub meets
+CRAN: An analysis of inter-repository package dependency problems’. In: 2016
+IEEE 23rd International Conference on Software Analysis, Evolution, and
+Reengineering (SANER). Vol. 1. IEEE, pp. 493–504. doi: 10.1109/SANER.2016.
+12.
+
+--- PDF PAGE 44 ---
+44 Fang Hou, Slinger Jansen
+Dolstra, Eelco, Andres L¨ oh and Nicolas Pierron (2010). ‘NixOS: A purely functional
+Linux distribution’. In: Journal of Functional Programming 20.5-6, pp. 577–615.
+Durach, Christian, Joakim Kembro and Andreas Wieland (Oct. 2017). ‘A New
+Paradigm for Systematic Literature Reviews in Supply Chain Management’.
+In: Journal of Supply Chain Management 53. doi: 10.1111/jscm.12145.
+Evans, Jonathan St BT and David E Over (1996). ‘Rationality in the selection
+task: Epistemic utility versus uncertainty reduction’. In: Psychological Review
+103.2, pp. 356–363.
+Farooq, Umar et al. (2016). ‘A multi source product reputation model’. In: Com-
+puters in Industry 83, pp. 55–67.
+Farshidi, Siamak, Slinger Jansen and Mahdi Deldar (2021). ‘A decision model for
+programming language ecosystem selection: Seven industry case studies’. In:
+Information and Software Technology, p. 106640.
+Gacek, Cristina et al. (1995). ‘On the deﬁnition of software system architecture’. In:
+Proceedings of the First International Workshop on Architectures for Software
+Systems. Seattle, WA, pp. 85–94.
+Gkortzis, Antonios, Daniel Feitosa and Diomidis Spinellis (2021). ‘Software re-
+use cuts both ways: An empirical analysis of its relationship with security
+vulnerabilities’. In: Journal of Systems and Software 172, p. 110653. issn: 0164-
+1212. doi: https : / / doi . org / 10 . 1016 / j . jss . 2020 . 110653. url: https :
+//www.sciencedirect.com/science/article/pii/S0164121220301199.
+Goles, Tim, Stephen Hawk and Kate M Kaiser (2008). ‘Information technology
+workforce skills: The software and IT services provider perspective’. In: Inform-
+ation Systems Frontiers 10.2, pp. 179–194. doi: 10.1007/s10796-008-9072-9 .
+Gonzalez, Danielle et al. (2021). ‘Anomalicious: Automated Detection of Anomalous
+and Potentially Malicious Commits on GitHub’. In: 2021 IEEE/ACM 43rd
+International Conference on Software Engineering: Software Engineering in
+Practice (ICSE-SEIP). IEEE, pp. 258–267.
+Graziotin, Daniel et al. (2018). ‘What happens when software developers are (un)
+happy’. In: Journal of Systems and Software 140, pp. 32–47. doi: 10.1016/j.
+jss.2018.02.041.
+Hanus, Michael (2018). ‘Semantic versioning checking in a declarative package
+manager’. In: Technical Communications of the 33rd International Conference
+on Logic Programming (ICLP 2017) . Schloss Dagstuhl-Leibniz-Zentrum fuer
+Informatik.
+Hayes, Paul, Ibo van de Poel and Marc Steen (2020). ‘Algorithms and values in
+justice and security’. In: AI & SOCIETY 35, pp. 1–23. doi: 10.1007/s00146-
+019-00932-9.
+Heyns, Marita and Sebastiaan Rothmann (2015). ‘Dimensionality of trust: An
+analysis of the relations between propensity, trustworthiness and trust’. In: SA
+Journal of Industrial Psychology 41.1, pp. 01–12.
+Hou, Fang, Siamak Farshidi and Slinger Jansen (2021). ‘TrustSECO: A Distributed
+Infrastructure for Providing Trust in the Software Ecosystem’. In: International
+Conference on Advanced Information Systems Engineering . Springer, pp. 121–
+133.
+Jansen, Floris, Slinger Jansen and Fang Hou (2021). ‘TrustSECO: An Interview
+Survey into Software Trust’. In: arXiv:2101.06138. url: https://arxiv.org/
+pdf/2101.06138.pdf.
+
+--- PDF PAGE 45 ---
+A Systematic Literature Review on Trust in the Software Ecosystem 45
+Jansen, Slinger et al. (2012). ‘Shades of gray: Opening up a software producing
+organization with the open software enterprise model’. In: Journal of Systems
+and Software 85.7, pp. 1495–1510.
+Kaminsky, Dan et al. (2002). Hack Prooﬁng Your Network. Syngress.
+Keele, Staﬀs et al. (2007). Guidelines for performing systematic literature reviews
+in software engineering. Tech. rep. Technical report, Ver. 2.3 EBSE Technical
+Report. EBSE.
+Khosravi, Khashayar and Yann-Ga¨ el Gu´ eh´ eneuc (2004). ‘A quality model for design
+patterns’. In: German Industry Standard .
+Kitchenham, Barbara (2004). ‘Procedures for performing systematic reviews’. In:
+Keele, UK, Keele University 33.2004, pp. 1–26.
+Krishnan, Vinod et al. (2008). ‘Who predicts better? Results from an online study
+comparing humans and an online recommender system’. In: Proceedings of the
+2008 ACM conference on Recommender systems , pp. 211–218.
+Li, Jianping et al. (2012). ‘An integrated risk measurement and optimization model
+for trustworthy software process management’. In: Information Sciences 191,
+pp. 47–60.
+Li, Xiaozhou et al. (2021). ‘Exploring factors and measures to select open source
+software’. In: arXiv preprint arXiv:2102.09977 .
+Mailath, George J and Larry Samuelson (2001). ‘Who wants a good reputation?’
+In: The Review of Economic Studies 68.2, pp. 415–441.
+Manikas, Konstantinos and Klaus Marius Hansen (2013). ‘Software ecosystems–
+A systematic literature review’. In: Journal of Systems and Software 86.5,
+pp. 1294–1306.
+Massacci, Fabio and Viet Hung Nguyen (2010). ‘Which is the right source for
+vulnerability studies? an empirical analysis on mozilla ﬁrefox’. In: Proceedings
+of the 6th International Workshop on Security Measurements and Metrics ,
+pp. 1–8.
+Meline, Timothy (2006). ‘Selecting studies for systemic review: Inclusion and
+exclusion criteria’. In: Contemporary issues in communication science and
+disorders 33.Spring, pp. 21–27.
+Mercuri, Rebecca T (2005). ‘Trusting in transparency’. In: Communications of the
+ACM 48.5, pp. 15–19.
+Miguel, Jos´ e P, David Mauricio and Glen Rodrı´ eguez (2014). ‘A review of software
+quality models for the evaluation of software products’. In: arXiv preprint
+arXiv:1412.2977.
+Moumane, Karima, Ali Idri and Alain Abran (2016). ‘Usability evaluation of mobile
+applications using ISO 9241 and ISO 25062 standards’. In: SpringerPlus 5.1,
+pp. 1–15.
+M¨ uller, Marcel et al. (2021). ‘Trust Mining: Analyzing Trust in Collaborative
+Business Processes’. In: IEEE Access 9, pp. 65044–65065.
+Osterloh, Margit and Sandra Rota (Mar. 2005). ‘Trust and Community in Open
+Source Software Production’. In: Analyse & Kritik, Zeitschrift f¨ ur Sozialtheorien
+26. doi: 10.1515/auk-2004-0115.
+Park, K. Francis and Zur Shapira (2017). Risk and Uncertainty . London: Palgrave
+Macmillan UK, pp. 1–7. doi: 10.1057/978-1-349-94848-2_250-1 .
+Pashchenko, Ivan, Duc-Ly Vu and Fabio Massacci (2020). ‘A qualitative study of
+dependency management and its security implications’. In: Proceedings of the
+
+--- PDF PAGE 46 ---
+46 Fang Hou, Slinger Jansen
+2020 ACM SIGSAC Conference on Computer and Communications Security ,
+pp. 1513–1531.
+Russell, Rebecca et al. (2018). ‘Automated vulnerability detection in source code
+using deep representation learning’. In: 2018 17th IEEE international conference
+on machine learning and applications (ICMLA) . IEEE, pp. 757–762.
+Sha, Wei (2009). ‘Types of structural assurance and their relationships with trusting
+intentions in business-to-consumer e-commerce’. In: Electronic Markets 19.1,
+pp. 43–54.
+Sonatype (2021). 2021 state of the software supply chain . url: https : / / www .
+sonatype.com/hubfs/Q3%202021-State%20of%20the%20Software%20Supply%
+20Chain-Report/SSSC-Report-2021_0913_PM_2.pdf?hsLang=en-us .
+Subramaniam, Chandrasekar, Ravi Sen and Matthew L Nelson (2009). ‘Determin-
+ants of open source software project success: A longitudinal study’. In: Decision
+Support Systems 46.2, pp. 576–585. doi: 10.1016/j.dss.2008.10.005.
+Tavakolifard, Mozhgan and Kevin C Almeroth (2012). ‘A taxonomy to express open
+challenges in trust and reputation systems’. In: Journal of Communications
+7.7, pp. 538–551.
+Viertel, Fabien Patrick et al. (2019). ‘Detecting Security Vulnerabilities using Clone
+Detection and Community Knowledge.’ In: SEKE, pp. 245–324.
+Watson, Andrew (2005). ‘Reputation in open source software’. In: Northeastern
+University, Boston, MA, USA, working paper 1.
+Wright, Stephen (2010). ‘Trust and trustworthiness’. In: Philosophia 38.3, pp. 615–
+627.
+Xie, Chengshu, Shaurya Jauhari and Antonio Mora (2021). ‘Popularity and per-
+formance of bioinformatics software: the case of gene set analysis’. In: BMC
+bioinformatics 22.1, pp. 1–16.
+Xu, Lai and Sjaak Brinkkemper (2007). ‘Concepts of product software’. In:European
+Journal of Information Systems 16.5, pp. 531–541.
+Zerouali, Ahmed et al. (2018). ‘An empirical analysis of technical lag in npm package
+dependencies’. In: International Conference on Software Reuse. Springer, pp. 95–
+110.

@@ -1,0 +1,292 @@
+--- PDF PAGE 1 ---
+Understanding Trust Miscalibration
+Across Developer Cognitive Modes in LLM-Assisted Software Engineering
+S.P.N.P. Eshan  ·  22000526  ·  2022/CS/052
+Supervisor: Dr. R.N. Rajapakse  ·  SCS4224 Final Year Project
+1 July 2026
+1
+PROPOSAL DEFENSE
+
+--- PDF PAGE 2 ---
+EvolvingLLMs Are Now Central to Software Engineering
+2
+* https://www.jetbrains.com/lp/devecosystem-2024/
+* https://survey.stackoverflow.co/2025?utm_source=chatgpt.com
+
+--- PDF PAGE 3 ---
+The TradeoffsProductivity gains come with a critical tension
+3
+Security Vulnerabilities
+- Developers may accept insecure AI-generated code, introducing security flaws into production systems.
+Verification Failure
+- Developers may trust suggestions too quickly and skip proper review or testing.
+Increased Debugging Cost
+- Incorrect AI outputs can waste time and effort during debugging and troubleshooting.
+Productivity Loss
+- Excessive skepticism can prevent developers from benefiting from useful AI assistance.
+False Confidence
+- Confident-sounding AI responses can make developers believe incorrect solutions are correct.
+
+
+--- PDF PAGE 4 ---
+Risk pointCan we trust the outcomes ?
+4
+
+
+--- PDF PAGE 5 ---
+Core terminologyDefining the trust landscape
+5
+TRUSTWORTHINESS
+TRUST
+OVER-TRUST
+UNDER-TRUST
+Model Confidence
+
+--- PDF PAGE 6 ---
+DefinitionWhat is Trust Miscalibration?
+6
+“ Trust miscalibration is the mismatch between 
+how much a developer trusts AI-generated output 
+and how reliable that output actually is ”
+Khati et al., 2025
+
+
+--- PDF PAGE 7 ---
+Perspectives of the Trust
+7
+Model Factors
+Model quality
+Explanation quality
+Uncertainty signals
+Suggestion length
+Multiple suggestions
+Cognitive Factors
+Interaction mode
+Automation bias
+Tool transparency
+Anthropomorphism
+Task Factors
+Task complexity
+Task type
+Change size
+Developer Factors
+Programming expertise
+Accountability
+Environmental Factors
+Tool reputation
+Community influence
+
+
+--- PDF PAGE 8 ---
+Prior WorkWhat Existing Research Has Established
+8
+Statistical : Proved models are overconfident; 91% per-token 
+confidence resulted in only 52% correctness
+Spiess et al., 2024
+Behavioral : Proposed Trust Calibration Cues 
+(TCCs)—adaptive alerts that correct over-trust in real-time
+Okamura & Yamada, 2020
+Decision-Support : Found numeric confidence scores 
+improve calibration, but local explanations can be 
+ineffective
+Zhang et al., 2020
+Cognitive : Measured the "calibration gap"; revealed users 
+overestimate accuracy based on long explanations
+Steyvers et al., 2025
+Industrial : Defined calibration as a balance in the IDE to 
+prevent "reckless reliance" on complex refactoring
+Borg, 2024
+Practitioner : Found trust is highly task-dependent and 
+requires multi-item metrics to bridge the gap between 
+academic theory and technical reality
+ Khati et al., 2025
+
+--- PDF PAGE 9 ---
+Research GapWhat Is Still Missing
+9
+"Limited empirical understanding of how different cognitive modes affect developer trust and verification behaviour 
+when working with LLM-based coding assistants."
+01
+Parallel but Disconnected Streams
+Cognitive mode studies and trust calibration studies have been conducted separately. No prior work integrates both 
+into a single empirical framework.
+02
+Unmeasured Attentional Drop
+Theory predicts developers become less vigilant in fast-flow states, but this has not been directly measured in 
+software engineering contexts.
+03
+Indirect Trust Proxies
+Existing studies rely on acceptance rates and self-reports rather than measuring cognitive state alongside trust 
+behaviour simultaneously.
+This study bridges the two streams by co-observing cognitive mode and trust behaviour within the same experimental session.
+
+--- PDF PAGE 10 ---
+Theoretical FoundationTwo Theories That Frame This Research
+10
+Dual-Process Theory  ·  Kahneman (2011)
+System 1  —  Fast, Automatic
+Intuitive pattern recognition. Developers in familiar 
+tasks accept AI suggestions rapidly with minimal 
+conscious deliberation.
+System 2  —  Slow, Deliberate
+Analytical reasoning. Developers encountering 
+unfamiliar problems slow down, scrutinise suggestions, 
+and validate outputs carefully.
+→  Predicts that cognitive mode shapes how critically AI 
+output is evaluated.
+Grounded Copilot Theory  ·  Barke et al. (2022)
+Acceleration Mode
+Developer knows the approach. AI acts as intelligent 
+autocomplete. Suggestions are accepted rapidly through 
+pattern recognition with minimal prompting effort.
+Exploration Mode
+Developer faces uncertainty, unfamiliar APIs, new libraries, 
+complex bugs. AI is used for discovery. Prompts are 
+deliberate, outputs are compared and tested.
+→  Developers dynamically switch between modes 
+depending on task familiarity.
+10
+
+--- PDF PAGE 11 ---
+Core ConceptResearch Questions (RQs)
+11
+RQ1 Do developers accept AI suggestions more quickly and without checking in acceleration mode compared to exploration 
+mode?
+RQ2 How does a developer's conﬁdence in a suggestion compare to actual correctness, and does this gap change between 
+modes?
+RQ3 What veriﬁcation behaviours do developers exhibit in each mode, and how do they affect the number of errors accepted?
+RQ4 Can cognitive mode be identiﬁed from IDE signals ( acceptance latency, prompting patterns, or edit frequency ) ?
+RQ5 Do trust miscalibration patterns differ across SE task types (completion, API exploration, bug repair) when controlling for 
+mode?
+11
+
+--- PDF PAGE 12 ---
+Methodology
+1212
+Mixed-methods | Within-subject controlled experiment
+*  Similar method used in  Barke et al. (2022)
+With 30 participants  (students + early-career + senior engineers)
+Study Design
+
+--- PDF PAGE 13 ---
+MeasurementsHow Trust Behaviour is Captured
+1313
+
+
+--- PDF PAGE 14 ---
+Expected Contributions
+1414
+Empirical
+Behavioural Evidence Across Modes
+First study to directly compare trust miscalibration rates between 
+acceleration and exploration modes using co-measured cognitive state and 
+behavioural logs.
+Theoretical
+Integration of Two Frameworks
+Bridges Kahneman's Dual-Process Theory with Barke et al.'s Grounded 
+Copilot model, establishing a unified lens for trust calibration research.
+Design
+Signals for Adaptive Tools
+Identifies IDE-observable proxies for cognitive mode (latency, edit distance, 
+prompting frequency) that could inform context-aware trust feedback 
+systems.
+Practice
+Developer & Educator Guidance
+Provides actionable insight into which cognitive states warrant stronger 
+verification habits, supporting responsible AI adoption in professional 
+settings.
+
+--- PDF PAGE 15 ---
+References
+1515
+Barke, S., James, M. B., and Polikarpova, N. (Oct. 31, 2022). Grounded Copilot: How Programmers Interact with Code-Generating Models. 
+Borg, M. (Dec. 20, 2024). Trust Calibration in IDEs: Paving the Way for Widespread Adoption of AI Refactoring.
+Brown, A., D’Angelo, S., Murillo, A., Jaspan, C., and Green, C. (July 10, 2024). “Identifying the Factors That Influence Trust in AI Code Completion”. 
+Ishaani M, Omidvar-Tehrani, B., and Anubhai, A. (2024). “Evaluating Human-AI Partnership for LLM-Based Code Migration”.
+Kahneman, D. (2011). Thinking, Fast and Slow. 
+Khati, D., Liu, Y., Palacio, D. N., Zhang, Y., and Poshyvanyk, D. (Oct. 4, 2025). Mapping the Trust Terrain: LLMs in Software Engineering – Insights and 
+Perspectives.
+Lee, J. D. and See, K. A. (2004). “Trust in Automation: Designing for Appropriate Reliance”. In Human Factors
+Okamura, K. and Yamada, S. (2020). “Adaptive Trust Calibration for Human-AI Collaboration”.
+Parasuraman, R. and Manzey, D. H. (June 2010). “Complacency and Bias in Human Use of Automation: An Attentional Integration”. In: Human 
+Factors 
+Spiess, C., Gros, D., Pai, K. S., Pradel, M., Rabin, M. R. I., Alipour, A., Jha, S., Devanbu, P., and Ahmed, T. (Aug. 21, 2024). Calibration and Correctness of 
+Language Models for Code. 
+
+--- PDF PAGE 16 ---
+Summary
+1616
+Understanding of how different cognitive modes affect developer trust and verification behaviour when working with 
+LLM-based coding assistants.
+Thank You! 
+
+--- PDF PAGE 17 ---
+MeasurementsHow Trust Behaviour is Captured
+1717
+Data Collection Methods
+Think-Aloud Protocol
+Participants verbalise reasoning while screen/audio recorded
+VS Code Extension Logging
+Acceptance/rejection events, response latency, edit distance
+Confidence Ratings
+Likert scale at key decision points during tasks
+Mode Self-Labelling
+Participants label sessions as 'in the zone' or 'figuring it out'
+Post-Task Interview
+Probing reasoning, uncertainty moments, and trust drivers
+Key Measurements
+Measurement What It Captures
+Acceptance rate (per mode) Overall reliance level
+Acceptance latency Speed of decision-making
+Post-acceptance edit distance Whether accepted code was 
+actually used
+Error detection rate Errors caught from planted 
+suggestions
+Human ECE Confidence vs. correctness 
+alignment
+Think-aloud codes Anchoring bias, over-optimism, 
+uncertainty
+
+--- PDF PAGE 18 ---
+Trust Calibration Mechanisms
+1818
+Paper Mechanism How it works Trust Measure Outcome Strengths
+Spiess et al., 2024 Platt Scaling Statistical 
+adjustment of 
+token probabilities
+ECE, Brier Score Improved 
+statistical 
+alignment
+High mathematical 
+rigor
+Okamura & 
+Yamada, 2020
+Behavior-based 
+TCCs
+Behavioral 
+monitoring triggers 
+alerts
+Manual choice rate Reduced over-trust 
+behavior
+Real-time 
+mitigation
+Steyvers et al., 
+2025
+Uncertainty 
+Language
+Linguistic markers 
+aligned to scores
+Human conﬁdence 
+(prob.)
+Narrowed 
+calibration gap
+Addresses user 
+perception
+Zhang et al., 2020 Numeric Scores Displaying model 
+certainty %
+Switch percentage Improved 
+calibration for blind 
+delegation
+Effective for 
+high-conﬁdence 
+cases

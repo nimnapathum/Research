@@ -1,0 +1,3103 @@
+--- PDF PAGE 1 ---
+ http://hfs.sagepub.com/
+ 
+Ergonomics Society
+of the Human Factors and 
+Human Factors: The Journal
+ http://hfs.sagepub.com/content/52/3/381
+The online version of this article can be found at:
+ 
+DOI: 10.1177/0018720810376055
+ 2010 52: 381Human Factors: The Journal of the Human Factors and Ergonomics Society
+Raja Parasuraman and Dietrich H. Manzey
+Complacency and Bias in Human Use of Automation: An Attentional Integration
+ 
+ 
+Published by:
+ http://www.sagepublications.com
+On behalf of:
+ 
+ 
+ Human Factors and Ergonomics Society
+ can be found at:Society
+Human Factors: The Journal of the Human Factors and ErgonomicsAdditional services and information for 
+ 
+ 
+ 
+ 
+ 
+ http://hfs.sagepub.com/cgi/alertsEmail Alerts: 
+ 
+ http://hfs.sagepub.com/subscriptionsSubscriptions:  
+ http://www.sagepub.com/journalsReprints.navReprints: 
+ 
+ http://www.sagepub.com/journalsPermissions.navPermissions: 
+ 
+ http://hfs.sagepub.com/content/52/3/381.refs.htmlCitations: 
+ 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 2 ---
+Complacency and Bias in Human Use of Automation:  
+An Attentional Integration
+Raja Parasuraman, George Mason University, Fairfax, Virginia, and 
+Dietrich H. Manzey, Berlin Institute of Technology, Berlin, Germany
+Address correspondence to Raja Parasuraman, Arch Lab, 
+MS 3F5, George Mason University, 4400 University Drive, 
+Fairfax, V A 22030; rparasur@gmu.edu.
+HUMAN FACTORS
+V ol. 52, No. 3, June 2010, pp. 381–410. 
+DOI: 10.1177/0018720810376055. 
+Copyright © 2010, Human Factors and Ergonomics Society.
+Objective: Our aim was to review empirical stud-
+ies of complacency and bias in human interaction with 
+automated and decision support systems and provide 
+an integrated theoretical model for their explanation. 
+Background: Automation-related complacency 
+and automation bias have typically been considered 
+separately and independently. 
+Methods: Studies on complacency and automation 
+bias were analyzed with respect to the cognitive pro-
+cesses involved. 
+Results: Automation complacency occurs under con-
+ditions of multiple-task load, when manual tasks compete 
+with the automated task for the operator’s attention. 
+Automation complacency is found in both naive and 
+expert participants and cannot be overcome with sim-
+ple practice. Automation bias results in making both omis-
+sion and commission errors when decision aids are 
+imperfect. Automation bias occurs in both naive and expert 
+participants, cannot be prevented by training or instruc-
+tions, and can affect decision making in individuals as well as 
+in teams. While automation bias has been conceived of as a 
+special case of decision bias, our analysis suggests that it 
+also depends on attentional processes similar to those 
+involved in automation-related complacency. 
+Conclusion: Complacency and automation bias repre-
+sent different manifestations of overlapping automation-
+induced phenomena, with attention playing a central role. 
+An integrated model of complacency and automation bias 
+shows that they result from the dynamic interaction of per-
+sonal, situational, and automation-related characteristics. 
+Application: The integrated model and attentional 
+synthesis provides a heuristic framework for further 
+research on complacency and automation bias and design 
+options for mitigating such effects in automated and deci-
+sion support systems. 
+Keywords: a t t e n t i o n ,  a u t o m a t i o n - r e l a t e d  c o m p l a -
+cency, automation bias, decision making, human-com-
+puter interaction, trust
+INTRODUCTION
+Human interaction with automated and deci-
+sion support systems constitutes an important 
+area of inquiry in human factors and ergonomics 
+(Bainbridge, 1983; Lee & Seppelt, 2009; Mosier, 
+2002; Parasuraman, 2000; R. Parasuraman, 
+Sheridan, & Wickens, 2000; Rasmussen, 1986; 
+Sheridan, 2002; Wiener & Curry, 1980; Woods, 
+1996). Research has shown that automation 
+does not simply supplant human activity but 
+rather changes it, often in ways unintended and 
+unanticipated by the designers of automation; 
+moreover, instances of misuse and disuse of 
+automation are common (R. Parasuraman & 
+Riley, 1997). Thus, the benefits anticipated by 
+designers and policy makers when implement-
+ing automation—increased efficiency, improved 
+safety, enhanced flexibility of operations, lower 
+operator workload, and so on—may not always 
+be realized and can be offset by human perfor-
+mance costs associated with maladaptive use of 
+poorly designed or inadequately trained-for 
+automation.
+In this article, we review research on two 
+such human performance costs: automation-
+related complacency and automation bias. These 
+have typically (although not exclusively) been 
+considered in the context of two different para-
+digms of human-automation interaction, super-
+visory control (Sheridan & Verplank, 1978) and 
+decision support, respectively. We discuss the 
+cognitive processes associated with automation 
+complacency and automation bias and provide a 
+synthesis that sees the two phenomena as repre-
+senting different manifestations of overlapping 
+automation-induced phenomena, with attention 
+playing a central role.
+AUTOMATION COMPLACENCY
+Definitions
+The term complacency originated in references 
+in the aviation community to accidents or incidents 
+in which pilots, air traffic controllers, or other 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 3 ---
+382 June 2010 - Human Factors
+operators purportedly did not conduct sufficient 
+checks of system state and assumed “all was 
+well” when in fact a dangerous condition was 
+developing that led to the accident. The National 
+Aeronautics and Space Administration Aviation 
+Safety Reporting System (ASRS) includes 
+complacency as a coding item for incident 
+reports (Billings, Lauber, Funkhouser, Lyman, 
+& Huff, 1976). ASRS defines complacency as 
+“self-satisfaction that may result in non-
+vigilance based on an unjustified assumption of 
+satisfactory system state” (Billings et al., 1976, 
+p. 23). Wiener (1981) discussed the ASRS defi-
+nition as well as several others, including com-
+placency defined as “a psychological state 
+characterized by a low index of suspicion” (p. 
+119). Wiener proposed that empirical research 
+was necessary to go beyond these somewhat 
+vague definitions so as to gain an understanding 
+of the mechanisms of complacency and to make 
+the concept useful in enhancing aviation safety.
+Currently, there is no consensus on the defi-
+nition of complacency. However, there is a core 
+set of features among many of the definitions 
+that is common both to accident analyses and to 
+empirical human performance studies that could 
+be used to derive a working definition. The first 
+is that human operator monitoring of an auto-
+mated system is involved. The second is that the 
+frequency of such monitoring is lower than 
+some standard or optimal value (see also Moray 
+& Inagaki, 2000). The third is that as a result of 
+substandard monitoring, there is some directly 
+observable effect on system performance. The 
+performance consequence is usually that a sys-
+tem malfunction, anomalous condition, or out-
+right failure is missed (R. Parasuraman, Molloy, 
+& Singh, 1993). Technically, the performance 
+consequence could also involve not an omission 
+error but an extremely delayed reaction. However, 
+in many contexts in which there is strong time 
+pressure to respond quickly, as in an air traffic 
+control (A TC) conflict detection situation (Metzger 
+& Parasuraman, 2001), a delayed response would 
+be equivalent to a miss.
+Accident and Incident Reports
+Operator complacency has long been impli-
+cated as a major contributing factor in aviation 
+accidents (Hurst & Hurst, 1982). Wiener (1981) 
+reported that in a survey of 100 highly experi-
+enced airline captains, more than half stated that 
+complacency was a leading factor in accidents. 
+Initially, complacency was used to refer to inad-
+equate pilot monitoring in relation to any air-
+craft subsystem. With the advent of automation, 
+however, first in the aviation industry and later 
+in many other domains, the possibility arose of 
+automation-related complacency. Consistent with 
+this trend, in a more recent analysis of aviation 
+accidents involving automated aircraft, Funk 
+et al. (1999) also reported that complacency 
+was among the top five contributing factors.
+Complacency has also been cited as a con-
+tributing factor in accidents in domains other 
+than aviation. A widely cited example is the 
+grounding of the cruise ship Royal Majesty off 
+the coast of Nantucket, Massachusetts (Degani, 
+2001; R. Parasuraman & Riley, 1997). This ship 
+was fitted with an automatic radar plotting aid 
+(ARPA) for navigation that was based on GPS 
+receiver output. The GPS receiver was connected 
+to an antenna mounted in an area where there 
+was heavy foot traffic of the ship’s crew. As a 
+result, the cable from the antenna frayed, lead-
+ing to a loss of the GPS signal. At this point, 
+the ARPA system reverted to “dead reckoning” 
+mode and did not correct for the prevailing tides 
+and winds. Consequently, the ship was gradually 
+steered toward a sand bank in shallow waters. 
+The National Transportation Safety Board (1997) 
+report on the incident cited crew overreliance 
+on the ARPA system and complacency associ-
+ated with insufficient monitoring of other sources 
+of navigational information, such as the Loran 
+C radar and visual lookout.
+Automation complacency has been similarly 
+cited in several other analyses of accidents and 
+incidents (Casey, 1998). The dangers of com-
+placency have been described in many com-
+mentaries and editorial columns, including 
+those in leading scientific journals, such as Science 
+(e.g., Koshland, 1989). Perhaps as a result of read-
+ing such anecdotal reports and opinion pieces 
+(which have a tendency to overgeneralize and 
+draw very broad conclusions), Dekker and col-
+leagues (Dekker & Hollnagel, 2004; Dekker & 
+Woods, 2002) proposed that terms such as com-
+placency and situation awareness do not have 
+scientific credibility but rather are simply “folk 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 4 ---
+AUTOMATION COMPLACENCY AND BIAS 383
+models.” R. Parasuraman, Sheridan, and 
+Wickens (2008) disputed this view, pointing to 
+the growing scientific, empirical literature on 
+the characteristics of both constructs.
+Accident and incident reports clearly cannot 
+be held to high scientific standards, but they pro-
+vide a useful starting point for scientific under-
+standing of any phenomenon. Describing the 
+characteristics of complacency through empiri-
+cal research would therefore appear to be an 
+important goal. In the three decades since the 
+early anecdotal reports and accident analyses 
+mentioning complacency, a number of investiga-
+tors have followed Wiener’s (1981) call for such 
+empirical research.
+Early Empirical Evidence for  
+Complacency Effects in Monitoring 
+Automated Systems
+Thackray and Touchstone (1989) conducted 
+an early yet ultimately unsuccessful attempt to 
+obtain evidence of complacency. They had par-
+ticipants perform a simple ATC task requiring 
+detection of aircraft-to-aircraft conflicts (e.g., 
+those within 5 nautical miles of each other) with 
+or without a simulated automation aid that indi-
+cated that a conflict would occur. The automa-
+tion failed twice, once early and once late during 
+a 2-hr session. Although observers were some-
+what slower to respond to the first failure when 
+using the automation, this was not the case for 
+the later failure. Moreover, participants were as 
+accurate at monitoring for conflicts with auto-
+mation as they were when performing the task 
+manually, if not more so.
+Thackray and Touchstone (1989) indicated 
+that their failure to obtain reliable evidence of 
+complacency might be related to their use of a 
+relatively short test session, even though their 
+testing period was 2 hr long and their ATC task 
+was so simple and monotonous that many par-
+ticipants experienced considerable boredom 
+(Thackray, 1981). However, subsequent studies 
+in which complacency effects have been found 
+in shorter periods and with more complex tasks 
+indicate that the short test duration was unlikely 
+to have been the major reason for their failure. 
+A more likely factor is the extremely simple 
+nature of the assignment given to the partici-
+pants in their study, who, unlike controllers 
+conducting real A TC operations, did not have 
+any competing tasks, only conflict detection.
+R. Parasuraman et al. (1993) provided the 
+first empirical evidence for automation compla-
+cency and for the contributing role of high task 
+load. They had participants perform three con-
+current tasks from the Multiple Task Battery 
+(MATB): a two-dimensional compensatory track-
+ing and an engine fuel management task, both 
+of which had to be carried out manually, and a 
+third task involving engine monitoring that 
+required participants to detect abnormal read-
+ings on one of four gauges; this task was sup-
+ported by an automated system that was not 
+perfectly reliable. In different conditions, the 
+automation had either high (88%) or low 
+(52%) reliability in detecting engine malfunc-
+tions. Complacency was operationally defined 
+as the operator’s not detecting or being slow to 
+detect failures of the automation to detect engine 
+malfunctions. 
+The variability of automation performance 
+over time was also manipulated on the basis of 
+Langer’s (1989) concept of “premature cogni-
+tive commitment,” defined as an attitude that 
+develops when a person first encounters a 
+device in a particular context and that is then 
+reinforced when the device is reencountered in 
+the same way. Langer (1982) proposed that 
+repeated exposure to the same experience 
+leads people to engage in “automated” or 
+“mindless” behavior. R. Parasuraman and col-
+leagues (1993) therefore reasoned that auto-
+mation that is unchanging in its reliability is 
+more likely to induce complacency than is 
+automation that varies. In this case, partici-
+pants will be more likely to develop a prema-
+ture cognitive commitment regarding the 
+nature of the automation and its efficiency. On 
+the other hand, participants encountering 
+inconsistent automation reliability should have 
+a more open attitude concerning the efficiency 
+of the automation and hence should be less 
+likely to be complacent. Finally, to examine 
+the effects of multiple-task load, Parasuraman 
+et al. also conducted a second experiment in 
+which participants had to perform only the 
+engine-monitoring task with automation sup-
+port under either the constant-reliability or the 
+variable-reliability condition.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 5 ---
+384 June 2010 - Human Factors
+The results showed that complacency effects 
+were linked both to the consistency of automa-
+tion reliability and to task load. The mean detec-
+tion rate of automation failures was markedly 
+higher for the variable-reliability condition (82%) 
+than for the constant-reliability condition (33%) 
+(see Figure 1). The magnitude of the effect—a 
+149% difference in detection rate—is dramatic, 
+considering that under single-task conditions, 
+detection of engine malfunctions was quite easy, 
+averaging about 97%.
+R. Parasuraman et al. (1993) also found that 
+detection of automation failures was significantly 
+poorer in the multitask condition than in the 
+single-task condition. When participants had 
+simply to “back up” the automation routine with-
+out other duties, monitoring was efficient and 
+near perfect in accuracy (~100%).
+These results indicate that automation-
+ind uced complacency is more easily detect-
+able in a multitask environment when operators 
+are responsible for many functions and their 
+attention is focused on their manual tasks. 
+Impor tantly, the findings suggest that compla-
+cency is not a passive state that the operator 
+falls into (as the usage in everyday parlance 
+would suggest). Rather, automation complacency 
+represents an active reallocation of attention 
+away from the automation to other manual tasks 
+in cases of high workload.
+Factors Influencing Automation 
+Complacency
+There have been a number of additional studies 
+examining the characteristics of automation 
+complacency following the original study by 
+R. Parasuraman et al. (1993). One question is 
+whether the spatial location of the automated 
+task is an important factor in automation com-
+placency. In the Parasuraman et al. study, the 
+automated task was always presented in the 
+periphery, away from the primary manual tasks 
+that were centrally displayed. It is possible that 
+the peripheral location led participants to 
+neglect the automated task. Singh, Molloy, and 
+Parasuraman (1997) accordingly examined whether 
+centrally locating the automated engine-moni-
+toring task would boost performance and reduce 
+or eliminate the complacency effect. They had 
+participants perform the same three tasks and 
+the same conditions as in Parasuraman et al., 
+with the single change that the engine-monitor-
+ing task was moved to the center of the display, 
+with the tracking and fuel management tasks 
+located below it. Singh et al. found that monitor-
+ing for automation failure was inefficient when 
+automation reliability was constant but not when 
+it varied over time, replicating Parasuraman 
+et al. Thus, the automation complacency effect 
+was not prevented by centrally locating the auto-
+mated task.
+Automation reliability. In the automation 
+complacency studies described thus far, the 
+automation failure rate was relatively high, for 
+example, 12% in the “high” reliability condi-
+tion of R. Parasuraman et al. (1993). Such high 
+(and even higher) values of failure rate were 
+needed for the study so that a sufficient number 
+of data points could be generated for estimating 
+the detection performance of individual partici-
+pants on the engine-monitoring task. But an 
+obvious drawback is that such high failure rates 
+are unrepresentative of any real automated sys-
+tem or at least any system that human operators 
+would use.
+To address this criticism, Molloy and 
+Parasuraman (1996) conducted a study in which 
+the automation failed on only a single occasion 
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1 2 3 4 5 6 7 8 9 10 11 12
+10-Minute Blocks of Trials
+Probability of Detecting
+Automation Failure
+Constant Reliability
+Variable Reliability
+Figure 1. Detection of automation failures under 
+constant-reliability and variable-reliability condi-
+tions. Adapted from “Performance Consequences 
+of Automation-Induced ‘Complacency,’” by  
+R. Parasuraman, R. Molloy, and I. L. Singh, 1993, 
+International Journal of Aviation Psychology, 3, 
+p. 10. Copyright 1993 by Taylor and Francis. Adapted 
+with permission.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 6 ---
+AUTOMATION COMPLACENCY AND BIAS 385
+during a test session. Participants performed the 
+same MATB simulation as in the R. Parasuraman 
+et al. (1993) study. Two groups of participants 
+performed the MATB under either a multitask 
+or a single-task condition, and a third group per-
+formed a simple line discrimination task; within 
+each group, participants performed two 30-min 
+sessions separated by a rest break. For the two 
+groups performing the MATB, the automation 
+failed only once in each session, either early 
+(first 10 min) or late (last 10 min); for the group 
+given the simple vigilance task, only one signal 
+was presented, either early or late in the 30-min 
+session.
+The authors found that in the single-task 
+MATB condition, most participants detected the 
+automation failure, whether it occurred early or 
+late. Under multitask conditions, however, only 
+about half the participants detected the automa-
+tion failure, and an even smaller proportion 
+detected the failure if it occurred late than if it 
+occurred early (see Figure 2). Bailey and Scerbo 
+(2007) replicated this finding using a somewhat 
+different multitask flight simulation based on 
+the MATB.
+De Waard, van der Hulst, Hoedemaeker, and 
+Brookhuis (1999) provided additional confir-
+matory evidence in a study of automation in 
+driving. They had participants in a simulator drive 
+a vehicle fitted for operation in an automatic 
+highway system (AHS), in which steering and 
+lateral control were automated but could be 
+overridden by depressing the brake. Toward the 
+end of the scenario and on a single occasion, a 
+vehicle merged suddenly into the same lane in 
+front of the participant’s AHS vehicle. The AHS 
+failed to detect the intrusion (automation fail-
+ure). De Waard and colleagues found that half 
+of the drivers did not detect the failure, depress 
+the brake, and retake manual control, and 14% 
+did not respond quickly enough to avoid a 
+collision.
+These findings provide additional evidence 
+for the view that automation complacency 
+occurs for highly reliable systems in which 
+automated control fails on only a single occa-
+sion. One could argue that even the single fail-
+ure during a 30-min session is not representative 
+of real systems, in which even lower failure 
+rates might be seen. For example, in a review of 
+various industrial monitoring and inspection jobs, 
+Craig (1984) estimated that a critical signal might 
+occur about once every 2 weeks. However, given 
+the impracticality of empirically testing partici-
+pants in a laboratory setting with such low signal 
+rates, and given that detection of an unexpected 
+event typically decreases with reductions in sig-
+nal probability (Davies & Parasuraman, 1982), 
+these findings indicate that monitoring for auto-
+mation failures is likely to be even poorer for 
+very low failure rates representative of real but 
+imperfect automated systems.
+These considerations also suggest that 
+decreases in automation reliability should reduce 
+automation complacency, that is, increase the 
+det ection rate of automation failures. In the 
+R. Parasuraman et al. (1993) study, two auto-
+mation reliability levels were compared, low 
+and high, and although participants detected 
+more automation failures at the low reliability, 
+the difference was not statistically significant, 
+possibly because of low power.  In a replication 
+study, however, Bagheri and Jamieson (2004) 
+did find that participants detected significantly 
+more automation failures at low than at high 
+automation reliability. Moreover, they confirmed 
+0
+20
+40
+60
+80
+100
+LastFirst
+10-Minute Block
+Proportion of Subjects Detecting
+Automation FailureSimple Task
+Single-Complex Task
+Multi-Complex Task
+Figure 2. Automation complacency effect for a single 
+automation failure. Adapted from “Monitoring an 
+Automated System for a Single Failure: Vigilance 
+and Task Complexity Effects,” by R. Molloy and  
+R. Parasuraman, 1996, Human Factors, 3 8, p. 318. 
+Copyright 1996 by the Human Factors and Ergonomics 
+Society. Adapted with permission.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 7 ---
+386 June 2010 - Human Factors
+Parasuraman et al.’s finding that detection per-
+formance was better under variable-reliability 
+than under constant-reliability automation. Finally, 
+May, Molloy, and Parasuraman (1993) varied 
+automation reliability across a range of values 
+under the same multitask condition used in 
+Parasuraman et al. They found that the detec-
+tion rate of automation failures varied inversely 
+with automation reliability, but no evidence was 
+found for a lower limit of automation reliability 
+below which automation complacency did not 
+occur. Rather, detection of automation failures 
+was still worse than manual performance even 
+at a low level of automation reliability.
+Complacency represents a cost that can off-
+set the benefits that automation can provide. 
+One would presume that when the reliability 
+level of an automated system falls below some 
+limit, that there would be neither benefits nor 
+costs associated with automation. Wickens and 
+Dixon (2007) proposed that this cutoff value is 
+approximately 70% (with a standard error of 
+±14%), on the basis of studies examining the 
+beneficial effects of automation support. If this 
+objective standard was followed, then observers 
+should not rely on imperfect automation whose 
+reliability falls below this value, but Wickens 
+and Dixon reported that some continue to do so. 
+Congruent with this finding, May et al. (1993) 
+also found that participants continued to show 
+complacency effects even at low automation 
+reliability. Moreover, other researchers have found 
+that even automation with reliabilities lower 
+than the 70% cutoff value can support human 
+operators who also have access to the “raw” 
+information sources, which they can combine 
+with the automation output to improve overall 
+performance (de Visser & Parasuraman, 2007; 
+St. John, Smallman, Manes, Feher, & Morrison, 
+2005).
+Automation reliance appears to be strongly 
+context dependent, with the 70% threshold 
+being important primarily under high workload 
+(Wickens & Dixon, 2007). Multiple-task condi-
+tions are also where the automation compla-
+cency effect is strongest. Whether there is a fixed 
+lower bound of automation reliability, below 
+which neither benefits nor costs accrue, and the 
+influence of contextual factors on such a thresh-
+old are issues that need further investigation.
+First-failure effect. In addition to the overall 
+automation failure rate, the temporal sequence 
+of failures and the time between failures may be 
+important factors to consider as well. If compla-
+cency reflects an operator’s initial attitude toward 
+high-reliability automation based on high trust, 
+then a failure to monitor is perhaps to be 
+expected the first time the automation fails. Lee 
+and Moray (1992, 1994) showed that the reduc-
+tion in operator trust following an automation 
+failure was followed by a recovery in trust but 
+at a slow rate. If so, then one would expect the 
+complacency effect to be high for the first fail-
+ure but to dissipate thereafter, a phenomenon 
+Merlo, Wickens, and Yeh (2000) referred to as 
+the first-failure effect. Some evidence for the 
+effect was reported in a recent study by Rovira, 
+McGarry, and Parasuraman (2007) in which 
+participants had to make simulated battlefield 
+engagement decisions under time pressure with 
+the aid of imperfect automation. Performance 
+declined the first time automation failed but 
+improved on subsequent failures.
+These findings suggest that complacency is 
+associated with a cognitive orientation toward 
+very-high-reliability automation prior to the 
+first time it has failed in the user’s experience 
+(R. Parasuraman & Wickens, 2008). Subsequent 
+exposure to automation failures may allow for 
+better calibration to the true reliability, so that 
+detection performance improves. However, 
+whereas Rovira et al. (2007) did find some cor-
+roborative evidence, other studies using differ-
+ent tasks have not found consistent evidence for 
+the first-failure effect (Wickens, Gempler, & 
+Morphew, 2000). 
+Expertise and automation realism. Although 
+the evidence for the first-failure effect is equiv-
+ocal, the phenomenon raises the issue of whether 
+complacency-like effects stem from insufficient 
+experience with the automation or from inade-
+quate practice in performing the automated task. 
+With respect to the first issue, it is noteworthy 
+that the complacency studies described thus far 
+all involved artificial types of automation not 
+found in real systems. Furthermore, college 
+students were used as participants. What of 
+exp erienced, skilled workers who are tested with 
+automation more closely resembling real auto-
+mated systems? Do they exhibit automation 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 8 ---
+AUTOMATION COMPLACENCY AND BIAS 387
+complacency? Three studies have provided a 
+positive answer to this question.
+First, using the MATB simulation, Singh, 
+Molloy, Mouloua, Deaton, and Parasuraman 
+(1998) compared the performance of pilots with 
+an average of approximately 440 hr of flight 
+experience with that of nonpilots in the same 
+paradigm developed by R. Parasuraman et al. 
+(1993). Clear complacency effects were obtained 
+for both groups, although the pilots detected more 
+automation failures than did the nonpilots.
+Second, Galster and Parasuraman (2001) tested 
+general aviation pilots with several hundred 
+hours of flight experience on a multitask flight 
+simulation involving Instrument Flight Rated 
+flight using an actual cockpit automation sys-
+tem, the Engine Indicator and Crew Alerting 
+System (EICAS). Clear evidence of a compla-
+cency effect was found, with pilots detecting 
+fewer engine malfunctions when using the EICAS 
+than when performing this task manually.
+In a third study, by Metzger and Parasuraman 
+(2005), experienced air traffic controllers were 
+tested on a high-fidelity simulation of a future 
+ATC (Free Flight) scenario requiring detection 
+of conflicts among “self-separating” aircraft. 
+Controllers were supported by a “conflict probe” 
+automation that pointed to a potential conflict 
+several minutes before its occurrence. The auto-
+mation failed once toward the end of the sce-
+nario. The authors found that significantly 
+fewer controllers detected the conflict when the 
+conflict probe failed than when the same con-
+flict was handled manually. This result was con-
+sistent with an earlier finding from this group 
+showing that conflict detection performance was 
+better when controllers were actively involved 
+in conflict monitoring and conflict resolution 
+(“active control”) than when they were asked to 
+be passive monitors in a simulated Free Flight 
+scenario involving pilot self-separation (Galster, 
+Duley, Masalonis, & Parasuraman, 2001; Metzger 
+& Parasuraman, 2001).
+Training. Notwithstanding these findings with 
+expert pilots and controllers, another aspect of 
+experience is familiarity with the simulation, 
+automation, and task setting per se. Could the 
+complacency effect simply reflect insufficient 
+practice at performing the automated task in 
+conjunction with other manual tasks? Singh, 
+Sharma, and Parasuraman (2001) found that the 
+automation complacency effect obtained in the 
+standard paradigm described by R. Parasuraman 
+et al. (1993) was not reduced by up to 60 min of 
+training.
+Although extended practice does not eliminate 
+automation complacency, other training proce-
+dures may provide some benefit. In particular, 
+given that complacency is primarily found in 
+multitasking environments and represents atten-
+tion allocation away from the automated task, 
+training in attention strategies might mitigate 
+complacency.
+One such training procedure is the variable-
+priority method proposed by Gopher (1996; 
+Gopher, Weil, & Siegel, 1989). For example, in 
+a dual-task setting, observers are trained to 
+devote greater priority to one task (say, 80%) 
+and less to the other (20%) in one block of train-
+ing trials, followed by the reverse priority in a 
+subsequent block. Compared with fixed, equal-
+priority training (50% and 50%), variable-priority 
+training results in faster acquisition of dual-
+task skills. Accordingly, Metzger, Duley, Abbas, 
+and Parasuraman (2000) trained participants in 
+the three subtasks of the MATB using either 
+the variable- or the fixed-priority method and 
+examined both overall performance and detec-
+tion of failures in the automated task (compla-
+cency). Variable-priority training led to better 
+multitasking performance, and a trend for a 
+reduction in the automation complacency effect 
+was observed. An additional training method 
+that might reduce complacency includes experi-
+ence of automation failures (Bahner, Huper, & 
+Manzey, 2008). We consider this method in a 
+later section of this article, where studies of 
+automation bias are discussed.
+Automation Complacency, Attention, 
+and Trust
+The studies discussed thus far have shown 
+that automation complacency—operationally 
+defined as poorer detection of system malfunc-
+tions under automation control compared with 
+manual control—is typically found under con-
+ditions of multiple-task load, when manual tasks 
+compete with the automated task for the opera-
+tor’s attention. The operator’s attention alloca-
+tion strategy appears to favor his or her manual 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 9 ---
+388 June 2010 - Human Factors
+tasks as opposed to the automated task. This 
+strategy may itself stem from an initial orienta-
+tion of trust in the automation, which is then 
+reinforced when the automation performs at the 
+same, constant level of reliability.
+The finding that variable-reliability automa-
+tion, fluctuating between high and low and back 
+again, is associated with the elimination of 
+complacency is certainly compatible with the 
+notion that reduced operator monitoring of the 
+automation could be linked to trust. Thus, as 
+Moray (2003; Moray & Inagaki, 2000) pointed 
+out, an attention strategy devoted primarily to 
+manual tasks and only occasionally to the auto-
+mated task can be considered rational (see also 
+Sheridan, 2002). Moray (2003; Moray & 
+Inagaki, 2000) also suggested that complacency 
+could be inferred only if the operator’s rate of 
+sampling of the automated task was below that 
+of an optimal or normative observer. Moray’s 
+views are considered further later in this article, 
+but for now, we simply note that these consider-
+ations reinforce a close link between automa-
+tion complacency, attention, and trust. Figure 3 
+shows a schematic of these links. The operator 
+uses an attention allocation strategy to sample 
+his or her manual tasks, with attention to the 
+automated task being driven in part by trust.
+The original R. Parasuraman et al. (1993) study 
+also discussed the finding of automated com-
+placency under constant-reliability conditions in 
+terms of attentional and trust factors. However, 
+that study did not obtain independent measures 
+either of attention or of trust. Subsequent stud-
+ies have used eye movement recordings to 
+examine attention allocation under conditions 
+of manual and automation control. In particular, 
+Metzger and Parasuraman (2005) used different 
+measures of eye movements to examine the 
+attentional theory of automation complacency.
+In this study, experienced air traffic control-
+lers were required to detect aircraft-to-aircraft 
+conflicts either manually or with the aid of auto-
+mation (a “look-ahead” conflict probe). Toward 
+the end of the scenario, the automation failed on 
+a single occasion. A greater proportion of con-
+trollers missed detecting the conflict with the 
+automation than when, in a separate session, 
+they handled the same conflict (rotated in sector 
+geometry to reduce familiarity effects) without 
+the help of automation. Among controllers who 
+detected the conflict in both the automation and 
+the manual conditions, there were no differences 
+in the number of fixations of the primary radar 
+display where the conflicting aircraft were shown. 
+Among controllers who missed the conflict, 
+however, there were significantly fewer fixa-
+tions of the radar display under automation sup-
+port than under manual control. This finding 
+provides strong evidence for a link between the 
+automation complacency effect and reduced 
+visual attention to the primary information sources 
+feeding automation which must be monitored to 
+detect an abnormal event (for related eye move-
+ment evidence on complacency, see Baghieri & 
+Jamieson, 2004, and Wickens, Dixon, Goh, & 
+Hammer, 2005).
+Although these studies point to a role for 
+attention allocation in the automation compla-
+cency effect, their interpretation depends on the 
+assumption of a close link between eye move-
+ments and attention. There is considerable evi-
+dence for a link between the two (Corbetta, 
+1998; Shepherd, Findlay, & Hockey, 1986), and 
+studies of covert shifts of attention show that 
+such attention shifts typically precede an eye 
+movement (Hoffman & Subramaniam, 1995). 
+However, attention and eye movements can 
+also be dissociated, and the phenomena of “inat-
+tentional blindness” or “change blindness” 
+(Mack & Rock, 1998; Simons & Rensink, 2005) 
+indicates that relatively salient items of infor-
+mation in the environment can be missed even 
+if they are fixated (R. Parasuraman, Cosenzo, & 
+de Visser, 2009; Thomas & Wickens, 2006). 
+Thus, although an eye fixation generally indi-
+cates that a location was attended, it need not 
+always do so, because attention may have moved 
+to another location—the so-called looking-but-
+not-seeing phenomenon.
+Task A
+Task B
+Task C
+Task D
+(Automated)
+Attention
+Allocation
+Strategy
+Trust
+Human
+OperatorSystem
+Indicators
+Figure 3. Attention allocation and trust in manual and 
+automated tasks.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 10 ---
+AUTOMATION COMPLACENCY AND BIAS 389
+Duley, Westerman, Molloy, and Parasuraman 
+(1997) reexamined the automation complacency 
+effect to see whether it could be reduced or 
+eliminated by forcing eye fixations on the auto-
+mated task. They did this by superimposing the 
+(automated) engine-monitoring task on the 
+manual tracking task in the MATB simulation, 
+carefully interleaving the display elements of 
+each task so that they did not mask each other. 
+They chose the tracking task for superimposition 
+because it was a high-bandwidth task (cf. Moray 
+& Inagaki, 2000) that needed to be frequently 
+visually sampled for successful performance. 
+Thus, operators would repeatedly have to fixate 
+the tracking task, and by doing so, the auto-
+mated task would also fall within foveal vision 
+at the same time. Surprisingly, Duley et al. 
+found that the standard complacency effect of 
+R. Parasuraman et al. (1993) was again found: 
+Participants were poorer in detecting engine 
+malfunctions under automation than when they 
+did the task manually. Tracking performance was 
+equally good under both conditions. Thus, the 
+automation complacency effect could not be 
+attributed to insufficient sampling of the auto-
+mated task. These findings suggest that atten-
+tion allocation away from the automated task 
+associated with complacency may include not 
+only fixation failures but attention failures as well.
+In addition to visual attention, automation 
+complacency has been linked to an initial atti-
+tude of high trust toward the automation. 
+Trust was not directly measured in the original 
+R. Parasuraman et al. (1993) study. However, 
+subjective measures of trust were obtained in 
+two subsequent studies, by Baghieri and 
+Jamieson (2004) and by Bailey and Scerbo 
+(2007). Consistent with Parasuraman et al., 
+Baghieri and Jamieson found that constant-reli-
+ability automation led to poorer detection of 
+automation failures than did variable-reliability 
+automation, but this effect was not associated 
+with higher subjective trust. However, in two 
+experiments conducted by Bailey and Scerbo 
+using the single-failure paradigm of Molloy and 
+Parasuraman (2006), an inverse relationship 
+was observed between subjective trust (mea-
+sured with a 12-item questionnaire) and moni-
+toring performance, although the relationship 
+emerged only when data from the two separate 
+experiments were combined. In a review of 
+trust and automation studies, Lee and See 
+(2004) did not find convincing links between 
+poor automation monitoring and high trust in 
+automation, and currently, the Bailey and 
+Scerbo study provides the only, somewhat ten-
+tative, evidence.
+One reason for the weak evidence for a rela-
+tionship between complacency and trust is the 
+potential discrepancy between subjective and 
+objective measures of trust. Overt behavioral 
+indicators of trust, as revealed, for example, in 
+verification activities (St. John et al., 2005), 
+may provide stronger evidence of a closer link. 
+We consider this issue further later, when we 
+discuss a study by Bahner et al. (2008).
+Individual Differences 
+There are considerable individual differences 
+in the performance effects associated with auto-
+mation complacency. R. Parasuraman et al. 
+(1993) found that in the experimental group that 
+exhibited this effect, the mean detection rate of 
+automation failures was quite low, 33%. But 
+there was considerable variability around this 
+mean, and as many as half of the participants in 
+the group did not detect any malfunctions (0% 
+detection) on one of the blocks of the test ses-
+sion. Clearly, some participants exhibit the 
+effect to a greater extent than others. What is the 
+source of these individual differences?
+In an initial examination of individual differ-
+ences, Singh, Molloy, and Parasuraman (1993a) 
+distinguished between complacency potential 
+and behavior. Although an attitude of trust toward 
+automation can foster overreliance, this may 
+not in itself lead to complacent behavior but 
+may indicate only a potential for complacency. 
+Complacent behavior—as reflected in poor 
+monitoring of automation—may occur only 
+when complacency potential coexists with other 
+conditions, such as high task load. Individuals 
+may differ both in the potential they “bring” to 
+a task setting as well as in their response to that 
+setting.
+Singh et al. (1993a) developed a 20-item 
+scale, the Complacency Potential Rating Scale 
+(CPRS), with items covering attitudes toward 
+commonly encountered automated devices (such 
+as automatic teller machines). Factor analysis 
+of questionnaire responses in a psychology 
+college population and a different sample of 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 11 ---
+390 June 2010 - Human Factors
+engineering students (R. Parasuraman, Singh, 
+Molloy, & Parasuraman, 1992) revealed factors 
+with good internal consistency and test-retest 
+reliability, suggesting that the CPRS might be 
+useful in validation studies examining individ-
+ual differences in complacent behavior.
+Singh, Molloy, and Parasuraman (1993b) rep -
+orted one such study. They administered the CPRS 
+to two groups of participants who performed 
+the MATB simulation in the same conditions of 
+the R. Parasuraman et al. (1993) study. There 
+was some evidence that complacent behavior—
+poor detection of automation failures—was asso-
+ciated (r = –.42) with higher complacency 
+potential as measured by the CPRS. However, 
+this correlation emerged only when the partici-
+pants were subdivided by a median split of 
+CPRS scores into low- and high-compla-
+cency-potential groups, with the association 
+being found only for high-complacency-poten-
+tial participants. Singh et al. suggested that 
+there is perhaps a threshold of complacency 
+potential, with a link between general attitudes 
+of reliance and trust toward automation being 
+reflected in complacent performance only in indi-
+viduals who exhibit such attitudes to a strong 
+degree. V ery similar findings were reported in a 
+replication study by Prinzel, DeVries, Freeman, 
+and Mikulka (2001), who found that individuals 
+scoring high on the CPRS were particularly 
+poor in monitoring automation under constant- 
+than under variable-reliability automation.
+Singh et al. (1993a) proposed that compla-
+cency potential represents an attitude toward 
+automation rather than an enduring trait. Con-
+sistent with this view, Singh et al. (1993b) found 
+no relationship between the automation com-
+placency effect and the personality trait of 
+extraversion-introversion. Prinzel et al. (2001) 
+also found no association with measures of 
+boredom proneness or absentmindedness, 
+although in a subsequent study, they did find 
+some evidence for a negative correlation 
+between automation complacency and self-
+efficacy (Prinzel, 2002). In general, however, 
+strong associations between personality or 
+related indices of personal variability and auto-
+mation complacency have not been found. 
+However, the currently available database is 
+very small and therefore does not warrant any 
+decisive conclusions. 
+With respect to other sources of individual or 
+group differences, there do not appear to be any 
+gender differences in complacency. However, 
+adult age differences in automation complacency 
+have been reported, with older adults exhibiting 
+greater automation-related complacency but only 
+under very high workload conditions (Hardy, 
+Mouloua, Dwivedi, & Parasuraman, 1995; 
+Vincenzi, Muldoon, Mouloua, Parasuraman, & 
+Molloy, 1996).
+Summary
+The studies discussed thus far have shown 
+that automation complacency—operationally 
+defined as poorer detection of system malfunc-
+tions under automation compared with under 
+manual control—is typically found under con-
+ditions of multiple-task load, when manual tasks 
+compete with the automated task for the opera-
+tor’s attention. Several factors modulate this 
+effect: It is largely eliminated when automation 
+reliability is varied over time as opposed to 
+when reliability remains constant. Automation 
+complacency is also reduced when the automa-
+tion failure rate is increased, but the issue of 
+whether there is a threshold reliability level 
+below which automation complacency does not 
+occur remains unresolved. Conversely, compla-
+cency occurs for highly reliable (yet imperfect) 
+automation and even when the automation 
+fails on only a single occasion in the operator’s 
+experience.
+Finally, experience and practice do not app-
+ear to mitigate automation complacency: Skilled 
+pilots and controllers exhibit the effect, and 
+additional task practice in naive operators does 
+not eliminate complacency. It is possible that 
+specific experience in automation failures may 
+reduce the extent of the effect. Automation 
+complacency can be understood in terms of an 
+attention allocation strategy whereby the opera-
+tor’s manual tasks are attended to at the expense 
+of the automated task, a strategy that may be 
+driven by initial high trust in the automation. 
+AUTOMATION BIAS
+Automated Decision Aids
+Automated decision aids are devices that 
+support human decision making in complex 
+environments. A dichotomous alarm system 
+that alerts human operators to a potential hazard 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 12 ---
+AUTOMATION COMPLACENCY AND BIAS 391
+represents the most basic example (Wiegmann, 
+2002). More complex examples include the 
+Traffic Conflict and Alert System (TCAS) and 
+the Ground Proximity Warning System (GPWS), 
+which are installed in many commercial air-
+craft. Other examples include navigation aids in 
+cars, fault diagnosis and management systems 
+in process control, and expert systems for phy-
+sicians or computer-based aids for surgeons in 
+the medical domain.
+Such systems are meant to support human 
+cognitive processes of information analysis 
+and/or response selection by providing auto-
+matically generated cues to help the human user 
+correctly assess a given situation or system state 
+and to respond appropriately. Two different 
+functions of decision aids can be distinguished: 
+alerts and recommendations. The alert function, 
+which is the main feature of simple alarm sys-
+tems and is embedded in more complex deci-
+sion aids, makes the user aware of a situational 
+change that might require action. In a car navi-
+gation aid, for example, this function is acti-
+vated whenever a turn must be made. The 
+recommendation function involves advice on 
+choice and action. For example, navigation aids 
+provide specific recommendations of where to 
+drive; cockpit warning systems, such as TCAS 
+or GPWS, provide pilots with specific com-
+mands (e.g., “Pull up! Pull up!”) to avoid colli-
+sion; and medical expert systems provide 
+recommendations about appropriate treatment 
+of patients and choice of drug doses.
+Definition and Characteristics of 
+Automation Bias
+Automated decision aids are meant to enhance 
+human decision-making efficiency. This is of 
+particular value in areas where incorrect deci-
+sions have high costs in terms of either economic 
+consequences (e.g., in the area of manufactur-
+ing) or safety outcomes (e.g., aviation, medi-
+cine, process control). If the benefit of a decision 
+aid is to be realized, it needs to be used appro-
+priately. Quite often, however, decision aids are 
+misused, for two main reasons. First, the auto-
+matically generated cues are very salient and 
+draw the user’s attention. Second, users have a 
+tendency to ascribe greater power and authority 
+to automated aids than to other sources of advice. 
+Consequently, Mosier and Skitka (1996) defined 
+automation bias as resulting from people’s 
+using the outcome of the decision aid “as a heu-
+ristic replacement for vigilant information seek-
+ing and processing” (p. 205). Such a definition 
+treats automation bias as similar to other biases 
+and heuristics in human decision making (e.g., 
+confirmation bias), with the qualification that 
+the bias stems specifically from interaction with 
+an automated system.
+Automation bias eventually can lead to deci-
+sions that are not based on a thorough analysis 
+of all available information but that are strongly 
+biased by the automatically generated advice. 
+Whereas automation bias is inconsequential 
+when the recommendations are correct, it can 
+compromise performance considerably in case 
+of automation failures, that is, if the aid does not 
+alert the user to become active or if the aid pro-
+vides a false recommendation or directive. An 
+error of omission, whereby the user does not 
+respond to a critical situation, is related to the 
+alert function. An example from everyday expe-
+rience is a driver who misses the correct exit 
+from a highway because the navigation aid 
+failed to notify the driver. The second type of 
+error is a commission error, which is related to 
+the specific recommendations or directives pro-
+vided by an aid. In this case, users follow the 
+advice of the aid even though it is incorrect. An 
+example is a driver who falsely enters a one-way 
+street from the wrong side because the naviga-
+tion aid (which may not have had the one-way 
+information in its database) tells the driver to do 
+so. Another example is following the advice of 
+an expert flight planner although its recom-
+mendations are wrong or less than optimal for 
+a particular situation (e.g., Layton, Smith, & 
+McCoy, 1994).
+Three main factors have been assumed to 
+contribute to the occurrence of automation 
+bias (Dzindolet, Beck, Pierce, & Dawe, 2001; 
+Mosier & Skitka, 1996). One is the tendency of 
+humans to choose the road of least cognitive 
+effort in decision making, the so-called cogni-
+tive-miser hypothesis (Wickens & Hollands, 
+2000). Instead of basing complex decisions on a 
+comprehensive analysis of available informa-
+tion, humans often use simpler heuristics and 
+decision rules (Gigerenzer & Todd, 1999; 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 13 ---
+392 June 2010 - Human Factors
+Kahneman, Slovic, & Tversky, 1982). Well-
+known examples of this tendency include the 
+heuristics of representativeness and availability 
+(Tversky & Kahneman, 1974). It has been argued 
+that recommendations and directives of automated 
+aids might serve as a strong decision-making heu-
+ristic used by the human user as a replacement for 
+more effortful processes of information analysis 
+and evaluation (Mosier & Skitka, 1996).
+A second factor is the perceived trust of 
+humans in automated aids as powerful agents 
+with superior analysis capability (Lee & See, 
+2004). As a consequence, users might tend to 
+overestimate the performance of automated aids. 
+More specifically, they may ascribe to the aid 
+greater performance and authority than to other 
+humans or themselves. Some evidence for this 
+effect was provided by Dzindolet, Pierce, Beck, 
+and Dawe (2002). In this study, participants had 
+to predict the performance of an automated aid 
+compared with the expected performance of 
+another human supporting them in a decision-
+making task. It turned out that the majority of 
+participants initially expected the automated aid 
+to perform considerably better than a human aid.
+A third contributing factor to automation bias 
+is the phenomenon of diffusion of responsibil-
+ity. Sharing monitoring and decision-making tasks 
+with an automated aid may lead to the same 
+psychological effects that occur when humans 
+share tasks with other humans, whereby “social 
+loafing” can occur—reflected in the tendency 
+of humans to reduce their own effort when 
+working redundantly within a group than when 
+they work individually on a given task (Karau 
+& Williams, 1993). Similar effects occur when 
+two operators share the responsibility for a 
+monitoring task with automation (Domeinski, 
+Wagner, Schoebel, & Manzey, 2007). To the 
+extent that human users perceive an automated 
+aid as another team member, they may perceive 
+themselves as less responsible for the outcome 
+and, as a consequence, reduce their own effort 
+in monitoring and analyzing other available 
+information.
+Evidence for Automation Bias
+Aviation studies. Several studies examining 
+pilot interaction with expert systems or with 
+advanced cockpit automation have provided 
+empirical evidence for automation bias (Layton 
+et al., 1994; McGuirl & Sarter, 2006; Mosier, 
+Palmer & Degani, 1992; Mosier, Skitka, Heers, 
+& Burdick, 1998; Sarter & Schroeder, 2001). 
+Layton et al. (1994) compared the impact of 
+electronic flight planning tools on the quality of 
+the en route flight planning decisions of pilots. 
+The aids differed in their level of automation 
+(LOA): The low LOA left most of the planning 
+decisions to the pilots and provided only an 
+evaluation of different plans, whereas the high 
+LOA specified and recommended a plan. Pilots 
+working with the high LOA aid spent less time 
+and effort in generating and evaluating alterna-
+tive plans than the group working with the low-
+LOA aid. This result is consistent with the 
+cognitive-miser hypothesis of automation bias. 
+In addition, a majority of these pilots also 
+tended to accept the plan provided by the auto-
+mation in cases in which the plan for a number 
+of reasons actually represented a suboptimal 
+solution.
+Mosier et al. (1992) studied pilot decision 
+making in simulated engine fire situations, in 
+particular when a decision aid provided wrong 
+advice. An automated electronic checklist was 
+implemented that recommended that the pilot 
+shut down the wrong engine (i.e., the one not 
+affected by fire). Mosier and colleagues found 
+that 75% of pilots followed the wrong recom-
+mendation and neglected to check relevant 
+information available from other indicators. In 
+contrast, only 25% of pilots using a traditional 
+paper checklist committed the same type of 
+commission error.
+In another study, Mosier et al. (1998) had 
+experienced commercial pilots perform a sim-
+ulated flight in a trainer equipped with adv -
+anced cockpit automation systems (e.g., Flight 
+Management System, EICAS). During the sim-
+ulated flight, various automation failures 
+occurred; each provided opportunities to com-
+mit either omission or commission errors. 
+Examples of the first kind included an altitude 
+clearance that did not get loaded correctly, a 
+heading change that was not executed properly 
+by the flight system, and a frequency change 
+misload. In addition, one opportunity for a com-
+mission error was presented in the form of a 
+falsely released engine fire warning that occurred 
+without being supported by any other readings 
+of engine parameters or indications available 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 14 ---
+AUTOMATION COMPLACENCY AND BIAS 393
+from relevant cockpit displays, gauges, and 
+indicators. Although all of these automation 
+failures were, in principle, easily detectable by 
+monitoring the relevant information available 
+from different cockpit displays (e.g., the pri-
+mary flight display,), the omission error rate 
+was considerable and reached 55%.
+The results for the commission error event 
+were even more dramatic: All the pilots decided 
+to shut down the engine in response to the false 
+EICAS alert. This action corresponds to a 100% 
+commission error rate. This result was in con-
+trast to the indication by the same pilots in a 
+debriefing interview that an EICAS message 
+alone would not be sufficient to shut down an 
+engine completely and that it would be safer 
+under these circumstances to just reduce the 
+power to idle. Clearly, the automatically gener-
+ated warning must have led the pilots to either 
+ignore (or discount) the contradicting informa-
+tion available from other displays and engine 
+indicators or to believe that it would be in line 
+with the warning, as in a confirmation bias 
+effect. The debriefing interview with the par-
+ticipants provided confirmatory evidence for 
+the latter explanation: 67% of the pilots reported 
+that they had seen at least one more indication 
+supporting the fire warning from the EICAS 
+(which in fact was absent), an effect termed 
+“phantom memory” by Mosier et al. (1998).
+Additional evidence for automation bias was 
+provided in a laboratory experiment comparing 
+the performance of nonpilots in a low-fidelity 
+flight simulation task with and without auto-
+mation support, the Workload/Performance 
+Simulation (W/PANES; Skitka, Mosier & 
+Burdick, 1999). Participants had to perform 
+three tasks simultaneously, including a compen-
+satory tracking task, a waypoint task, and a 
+gauge-monitoring task. Both of these latter 
+tasks had to be performed either manually or 
+with the support of an automated aid. During 
+the experiment, automation failures occurred, 
+six in which the automation failed to prompt the 
+participants of a critical event and another six in 
+which it gave a wrong directive. Only 59% of 
+the former were correctly identified and responded 
+to by the participants, which corresponds to a 
+41% omission error rate. In contrast, almost 
+97% of participants working without automa-
+tion detected them correctly.
+A similar result emerged for commission 
+errors. In cases in which the automated aid pro-
+vided a wrong recommendation, approximately 
+65% of the participants committed a commis-
+sion error by following this advice without 
+taking into account the clearly disconfirming 
+evidence directly available from the relevant 
+gauges. All of these effects emerged although 
+the participants were informed that all readings 
+from indicators and gauges were always per-
+fectly valid and provided a reliable basis for 
+cross-checking the automation.
+Sarter and Schroeder (2001; see also McGuirl 
+& Sarter, 2006) examined the performance of 
+pilots interacting with automated decision aids 
+that supported decision making in case of in-
+flight icing events. Such events represent a seri-
+ous threat to flight safety and must be handled 
+promptly. Consequently, an in-flight icing event 
+is characterized by time pressure and uncer-
+tainty: Pilots need to respond rapidly without 
+always being able to verify directly whether 
+icing in fact has taken place. Two types of deci-
+sion aids were compared in a simulator study. 
+The first involved a status display that provided 
+information about the icing condition (i.e., wing 
+icing vs. tailplane icing) but left the selection of 
+appropriate responses with the pilots. The sec-
+ond one involved a command display that in 
+addition to the information about the icing con-
+dition provided recommendations for proper 
+actions (e.g., concerning appropriate pitch atti-
+tude and settings of flaps and power). Performance 
+data assessed included, among others, how long 
+the pilots needed to respond to the ice accretion 
+and whether they responded in a way that effec-
+tively prevented serious consequences indicated 
+first by a buffet of the airframe and eventually 
+by a stall.
+Compared to a baseline condition in which 
+pilots had to manage in-flight icing encounters 
+without any automation support, that is, by just 
+relying on their own kinesthetic perception of 
+changed flight dynamics, the availability of the 
+aids increased the number of correct decisions 
+in response to different icing encounters consid-
+erably. This finding was reflected in a signifi-
+cantly lower frequency of early buffets (7.87% 
+compared with 20.56% without support) as well 
+as fewer stalls (18.08% vs. 30.00%). However, 
+this performance benefit was observed only 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 15 ---
+394 June 2010 - Human Factors
+when the aid provided correct recommendations. 
+In case of inaccurate information, the availabil-
+ity of the aid resulted in clear performance dec-
+rements compared with the baseline condition, 
+with the frequency of early buffets increasing 
+up to 73.61% and those of stalls even to 88.89%.
+This impairment of performance was mainly 
+related to the pilots’ inadvertently following the 
+aids’ recommendation even though the avail-
+able kinesthetic cues contradicted it, hence indi-
+cating a clear tendency toward automation bias. 
+Moreover, a significant interaction effect was 
+found between the type and accuracy of the 
+decision aid. Whereas both aids led to worse 
+performance when the information provided 
+was inaccurate compared with an accurate con-
+dition, this effect was somewhat stronger for 
+command than for status displays. However, the 
+effect could not be replicated in a follow-up 
+study to this research (McGuirl & Sarter, 2006), 
+thus raising some doubts as to its generality.
+Health care. Evidence of automation bias has 
+also been reported in the health care domain 
+(Alberdi, Povyakalo, Strigini, & Ayton, 2004; 
+Alberdi, Povyakalo, Strigini, Ayton, & Given-
+Wilson, 2008; McKibbon & Fridsma, 2006; 
+Tsai, Fridsma, & Gatti, 2003; Westbrook, Coiera, 
+& Gosling, 2005). McKibbon and Fridsma 
+(2006) and Westbrook et al. (2005) explored the 
+effects of electronic information systems on 
+decisions made by primary care physicians. In 
+controlled field trials, they compared the cor-
+rectness of answers to a set of standardized 
+clinical questions provided by physicians before 
+and after searching different electronic sources, 
+such as PubMed, Medline, and Google. They 
+found a small to medium (2% and 21%, respec-
+tively) increase in the rate of correct answers 
+attributable to the use of these sources com-
+pared with the answers provided before its con-
+sultation. Yet, in 11% (McKibbon & Fridsma, 
+2006) and 7% (Westbrook et al., 2005) of all 
+cases, the search of electronic sources misled 
+the physicians, who changed an initially correct 
+answer to an incorrect one after consulting the 
+electronic information source.
+Although these results provide evidence that 
+physicians make commission errors when using 
+electronic aids, the studies did not use a control 
+group given nonelectronic resources, making 
+any clear-cut interpretation in terms of automa-
+tion bias difficult.
+However, Alberdi et al. (2004, 2008) con-
+ducted more carefully designed studies on the 
+effects of automated aids on clinical decision 
+making. Experienced radiologists examined a 
+set of mammograms either with or without the 
+support of a detection aid that suggested areas 
+containing lesions. Half of the mammograms 
+contained signs of cancer, whereas the other 
+half was free of pathology. Four different kinds 
+of cases were compared: (a) cases in which the 
+detection aid provided valid advice, either by 
+correctly placing a prompt on a critical feature 
+or by leaving a mammogram without pathologi-
+cal findings unmarked; (b) cases in which the 
+aid failed to prompt critical features, that is, left 
+a mammogram unmarked although there were 
+signs of cancer; (c) cases in which the aid incor-
+rectly placed a prompt in an area away from an 
+actual sign of cancer; and (d) cases in which the 
+aid incorrectly placed a prompt on a mammo-
+gram where in fact no signs of cancer were pres-
+ent. Cases of Types b and c represented false 
+negatives that provoke omission errors if the 
+film reader’s decision making was biased by 
+the aid’s suggestion. Cases of Type d provided 
+the opportunity for a commission error.
+The results provided clear evidence for auto-
+mation bias in terms of omission errors. The 
+detection rate for “unmarked” cancers (Case b) 
+dropped from 46% in conditions without the aid 
+to 21% in the aided conditions, and incorrectly 
+marked cases (c) reduced the detection rate of 
+cancer from 66% to 53%. Clearly, the film read-
+ers tended to take the absence of a computer 
+prompt as strong evidence for the absence of 
+cancer. The authors interpreted this finding as 
+evidence for complacency, which they further 
+attributed to a lack of vigilance, following the 
+interpretation offered by Mosier and Skitka 
+(1996) for omission errors.
+In contrast to the strong evidence for omission 
+errors, Alberdi et al. (2004) did not find evidence 
+for commission errors in case of falsely placed 
+prompts (Case d). However, this kind of bias was 
+further investigated in a follow-up study (Alberdi 
+et al., 2008). On the basis of a reanalysis of data 
+available from a large-scale clinical trial in the 
+United Kingdom focusing on the effectiveness of 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 16 ---
+AUTOMATION COMPLACENCY AND BIAS 395
+automated detection aids in breast screening 
+(Taylor, Champness, Given-Wilson, Potts, & 
+Johnston, 2004), the authors explored the possi-
+ble consequences of falsely placed prompts. The 
+results provided some evidence, albeit weak, for 
+automation bias in terms of commission errors. 
+Falsely placed prompts significantly raised the 
+probability by 12.3% that the prompted areas 
+actually were marked as malignancy compared 
+with an unaided condition.
+Process control. Even stronger effects of 
+automation bias have been reported in a recent 
+series of studies investigating performance 
+consequences of an automated decision aid in a 
+simulated process control task (Bahner, Elepfandt, 
+& Manzey, 2008; Bahner, Huper, et al., 2008; 
+Manzey, Reichenbach, & Onnasch, 2008, 2009). 
+In this research, the automated aid supported 
+fault identification and management tasks by 
+providing operators with automatically gener-
+ated diagnoses for system faults and recommen-
+dations for how to deal with them. Evidence for 
+both omission and commission errors was 
+found, with 20% to 50% of participants com-
+mitting a commission error in case the aid pro-
+vided a wrong fault diagnosis for the first time 
+(first-failure effect). Because these studies 
+also addressed possible links between compla-
+cency and automation bias, we describe them in 
+more detail in a subsequent section in which the 
+two issues are discussed jointly.
+Command and control. Finally, automation 
+bias has also been recognized to represent an 
+important issue with respect to intelligent deci-
+sion support systems for command-and-control 
+operations in the military domain (e.g., Crocoll 
+& Coury, 1990; Cummings, 2003, 2004; Rovira 
+et al., 2007). According to Cummings (2004), 
+automation bias effects in interaction with auto-
+mated decision aids have contributed to several 
+fatal military decisions, including inadvertent 
+killing of friendly aircrews by U.S. missiles 
+during the Iraq War. Research in this domain 
+has addressed issues of the appropriate LOA 
+that decision support systems should be set at 
+and its impact on decision making in case of 
+inaccurate recommendations (Crocoll & Coury, 
+1990; Cummings, 2003; Rovira et al., 2007).
+Although these studies did not provide detailed 
+information about the frequency of omission or 
+commission errors, their results provide additional 
+indirect evidence for the existence of automation 
+bias effects. For example, Rovira et al. (2007) 
+investigated the effects of different automated 
+aids on military decisions under time pressure. 
+Specifically, they explored to what extent auto-
+mated aids differing in LOA (information automa-
+tion vs. three levels of decision automation) and 
+overall reliability (60% vs. 80%) affect the speed 
+and quality of command-and-control decisions 
+involving the identification of most dangerous 
+enemy targets and deciding which friendly unit 
+might be the best choice to combat it.
+As expected, all of the automated aids imp-
+roved performance when they provided accu-
+rate advice. However, in case of inaccurate 
+recommendations, clear performance costs were 
+identified compared with an unsupported (man-
+ual) control condition. Decision accuracy declined 
+from 89% in the manual condition to 70% in 
+supported conditions when the aid provided 
+incorrect recommendations, pointing to a sub-
+stantial number of commission errors in the lat-
+ter condition. Furthermore, some evidence was 
+found that these effects were moderated by the 
+LOA and the overall reliability of the aid. 
+Performance impairments in case of inaccurate 
+automation were most pronounced if the aid 
+provided a high level of support of decision-
+making functions (i.e., provided a specific rec-
+ommendation for an optimum decision) and 
+when the overall level of reliability was high. 
+Whereas the former effect parallels the findings 
+concerning the impact of status versus com-
+mand displays on automation bias in aviation 
+(Crocoll & Coury, 1990; Sarter & Schroeder, 
+2001; see earlier discussion), the latter corre-
+sponds to the impact of reliability on compla-
+cency effects in supervisory control (Bailey & 
+Scerbo, 2007; R. Parasuraman et al., 1993).
+Factors Influencing Automation Bias
+Compared to research on automation-related 
+complacency, considerably less is known about 
+relevant factors that modulate the degree of 
+automation bias. Factors to be taken into account 
+include different aspects of system properties as 
+well as the task context.
+System properties. As should be evident from 
+the foregoing review of research, the strength of 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 17 ---
+396 June 2010 - Human Factors
+automation bias effects seems to depend at least 
+to some extent on the LOA and the reliability of 
+an automated aid. Specifically, there is evidence 
+that automated aids that only support processes 
+of information integration and analysis may 
+lead to lower automation bias effects (in terms 
+of commission errors) than aids that provide 
+specific recommendations for certain actions 
+based on an assessment of the available infor-
+mation (Crocoll & Coury, 1990; Rovira et al., 
+2007; Sarter & Schroeder, 2001).
+Another factor that may have an impact on 
+automation bias effects includes the provision 
+of system confidence information together with 
+an automatically generated recommendation, as 
+suggested by another study addressing effects 
+of an automated aid on responses to in-flight 
+icing encounters (McGuirl & Sarter, 2006). 
+Using a similar paradigm as in the study of 
+Sarter and Schroeder (2001), they investigated 
+effects of decision aids that not only provided 
+information about the icing condition (status 
+display) or specific recommendations for proper 
+actions (command display) but also confidence 
+values for each. The confidence information 
+was updated on a trial-by-trial basis and was 
+presented to the participants in a separate trend 
+display. Providing this additional information 
+led to less performance decrements in case of 
+inaccurate aid recommendations compared with 
+a condition in which the additional confidence 
+information was not available, that is, the pilots 
+received only information concerning the over-
+all reliability of the aid. Clearly, pilots sup-
+ported by the advanced aid were better able to 
+assess the validity of the aids’ single recommen-
+dations and to make less biased decisions about 
+whether to comply with the aid.
+Task context. Most of the available knowl-
+edge about the impact of task context factors on 
+automation bias, thus far, has been obtained in a 
+series of studies conducted by Mosier, Skitka, 
+and colleagues (Mosier, Skitka, Dunbar, & 
+McDonnell, 2001; Skitka, Mosier, & Burdick, 
+2000; Skitka, Mosier, Burdick, & Rosenblatt, 
+2000). Specifically, three different factors were 
+investigated, including social accountability, 
+teams versus individuals, and instruction and 
+training interventions.
+Skitka, Mosier, and Burdick (2000) exam-
+ined the impact of accountability on the basis of 
+an earlier observation that suggested that the 
+strength of automation bias in terms of omis-
+sion errors might be influenced by the degree to 
+which pilots perceive themselves as account-
+able for the automated tasks (Mosier et al., 
+1998). The experiment involved 181 nonpilots 
+who had to complete five trials with the same 
+W/PANES simulation described earlier. In the 
+nonaccountable condition, participants were told 
+that their performance would not be recorded 
+and that the main objective of the experiment 
+was to obtain their subjective evaluation of the 
+task environment. Four other groups were ins-
+tructed to be particularly accountable so as to 
+reach different performance objectives (e.g., 
+maximize overall performance, tracking perfor-
+mance, or speed or accuracy in the waypoint 
+and gauge-monitoring tasks) and that they would 
+have to justify their performance in a debriefing 
+interview after the experiment.
+The authors found that participants who were 
+instructed to be accountable for overall perfor-
+mance or the accuracy in the waypoint and 
+gauge-monitoring tasks committed significantly 
+less omission and commission errors than did 
+the participants of the nonaccountable group or 
+the groups who particularly were made account-
+able for quick responses or their specific per-
+formance in the tracking task. Furthermore, 
+par ticipants who felt responsible for overall per-
+formance or accuracy also showed more atten-
+tive automation verification behavior than did 
+participants in all the other groups. The latter 
+effect was shown by providing participants a 
+second monitor with which they could actively 
+check the validity of any recommendations pro-
+vided by the aid in case of doubts. Participants 
+in the nonaccountable group made significantly 
+less use of this device than participants feeling 
+accountable for overall performance or the 
+accuracy of the automated tasks. An even smaller 
+tendency to cross-check the automation was 
+found in groups who felt particularly account-
+able for response speed or tracking performance, 
+respectively. Although these results may be taken 
+as evidence that accountability might be a rele-
+vant factor reducing automation bias, the results 
+are not fully conclusive in this respect. An alter-
+native view is that the results might reflect a 
+higher level of motivation and effort in the account-
+able groups induced by providing participants 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 18 ---
+AUTOMATION COMPLACENCY AND BIAS 397
+of these groups with some specific performance 
+goals (Locke & Latham, 1990).
+Another set of two experiments explored to 
+what extent the presence of a second crewmem-
+ber in combination with several training inter-
+ventions or explicit prompts to cross-check the 
+automation would moderate the degree of auto-
+mation bias (Mosier et al., 2001; Skitka, Mosier, 
+Burdick, et al., 2000). The first of these studies 
+(Skitka, Mosier, Burdick, et al., 2000) again 
+involved nonpilots working on the W/PANES 
+task. In the two-person conditions, both crew-
+members had individual tasks but were instructed 
+to work redundantly on the waypoint or gauge-
+monitoring task. Training interventions included 
+various briefings, ranging from just alerting 
+participants to verify the automation to a detailed 
+briefing about the nature of omission and com-
+mission error as risk factors in human-automation 
+interaction. In addition, conditions were com-
+pared in which the participants did or did not 
+receive explicit prompts to verify the automation, 
+which in the first case were presented along 
+with the aid’s directive.
+The presence of a second crewmember did 
+not affect the strength of automation bias for 
+either omission or commission errors. This over-
+all pattern of effects was replicated in a second 
+study involving 48 experienced glass cockpit 
+pilots (Mosier et al., 2001). The pilots were 
+required to perform missions in a part-task 
+flight simulator similar to those in the previ-
+ously described study of Mosier et al. (1998). 
+Neither detrimental nor beneficial effects of 
+crew versus individual performance were found 
+with respect to omission and commission errors. 
+Furthermore, neither of the training and instruc-
+tion interventions had any effect on the strength 
+of automation bias. However, what was found is 
+that the rate of omission errors varied between 
+individual participants and with the criticality 
+of events in terms of possible consequences if 
+they were missed. The latter effect confirms 
+earlier results of Mosier et al. (1998) and may 
+be taken as evidence that automation bias might 
+not be related just to an automation-induced 
+vigilance decrement but to a reallocation of 
+attentional resources attributable to a delegation 
+of responsibility to the automated aid. However, 
+this reallocation of resources does not seem to 
+be used to improve performance in concurrent 
+tasks, a finding that provides some support for the 
+cognitive-miser hypothesis of automation bias.
+Summary
+Human decision making can be biased when 
+supported by imperfect automated decision aids. 
+Whereas this bias is relatively benign and actu-
+ally can be beneficial when a decision aid pro-
+vides correct recommendations (e.g., by speeding 
+up decision making), it results in omission and 
+commission errors when the decision aid is 
+wrong. Evidence of both kinds of errors has been 
+reported from several domains, including avia-
+tion, medicine, process control, and command-
+and-control operations in military contexts.
+The results show that automation bias repre-
+sents a robust phenomenon that (a) can be found 
+in different settings, (b) occurs in both naive 
+and expert (e.g., pilots) participants, (c) seems 
+to depend on the LOA and the overall reliability 
+of an aid, (d) cannot be prevented by training or 
+explicit instructions to verify the recommenda-
+tions of an aid, (e) seems to be depend on how 
+accountable users of an aid perceive themselves 
+for overall performance, and (f) can affect deci-
+sion making in individuals as well as in teams. 
+Interestingly, the first four of these results have 
+also been found in studies of automation-related 
+complacency (the fifth, that is, impact of account-
+ability on complacency, and sixth, that is, com-
+placency in teams, have not yet been systematically 
+investigated). The common findings suggest 
+that complacency and bias might be linked, a 
+possibility that we discuss in more detail in the 
+next section.
+TOWARD AN INTEGRATED MODEL OF 
+COMPLACENCY AND BIAS
+Theoretical Links
+Although the concepts of complacency and 
+automation bias have been discussed separately 
+as if they were independent, they share several 
+commonalities, suggesting they reflect different 
+aspects of the same kind of automation misuse 
+(cf. R. Parasuraman & Riley, 1997). Omission 
+errors with decision-aiding systems provide the 
+most obvious link between the two concepts, 
+given that they occur when decision makers fail 
+to act because they were not informed of an 
+imminent system problem by the automation. 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 19 ---
+398 June 2010 - Human Factors
+Human operators thus rely on the alerting func-
+tion of the aid at the expense of attentive moni-
+toring of important environmental cues. Such 
+inadequate monitoring clearly corresponds to 
+automation-induced complacency (Mosier & 
+Skitka, 1996).
+Similarly, complacency-like effects may also 
+be responsible for the occurrence of commis-
+sion errors. According to Skitka et al. (1999), 
+“Commission errors can be the result of not 
+seeking out confirmatory or disconfirmatory 
+information, or discounting other sources of 
+information in the presence of computer-generated 
+cues” (p. 993). The latter alternative, discount-
+ing of contradictory information, reflects bias in 
+decision making in a strict sense. Having con-
+tradictory information from different sources, the 
+operator, for some reason, cedes greater author-
+ity to the automated aid than to the other sources. 
+This attitude could reflect greater trust in auto-
+mation than in one’s own ability or difficulties 
+to comprehend the perceived information 
+correctly.
+However, the former alternative, following 
+the aid’s recommendation without verification, 
+reflects a qualitatively different kind of decision 
+bias. In this case, the bias in favor of an auto-
+mated aid is expressed in operators’ relying so 
+much on the proper function of an aid that they 
+neglect their own sampling of information and 
+become more selective in attending to different 
+information sources. This kind of automation 
+bias resembles what has been referred to as 
+automation complacency in supervisory control 
+tasks, given that the failure to verify (not attend-
+ing to the raw data) indicates a reallocation of 
+attention.
+Furthermore, the cognitive-miser hypothesis 
+of automation bias in high task load situations 
+could also reflect complacency in addition to a 
+strict decision bias. Similar to the operator who 
+tends to monitor an automated process inade-
+quately if the workload is high, the user of a 
+decision aid may trust it to the extent that he or 
+she directly follows the automatically generated 
+advice without making the attentionally demand-
+ing effort of cross-checking its validity against 
+other available and accessible information. This 
+view points to an overlap between the concepts of 
+automation complacency and bias and suggests 
+that at least some instances of commission 
+errors might be explained within the same atten-
+tional framework suggested for complacency 
+and shown previously in Figure 3, substituting 
+“Information Source A” for “Task A,” and so on.
+To date, there is little empirical evidence to 
+allow for an assessment to what extent commis-
+sion errors truly represent a bias in weighting 
+information from different sources (automation 
+vs. own information sampling) or a decision 
+bias reflected in neglecting to verify automa-
+tion. However, the previously described find-
+ings of Skitka et al. (1999; Skitka, Mosier, & 
+Burdick, 2000) do support the view that neglect 
+of automation verification might constitute a 
+major source of commission errors, as does a 
+study by Bahner, Huper, et al. (2008), which we 
+describe later.
+Common Issues
+The concepts of complacency and automation 
+bias can be viewed as indications of automation 
+misuse, that is, as a behavioral consequence 
+related to inappropriate overreliance on auto-
+mation. This characterization was challenged by 
+Moray (2003; Moray & Inagaki, 2000), at least 
+with respect to complacency. Moray proposed 
+that what has been characterized as “compla-
+cent” behavior, that is, operators’ neglecting to 
+monitor automation, in fact may represent a 
+rational strategy. Moray argued that when oper-
+ators have several tasks to attend to, their moni-
+toring of automation should be in proportion to 
+its perceived reliability. Given that highly reli-
+able automation will fail only very rarely, then 
+the rational strategy would be to monitor it also 
+only very infrequently. A natural consequence 
+of such a monitoring strategy is that when oper-
+ators have other tasks to perform they will occa-
+sionally miss automation failures because their 
+attention will be allocated elsewhere.
+Up to this point, Moray’s (2003; Moray & 
+Inagaki, 2000) argument does not differ from 
+the framework for complacency we have pre-
+sented that links it to a multitask attentional 
+strategy (Figure 3). However, Moray went fur-
+ther in arguing that complacency should be 
+inferred only if operators monitor automation 
+less frequently than the optimal value for a par-
+ticular system. If, on the other hand, they monitor 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 20 ---
+AUTOMATION COMPLACENCY AND BIAS 399
+more often than the optimal value, they could 
+be called “skeptical.” Moray suggested that an 
+operator who monitored at the optimal fre-
+quency should be characterized as “eutactic” or 
+“well calibrated”—similar to the concept of an 
+operator whose trust is calibrated to the actual 
+reliability of automation (Lee & See, 2004). 
+What is the optimal (or normative) monitoring 
+rate? Moray suggested that the Shannon-
+Weaver-Nyquist sampling theorem provides a 
+basis for determining the optimum. This theo-
+rem states that to perfectly reproduce a continu-
+ously varying process (e.g., an analog signal) 
+from intermittent samples (e.g., digital values), 
+the frequency of sampling should be at least 
+twice the frequency of the highest frequency in 
+the continuous or analog signal.
+Does human sampling behavior also follow 
+the sampling theorem? An early study by Senders 
+(1964) provides some supporting evidence. He 
+had participants monitor up to six gauges with 
+continuously varying values to detect out-of-
+limit targets. The frequency (or bandwidth) of 
+the continuously varying signals ranged from 
+slow to fast. Senders found that participants’ 
+fixations on a particular gauge were directly 
+proportional to the bandwidth of the signal dis-
+played on that gauge (see also Moray, 1984).
+Moray and Inagaki’s (2000) suggestion con-
+cerning the necessity of comparing actual and 
+optimal monitoring rates in automated systems 
+is important. However, their proposal that the 
+sampling theorem provides a basis for deter-
+mining the optimal rate for monitoring is difficult 
+to test outside of simple laboratory experiments 
+(as in Senders, 1964), because the frequency 
+content of many real-world information sources 
+is difficult or impossible to compute. Nevertheless, 
+there may be other ways in which a normative 
+value for monitoring automation can be calcu-
+lated, as described in a later section. Moreover, 
+the sampling models posited by Moray (2003; 
+Moray & Inagaki, 2000) and Senders (1964) do 
+not consider the potential cost of sampling (e.g., 
+extensive eye or head movements or search 
+time) or the value provided by sampled infor-
+mation, which can pose severe limits on the rate 
+of sampling (Sheridan, 1970, 2002). The salience, 
+effort, expectancy, and value (SEEV) model of 
+Wickens et al. (2007), on the other hand, does 
+include such cost and value parameters and has 
+been found to explain well observers’ visual 
+scanning patterns (or lack thereof) in a number 
+of different tasks.
+We agree with Moray and Inagaki’s (2000) 
+view that complacency should ideally be evalu-
+ated independently of the outcome of insuffi-
+cient monitoring—for example, not detecting 
+an automation failure. Most previous studies, 
+including the first study by Parasuraman et al. 
+(1993), inferred complacency from detection 
+performance alone and not from an independent 
+measure of monitoring. Studies measuring eye 
+movements provide an exception (Bagheri & 
+Jamieson, 2004; Metzger & Parasuraman, 2005), 
+but eye fixation rates still need to be compared 
+with optimal monitoring rates. Hence, Moray 
+and Inagaki suggested that studies on compla-
+cency to date had not provided convincing evi-
+dence for the phenomenon of automation-related 
+complacency.
+Moray and Inagaki’s (2000) critique can also 
+be applied to studies on automation bias. As 
+described previously, although operators com-
+mit omission or commission errors in using 
+such aids, such errors may not necessarily indi-
+cate that the operators were complacent. Such a 
+conclusion would be warranted only if it could 
+be shown that these performance consequences 
+indeed were related to operators’ monitoring or 
+verifying automation behavior less frequently 
+than the rate indicated by a normative model.
+Evidence for an Integrative Concept of 
+Complacency and Automation Bias
+A recent series of experiments has taken this 
+caveat into account and provided evidence for 
+the proposed link between complacency and 
+automation bias (Bahner, Elepfandt, et al., 2008; 
+Bahner, Huper, et al., 2008; Manzey et al., 2009; 
+Manzey, Reichenbach, et al., 2008). These stud-
+ies involved the use of a process control micro-
+world (AutoCAMS; Lorenz, Di Nocera, Rottger, 
+& Parasuraman, 2002; Manzey, Bleil, et al., 
+2008) that simulates an autonomous life support 
+system for a space station consisting of five 
+subsystems (e.g., O2, CO2, pressure) critical to 
+maintaining cabin atmosphere. The primary 
+task of the operator involved supervisory control 
+of the different subsystems, including diagnosis 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 21 ---
+400 June 2010 - Human Factors
+and management of system faults, which 
+occurred occasionally and unpredictably. Operators 
+also had two secondary tasks: a prospective 
+memory task and a simple reaction time task. 
+The primary task was supported by an auto-
+mated aid that, in case of failures of single sub-
+systems, provided an automatically generated 
+fault diagnosis as well as recommendations for 
+fault management.
+Bahner, Huper, et al. (2008) had two groups 
+of well-trained engineering students perform 
+the AutoCAMs simulation. One group was told 
+that the aid would work highly reliably, although 
+not perfectly, and that they should carefully 
+cross-check each diagnosis before accepting it 
+(information group). The second group received 
+the same information but was additionally exposed 
+to some rare automation failures during training 
+(experience group). Automation failures could 
+include a failure of the diagnostic function, that 
+is, the aid provided wrong diagnoses for 2 out of 
+10 system faults (Bahner, Huper, et al., 2008), 
+or a failure of the alarm function, that is, the aid 
+failed to indicate 2 out of 10 system faults 
+(Bahner, Elepfandt, et al., 2008). On the basis of 
+earlier research (e.g., Lee & Moray, 1992), it 
+was assumed that the practical experience of 
+automation failures should reduce overall trust 
+in the system.
+Bahner, Huper, et al. (2008) assessed com-
+placency by measuring the extent to which par-
+ticipants verified the automation’s diagnosis 
+before accepting it. Participants were provided 
+independent access (via mouse click) to all rel-
+evant system information (e.g., tank levels, flow 
+rates at different valves, history graphs display-
+ing the time course of system parameters), 
+needed to verify the aid’s diagnoses. This pro-
+cedure allowed the investigators to assess the 
+level of operator complacency in interaction with 
+the aid by contrasting the actual information 
+sampling behavior of operators with a “norma-
+tive model” of optimal behavior. According to this 
+logic, any participant who accessed just the infor-
+mation appropriate to verify a given diagnosis 
+before accepting it was regarded as showing 
+noncomplacent (eutactic) behavior in interac-
+tion with the aid. However, participants sam-
+pling less information than that necessary to 
+completely verify the aid’s recommendation were 
+regarded as complacent to different degrees, 
+dependent on how much they deviated from the 
+optimal sampling strategy. This operational def-
+inition of complacency made it possible to eval-
+uate the level of complacency in interaction 
+with the aid independent of its possible perfor-
+mance consequences.
+These results provide direct empirical evi-
+dence for the proposed relationship between 
+perceived reliability of automation, complacency, 
+and automation bias. In both experiments, par-
+ticipants of all experimental groups exhibited a 
+complacency effect at least to some extent, that 
+is, did not fully verify the automatically gener-
+ated diagnoses for system faults completely 
+before accepting it. Figure 4 from Bahner, 
+Huper, et al. (2008) shows that operators in the 
+information group were more complacent (sam-
+pled fewer parameters) than were those in the 
+experience group. This figure also shows that 
+the degree of operator verification was less than 
+that required by the normative model, irrespec-
+tive of training. Yet, as expected, the degree of 
+the complacency effect was moderated by the 
+experiences the participants had with the aid 
+during training. Participants who were exposed 
+to failures of the diagnostic function of the aid, 
+but not those exposed to failures of the alarm 
+function (Bahner, Elepfandt, et al., 2008), 
+showed a significantly lower level of compla-
+cency than participants who were informed just 
+that the aid may fail.
+In addition, a clear link between the level of 
+complacency and automation bias was also found: 
+21% of participants committed commission errors, 
+which occurred despite the fact that the automa-
+tion error could easily be recognized (Bahner, 
+Huper, et al., 2008). Analyses of information-
+sampling behavior revealed that these errors 
+indeed were related to a generally higher level 
+of complacency in this subgroup of participants 
+compared with those who did not commit this 
+kind of error (see Figure 5). Bahner, Elepfandt, 
+et al. (2008) found even more participants (18 out 
+of 24) committed a commission error when 
+the aid provided a wrong diagnosis for the first 
+time. Inspection of the verification behavior just 
+before committing the error again revealed 
+that 80% of the participants followed the 
+false recommendation because of insufficient 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 22 ---
+AUTOMATION COMPLACENCY AND BIAS 401
+cross-checking of the relevant system informa-
+tion needed to verify the aid’s recommendation. 
+Yet 20% of the participants followed the recom-
+mendation despite seeking out all parameters 
+necessary to verify that the automated advice 
+was wrong.
+The underlying determinants of this latter 
+effect were further investigated in a follow-up 
+experiment (Manzey, Reichenbach, et al., 2008) 
+in which participants worked with three differ-
+ent decision aids that differed in their amount of 
+support (LOA). The first aid provided only an 
+automatically generated diagnosis for a given 
+system fault but left it to the operator to plan 
+and implement all necessary actions; the second 
+one provided additional recommendations for 
+necessary actions, which, however, had then to 
+be implemented manually by the operator; and 
+the third performed fault management autono-
+mously if the operator confirmed the proposed 
+diagnosis and plan of interventions.
+Independent of the LOA of the decision aid, 
+approximately 43% of operators did not detect a 
+wrong diagnosis of the aid when it occurred for 
+the first time. Analyses of information-sampling 
+behavior revealed that half of the participants 
+made this commission error because of a clear 
+complacency effect, as reflected in an incomplete 
+sampling of information needed for automation 
+verification. The other half of participants again 
+committed this kind of error despite the fact that 
+they had sampled all system parameters neces-
+sary to verify the diagnosis provided by the aid.
+However, more detailed analyses of this 
+effect revealed an interesting difference between 
+these participants and participants who detected 
+the wrong diagnosis. Participants who correctly 
+recognized that the aid’s advice was wrong 
+showed a sharp increase in the average time 
+needed to process a sampled system parameter 
+in case that its information did not fit the diag-
+nosis of the aid, compared with trials in which 
+the aid’s diagnoses were correct. Clearly, these 
+participants became aware of the contradictory 
+information and needed time to evaluate it. 
+However, this effect did not emerge for partici-
+pants who sampled all relevant information but 
+nevertheless committed a commission error. 
+These participants did not show any difference 
+in processing time when the aid’s diagnosis was 
+correct and when it was wrong.
+Given this finding, the commission error 
+committed by these participants cannot be exp-
+lained by a decision bias view associated with a 
+Figure 4. Proportion of parameters sampled prior to act-
+ing on the recommendation of an automated decision 
+aid, for different faults and for the information and expe-
+rience groups. From “Misuse of Automated Decision 
+Aids: Complacency, Automation Bias and the Impact 
+of Training Experience,” by E. Bahner, A.-D. Huper, 
+and D. Manzey, 2008, International Journal of Human-
+Computer Studies, 66, p. 694. Copyright 2008 by 
+Elsevier Science. Reprinted with permission.
+Figure 5. Proportion of relevant parameters sampled 
+among participants who did and did not commit a com-
+mission error. From “Misuse of Automated Decision 
+Aids: Complacency, Automation Bias and the Impact 
+of Training Experience,” by E. Bahner, A.-D. Huper, 
+and D. Manzey, 2008, International Journal of 
+Human-Computer Studies, 66, p. 695. Copyright 
+2008 by Elsevier Science. Adapted with permission.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 23 ---
+402 June 2010 - Human Factors
+discounting of contradictory information. In 
+addition, an explanation in terms of confirma-
+tion bias in processing the sampled information 
+or difficulties of comprehension is also unlikely, 
+given that the participants were very well 
+trained and that the system parameter always 
+contradicted the aid’s diagnosis in an unequiv-
+ocal way. Thus, the two types of decision bias 
+discussed previously, confirmation bias and dis-
+counting bias, can be ruled out as explanations, 
+at least for this group. Rather, the commission 
+errors in this group seem to be attributable to a 
+sort of looking-but-not-seeing effect, analogous 
+to what in other contexts has been referred to as 
+“inattentional blindness” (Mack & Rock, 1998) 
+and which also has been suggested to underlie 
+complacency effects in supervisory control 
+tasks (Duley et al., 1997).
+Direct evidence for this latter interpretation 
+was provided by another AutoCAMS experi-
+ment that investigated this hypothesis in more 
+detail (Reichenbach, Onnasch, & Manzey, in 
+press). In this study, the simulation was stopped 
+immediately after the participants had commit-
+ted a commission error, and the participants 
+were required to report (a) what system param-
+eters they had accessed to verify the aid’s rec-
+ommendation and (b) what the values of these 
+parameters were. Out of the 11 participants 
+committing a commission error in this study, 6 
+were found to have sampled only part of the 
+system information that would have been nec-
+essary to check to verify the aid’s advice. The 
+remaining 5 participants committed the com-
+mission error despite checking all the parame-
+ters that were necessary to realize that the 
+automatically generated diagnosis was wrong. 
+However, only 1 of them actually was aware of 
+all the contradictory information but failed to 
+give an explanation for the final decision to 
+nevertheless follow the aid.
+The other 4 participants were not able to recall 
+correctly the information they had accessed. 
+Instead, they tended to report system values that 
+would have to be expected, given that the advice 
+of the aid would have been correct. This effect 
+replicates the phantom memory effect reported 
+by Mosier et al. (1998). However, given that the 
+actual system values always differed consider-
+ably from the ones to be expected, this effect 
+seems to be more related to a hindsight justifi-
+cation of the final decision than to a misreading 
+of the parameters.
+This finding is particularly interesting because 
+it provides evidence that commission errors 
+associated with complete (optimal) information 
+sampling may result not necessarily from a mis-
+weighting of contradictory information but from 
+a complacency-like, covert attention effect 
+(Duley et al., 1997), which, in this case, was 
+reflected in a withdrawal of attentional resources 
+from processing the available (and looked-at) 
+information.
+In summary, two main conclusions can be 
+drawn from these results. The first is that it is 
+necessary to decompose the underlying determi-
+nants of commission errors that operators make 
+while interacting with automated decision aids. 
+Three different sources can be distinguished: (a) 
+an actual, overt redirection of visual attention in 
+terms of reduced proactive sampling of relevant 
+information needed to verify an automated aid; 
+(b) a more subtle effect reflected in less attentive 
+processing of this information, perhaps because 
+covert attention is allocated elsewhere (an effect 
+analogous to inattentional blindness); and (c) an 
+active discounting of information that contra-
+dicts the recommendation of the aid because of 
+either difficulties in comprehension or an over-
+reliance on the automated source.
+The first two of these sources relate the 
+occurrence of automation bias to issues of selec-
+tive or less attentive processing of information 
+and seem to constitute a major source of bias in 
+human interaction with decision aids. Such an 
+effect provides strong evidence that not only 
+omission errors but also commission errors can 
+be related to essentially the same attentional 
+processes that have been shown to underlie 
+complacency effects in supervisory control tasks. 
+This parallelism further suggests that what has 
+been referred to as complacency in supervisory 
+control studies (R. Parasuraman et al., 1993) 
+and automation bias in studies examining use of 
+decision aids (Mosier & Skitka, 1996), at least 
+to a large extent, might represent different man-
+ifestations of overlapping automation-induced 
+phenomena.
+Second, given the operational definition of 
+complacency and automation bias in the set of 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 24 ---
+AUTOMATION COMPLACENCY AND BIAS 403
+studies we have described (e.g., Bahner, Huper, 
+et al., 2008; Manzey et al., 2009), the view that 
+the observed effects reflect an inevitable side 
+effect of a rational strategy used by operators in 
+interacting with automated systems can be ruled 
+out, as confirmed by a contrast of the actual 
+automation verification behavior of operators 
+with a normative (rational) model of information 
+sampling, as suggested by Moray and Inagaki 
+(2000). The results instead support the view that 
+complacency and automation bias indeed repre-
+sent a human performance cost of certain automa-
+tion system designs, that is, systems characterized 
+by high reliability and high levels of automation, 
+particularly in high task load situations. Such costs 
+need to be considered as potentially serious risk 
+factors when evaluating the overall efficiency and 
+safety of human-automation systems.
+An Integrated Model of Complacency 
+and Automation Bias
+Our analysis suggests that automation-induced 
+complacency and automation bias represent 
+closely linked theoretical concepts that show 
+considerable overlap with respect to the under-
+lying processes. We propose an integration such 
+that they represent different manifestations of 
+similar automation-induced phenomena, with 
+attention playing a central role. Furthermore, 
+complacency and automation bias, although 
+affected by individual differences, cannot be 
+considered as just another type of human error 
+but constitute phenomena that result from a com-
+plex interaction of personal, situational, and 
+automation-related characteristics. 
+An integrated model of complacency and auto-
+mation bias is shown in Figure 6. Note that this 
+model is not meant to cover all kinds of automa-
+tion bias but only those that are related to a selec-
+tive or less attentive processing of information. 
+Furthermore, the model does not address instances 
+of complacency and automation bias that solely 
+reflect performance consequences stemming from 
+operators’ lacking appropriate system knowledge, 
+that is, instances in which the automated system has 
+to be relied on because the human operator does 
+not possess the necessary competency or knowl-
+edge to verify its proper function.
+The three main critical features of this model 
+include (a) the distinction between two aspects 
+of complacency and automation bias, referred 
+to as “complacency potential” and “attentional 
+bias” in information processing; (b) the differ-
+entiation between automation-induced atten-
+tional phenomena and its possible performance 
+consequences in terms of omission and com-
+mission errors; and (c) the dynamic and adap-
+tive nature of complacency and automation 
+bias, reflected in the two feedback loops.
+The first distinction capitalizes on a similar 
+conceptual differentiation between two differ-
+ent aspects of complacency first proposed by 
+Singh et al. (1993a, 1993b) and later adopted 
+by Manzey and Bahner (2005). Complacency 
+potential is conceived of as a behavioral ten-
+dency to react in a less attentive manner in 
+interacting with a specific automated system. 
+It is assumed to be influenced by the (per-
+ceived) reliability and consistency of the sys-
+tem, the history of experiences of the operator 
+with this system (see later discussion), and 
+individual characteristics of the human opera-
+tor. The assumption that this tendency to overrely 
+on a certain system is system specific contrasts 
+with earlier conceptions that have conceived 
+of complacency potential as a general ten-
+dency toward automation in general (Singh 
+et al., 1993a). However, previous findings 
+(Prinzel, 2002; Prinzel et al., 2001) indicate 
+that both perceived system characteristics as 
+well as individual differences determine the 
+final level of complacency in supervisory con-
+trol of an automated system.
+Relatively less is known about the nature of 
+individual characteristics contributing to differ-
+ences in complacency potential. As has been 
+discussed in some detail previously, differences 
+in attitudes toward technology may play a role. 
+Yet other findings suggest that personality traits 
+might also contribute to individual differences 
+in complacency, for example, self-efficacy (Prinzel, 
+2002), as well as trust in automation in general 
+(Merritt & Ilgen, 2008). Clearly, more research 
+is needed in this area.
+However, even high complacency potential 
+does not guarantee that individuals will neces-
+sarily exhibit selective or less attentive informa-
+tion processing in interaction with an automated 
+system. As shown earlier, complacency and 
+automation bias effects emerge primarily when 
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 25 ---
+404 June 2010 - Human Factors
+task load is high (e.g., multitask demands). This 
+fits with the general understanding of complacency 
+and automation bias as representing issues 
+related to task prioritization and allocation of 
+attentional resources. Furthermore, operator 
+state variables may also influence to what extent 
+high complacency potential leads to an overt 
+attentional bias in interaction with automation. 
+For example, a recent study found that fatigued 
+operators interacted in a more careful and less 
+complacent manner with a decision aid than did 
+alert operators (Manzey et al., 2009). 
+A second important feature of the integrated 
+model represents the distinction between com-
+placency and automation bias as an attentional 
+effect and its performance consequences in terms 
+of omission or commission errors. This distinc-
+tion directly relates to the analysis of the link 
+between complacency and automation bias pre-
+sented previously. It emphasizes that complacency 
+and automation bias in interaction with auto-
+mated systems is reflected in an automation-
+induced withdrawal or reallocation of attentional 
+resources. These attentional effects constitute a 
+conscious or unconscious response of the human 
+operator induced by overtrust in the proper 
+function of an automated system. In this sense, 
+the effects reflect what Mosier and Skitka (1996) 
+described as a “heuristic use of automation” that 
+may or may not lead to overt performance conse-
+quences, depending on whether the automation 
+fails. More specifically, the model assumes that the 
+immediate performance consequence of a selec-
+tive or less attentive processing of information is 
+a loss of situation awareness. This has no conse-
+quences as long as the automation works prop-
+erly but directly leads to errors of omission or 
+commission in case of automation failure.
+This aspect of the model has particular impli-
+cations for an appropriate operational definition 
+of the concepts of complacency and automation 
+bias in future research. Specifically it suggests 
+that operational definitions of complacency or 
+automation bias as behavior need to be based 
+on direct or indirect behavioral indicators of atten-
+tion allocation. Direct indicators may be derived 
+from eye-tracking analyses or other indicators 
+of monitoring or information-sampling behav-
+ior. Indirect indicators of attention may include 
+assessments of a reallocation of attentional 
+resources by means of secondary-task methods. 
+However, as proposed by Moray (2003; Moray 
+& Inagaki, 2000), the mere fact that automated 
+systems influence allocation of attentional 
+resources cannot be regarded as an indication 
+of complacency or automation bias. Such a 
+Positive Feedback Loop
+“Learned Carelessness”
+Task Context
+Concurrent tasks, workload, 
+constancy of function
+allocation, accountability
+System Properties
+Level of Automation
+Reliability, 
+Consistency
+Person
+Technology-related
+attitudes, Self-Efficacy, 
+Personality Traits
+Performance 
+Consequences:
+Error of Omission
+Error of Commission
+Loss of SA
+Individual State
+Operator state
+Motivation
+“Complacency 
+Potential”
+Attentional Bias in 
+Information Processing
+Inappropriate reallocation
+of attentional resources
+Selective Information 
+Processing No Performance 
+Consequences
+Auto normal
+Auto failure
+Negative Feedback 
+Loop
++
+–
+Figure 6. An integrated model of complacency and automation bias.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 26 ---
+AUTOMATION COMPLACENCY AND BIAS 405
+conclusion is justified only if the observed 
+effects are compared with some normative 
+model of “optimal attention allocation” in inter-
+action with a given system. Defining appropri-
+ate normative models for interaction with given 
+automated systems represents an important chal-
+lenge for future research.
+Finally, following an earlier proposal by 
+Manzey and Bahner (2005), the model con-
+ceives of complacency and automation bias as 
+resulting from an adaptive process that dyn-
+amically develops over time on the basis of 
+experiences an operator has in interaction with 
+an automated system. As shown in Figure 6, 
+there is a positive feedback loop that leads to a 
+rise in complacency potential over time. Given 
+the usually high reliability of automated sys-
+tems, even highly complacent and biased 
+behavior of operators rarely leads to obvious 
+performance consequences. Over time, the lack 
+of performance consequences might affect com-
+placency potential by inducing a cognitive pro-
+cess that resembles what has been referred to as 
+“learned carelessness” in the domain of work 
+safety (Frey & Schulz-Hardt, 1997) and has 
+already been included in cognitive models of 
+pilot performance (Luedtke & Moebus, 2005).
+On the other hand, experiences of automa-
+tion failures can be assumed to initiate a nega-
+tive feedback loop, reducing the complacency 
+potential in interaction with a given system. 
+This pattern is suggested by empirical results 
+showing that even single automation failures 
+may considerably reduce the trust in an auto-
+mated system (Lee & Moray, 1992; Madhavan, 
+Wiegmann, & Lacson, 2006) and also affect the 
+strength of complacency and automation bias 
+effects (Bahner, Huper, et al., 2008). In this 
+respect, our model of complacency and automa-
+tion bias resembles the more general model of 
+trust and reliance in automation proposed by 
+Lee and See (2004) that includes similar feed-
+back loops.
+CONCLUSION
+Automation-related complacency and auto-
+mation bias have previously been viewed as two 
+separate and independent potential human per-
+formance costs of certain automation designs. 
+Automation complacency is generally found in 
+multitasking environments where operators 
+have to perform manual tasks as well as super-
+vise automation. Automation complacency can 
+thus be understood in terms of an attention allo-
+cation strategy whereby the operator’s manual 
+tasks are attended to at the expense of the auto-
+mated task. Automation bias is reflected in omis-
+sion and commission errors made by operators 
+interacting with imperfect decision aids. Auto-
+mation bias can be conceived of as a special case 
+of human decision biases, such as confirmation 
+bias and discounting bias. However, recent evi-
+dence suggests that at least some forms of auto-
+mation bias result from attentional processes 
+similar to those involved in automation-related 
+complacency. Thus, complacency and automa-
+tion bias represent different manifestations of 
+overlapping automation-induced phenomenon, 
+with attention at the center.
+Our integrated attentional model provides a 
+heuristic framework for further research on 
+com placency and automation bias. The model 
+proposes that attentional factors contribute to 
+some but not all forms of automation bias. 
+This suggests that future research would be 
+desirable on the relative importance of atten-
+tional effects versus discounting of contradic-
+tory information as determinants of automation 
+bias. This goal could be achieved through 
+additional studies that not only investigate the 
+performance consequences of automation bias 
+but also conduct microanalyses of information-
+sampling strategies, using either eye-tracking 
+or explicit verification procedures as devel-
+oped by Bahner, Huper et al. (2008) or both. In 
+particular, the extent to which contradictory 
+information is available, its saliency, and the 
+cost of obtaining it may determine the degree 
+of influence of attentional factors.
+In addition, further research is required on 
+the relative importance and interplay of the two 
+proposed feedback loops in our integrated model 
+(see Figure 6). We propose a positive feedback 
+loop that increases complacency potential while 
+negative feedback reduces it. Studies that var-
+ied the relative effectiveness of these feedback 
+loops would allow for a better understanding of 
+the dynamics of development of complacency 
+and automation bias in human interaction with 
+automation.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 27 ---
+406 June 2010 - Human Factors
+Finally, individual differences were consid-
+ered only briefly in this article, but there is pre-
+liminary evidence that personal, experiential, 
+and situational factors influence automation 
+complacency and bias. There is currently grow-
+ing interest in using knowledge of individual 
+differences to improve design and training efforts 
+in human factors and ergonomics generally 
+(Szalma, 2009). Similar research in the area of 
+automation complacency and bias would appear 
+to be worthwhile.
+Our integrated model of automation compla-
+cency and bias also provides a framework within 
+which practical applications, particularly those 
+aimed at mitigating complacency and bias in 
+automated systems, can be better examined. 
+Several studies have shown that the LOA and the 
+type of processing supported by automation can 
+affect its benefits and costs, including compla-
+cency and situation awareness (R. Parasuraman 
+et al., 2000). There is also preliminary evidence 
+that automation bias can be mitigated with aiding 
+of information analysis as opposed to decision 
+support, although additional research is needed 
+to confirm the efficacy of this design option.
+Additional promising points of attack include 
+a change of situational conditions (including 
+function allocation; see Manzey, Reichenbach, 
+et al., 2008; Parasuraman, Mouloua, & Molloy, 
+1996) or providing practical experience with a 
+given automated system. Changes of situational 
+conditions may include taking actions to raise the 
+perceived accountability of operators or using 
+flexible strategies of function allocation, which 
+both have been shown to reduce issues of com-
+placency and automation bias in interaction with 
+different automated systems (R. Parasuraman 
+et al., 1996; Skitka, Mosier, & Burdick, 2000). 
+Our integrated model also suggests the impor-
+tance of a negative feedback loop in minimizing 
+complacency and bias effects (see Figure 6), 
+which could be used to make users of automated 
+systems more resilient to complacency and auto-
+mation bias effects.
+KEY POINTS
+• Complacency and automation bias are phenomena 
+that describe a conscious or unconscious response 
+of the human operator induced by overtrust in the 
+proper function of an automated system.
+• Although both concepts have been described sep-
+arately, they share several commonalities with 
+respect to the underlying attentional processes.
+• Empirical evidence suggests that attentional fac-
+tors contribute to many but not all forms of auto-
+mation bias.
+• An integrated model is presented that views com-
+placency and automation bias as resulting from a 
+complex interplay of personal, situational, and 
+automation-related factors.
+• The integrated model can provide design guid-
+ance and serve as a heuristic framework for fur-
+ther research.
+REFERENCES
+Alberdi, E., Povyakalo, A. A., Strigini, L., & Ayton, P . (2004). 
+Effects of incorrect computer-aided detection (CAD) output on 
+human decision-making in mammography. Academic Radiology, 
+11, 909–918.
+Alberdi, E., Povyakalo, A. A., Strigini, L., Ayton, P., & Given-
+Wilson, R. (2008). CAD in mammography: Lesion-level ver-
+sus case-level analysis of the effects of prompts on human 
+decisions. International Journal of Computer-Assisted 
+Radiology and Surgery, 3, 115–122.
+Bagheri, N., & Jamieson, G. A. (2004). Considering subjective 
+trust and monitoring behavior in assessing automation-
+induced ‘‘complacency.” In D. A. Vicenzi, M. Mouloua, & 
+O. A. Hancock (Eds.), Human performance, situation 
+awareness, and automation: Current research and trends  
+(pp. 54–59). Mahwah, NJ: Erlbaum.
+Bahner, J. E., Elepfandt, M., & Manzey, D. (2008). Misuse of diag-
+nostic aids in process control: The effects of automation misses 
+on complacency and automation bias. In Proceedings of the 
+52nd Meeting of the Human Factors and Ergonomics Society 
+(pp. 1330–1334). Santa Monica, CA: Human Factors and 
+Ergonomics Society.
+Bahner, E., Huper, A.-D., & Manzey, D. (2008). Misuse of auto-
+mated decision aids: Complacency, automation bias and the 
+impact of training experience. International Journal of Human-
+Computer Studies, 66, 688–699.
+Bailey, N., & Scerbo, M. S. (2007). Automation-induced compla-
+cency for monitoring highly reliable systems: The role of task 
+complexity, system experience, and operator trust. Theoretical 
+Issues in Ergonomics Science, 8, 321–348.
+Bainbridge, L. (1983). Ironies of automation. Automatica, 19, 
+775–779.
+Billings, C. E., Lauber, J. K., Funkhouser, H., Lyman, G., &  
+Huff, E. M. (1976). Aviation Safety Reporting System 
+(Technical Report TM-X-3445). Moffett Field, CA: National 
+Aeronautics and Space Administration Ames Research Center.
+Casey, S. M. (1998). Set phasers on stun: And other true tales of 
+design, technology, and human error. Santa Barbara, CA: Aegean.
+Corbetta, M. (1998). Frontoparietal cortical networks for directing 
+attention and the eye to visual locations: Identical, independent, 
+or overlapping neural systems? Proceedings of the National 
+Academy of Sciences (USA), 95, 831–838.
+Craig, A. (1984). Human engineering: The control of vigilance. In 
+J. S. Warm (Ed.), Sustained attention in human performance 
+(pp. 247–291). New York, NY: Wiley.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 28 ---
+AUTOMATION COMPLACENCY AND BIAS 407
+Crocoll, W. M., & Coury, B. G. (1990). Status or recommendation: 
+selecting the type of information for decision aiding. In 
+Proceedings of the Human Factors Society 34th Annual 
+Meeting (pp. 1525–1528). Santa Monica, CA: Human Factors 
+and Ergonomics Society.
+Cummings, M. L. (2003). Designing decision support systems for 
+revolutionary command and control domains (PhD disserta-
+tion). University of Virginia, Charlottesville.
+Cummings, M. L. (2004, September). Automation bias in intel-
+ligent time critical decision support systems . Paper pre-
+sented to the American Institute for Aeronautics and 
+Astronautics First Intelligent Systems Technical Conference, 
+Reston, V A. Retrieved from http://citeseerx.ist.psu.edu/
+viewdoc/summary?doi=10.1.1.91.2634
+Davies, D. R., & Parasuraman, R. (1982). The psychology of vigi-
+lance. London, England: Academic Press.
+Degani, A. (2001). Taming Hal: Designing interfaces beyond 2001. 
+New York, NY: Macmillan.
+Dekker, S. W. A., & Hollnagel, E. (2004). Human factors and folk 
+models. Cognition, Technology, and Work, 6, 79–86.
+Dekker, S. W. A., & Woods, D. D. (2002). MABA-MABA or abraca-
+dabra? Progress on human automation coordination. Cognition, 
+Technology, and Work, 4, 240–244.
+de Visser, E., & Parasuraman, R. (2007). Effects of imperfect 
+automation and task load on human supervision of multiple 
+uninhabited vehicles. In Proceedings of the 51st Annual 
+Meeting of the Human Factors and Ergonomics Society  
+(pp. 1081–1085). Santa Monica, CA: Human Factors and 
+Ergonomics Society.
+De Waard, D., van der Hulst, M.,  Hoedemaeker, M., &  
+Brookhuis, K. A. (1999). Driver behavior in an emergency situ-
+ation in the automated highway system. Transportation Human 
+Factors, 1, 67–82.
+Domeinski, J., Wagner, R., Schoebel, M., & Manzey, D. (2007). 
+Human redundancy in automation monitoring: Effects of social 
+loafing and social compensation. In Proceedings of the Human 
+Factors and Ergonomics Society 51st Annual Meeting  
+(pp. 587–591). Santa Monica, CA: Human Factors and 
+Ergonomics Society. 
+Duley, J. A., Westerman, S., Molloy, R., & Parasuraman, R. (1997). 
+Effects of display superimposition on monitoring of automation. 
+In Proceedings of the 9th International Symposium on Aviation 
+Psychology (pp. 322–326). Columbus, OH: Association of 
+Aviation Psychology.
+Dzindolet, M. T., Beck, H. P., Pierce, L. G., & Dawe, L. A. (2001). 
+A framework of automation use (Report No. ARL-TR-2412). 
+Aberdeen Proving Ground, MD: Army Research Laboratory.
+Dzindolet, M. T., Pierce, L. G., Beck, H. P., & Dawe, L. A. (2002). 
+The perceived utility of human and automated aids in a visual 
+detection task. Human Factors, 44, 79–94.
+Frey, D., & Schulz-Hardt, S. (1997). Eine Theorie der gelernten 
+Sorglosigkeit [A theory of learned carelessness]. In H. Mandl 
+(Ed.), Bericht über den 40. Kongress der Deutschen Gesellschaft 
+für Psychologie (pp. 604–611). Goettingen, Germany: Hogrefe.  
+Funk, K., Lyall, B., Wilson, J., Vint, R., Niemczyk, M., Suroteguh, C., 
+& Owen, G. (1999). Flight deck automation issues. International 
+Journal of Aviation Psychology, 9, 109–123.
+Galster, S., Duley, J. A., Masalonis, A., & Parasuraman, R. (2001). 
+Air traffic controller performance and workload under mature 
+Free Flight: Conflict detection and resolution of aircraft self-
+separation. International Journal of Aviation Psychology, 11, 71–93.
+Galster, S., & Parasuraman, R. (2001). Evaluation of countermea-
+sures for performance decrements due to automated-related 
+complacency in IFR-rated general aviation pilots. In 
+Proceedings of the International Symposium on Aviation 
+Psychology ( p p .  2 4 5 – 2 4 9 ) . Columbus, OH: Association of 
+Aviation Psychology.
+Gigerenzer, G., & Todd, P. A. (1999). Simple heuristics that make 
+us smart. London, England: Oxford University Press. 
+Gopher, D. (1996). Attention control: Explorations of the work of 
+an executive controller. Cognitive Brain Research, 5, 23–38.
+Gopher, D., Weil, M., & Siegel, D. (1989). Practice under varying 
+priorities: An approach to the training of complex skills. Acta 
+Psychologica, 71, 147–177.
+Hardy, D., Mouloua, M., Dwivedi, C., & Parasuraman, R. (1995). 
+Monitoring of automation failures by young and older adults. 
+In Proceedings of the International Symposium on Aviation 
+Psychology (pp. 1382–1386). Columbus, OH: Association of 
+Aviation Psychology.
+Hoffman, J. E., & Subramaniam, B. (1995). The role of visual atten-
+tion in saccadic eye movements. Perception and Psychophysics, 
+57, 787–795.
+Hurst, K., & Hurst, L. (1982). Pilot error: The human factors. 
+New York, NY: Aronson.
+Kahnemann, D., Slovic, P., & Tversky, A. (1982). Judgement under 
+uncertainty: Heuristics and biases. New York, NY: Cambridge 
+University Press.
+Karau, S. J., & Williams, K. D. (1993). Social-loafing: A meta-
+analytic review and theoretical integration. Journal of 
+Personality and Social Psychology, 65, 681–706.
+Koshland, D. E. (1989). Low probability-high consequence acci-
+dents. Science, 244, 405.
+Langer, E. J. (1982, April). Automated lives. Psychology Today, 
+pp. 60–71.
+Langer, E. J. (1989). Mindfulness. Reading, MA: Addison-Wesley.
+Layton, C., Smith, P. J., & McCoy, C. E. (1994). Design of coop-
+erative problem-solving system for en-route flight planning: an 
+empirical evaluation. Human Factors, 36, 94–119.
+Lee, J. D., & Moray, N. (1992). Trust, control strategies and alloca-
+tion of function in human-machine systems. Ergonomics, 35, 
+1243–1270.
+Lee, J. D., & Moray, N. (1994). Trust, self-confidence, and opera-
+tors’ adaptation to automation. International Journal of 
+Human-Computer Studies, 40, 153–184.
+Lee, J. D., & See, J. (2004). Trust in automation and technology: 
+Designing for appropriate reliance. Human Factors, 46, 50–80.
+Lee, J. D., & Seppelt, B. D. (2009). Human factors in automation 
+design. In S. Nof (Ed.), Springer handbook of automation (pp. 
+417–436). New York, NY: Springer.
+Locke, E. A., & Latham, G. P. (1990). A theory of goal setting and 
+task performance. Englewood Cliffs, NJ: Prentice Hall. 
+Lorenz, B., Di Nocera, F., Rottger, S., & Parasuraman, R. (2002). 
+Automated fault-management in a simulated spaceflight 
+micro-world. Aviation, Space, and Environmental Medicine, 
+73, 886–897.
+Luedtke, A., & Moebus, C. (2005). A case study for using a cogni-
+tive model of learned carelessness in cognitive engineering. In 
+G. Salvendy (Ed.), Proceedings of the 11th International 
+Conference of Human-Computer Interaction. Mahwah, NJ: 
+Erlbaum. Retrieved from http://www.lks.uni-oldenburg .de/down-
+load/abteilung/Luedtke_Moebus_crv.pdf
+Mack, A., & Rock, I. (1998). Inattentional blindness. Cambridge, 
+MA: MIT Press.
+Madhavan, P ., Wiegmann, D. A., & Lacson, F. C. (2006). Automation 
+failures on tasks easily performed by operators undermine trust 
+in automated aids. Human Factors, 48, 241–256.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 29 ---
+408 June 2010 - Human Factors
+Manzey, D., & Bahner, J. E. (2005). Vertrauen in Automation als 
+Aspekt der Verlaesslichkeit von Mensch-Maschine-Systemen 
+[Trust in automation as an aspect of dependability of human-
+machine-systems]. In K. Karrer, B. Gauss, & C. Steffens 
+(Eds.), Mensch-Maschine-Systemtechnik aus Forschung und 
+Praxis (pp. 93–109). Duesseldorf, Germany: Symposion.  
+Manzey, D., Bleil, M., Bahner-Heyne, J. E., Klostermann, A., 
+Onnasch, L., Reichenbach, J., & Röttger, S. (2008). AutoCAMS 
+2.0 manual. Berlin, Germany: Berlin Institute of Technology, 
+Chair of Work, Engineering and Organisational Psychology. 
+Retrieved from http://www.aio.tu-berlin.de/?id=30492
+Manzey, D., Reichenbach, J., & Onnasch, L. (2008). Performance-
+consequences of automated aids in supervisory control: The 
+impact of function allocation. In Proceedings of the 52nd Meeting 
+of the Human Factors and Ergonomics Society ( p p .  2 9 7 – 3 0 1 ) . 
+Santa Monica, CA: Human Factors and Ergonomics Society.
+Manzey, D., Reichenbach, J., & Onnasch, L. (2009). Human per-
+formance consequences of automated decision aids in states of 
+fatigue. In Proceedings of the 53rd Meeting of the Human 
+Factors and Ergonomics Society (pp. 329–333). Santa Monica, 
+CA: Human Factors and Ergonomics Society.
+May, P., Molloy, R., & Parasuraman, R. (1983, October). Effects of 
+automation reliability and failure rate on monitoring perfor-
+mance in a multi-task environment. Paper presented at the annual 
+meeting of the Human Factors Society, Santa Monica, CA. 
+McGuirl, J. M., & Sarter, N. B. (2006). Supporting trust calibration 
+and the effective use of decision aids by presenting dynamic 
+system confidence information. Human Factors, 48, 656–665.
+McKibbon, K. A., & Fridsma, D. B. (2006). Effectiveness of clinical-
+selected electronic information resources for answering primary 
+care physician’s information needs. Journal of the American 
+Medical Informatics Association, 13, 653–659.
+Merlo, J. L., Wickens, C., & Yeh, M. (2000). Effect of reliability on 
+cue effectiveness and display signaling. In Proceedings of the 
+4th Annual Army Federated Laboratory Symposium (pp. 27–31). 
+College Park, MD: Army Research Laboratory.
+Merritt, S. M., & Ilgen, D. R. (2008). Not all trust is created equal: 
+Dispositional and history-based trust in human-automation 
+interactions. Human Factors, 50, 194–210.
+Metzger, U., Duley, J., Abbas, R., & Parasuraman, R. (2000). Effects 
+of variable-priority training on automation-related complacency: 
+Performance and eye movements. In Proceedings of the IEA 
+2000/HFES 2000 Congress (pp. 2-346–2-349). Santa Monica, 
+CA: Human Factors and Ergonomics Society.
+Metzger, U., & Parasuraman, R. (2001). The role of the air traffic 
+controller in future air traffic management: An empirical study 
+of active control versus passive monitoring. Human Factors, 
+43, 519–528.
+Metzger, U., & Parasuraman, R. (2005). Automation in future air traf-
+fic management: Effects of decision aid reliability on controller 
+performance and mental workload. Human Factors, 47, 35–49.
+Molloy, R., & Parasuraman, R. (1996). Monitoring an automated 
+system for a single failure:  Vigilance and task complexity 
+effects. Human Factors, 38, 311–322.
+Moray, N. (1984). Attention to dynamic visual displays in man-
+machine systems. In R. Parasuraman & D. R. Davies (Eds.), 
+Varieties of attention (pp. 485–513). San Diego, CA: Academic 
+Press.
+Moray, N. (2003). Monitoring, complacency, scepticism and eutac-
+tic behaviour. International Journal of Industrial Ergonomics, 
+31, 175–178.
+Moray, N., & Inagaki, T. (2000). Attention and complacency. 
+Theoretical Issues in Ergonomics Science, 1, 354–365.
+Mosier, K. L. (2002). Automation and cognition: Maintaining coher-
+ence in the electronic cockpit. In E. Salas (Ed.), Advances in 
+human performance and cognitive engineering research (V ol. 2, 
+pp. 93–121). Amsterdam, Netherlands: Elsevier Science.
+Mosier, K. L., Palmer, E. A., & Degani, A. (1992). Electronic 
+checklists: Implications for decision making. In Proceedings of 
+the Human Factors Society 36th Annual Meeting (pp. 7–11). 
+Santa Monica, CA: Human Factors and Ergonomics Society.
+Mosier, K. L., & Skitka, L. J. (1996). Human decision makers and 
+automated decision aids: Made for each other? In R. Parasuraman 
+& M. Mouloua (Eds.), Automation and human performance: 
+Theory and application (pp. 201–220). Mahwah, NJ: Erlbaum.
+Mosier, K. L., Skitka, L. J., Dunbar, M., & McDonnell, L. (2001). 
+Aircrews and automation bias: The advantages of teamwork? 
+International Journal of Aviation Psychology, 11, 1–14.
+Mosier, K. L., Skitka, L. J., Heers, S., & Burdick, M. (1998). 
+Automation bias: Decision-making and performance in high-
+tech cockpits. International Journal of Aviation Psychology, 8, 
+47–63.
+National Transportation Safety Board. (1997). Grounding of the 
+Panamanian passenger ship Royal Majesty on Rose and 
+Crown shoal near Nantucket, Massachusetts, June 10, 1995 
+(Report NTSB/MAR-97-01). Washington, DC: Author. 
+Parasuraman, R. (2000). Designing automation for human use: 
+Empirical studies and quantitative models. Ergonomics, 43, 
+931–951. 
+Parasuraman, R., Cosenzo, K., & de Visser, E. (2009). Adaptive 
+automation for human supervision of multiple uninhabited 
+vehicles: Effects on change detection, situation awareness, and 
+mental workload. Military Psychology, 21, 270–297.
+Parasuraman, R., Molloy, R., & Singh, I. L. (1993). Performance con-
+sequences of automation-induced “complacency.” International 
+Journal of Aviation Psychology, 3, 1–23.
+Parasuraman, R., Mouloua, M., & Molloy, R.  (1996). Effects of 
+adaptive task allocation on monitoring of automated systems. 
+Human Factors, 38, 665–679.
+Parasuraman, R., & Riley, V .  (1997). Humans and automation: 
+Use, misuse, disuse, abuse. Human Factors, 39, 230–253.
+Parasuraman, R., Sheridan, T. B., & Wickens, C. D. (2000). A 
+model for types and levels of human interaction with automa-
+tion. IEEE Transactions on Systems, Man, and Cybernetics, 
+Part A: Systems and Humans, 30, 286–297.
+Parasuraman, R., Sheridan, T. B., & Wickens, C. D. (2008). 
+Situation awareness, mental workload, and trust in automation: 
+Viable, empirically supported cognitive engineering con-
+structs. Journal of Cognitive Engineering and Decision 
+Making, 2, 141–161.
+Parasuraman, R., & Wickens, C. D. (2008). Humans: Still vital after 
+all these years of automation. Human Factors, 50, 511–520.
+Parasuraman, S., Singh, I. L., Molloy, R., & Parasuraman, R. 
+(1992). Automation-related complacency: A source of vulner-
+ability in contemporary organizations. In R. Aiken (Ed.), 
+Education and society: Information processing 92 (V ol. 2, 
+pp. 426–432). Amsterdam, Netherlands: Elsevier Science.
+Prinzel, L. J. (2002). The relationship of self-efficacy and compla-
+cency in pilot-automation interaction (Technical Memorandum 
+No. TM-2002-211925). Hampton, V A: National Aeronautics 
+and Space Administration Langley Research Center.
+Prinzel, L. J., De Vries, H., Freeman, F. G., & Mikulka, P. (2001). 
+Examination of automation-induced complacency and indi-
+vidual difference variates (Technical Memorandum No. 
+TM-2001-211413). Hampton, V A: National Aeronautics and 
+Space Administration Langley Research Center.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 30 ---
+AUTOMATION COMPLACENCY AND BIAS 409
+Rasmussen, J. (1986). Information processing and human-com-
+puter interaction. Amsterdam, Netherlands: North Holland.
+Reichenbach, J., Onnasch, L., & Manzey, D. (in press). Misuse of 
+automation: The impact of system experience on complacency 
+and automation bias in interaction with automated aids. In 
+Proceedings of the 54th Meeting of the Human Factors and 
+Ergonomics Society. Santa Monica, CA: Human Factors and 
+Ergonomics Society.
+Rovira, E., McGarry, K., & Parasuraman, R. (2007). Effects of 
+imperfect automation on decision making in a simulated com-
+mand and control task. Human Factors, 49, 76–87.
+Sarter, N. B., & Schroeder, B. (2001). Supporting decision making 
+and action selection under time pressure and uncertainty: The 
+case of in-flight icing. Human Factors, 43, 573–583.
+Senders, J. W. (1964). The human operator as a monitor and con-
+trollers of multidegree of freedom systems. IEEE Transactions 
+on Human Factors in Electronics, HFE-5, 1–6.
+Shepherd, M., Findlay, J. M., & Hockey, R. J. (1986). The relation-
+ship between eye movements and spatial attention. Quarterly 
+Journal of Experimental Psychology A, 38, 475–491.
+Sheridan, T. B. (1970). On how often the supervisor should sample. 
+IEEE Transactions on Systems Science and Cybernetics, SSC-
+6(2), 140–145.
+Sheridan, T. B. (2002). Humans and automation: Systems design 
+and research issues. Santa Monica, CA: Human Factors and 
+Ergonomics Society.
+Sheridan, T. B., & Verplank, W. L. (1978). Human and computer 
+control of undersea teleoperators (Technical Report, Man-
+Machine Systems Laboratory, Department of Mechanical 
+Engineering). Cambridge, MA: MIT.
+Simons, D. J., & Rensink, R. A. (2005). Change blindness: Past, 
+present, and future. Trends in Cognitive Sciences, 9, 16–20.
+Singh, I. L., Molloy, R., Mouloua, M., Deaton, J., & Parasuraman, R. 
+(1998). Cognitive ergonomics of cockpit automation. In  
+I. L. Singh & R. Parasuraman (Eds.), Human cognition: A 
+multidisciplinary perspective (pp. 242–253). New Delhi, 
+India: Sage.
+Singh, I. L., Molloy, R., & Parasuraman, R. (1993a). Automation-
+induced “complacency”: Development of the complacency-
+potential rating scale. International Journal of Aviation 
+Psychology, 3, 111–121.
+Singh, I. L., Molloy, R., & Parasuraman, R. (1993b). Individual 
+differences in monitoring failures of automation. Journal of 
+General Psychology, 120, 357–373.
+Singh, I. L., Molloy, R., & Parasuraman, R. (1997). Automation-
+related monitoring inefficiency: The role of display location. 
+International Journal of Human-Computer Studies, 46, 17–30.
+Singh, I. L., Sharma, H. O., & Parasuraman, R. (2001). Effects of 
+manual training and automation reliability on automation 
+induced complacency in a flight simulation task. Psychological 
+Studies, 46, 21–27.
+Skitka, L. J., Mosier, K. L., & Burdick, M. (1999). Does automa-
+tion bias decision-making? International Journal of Human-
+Computer Studies, 51, 991–1006.
+Skitka, L. J., Mosier, K. L., & Burdick, M. (2000). Accountability 
+and automation bias. International Journal of Human-Computer 
+Studies, 52, 701–717.
+Skitka, L. J., Mosier, K. L., Burdick, M., & Rosenblatt, B. (2000). 
+Automation bias and errors: Are crews better than individuals? 
+International Journal of Aviation Psychology, 10, 85–97.
+St. John, M., Smallman, H. S., Manes, D. I., Feher, B. A., & 
+Morrison, J. G. (2005). Heuristic automation for decluttering 
+tactical displays. Human Factors, 47, 509–525.
+Szalma, J. (2009). Incorporating human variation into human factors/
+ergonomics research and practice [Special issue]. Theoretical 
+Issues in Ergonomics, 10, 377–488.
+Taylor, P. M., Champness, J., Given-Wilson, R. M., Potts, H. W. E., 
+& Johnston, K. (2004). An evaluation of the impact of  
+computer-based prompts on screen readers’ interpretation of 
+mammograms. British Journal of Radiology, 77, 21–27. 
+Thackray, R. I. (1981). The stress of boredom and monotony: A 
+consideration of the evidence. Psychosomatic Medicine, 43, 
+165–176.
+Thackray, R. I., & Touchstone, R. M. (1989). Detection efficiency 
+on an air traffic control monitoring task with and without com-
+puter aiding. Aviation, Space, and Environmental Medicine, 
+60, 744–748.
+Thomas, L., & Wickens, C. D. (2006). Effects of battlefield display 
+frames of reference on navigation tasks, spatial judgments, and 
+change detection. Ergonomics, 49, 1154–1173.
+Tsai, T. L., Fridsma, D. B., & Gatti, G. (2003). Computer decision 
+support as a source of interpretation error: the case of electro-
+cardiograms. Journal of the American Medical Informatics 
+Association, 10, 478–483.
+Tversky, A., & Kahneman, D. (1974). Judgement under uncer-
+tainty: Heuristics and biases. Science, 185, 1124–1131.
+Vincenzi, D. A., Muldoon, R., Mouloua, M., Parasuraman, R., & 
+Molloy, R. (1996). Effects of aging and workload on monitor-
+ing of automation failures. In Proceedings of the 40th Annual 
+Meeting of the Human Factors and Ergonomics Society  
+(pp. 1556–1561). Santa Monica, CA: Human Factors and 
+Ergonomics Society.
+Westbrook, J. I., Coiera, W. E., & Gosling, A. S. (2005). Do online 
+information retrieval systems help experienced clinicians 
+answer clinical questions? Journal of the American Medical 
+Informatics Association, 12, 315–321.
+Wickens, C. D., & Dixon, S. (2007). The benefits of imperfect 
+diagnostic automation: A synthesis of the literature. Theoretical 
+Issues in Ergonomics Science, 8, 201–212.
+Wickens, C. D., Dixon, S., Goh, J., & Hammer, B. (2005). Pilot 
+dependence on imperfect diagnostic automation in simulated 
+UA V flights: An attentional visual scanning analysis.  In 
+Proceedings of the 13th International Symposium on Aviation 
+Psychology (pp. 919–923). Columbus, OH: Association of 
+Aviation Psychology.
+Wickens, C. D., Gempler, K., & Morphew, M. E. (2000). Workload 
+and reliability of traffic displays in aircraft traffic avoidance. 
+Transportation Human Factors Journal, 2, 99–126.
+Wickens, C. D., & Hollands, J. G. (2000). Engineering psychology 
+and human performance. New York, NY: Prentice Hall. 
+Wickens, C. D., McCarley, J. S., Alexander, A., Thomas, L., 
+Ambinder, M., & Zheng, S. (2007). Attention-situation aware-
+ness (A-SA) model of pilot error. In D. Foyle & B. Hoeey 
+(Eds.), Pilot performance models (pp. 213–240). Mahwah, NJ: 
+Erlbaum.
+Wiegmann, D. A. (2002). Agreeing with automated diagnostic aids: A 
+study of users’ concurrence strategies. Human Factors, 44, 44–50.
+Wiener, E. L. (1981). Complacency: Is the term useful for air safety? 
+In Proceedings of the 26th Corporate Aviation Safety Seminar (pp. 
+116–125). Denver, CO: Flight Safety Foundation
+Wiener, E. L., & Curry, R. E. (1980). Flight-deck automation: 
+Promises and problems. Ergonomics, 23, 995–1011.
+Woods, D. D. (1996). Decomposing automation: Apparent simplic-
+ity, real complexity. In R. Parasuraman & M. Mouloua (Eds.), 
+Automation and human performance (pp. 3–18). Mahwah, NJ: 
+Erlbaum.
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 
+
+--- PDF PAGE 31 ---
+410 June 2010 - Human Factors
+Raja Parasuraman is a university professor of psy-
+chology at George Mason University. He obtained 
+his PhD in applied psychology from Aston University 
+in 1976. 
+Dietrich H. Manzey is a professor of work, engineer-
+ing, and organizational psychology at the Institute of 
+Psychology and Ergonomics, Berlin Institute of 
+Technology, Germany. He received his PhD in ex- 
+perimental psychology at the University of Kiel, 
+Germany, in 1988 and his habilitation in psychology 
+at the University of Marburg, Germany, in 1999.
+Date received: December 1, 2009
+Date accepted: May 21, 2010
+ at GEORGE MASON UNIV on October 21, 2010hfs.sagepub.comDownloaded from 

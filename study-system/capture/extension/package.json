@@ -1,0 +1,18 @@
+{
+  "name": "security-trust-study-capture",
+  "displayName": "Security Trust Study Capture",
+  "description": "Local, pseudonymous study event capture for a controlled coding task",
+  "version": "0.1.0",
+  "publisher": "research-study-local",
+  "private": true,
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Other"],
+  "activationEvents": ["workspaceContains:study/CAPTURE_CONFIG.json"],
+  "main": "./extension.cjs",
+  "contributes": {
+    "commands": [
+      { "command": "studyCapture.status", "title": "Study Capture: Show Status" },
+      { "command": "studyCapture.openReview", "title": "Study Capture: Open Review Page" }
+    ]
+  }
+}

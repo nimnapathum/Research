@@ -1,0 +1,1848 @@
+--- PDF PAGE 1 ---
+International Journal on Software Tools for Technology Transfer
+https://doi.org/10.1007/s10009-026-00840-6
+EXPLANATION PARADIGMS LEVERAGING ANALYTIC INTUITION
+Regular
+Dynamic calibration of trust and trustworthiness in
+AI-enabled systems
+Magnus Liebherr1 · Ellen Enkel1 · Eﬃe L.-C. Law 2 · Mohammad Reza Mousavi3 · Matteo Sammartino4 ·
+Philipp Sieberg5
+Accepted: 3 February 2026
+© The Author(s) 2026
+Abstract
+Trust is a multi-faceted phenomenon traditionally studied in human relations and more recently in human-machine interactions.
+In the context of AI-enabled systems, trust is about the belief of the user that in a given scenario the system is going to be
+helpful and safe. The system-side counterpart to trust is trustworthiness. When trust and trustworthiness are aligned with each
+other, there is calibrated trust. Trust, trustworthiness, and calibrated trust are all dynamic phenomena, evolving throughout
+the history and evolution of user beliefs, systems, and their interaction. In this paper, we review the basic concepts of trust,
+trustworthiness and calibrated trust and provide deﬁnitions for them. We discuss their various metrics used in the literature,
+and the causes that may aﬀect their dynamics, particularly in the context of AI-enabled systems. We discuss the implications
+of the discussed concepts for various types of stakeholders and suggest some challenges for future research.
+Keywords Trust · Trustworthiness · Calibrated trust · AI-enabled systems
+1 Introduction
+Trust [38, 51, 97, 103] is a user-centred multi-faceted no-
+tion, which has been traditionally studied in social sci-
+ences in human-human interactions. With the advent of
+human-machine interactions and more recently autonomous
+and AI-enabled systems trust has gained renewed interest
+[41, 57, 91]. This has been particularly driven by the in-
+creasing deployment of AI in high-stakes domains such as
+healthcare, ﬁnance, and autonomous driving, where trust di-
+rectly impacts adoption, interaction quality, and safety. As AI
+systems take on more autonomous and decision-critical roles,
+ensuring appropriate levels of trust has become a central con-
+cern. In this context, many recent studies have focussed on
+deﬁning [ 91] and measuring [6, 17, 82, 120] trust in human-
+machine interactions. Users’ trust in machines is not always
+justiﬁed [ 28]: under-trust in a system that is not trustworthy
+can lead to reduced beneﬁt for users, and over-trust can lead
+to harm. Calibrated trust [ 28] happens when trust of users
+and trustworthiness of systems [ 18, 71, 76, 111] meet. All
+these notions are parametric to users (personas and groups)
+and scenarios in which the system is used.
+In this paper, we provide an overview of existing results,
+open challenges, potential solutions regarding trust and trust-
+worthiness in data-driven AI-enabled systems. A common
+feature of many such systems is that there is typically lit-
+tle speciﬁcation available and hence, establishing trustwor-
+thiness and calibrating trust are signiﬁcant challenges. Our
+target audience is researchers, particularly those starting a re-
+search career in Trust (worthiness) for AI, and practitioners
+using such systems. We present the deﬁnitions and results in
+such a way that they are also accessible for practitioners and
+✉M. Liebherr
+magnus.liebherr@uni-due.de
+E. Enkel
+ellen.enkel@uni-due.de
+E.L.-C. Law
+lai-chong.law@durham.ac.uk
+M.R. Mousavi
+mohammad.mousavi@kcl.ac.uk
+M. Sammartino
+matteo.sammartino@rhul.ac.uk
+P. Sieberg
+philipp.sieberg@schotteautomotive.de
+1 University of Duisburg-Essen, Duisburg, Germany
+2 Durham University, Durham, UK
+3 King’s College London, London, UK
+4 Royal Holloway, University of London, London, UK
+5 Schotte Automotive Gmbh & Co.KG, Hattingen, Germany
+Springer
+
+--- PDF PAGE 2 ---
+M. Liebherr et al.
+policy makers. For this audience, we present rigorous deﬁ-
+nitions and an overview of available metrics and causes; we
+also reﬂect on the possible applications and consequences,
+and open issues for future research.
+The contributions of this paper can be summarized as
+follows:
+– An overview of deﬁnitions, assessment models, and fac-
+tors of trust, trustworthiness and their calibration.
+– A framework, based on the provided deﬁnitions, account-
+ing for the dynamic interaction among trust, trustworthi-
+ness and their interactions.
+– A reﬂection on the implication of these issues. We derive
+recommendations for system developers, policy makers,
+users and companies on how to deal with the levels of
+trust/trustworthiness.
+The remainder of this paper is organized as follows. In
+Sect. 2, we review the diﬀerent facets and deﬁnitions of trust,
+trustworthiness and calibrated trust and produce our deﬁni-
+tions. In Sect. 3, we present the state of the art in assessing
+these concepts and the open challenges involved in their as-
+sessment. In Sect. 4, we discuss the factors that may have a
+positive or negative causal inﬂuence on trust and trustworthi-
+ness (and hence, their calibration) and discuss the dynamics
+of trust and trustworthiness in this context. Section 5 dis-
+cusses the ongoing work embodying the implication of this
+research, e.g., in terms of standards and guidelines. Section6
+concludes the paper and presents an overview of the future
+road-map. We provide a glossary of terms as anAppendix to
+help our readers navigate through the wealth of terminology
+and concepts.
+2 Deﬁnitions
+2.1 Trust
+Deﬁning trust Trust stands as a foundational element
+within interpersonal relationships and is generally deﬁned
+as “the willingness of a party to be vulnerable to the actions
+of another party based on the expectation that the other will
+perform a particular action important to the trustor, irrespec-
+tive of the ability to monitor or control that other party”
+[97]. Mayer et al.’s (1995) model expands on this deﬁnition
+by identifying three key dimensions that shape the trustor’s
+perception of trustworthiness, namely ability, benevolence,
+and integrity. This perception of trustworthiness inﬂuences
+trust, which in turn impacts the trustor’s willingness to take
+risks. The extent to which trust translates into risk-taking
+is moderated by perceived risk, meaning that trust only be-
+comes relevant in situations where vulnerability exists. Ad-
+ditionally, trustor’s propensity—a general tendency to trust
+others based on personality or past experiences—acts as an
+antecedent, shaping initial trust levels before direct interac-
+tions with the trustee occur [97]. In addition to considering
+risk as a moderator, other perspectives on trust place sig-
+niﬁcantly greater emphasis on perceived risk as a central
+component. [38, 51, 103]. The perception of risk has to do
+with the epistemic state of each user. Although risk is inher-
+ent in trust, it does not negate the value of trust. Rather, it
+is the willingness to trust despite potential risks that makes
+trust a powerful and transformative force in interpersonal re-
+lationships, group dynamics, civic engagement and society
+as a whole [122]. However, trust is not limited to the interper-
+sonal domain. It also describes the way people interact with
+technology. In particular, the ﬁeld of trust in AI has garnered
+signiﬁcant attention in recent times [41, 78, 148].
+To our current understanding, it is evident that interper-
+sonal trust and trust in AI-based systems entail reliance on
+an external entity; however, the underpinnings and dynamics
+of trust exhibit notable distinctions between human interac-
+tions and engagement with AI-based systems, particularly
+concerning the dynamics of trust calibration with respect
+to the trustworthiness of the AI-enabled system. Currently,
+multiple competing deﬁnitions of trust in AI-based systems
+exist, and consensus on a speciﬁc deﬁnition has not been
+reached. In accordance with previous work in the area of
+trust and new technologies/AI applications [41, 57, 91], we
+deﬁne trust in AI-based systems as follows.
+Trust is deﬁned as the user’s (u) epistemic state that
+the system (s) is going to behave (b) as expected in a
+scenario (r) characterized by a certain level of risk and
+uncertainty.
+Much like in interpersonal relationships, trust is about
+the state of people’s minds and it signiﬁcantly inﬂuences
+people’s readiness to depend on AI-based systems. Below
+we list some of the factors contributing to trust, with a focus
+on trust in AI-based systems.
+Cognitive trust vs. emotional trust Trust can be ground-
+ed in both aﬀect, involving emotional aspects, and ra-
+tional thinking, encompassing cognitive evaluations [ 98].
+[97] hinted at the potential emergence of an emotional con-
+nection in a trusting relationship. However, their model did
+not fully incorporate emotion. Instead, the inﬂuential factors
+have been construed through a cognitive lens, wherein trust
+is logically assessed by the trusting party based on trusting
+beliefs [89, 100]. Cognitive trust is rooted in logical rea-
+soning and evidence, involving assessments that individuals
+make about the reliability, competence, and predictability
+of another party [126]. This evaluation extends beyond hu-
+man interactions, recognizing trust as a key factor in human
+relations with non-humans [57, 115]. Researchers studying
+cognitive trust in AI describe it by the users’ willingness
+Springer
+
+--- PDF PAGE 3 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+to act on factual information or advice and their perception
+of the technology’s helpfulness, competence, or usefulness
+[47, 57, 91]. It’s important to acknowledge that cognitive
+trust might also be inﬂuenced by factors like emotions and
+mood, and that emotional trust may mediate users’ decisions
+to adopt a speciﬁc technology [ 83]. Although we know that
+emotions are the primary determinant of trusting behavior,
+the concept of emotional trust is under-explored and deserve
+further research in the context of human interactions with
+technology [57, 91]. Generally, emotional trust is described
+by the sense of security individuals experience within emo-
+tional connections with others [41, 70, 93]. In the utilization
+of AI-based systems, tangibility has proven to be of sig-
+niﬁcant importance, as well as the empathy and compassion
+exhibited by the AI towards users [42, 95, 148]. [42], through
+their review of literature on human trust in AI, identiﬁed three
+forms of AI representations (robotic, virtual, and embedded)
+and their corresponding paths of cognitive and emotional
+trust. Overall, due to the information asymmetry between an
+AI system and its users, building cognitive trust proves to
+be challenging without a thorough understanding of how the
+system operates. Consequently, users often rely on emotional
+trust [87].
+Theoretical models for trust in AI A particularly rel-
+evant extension of trust models to human-machine inter-
+actions was introduced by [ 90] and later reﬁned by [ 91].
+Their work translated Mayer et al.’s [97] interpersonal trust
+dimensions—ability, benevolence, and integrity—into the
+automation context, framing trust as a user’s perception of
+a system’s performance (ability), intent (benevolence), and
+predictability (integrity/reliability). This adaptation laid the
+groundwork for understanding trust in AI, as it emphasizes
+how users develop expectations about system behavior based
+on cognitive evaluations of these dimensions. Building on
+these insights, trust has been recognized as a pivotal fac-
+tor shaping users’ behavioral intentions towards the utiliza-
+tion of AI-based systems, consequently impacting adoption
+and diﬀusion in diverse domains [ 41, 148]. In a recent re-
+view, encompassing diverse industrial areas, trust is eluci-
+dated as a substantial and aﬃrmative predictor of intention,
+willingness, and usage behavior related to AI [78]. The im-
+portance of trust becomes also evident in both classic and
+modiﬁed iterations of key theories on new technology adop-
+tion (also applicable to the domain of AI-based systems), by
+including trust indirectly (Theory of Reasoned Action; The-
+ory of Planned Behavior; Technology Acceptance Model) or
+directly (modiﬁed versions of the Technology Acceptance
+Model) within the models [5, 27, 37, 39]. These frameworks
+also underscore the dynamic nature of trust in technology
+adoption processes, a concept that has been explicitly ex-
+plored in additional theories. Dynamic trust models have
+been reported in various contexts such as the Internet of
+things [ 138] algorithmic advice [ 26, 57] or B2C Cross-
+Border E-Commerce [ 29]. The prevailing consensus con-
+solidates trust as an emergent phenomenon rather than a
+static state [146]. In Explainable AI (XAI) a notional view
+of how trust could morph has been proposed, showing that
+users start cautiously or skeptically but become more trusting
+when provided with an eﬀective initial explanation, leading
+to a state of justiﬁed trust; however, continued interaction
+with the XAI system may lead to instances of automation
+surprise [58].
+2.2 Trustworthiness
+Deﬁning trustworthiness Trustworthiness has been used
+in various ﬁelds of social sciences such as Philosophy
+[18, 71, 79], Psychology [19, 123], Political Economy [50],
+and outside social sciences in Neuroscience [33] and Com-
+puter Science and Engineering [ 76, 111]. It is noteworthy
+that trustworthiness is an under-researched concept, particu-
+larly when compared with trust [50]. The semantics of trust-
+worthiness varies across diﬀerent ﬁelds and there are even
+debates about how to deﬁne it within a ﬁeld of study. For ex-
+ample, Hardin [50] deﬁnes trustworthiness as the “capacity
+to judge one’s interest in fulﬁlling the trust”. In much of the
+social sciences literature, trustworthiness is deﬁned in terms
+of perceived trust. An important aspect of many earlier deﬁ-
+nitions of trustworthiness is its contextualization in terms of
+the subject (the assessor of trustworthiness), the object (the
+trustee), and the task (the scenario in which the interaction
+is supposed to happen) [18, 71]. We would like to provide a
+deﬁnition of trustworthiness that can be formalized and can
+provide a basis for quantitative measurement on the system
+and its properties. This will further enable quantifying the
+dynamic calibration between trust (using the metrics sur-
+veyed before) and trustworthiness (through the forthcoming
+deﬁnition). It is worth noting that trustworthiness is dynamic
+and subject to change during the system life cycle due to the
+continuous changes (e.g., due to changes and repair and also
+due to ageing of sensors and hardware). As a consequence,
+we deﬁne trustworthiness to be a property of the object of
+trust, given a speciﬁcation of requirements provided by the
+user, as well as the scenario in which trustworthiness is de-
+ﬁned. It is therefore inspired by the earlier contextualization
+of trustworthiness in earlier deﬁnitions [71, 79].
+Trustworthiness: We call a system (s) trustworthy in a
+scenario (r), when it satisﬁes the user’s (u) requirements
+(req
+s) for the scenario. A system is trustworthy when it is
+trustworthy in all scenarios within its operational design
+domain.
+Principles of trustworthiness Several organizations
+have proposed principles for trustworthy AI, including ma-
+jor tech companies such as Google, OpenAI, Microsoft, and
+Springer
+
+--- PDF PAGE 4 ---
+M. Liebherr et al.
+IBM. These principles coalesce around the key requirements
+set out by the EU Commission in 2019 [55]:
+1. Human agency and oversight: AI should support human
+agency, safeguard fundamental rights of users and include
+oversight mechanisms.
+2. Technical robustness and safety: AI systems must exhibit
+resilience, safety and security. Additionally, they should
+prioritize accuracy, reliability, and reproducibility. Con-
+tingency plans should be in place.
+3. Privacy and data governance: AI systems should guaran-
+tee privacy and data protection, ensure the quality and
+integrity of data, and support data access protocols.
+4. Transparency: AI systems should be properly documented
+to allow for traceability, with technical and decision-
+making processes that are explainable. Users should be
+made aware of the systems’ capabilities and limitations.
+5. Diversity, non-discrimination and fairness: AI systems
+should avoid unfair bias, be accessible, and engage perti-
+nent stakeholders at every stage of their life cycle.
+6. Societal and environmental sustainability: AI systems
+should contribute to the well-being of individuals, pri-
+oritize sustainability and environmental friendliness, and
+undergo thorough assessments for their societal impact.
+7. Accountability: AI systems should incorporate mecha-
+nisms to guarantee responsibility and accountability. The
+algorithms, data, and design processes should facilitate
+auditability, with established measures for redress.
+The EU deﬁnition is not the ﬁnal word on deﬁning trust-
+worthiness, but it gives a comprehensive template for assess-
+ing trustworthiness on an abstract level. The principles put
+forward by the EU can further be used as metrics to char-
+acterize the requirements for diﬀerent scenarios in diﬀerent
+application domains. Moreover, such requirements can be
+turned into formal contracts between AI system providers
+and users to enforce the trustworthiness of the system [67].
+There are published critiques of this deﬁnition [ 86, 130,
+132], some of which note that the EU guidelines are pri-
+marily based on ethical rather than legal principles, making
+their implementation challenging in speciﬁc contexts such
+as corporate governance, where harmonization with relevant
+regulations and governance principles is necessary [53]. Al-
+though other frameworks exist, there is considerable consen-
+sus on the key principles (see [62, pag.13] for a comparison
+table).
+2.3 Calibrated trust
+Deﬁning calibration Trust and trustworthiness are sup-
+posed to mirror each other: trust is the belief of the user
+about the system matching their expectations, while trust-
+worthiness is the property of the system that satisﬁes the re-
+quirements aligned with user needs, which, in turn, capture
+Fig. 1 Trust calibration [28] p. 462
+users’ expectations. Trust is a personal and user-speciﬁc no-
+tion, while trustworthiness, in our deﬁnition, is objective and
+generalizable to a group, community or society [127, 128].
+Calibrated trust, deﬁned below, is when for a given user, the
+levels of trust and trustworthiness match, i.e., trust is placed
+on a system that is trustworthy in the given scenario:
+Calibrated trust: Trust of a user (u) in a system (s) in
+a scenario (r) is called calibrated when it matches the
+actual level of trustworthiness of the system for this sce-
+nario. Trust in a system is calibrated when it is calibrated
+for all users and all scenarios.
+Calibration of trust is a dynamic process; typically the
+user builds an instantaneous trust when confronted by an AI-
+based system. Instantaneous trust may be informed by prior
+knowledge, by the guarantor of the system and the guarantees
+provided, as well as other cognitive and emotional factors
+brieﬂy discussed in Sect. 2.1 and elaborated in Sect.4.B o t h
+instantaneous trust and the dynamic changes of trust can
+lead to overtrust and distrust in AI-based systems. Below
+we brieﬂy discuss the issues of overtrust and distrust. See
+Fig. 1 [28] for a depiction of how calibration is determined
+by actual and perceived trustworthiness.
+Under-trust/distrust Under-trust in AI technology can
+have multifaceted consequences, manifesting in various ways
+[28]. Firstly, the failure to harness the full potential of Trust-
+worthy Autonomous Systems (TAS) is a signiﬁcant draw-
+back. Underestimating or hesitating to rely on the capabili-
+ties of AI systems leads to missed opportunities for enhanced
+eﬃciency and eﬀectiveness. Additionally, under-trust can re-
+sult in suboptimal solutions or performance [28]. Doubting
+the capabilities of AI technology may lead to conservative
+Springer
+
+--- PDF PAGE 5 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+decision-making, preventing the realization of optimal out-
+comes that could be achieved through a more conﬁdent in-
+tegration of AI tools. Communication breakdowns can also
+arise as a consequence of under-trust. When humans lack
+conﬁdence in AI systems, eﬀective communication chan-
+nels may be hindered, impeding the seamless collabora-
+tion between human operators and autonomous technologies
+[92, 112]. Moreover, under-trust contributes to an increased
+workload on both human operators and TAS [ 36]. Human
+operators may feel compelled to overcompensate for per-
+ceived deﬁciencies in AI, leading to heavier cognitive load.
+Simultaneously, AI systems may not be utilized to their full
+potential, resulting in a suboptimal distribution of tasks and
+responsibilities. Lastly, under-trust can lead to a state of dis-
+use or micromanagement. Human operators, due to a lack
+of trust in AI, may either refrain from using the technology
+altogether or micromanage its functions, undermining the
+purpose of employing autonomous systems for eﬃciency
+and autonomy [28, 36].
+Over-trust Over-trust in AI presents serious challenges,
+often culminating in harmful outcomes. This unwarranted
+conﬁdence in AI systems can be particularly perilous when
+the technology is not infallible or fully capable of perform-
+ing a given task [11]. The danger lies in relying excessively
+on AI without recognizing its limitations, potentially leading
+to critical errors or misinterpretations [28, 42]. In instances
+where over-trust prevails, there is a concerning lack of guid-
+ance and control mechanisms. Users may neglect to provide
+adequate oversight or interventions, assuming that AI is en-
+tirely reliable [135]. This absence of vigilant monitoring can
+exacerbate the risks associated with over-trust, as it fails
+to account for unexpected variables or evolving scenarios.
+Consequently, over-trust not only ampliﬁes the potential for
+disastrous outcomes but also highlights the need for robust
+guidance and control measures to ensure the responsible and
+eﬀective deployment of AI technologies in various contexts
+[42, 135].
+Trust in AI-powered agents undergoes continuous cali-
+bration over time, particularly in prolonged collaborations
+between humans and agents [28]. User trust adapts dynami-
+cally based on the performance of the agent. Trust increases
+with positive interaction (matching the mental model of the
+user with the interaction with the AI based system) and
+trust can decrease when the expectation from the user is
+not matched with by the system (e.g. because the system
+has the wrong mental model of the user, overestimating the
+user’s trust). In [143] comprehensive review of trust calibra-
+tions for automated systems, distinct patterns related to trust
+ﬂuctuations and recovery, or resilience, were identiﬁed. No-
+tably, some studies revealed that users were more responsive
+to declines in the agent’s reliability than to improvements.
+The decline in trust was more pronounced than the increase,
+Table 1 Summary of concepts, deﬁnitions, and discussed topics for:
+trust, trustworthiness, and calibrated trust
+Concept Deﬁnition Discussed topics
+Trust We deﬁne trust in AI-based
+systems as the users (u)
+epistemic state that the system
+(s) is going to behave (b) as
+expected in a scenario (r)
+characterized by a certain level
+of risk and uncertainty.
+Cognitive and
+emotional trust,
+Expectations,
+Theories of trust.
+Trustworthiness We call a system (s)
+trustworthy in a scenario (r),
+when it satisﬁes the user’s (u)
+requirements for the scenario.
+As y s t e mi st r u s t w o r t h yw h e n
+it is trustworthy in all
+scenarios within its
+operational design domain.
+Agency and
+oversight,
+Privacy and data
+governance,
+Robustness and
+safety, Fairness,
+Sustainability,
+Accountability.
+Calibrated trust Trust of a user (u) in a system
+(s) in a scenario (r) is called
+calibrated when it matches the
+actual level of trustworthiness
+of the system for this scenario.
+Trust in a system is calibrated
+when it is calibrated for all
+users and all scenarios.
+Calibrated trust,
+instantaneous
+trust, overtrust,
+distrust.
+despite comparable changes in reliability in either direction
+[142]. Users were inclined to trust the agent even more after
+recovering from minor and brief reliability lapses, but not
+for signiﬁcant and short ones [ 94]. Additionally, the nature
+of the error leading to reliability changes could signiﬁcantly
+impact trust calibration; for example, false alarms were ob-
+served to diminish trust more than misses [ 21]. However,
+these intriguing phenomena have primarily been analysed
+from cognitive rather than aﬀective processes (i.e. cognitive
+rather than emotional trust), as [ 143] reported that only a
+few studies have explored the emotion-trust relationship in
+the context of automated systems [35].
+2.4 Summary
+In this section, we provided three formal deﬁnitions for the
+three concepts of trust, trustworthiness, and calibrated trust.
+All three deﬁnitions are parameterized in terms of a user (u),
+a system (s), and a scenario (r). Trust is about the user’s state
+(e.g., beliefs and emotions) concerning the system in a given
+scenario. Trustworthiness is about systems’ properties with
+respect to users’ requirements in a given scenario. Calibra-
+tion is about the conformance of the earlier two notions. For
+each of the three concepts, we provided some aspects of the
+concept discussed in earlier research to motivate and contex-
+tualize our deﬁnitions. Table 1 summarizes the concepts, as
+well as the deﬁnitions, and aspects of each concept discussed
+in this section.
+Springer
+
+--- PDF PAGE 6 ---
+M. Liebherr et al.
+3 Assessment
+3.1 Measures of trust
+The varied conceptualizations and subsequent operational-
+izations of trust have given rise to a multitude of trust mea-
+sures [6, 17, 82, 120]. They can be categorized as either
+direct or indirect methods. Direct assessment involves self-
+report/subjective measures, while indirect evaluation utilizes
+behavioral/performance-based as well as physiological mea-
+sures.
+Self-report/subjective measures These measures entail
+individuals providing information regarding their thoughts,
+feelings, attitudes, or behaviors. They rely on individuals’
+self-disclosure and are typically obtained through surveys,
+questionnaires, interviews, or other means where individuals
+report on their own experiences or perceptions. Self-report
+measures are most commonly used to assess human trust due
+to the ease of use and implementation in tasks or contexts [69,
+84, 96, 125, 145]. We provide a summary of such measures
+in Table 2.
+Utilizing a text analysis approach, [ 6] identiﬁed diﬀer-
+ences and similarities across the most used trust question-
+naires, subsequently providing guidelines for its selection. In
+the context of AI, the following two speciﬁc questionnaires
+are most commonly used:
+– Trust in Artiﬁcial Intelligent Agents Questionnaire [ 8];
+and
+– TXAI Questionnaire [ 59].
+In addition to employing speciﬁc questionnaires, general
+trust assessments or modiﬁed versions adapted from other
+contexts are also utilized to measure trust in AI. Furthermore,
+studies on trust in AI-based systems frequently incorporate
+custom measures, such as non-validated scales or individ-
+ual items. In Table 2, we provide a concise overview of the
+self-report/subjective measures of trust.
+Behavioral/performance-based measures These mea-
+sures assess trust based on observable actions, responses, or
+behaviors exhibited by individuals in a given context. These
+measures focus on tangible and external manifestations of
+trust, providing insights into how individuals interact with or
+rely on a particular entity, system, or situation. Examples of
+behavioral measures in the context of trust might include:
+– Compliance and Agreement Rate [ 136]
+– Decision Time [ 149]
+– Reliance [ 114]
+– Response Time [ 85]
+The determination of the parameter used as a behavior-
+related measure for evaluating trust depends on the system or
+AI technologies considered. For instance, in the integration
+of AI-based technologies in driving, reaction time serves as
+a valuable metric for gaining insight into trust in the system
+[85]; however, it oﬀers limited insights or may not be rel-
+evant to conversational AI applications. Unlike self-report
+measures that rely on individuals’ subjective perceptions,
+behavioral measures oﬀer an objective and tangible way to
+assess trust by examining actual behaviors and actions in
+real-world or simulated scenarios. These measures are par-
+ticularly valuable for understanding trust dynamics in situ-
+ations where individuals may not accurately or completely
+express their trust through self-reporting.
+Physiological measures These measures capture bio-
+logical responses within the human body as indicators of
+trust in a given situation. Certain physiological reactions
+such as changes in heart rate, skin conductance or brain ac-
+tivity, which reﬂect emotional and cognitive states, are used
+to draw conclusions about changes in trust. Typical measures
+are:
+– Heart rate variability [ 139] - Electrodermal activity or
+galvanic skin response [81]
+– Neural measures [ 44, 56, 72]
+– Eye gaze tracking [ 43, 52]
+Physiological measures enhance our understanding of un-
+derlying processes associated with trust (see Table 3). In
+order to draw conclusions, it is necessary to link physio-
+logical measures to context. Just as behavioral measures are
+selected, the choice of a metric is contingent upon the spe-
+ciﬁc AI technology under consideration, taking into account
+factors such as the environment (e.g., natural environment),
+the situation (e.g., any kind of movement included), and in-
+dividual aspects (e.g., clinical history).
+To date, several systematic literature reviews on human
+trust in technologies provide further insights into related
+measures [4, 6, 12, 17, 82, 120]; integrating such reviews
+can chart a landscape of existing methods and tools for mea-
+suring trust in AI-based systems. In the future, it is crucial to
+consolidate the substantial variability in metrics employed
+for evaluating human trust in AI and to establish consensus
+on the adoption of standardized methods [42]. Furthermore,
+when employing trust measures in the realm of new technolo-
+gies and AI systems, it is essential to consider the various
+phases of usage. Subjective measures are most eﬀectively
+utilized in the pre- and post-technology use phases, as inte-
+grating them into the actual usage phase is diﬃcult and can
+potentially disrupt individuals. In contrast, behavioral mea-
+sures can be solely applied during the actual usage phase,
+as they oﬀer data derived from interactions with the system
+or technology. Physiological measures are also commonly
+employed during the usage phase. However, to continuously
+track the progression of trust from pre-use to post-use and
+Springer
+
+--- PDF PAGE 7 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+Table 2 Summary of self-reported / subjective measure of trust
+Questionnaire Number of
+items
+Subscales Likert-
+scale
+Example Context Psychometric
+characteristics
+Trust Between
+People and
+Automation [69]
+12 - 1-7 “The system is
+deceptive.”
+Automated system Reliability ↑[69, 120]
+Reliability of scale
+structure ↓[145]
+Human-computer
+trust questionnaire
+[96]
+25 Perceived Reliability,
+Perceived Technical
+Competence, Perceived
+Understandability,
+Faith, Personal
+Attachment
+1-7 “The system
+performs reliably.”
+subjective measure
+of “cognition
+based” and
+“aﬀective-based”
+trust
+Reliability, Validity↑
+[96], Reliability↑,
+Construct validity↓
+[30]
+TiA scale [84] 19 Reliability/Compe-
+tence,
+Understanding/Pre-
+dictability, Familiarity,
+Intention of
+Developers, Propensity
+to Trust, Trust in
+Automation
+1-5 “The system works
+reliably.”
+Reliability, validity↑
+[84, 120]
+Trust Perception
+Scale for
+Human-Robot
+Interactions [125]
+40 (and 14
+item
+sub-scale)
+- 0%-100% “What percent of
+the time will this
+robot be
+responsible?”
+Human-Robot-
+Interaction
+Reliability↑,v a l i d i t y↓
+[120]
+Propensity to Trust
+Scale [102]
+6 - 1-5 “I usually trust
+machines until
+there is a reason
+not to.”
+Propensity to trust,
+not speciﬁc
+technology
+Reliability↑[102]
+HCTM [45] 12 - 1-5 “I believe that
+there could be
+negative
+consequences
+when using (—).”
+Reliability↑[45]
+[99] 16 Trusting beliefs,
+Trusting intention
+1-7 “I can always rely
+on
+LegalAdvice.com
+in a tough legal
+situation.”
+Reliability↑[99]
+TAIA (Trust in
+Artiﬁcial Intelligent
+Agents; [8])
+12 Predictability,
+Consistency, Utility,
+Faith, Dependability,
+Understanding
+1-7 Not included Reliability, Validity
+and internal
+consistency↑[8]
+TXAI [59] 8 - 1-5 “I am conﬁdent in
+the [tool]. I feel
+that it works well.”
+XAI Reliability ↑[59]
+gain insights into speciﬁc situations, such as initial encoun-
+ters with the technology, physiological measures can provide
+a more detailed understanding (Fig.2).
+3.2 Trustworthiness
+It follows from our deﬁnition (see Sect. 2.2) that trustwor-
+thiness can be put on a formal ground, for a given set of
+scenarios, if the expected behaviors of the system in those
+scenarios are formalized. The level of conﬁdence and the pre-
+cision of the measured trustworthiness are then proportional
+to the details made available in the requirement speciﬁcation
+for the given set of scenarios.
+A number of assessment frameworks are available. The
+FAIE-H toolkit designed by the Open Roboethics Institute
+[113] aims to perform ethics assessment of healthcare AI
+projects, mainly focusing on the development and deploy-
+ment stages. The Assessment List for Trustworthy AI (AL-
+Springer
+
+--- PDF PAGE 8 ---
+M. Liebherr et al.
+Table 3 Summary of physiological measures of trust
+Parameter Explanations
+Heart rate
+variability
+Describes the ﬂuctuations in the time interval
+between successive heartbeats and can be
+indicative of the autonomic nervous system’s
+activity, providing insights into emotional
+responses and potential trust-related states [139]
+Electrodermal
+activity
+This is measured using electrodes in contact with
+the skin, detecting changes in ionic activity
+inﬂuenced by sweat [16, 25]. Changes can signify
+emotional arousal, potentially reﬂecting trust or
+anxiety [81]
+Neural measures Neural measures involve the examination of brain
+activity patterns to gain insights into cognitive
+processes related to trust. Techniques such as
+functional magnetic resonance imaging (fMRI),
+functional near-infrared spectroscopy (fNIRS), or
+electroencephalography (EEG) are employed to
+capture neural responses. These measures provide
+direct information about how the brain responds
+to trust-related stimuli, oﬀering valuable data on
+the cognitive aspects of trust perception. Neural
+measures enhance our understanding of the
+underlying neurological processes associated with
+trust in various contexts, including human
+interactions with technology or AI [44, 56, 72].
+Eye gaze tracking Involves monitoring the direction and duration of
+an individual’s eye movements. By analyzing
+where a person directs their gaze, researchers can
+gain insights into visual attention patterns and
+cognitive processing related to trust. For instance,
+prolonged gaze at certain stimuli may indicate
+heightened interest or trust, while quick shifts in
+gaze may suggest uncertainty or scepticism
+[43, 52].
+Fig. 2 Allocation of measurement methods according to their primary
+temporal use in the process of interaction with AI systems
+TAI) [54] is an online tool that prompts users with a set of
+questions related to the dimensions of trustworthiness. The
+outcomes are subsequently visualized in a spider diagram.
+A recent example is the Z-Inspection toolkit [151], a holistic
+approach which aims to orchestrate assessments from a team
+of multi-disciplinary experts, and can be applied at any stage
+of the AI system lifetime. Due to this multidisciplinary and
+multifaceted nature of trustworthiness, in the remainder of
+this section, we provide an overview of some of the key as-
+pects of trustworthiness, as exempliﬁed in the EU Guideline
+for Trustworthy AI [55], and provide respective metrics to
+measure them.
+Human oversight and agency The degree of human
+agency and oversight in relation to an AI system is in direct
+correlation with the perceived level of risk associated with
+the scenario. This relationship has been categorized in [55]
+into three distinct paradigms: human-in-the-loop, human-on-
+the-loop, and human-in-command. Other works [7] empha-
+size the need for a more nuanced understanding of these dif-
+ferent levels of human interaction with AI systems. We may
+quantify the appropriate level of agency/oversight by carry-
+ing out a risk assessment in diﬀerent scenarios, using one of
+the frameworks recently proposed (e.g., [110]), and compar-
+ing the result with the expected level of agency/oversight in
+each scenario. It is widely acknowledged that higher-risk AI
+necessitates more rigorous oversight to ensure responsible
+development, deployment, and operation.
+Technical robustness / safety Assessing technical ro-
+bustness and safety can be achieved by evaluating compliance
+with established guidelines, such as those outlined by the UK
+NCSC [109], and adherence to standards such as ISO 10218
+[64], and the IEEE P7009 standard for fail-safe design of
+autonomous and semi-autonomous systems [63]. More rig-
+orous approaches within formal methods oﬀer greater ability
+to quantify properties. Exact (complete) approaches for deep
+neural networks include:
+– Encoding natural networks and safety properties as con-
+straints satisfaction problems. This approach ensures that
+the system operates within certain safety bounds [34, 75];
+and
+– Assessing resilience against deliberate attempts to manip-
+ulate its behavior, known as adversarial attacks [61, 108].
+There are approaches to ﬁnd “nearest” (with respect to
+speciﬁc metrics) adversarial examples [15, 133].
+To mitigate complexity, incomplete approaches are avail-
+able, based on abstract interpretation [ 40, 129], simulation
+[147], and approximation [141].
+Although less studied, approaches for other models exist,
+such as support vector machines [ 119], and for identifying
+nearest adversarial examples in decision tree ensembles [20,
+73].
+Privacy and data governance Data ownership, account-
+ability, and management are crucial aspects of data gover-
+nance [80]. Assessing them involves evaluating the clarity
+and comprehensiveness of roles and responsibilities, and
+Springer
+
+--- PDF PAGE 9 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+Table 4 Summary of measures of privacy as a part of trustworthiness
+metrics: diﬀerential privacy and informational leakage
+Measure Explanations
+Diﬀerential privacy Two parameters 𝜀and 𝛿represent the privacy
+guarantee, i.e., the probability an attacker might
+guess whether an individual’s data was in the
+training set, and the probability this guarantee
+may not hold, respectively [32]. Recent work by
+Jayaraman and Evans [68]i n v e s t i g a t e st h e
+practical challenges of using diﬀerentially
+private machine learning. Estimation methods
+for privacy guarantees are presented in [150].
+Information leakage The amount of information about an individual
+leaked by an AI system. Work by Hannun et
+al. [49] explores using a speciﬁc measure
+(Fisher information) for quantifying leakage.
+Information leakage can also be measured by
+evaluating how eﬀective certain attacks are. For
+instance, membership inference attacks allow
+attackers to potentially learn if a data point was
+used to train the model (see, e.g., [60])
+a rigorous evaluation of implemented measures, ensuring
+they meet the compliance and quality standards established
+by regulations such as GDPR. For instance, Privacy Im-
+pact Assessments (PIA) and Data Protection Impact Assess-
+ments (DPIA) should be carried out in certain cases. Other
+standards include ISO 31700 Privacy by Design Standard,
+KMPG’s Privacy by Design Assessment Framework, ISO
+27001.
+The literature on assessing the privacy of AI systems pro-
+vides some concrete measures listed in Table4.
+Diversity and fairness Given two groups of agents that
+diﬀer only in a number of protected characteristics, an AI-
+enabled system is fair when the outcome of the system does
+not change signiﬁcantly for similar inputs only diﬀering on
+legally protected or diversity-related characteristics. Fairness
+is typically categorized into two broad categories: group and
+individual fairness. Group fairness refers to guaranteeing
+a statistical notion of similarity of outcomes across diﬀer-
+ent groups of the society characterized by their sensitive
+attributes. Individual fairness requires the outcomes of an
+AI-enabled system to be identical (or similar with respect
+to a distance measure) for individuals that only diﬀer with
+respect to their sensitive attribute (or are similar, again with
+respect to a distance measure on their other features). There
+are diﬀerent metrics for measuring the change of outcomes
+and similar inputs. We refer to recent textbooks [14, 77] and
+surveys [101, 117] on the deﬁnitions of fairness for machine
+learning and AI systems. In the remainder of this section, we
+provide only some examples of such metrics and how they
+can be used to measure fairness. We conclude by reviewing
+some of the shortcomings of using these metrics as well as
+mentioning some other diversity-related metrics that can be
+measured on AI-enabled systems.
+Some commonly used metrics for measuring fairness in-
+clude: statistical parity diﬀerence (SPD), equal opportunity
+diﬀerence (EOD), average odds diﬀerence (AOD) and dis-
+parate impact (DI). Their deﬁnitions are provided in Table5.
+Despite the rich literature on quantitative metrics of fair-
+ness and diversity, researchers in this area ﬁnd that optimiz-
+ing for speciﬁc metrics can result in more unfair systems [24].
+Also such metrics can be gamed and the powerful actors in
+an ecosystem may use the metric that works best for them or
+optimize for the commonly-used metrics without providing
+genuine support for fairness or diversity [107].
+Societal and environmental sustainability To assess
+the societal impact of AI systems, Algorithm Impact As-
+sessment tools have been proposed, such as the one from the
+AI Now Institute [121], which targets public agencies. With
+the advent of generative AI, impact assessment has become
+more challenging, as contextual factors, human interactions,
+and the combination of modalities (e.g., text, images, videos)
+have become increasingly relevant [140]. It is crucial to mea-
+sure impact across several dimensions, some of which apply
+diﬀerently to various modalities [131].
+Measuring the precise environmental impact can be dif-
+ﬁcult, as most AI systems are deployed in the cloud, where
+the majority of carbon emissions stem from construction,
+infrastructure, and hardware manufacturing [46].
+When considering AI algorithms in isolation, most en-
+ergy consumption occurs during the training phase, which
+can last for months. Tools for measuring the carbon footprint
+are available, such as the “Machine Learning Emissions Cal-
+culator” [88] and the“Carbon Tracker” [9].
+Accountability The main challenge regarding the ac-
+countability of AI systems is the lack of comprehensive
+“internal auditing”, i.e., auditing processes that should be
+applied before deployment by companies designing such sys-
+tems, rather than after deployment, when issues have already
+arisen [118].
+To quantify accountability, organizations need to formal-
+ize ethical principles guiding development and measure com-
+pliance at each stage. Outcomes should be documented, and
+proactive risk analysis should be conducted [118]. Key Per-
+formance Indicators can also be used to better measure ac-
+countability [116].
+3.3 Calibrated trust
+Trust calibration is typically assessed through one of the fol-
+lowing three methods (we refer to the survey by Wischnewski
+et al. [144] for a more detailed overview):
+Springer
+
+--- PDF PAGE 10 ---
+M. Liebherr et al.
+Table 5 Summary of four common metrics for fairness as a part of trustworthiness: statistical parity diﬀerence (SPD), equal opportunity diﬀerence
+(EOD), Average Odds Diﬀerence (AOD), and disparate impact (DI)
+Fairness metric Intuition Formalization Explanation
+Statistical Parity
+Diﬀerence (SPD)
+Equal rate of favorable outcomes
+between majority and minority
+SPD= 𝑃[𝑌
+pred = 1|𝐴= 1]−
+𝑃[𝑌pred = 1|𝐴= 0]
+The diﬀerence of conditional probability
+for predicting favorable outcomes between
+the majority and minority conditions.
+Non-zero values will classify the amount
+of bias.
+Disparate Impact
+(DI)
+Similar to SPD, only the
+diﬀerence is replaced with the
+ratio
+DI = P[Y=1|A =1] /P[Y=1|A = 0] The ratio of conditional probability for
+predicting favorable outcomes between the
+majority and minority conditions.
+Non-zero values will classify the amount
+of bias.
+Equal Opportunity
+(EOD)
+Equal rate of true (justiﬁed)
+favorable outcomes between
+majority and minority
+EOD= 𝑃[𝑌pred = 1|𝐴= 1,𝑌= 1]−
+𝑃[𝑌pred = 1|𝐴= 0,𝑌= 1]
+The diﬀerence of conditional probability
+for predicting true positive (favorable)
+outcomes between the majority and
+minority conditions. Non-zero values will
+classify the amount of bias.
+Average Odd
+Diﬀerence (AOD)
+Average of diﬀerences for false
+(unjustiﬁed) and true favorable
+outcomes between the majority
+and minority
+AOD= avg𝑖𝑖𝑛{0,1}(.5∗(𝑃[𝑌pred = 1|
+𝐴= 1,𝑌=𝑖]−𝑃[𝑌pred = 1|𝐴= 0,
+𝑌=𝑖]))
+The diﬀerence of conditional probability
+for predicting true positive (favorable)
+outcomes between the majority
+and minority conditions. Non-zero values
+will classify the amount of bias in both
+cases.
+1. Relative measures: comparing perceived trustworthiness
+among diﬀerent groups and systems, e.g., systems with
+high and low trustworthiness; the relative diﬀerences
+can be used to establish calibration of trust among user
+groups;
+2. Correlative measure: estimating the correlation between
+the dynamics of trust and trustworthiness, for instance by
+measuring how trust changes as trustworthiness evolves
+(“trust sensitivity”); and
+3. Behavioral measures: measuring the deviation from
+“ideal” user behavior (e.g., response time) under diﬀer-
+ent circumstances (e.g., in scenarios featuring diﬀerent
+trustworthiness levels).
+Given its ease of integration, the ﬁrst method is most fre-
+quently employed in studies evaluating trust calibration. In
+the context of XAI, Naiseh et al. [ 106] used the cognitive-
+based trust scale introduced by Madsen and Gregor [ 96],
+which measures how eﬀectively the XAI interface aids users
+in comprehending, relying on and perceiving the technical
+proﬁciency of the AI. Furthermore, the authors examined
+behavioral markers of trust calibration, leveraging an objec-
+tive metric proposed by Wang et al. [ 137], which assesses
+the accuracy of participants’ decisions. In addition to the ad-
+vantages of this method, Wischnewski and colleagues [144]
+mention that the method doesn’t indicate whether a system
+with lower capabilities might be seen as overly trustworthy or
+untrustworthy, leading to over-trust or under-trust. Similarly,
+a high-capability system might cause either excessive or in-
+suﬃcient perceived trustworthiness, resulting in overtrust or
+undertrust. Many interventions are possible to calibrate trust,
+including 1) providing prior information about the system’s
+trustworthiness factors, 2) providing run-time information
+about the systems decisions and their underlying causes, and
+3) receiving and providing feedback after interactions [144].
+4 Causes and correlations
+4.1 Trust factors
+When considering antecedents of trust in AI, again we need
+to apply them to the broad variety of AI-based systems (e.g.,
+algorithms, automated vehicles, chatbots, and robots), result-
+ing in a wide range of factors that can impact trust. Previ-
+ous works propose a categorization of trust antecedents in
+AI-based systems into three overarching groups relating to
+the human trustor, the technology trustee, and shared con-
+textual factors [74]. In the spectrum of AI-based systems,
+factors within the human trustor category underscore the
+signiﬁcance of ability-based elements (Competency/Under-
+standing and Expertise) and along with characteristics-based
+factors (Culture, Gender, and Personality traits). In the realm
+of the technology trustee category, performance-based fac-
+tors (Performance and Reliability) along with attribute-based
+factors (e.g., AI Personality, Anthropomorphism, Behavior,
+Reputation, and Transparency) are identiﬁed to be relevant.
+Springer
+
+--- PDF PAGE 11 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+Fig. 3 Antecedents of trust in AI-enabled systems
+Additionally, within the third category team-related (Com-
+munication) and task-related factors (Risk) have been re-
+ported to be relevant [47, 48, 57, 74, 148].
+Regarding trustee-related factors, we would like to em-
+phasize the role of anthropomorphism and more generally,
+embodiment. In interpersonal relationships trust is notably
+contingent upon the physical attributes of the trusted individ-
+ual [22, 31]. In AI-based systems there is a great variety of
+embodiment forms, which means that the degree of physical
+appearance varies greatly: as a physical robot, as a virtual
+agent or bot, or in forms that are invisible to the user, em-
+bedded in a computer or another tool. Current empirical data
+indicate that the extent and nature of embodiment, coupled
+with the degree of machine intelligence integrated into the
+technology, have considerable implications for the trust ex-
+hibited by users [42].
+Figure 3 describes the relationship of AI-relevant measure
+of trust (see Sect. 3.1, the color coding describes the cate-
+gory to which those factors belong), assessed before, during
+and after interacting with the AI system as well as the in-
+ﬂuencing factors on building trust, derived from the three
+categories human trustee, technology trustee and contextual
+factors. In order to inﬂuence trust, a feedback loop from the
+measures to the inﬂuencing factors indicates the possibil-
+ity of strengthening certain factors to enhance trust in the
+AI-based system.
+4.2 Trustworthiness factors
+The principles of trustworthiness, covered in Sect. 2.2, can
+be incorporated into the requirement speciﬁcation and sys-
+tem design, and can be guaranteed by construction. Ex-
+amples of such trustworthy-by-construction techniques in-
+clude privacy-preserving architectures for AI [ 1] and AI-
+enabled systems [134]; certiﬁed (adversarial) robustness for
+AI [13, 23]; and inherently explainable AI models [105].
+However, not all components of an AI-enabled system are
+designed based on the trustworthiness principles and some
+are obtained as third-party oﬀ-the-shelf components. In such
+cases, in order to ensure trustworthiness, a rigorous speci-
+ﬁcation of trustworthiness requirements [ 3] and structured
+validation and veriﬁcation techniques [104] are needed. The
+techniques involved in validation and veriﬁcation include:
+formal veriﬁcation (including theorem proving and model
+checking), various forms of testing (including model-based
+testing and falsiﬁcation), and various forms of user studies
+[10].
+When shortcomings in trustworthiness principles are
+detected, those can be remedied by deploying ﬁxes, re-
+synthesizing and re-training parts of the system, and / or
+developing and deploying complementary components and
+wrappers to ensure the trustworthiness requirements [2].
+4.3 Calibration and interplay
+Trustworthiness of the AI-based system and human trust will
+change during the course of interaction between the human
+and the system. Based on the mental model of the human
+(how the system will behave in certain situations or given
+certain commands, trust is gained when the system behaves
+accordingly, trust is lost if the system reacts unexpectedly.
+How easy trust is lost or gained depends on the previous “trust
+level” caused by the inﬂuencing factors described in Sect.4.1.
+If human trust is low, measured in an initial assessment before
+interacting with the system, the system needs to communicate
+or display its trustworthiness more openly and clearly than if
+human trust is initially high.
+However, during the interaction between the human and
+system, human trust will be inﬂuenced. If the human gains
+more trust (adapting their mental model), the system can
+reduce its explanation and the human is willing to reduce
+the control over the system (e.g. from human-in-control to
+human-in-the-loop). In order to seamlessly adapt the conﬁg-
+uration of the system towards the level of human trust/men-
+tal model assessed, the system needs to integrate certain
+trust measurements to adapt automatically its explanations
+or, if not possible, to describe which level of trust is needed
+to successfully use the system (often generally indicated as
+“beginner” or “expert level” user).
+5 Implications for stakeholders
+The description of trust, trustworthiness, and their interac-
+tions cannot be uniform for all stakeholders. It is evident that
+the general public does not have the same level of under-
+standing of AI as a programmer or certiﬁer. Therefore, the
+public may need additional explanations that are apparent
+to developers. The following distinguishes between various
+stakeholders, including the wider public, certiﬁcation bodies,
+investigators, expert witnesses, and lawyers.
+5.1 Implications for the general public
+Artiﬁcial intelligence is transforming society in numerous
+ways. It is crucial that individuals possess an understanding
+Springer
+
+--- PDF PAGE 12 ---
+M. Liebherr et al.
+of how these systems operate when working with or utilizing
+them in public. To fully harness the potential of the tech-
+nology, trust and trustworthiness in AI need to be aligned to
+create calibrated trust. One way to achieve this could be the
+education of the general public about the opportunities and
+risks of using AI transparently, and how over- or under-trust
+can aﬀect both the environment and the society. To achieve
+this goal, discussion panels should facilitate open dialogue,
+supported by easily understandable media that are accessible
+to the general public through mass media such as TV, news-
+papers and social media. However, this approach may be too
+simplistic. It could be argued that the burden of understand-
+ing these complex systems should not fall solely on end users
+[124]. An alternative option would be to design systems and
+contexts in which trustworthy technologies are the norm, and
+to develop strategies to ensure that only reliable systems are
+deployed. Furthermore, the development of AI systems could
+be informed by the understanding that these systems adapt to
+the trust level of users and provide clear signals when they are
+over- or under-trusted. This would shift the responsibility for
+ensuring the trustworthiness of AI systems from the general
+public to the developers and deployers of these technologies.
+5.2 Implications for certiﬁcation authorities and
+assessors
+In the context of certifying AI systems, independent certiﬁ-
+cation bodies should have a calibrated trust in the technology.
+Over- or under-trust would be fatal, especially in the case of
+system safety acceptance. Depending on how safety-critical
+a system is, it must meet diﬀerent safety requirements. The
+safety requirements for an AI system for automated driving
+are signiﬁcantly higher than for an AI system for creative
+image creation. An error in automated driving can have fatal
+consequences, whereas an error in the second example only
+produces undesirable results. Certiﬁcation bodies must be
+able to verify that AI developers have thoroughly tested and
+checked their systems to achieve a trustworthy AI system.
+Depending on the safety requirements, the developers will
+need to provide the technical description of the system, the
+source code, and information about how and with which data
+the AI has been trained.
+5.3 Implications for investigators, expert
+witnesses and lawyers
+To ensure a fair judgement or appropriate compensation in
+the event of a dispute or accident, investigators, lawyers or
+other experts require access to reliable information. This in-
+formation should be provided by those responsible for the
+safety and inspection of the AI. It is also important that
+lawyers, investigators and experts can comprehend the causes
+and consequences of the situation. Over- or under-trust is
+not acceptable in this role. To achieve reliable trust in AI,
+lawyers, investigators and experts must also consider the at-
+tributes of the developers. This includes fundamental aspects
+such as the implementation of quality assurance and a data
+security strategy. Certiﬁcation of these aspects, for exam-
+ple, in accordance with [ 65]o r[ 66] and TISAX, enhances
+trustworthiness.
+6 Conclusions
+This paper explores trust and trustworthiness in AI systems,
+and proposes a formalization that relies on the system, the
+scenario, and the user, highlighting the highly contextual
+nature of these concepts. Alignment of trust and trustwor-
+thiness is essential to achieve calibrated trust, i.e., a state in
+which the user’s trust reﬂects the actual level of trustworthi-
+ness for a speciﬁc scenario. Calibration is a dynamic process,
+as the user acquires experience and their expectations adapt.
+Under-trust or over-trust may occur when the alignment is
+not achieved, and both can have detrimental eﬀects on the
+eﬀectiveness and safety of AI systems.
+As formalization requires quantifying trust and trustwor-
+thiness, we review a range of approaches to measure trust,
+from subjective self-reports to objective behavioral assess-
+ments, and approaches to measure trustworthiness, detailing
+methods for assessing a variety of dimensions, as well as
+methods to measure trust calibration.
+We analyze factors that can impact these concepts. For
+trust, the impacts stem from a combination of human fac-
+tors, technology attributes, and contextual inﬂuences. For
+trustworthiness, we describe ways in which its principles
+can be integrated into AI system design, highlighting the
+need for validation and veriﬁcation. For calibrated trust, ef-
+fective communication about the AI system’s behavior and
+capabilities can help the user adjust their trust levels appro-
+priately. Finally, we discuss the incarnation of (calibrated)
+trust and trustworthiness in a range of contexts, emphasizing
+the need for tailored explanations about the system to dif-
+ferent stakeholders. However, several signiﬁcant challenges
+remain. One major challenge is the dynamic calibration of
+trust over time. Trust levels are not static; they ﬂuctuate based
+on system performance and user experiences, and current
+systems lack the adaptability to manage these ﬂuctuations
+eﬀectively. Furthermore, balancing cognitive and emotional
+trust presents a complex issue. While AI systems can support
+cognitive trust by oﬀering transparency and logical reason-
+ing, fostering emotional trust—rooted in feelings of security
+and connection—requires further attention.
+Assessing trustworthiness also remains problematic, es-
+pecially across diverse scenarios and use cases. Many AI
+systems still lack the transparency and robustness necessary
+Springer
+
+--- PDF PAGE 13 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+for users to gauge their reliability conﬁdently. This is com-
+pounded by the dual issue of overtrust and distrust, where
+users either rely too heavily on systems or fail to utilize them
+fully, both of which can lead to suboptimal or even dangerous
+outcomes.
+Additionally, while there is growing research on trust in
+AI, much of it focuses on short-term interactions. Little is
+understood about the dynamics of trust in long-term engage-
+ments, which are critical for many real-world applications.
+Ethical concerns and fairness in AI systems also pose ongo-
+ing challenges. Ensuring that AI operates in a way that is both
+transparent and fair while maintaining performance requires
+more sophisticated solutions than currently available.
+Trust calibration becomes particularly diﬃcult in high-
+risk domains, such as healthcare or autonomous driving,
+where system failures can have severe consequences. In these
+areas, achieving calibrated trust is essential, yet it remains
+one of the most pressing challenges. Finally, addressing these
+issues will require stronger cross-disciplinary collaboration,
+integrating insights from ﬁelds such as cognitive psychology,
+computer science, and ethics to develop more comprehensive
+frameworks for trust and trustworthiness in AI.
+Future research must focus on overcoming these chal-
+lenges by reﬁning the methods used to assess trust, design-
+ing systems that can adapt to trust dynamics in real time, and
+ensuring that AI systems adhere to ethical and fairness stan-
+dards. Only through this approach can we build AI systems
+that are not only eﬀective but also trustworthy, ensuring their
+safe and beneﬁcial integration into society.
+Appendix: Glossary of terms
+– Trust: A user-centered concept, referring to the epistemic
+state that the system is going to behave as expected in a
+given situation, characterized by a certain level of risk and
+uncertainty.
+– Trustworthiness: A property of a system where it satisﬁes
+the user’s requirements in a speciﬁc scenario. A system
+is considered trustworthy if it consistently meets these
+expectations across various scenarios.
+– Calibrated Trust: Trust of a user in a system that matches
+the actual level of trustworthiness for a given scenario. Cal-
+ibration is considered dynamic, where trust adapts based
+on ongoing interaction with the system.
+– Cognitive trust: Trust of a user in a system that matches
+the actual level of trustworthiness for a given scenario. Cal-
+ibration is considered dynamic, where trust adapts based
+on ongoing interaction with the system.
+– Emotional trust: Trust that emerges from emotional con-
+nections, often involving the feeling of security users ex-
+perience during interactions with the system.
+– Overtrust: A situation where a user places too much trust
+in a system, exceeding the system’s actual trustworthiness,
+potentially leading to harmful outcomes.
+– Distrust: A scenario where a user’s level of trust in a
+system is lower than the system’s actual trustworthiness,
+which can lead to underuse of the system’s capabilities.
+– Human-in-the-loop: A control paradigm where human
+operators are actively involved in the decision-making pro-
+cesses of the system.
+– Human-on-the-loop: A control paradigm where human
+operators monitor and oversee the system’s operations but
+intervene only when necessary.
+– Human-in-command: A control paradigm where human
+operators have overarching control over the system, in-
+cluding both decision-making and oversight capabilities.
+– Adversarial Attacks: Deliberate manipulations aimed at
+exploiting the weaknesses of AI systems, often to produce
+erroneous outputs.
+– Diﬀerential Privacy: A technique used to protect indi-
+viduals’ privacy by introducing randomness into the data
+analysis process, ensuring the data output is indistinguish-
+able from queries with or without a particular individual’s
+data.
+– Statistical Parity: A fairness metric ensuring that the rate
+of favorable outcomes is the same across majority and
+minority groups.
+– Explainability (XAI): The degree to which a human user
+can understand the reasons behind an AI system’s deci-
+sions or actions.
+Funding information Open Access funding enabled and organized
+by Projekt DEAL. Mohammad Reza Mousavi has been partially sup-
+ported by the UKRI Trustworthy Autonomous Systems Node in Ver-
+iﬁability, Grant Award Reference EP/V026801/2, EPSRC project on
+Veriﬁed Simulation for Large Quantum Systems (VSL-Q), grant ref-
+erence EP/Y005244/1 and the EPSRC project on Robust and Reliable
+Quantum Computing (RoaRQ), Investigation 009 Model-based mon-
+itoring and calibration of quantum computations (ModeMCQ), grant
+reference EP/W032635/1.
+Open Access This article is licensed under a Creative Commons At-
+tribution 4.0 International License, which permits use, sharing, adap-
+tation, distribution and reproduction in any medium or format, as long
+as you give appropriate credit to the original author(s) and the source,
+provide a link to the Creative Commons licence, and indicate if changes
+were made. The images or other third party material in this article are
+included in the article’s Creative Commons licence, unless indicated
+otherwise in a credit line to the material. If material is not included in
+the article’s Creative Commons licence and your intended use is not
+permitted by statutory regulation or exceeds the permitted use, you will
+need to obtain permission directly from the copyright holder. To view a
+copy of this licence, visithttp://creativecommons.org/licenses/by/4.0/.
+References
+1. Abadi, M., Chu, A., Goodfellow, I., McMahan, H.B., Mironov,
+I., Talwar, K., Zhang, L.: Deep learning with diﬀerential pri-
+vacy. In: Proceedings of the 2016 ACM SIGSAC Conference on
+Springer
+
+--- PDF PAGE 14 ---
+M. Liebherr et al.
+Computer and Communications Security, CCS ’16, pp. 308–318.
+Association for Computing Machinery, New York (2016)
+2. Abdessalem, R.B., Panichella, A., Nejati, S., Briand, L.C., Stifter,
+T.: Automated repair of feature interaction failures in automated
+driving systems. In: Proceedings of the 29th ACM SIGSOFT In-
+ternational Symposium on Software Testing and Analysis, ISSTA
+2020, pp. 88–100. Association for Computing Machinery, New
+York (2020)
+3. Abeywickrama, D.B., Bennaceur, A., Chance, G., Demiris, Y.,
+Kordoni, A., Levine, M., Moﬀat, L., Moreau, L., Mousavi, M.R.,
+Nuseibeh, B., Ramamoorthy, S., Ringert, J.O., Wilson, J., Wind-
+sor, S., Eder, K.: On specifying for trustworthiness. Commun.
+ACM 67(1), 98–109 (dec 2023)
+4. Ajenaghughrure, I.B., Da Costa Sousa, S., Lamas, D.: Measur-
+ing trust with psychophysiological signals: a systematic mapping
+study of approaches used. Multimodal Technol. Interact.4(3), 63
+(2020)
+5. Ajzen, I.: The theory of planned behavior. Organ. Behav. Hum.
+Decis. Process. 50(2), 179–211 (1991). Theories of Cognitive
+Self-Regulation
+6. Alsaid, A., Li, M., Chiou, E.K., Lee, J.D.: Measuring trust: a text
+analysis approach to compare, contrast, and select trust question-
+naires. Front. Psychol.14 (2023)
+7. Anderson, M., Fort, K.: Human where? A new scale deﬁning
+human involvement in technology communities from an ethical
+standpoint. Int. Rev. Inf. Ethics31(1) (Nov. 2022)
+8. Angelgardt, A., Gorbunova, E., Chumakova, M.: An assessment
+of trust in artiﬁcial intelligent agents: Tool development. Higher
+School of Economics Research Paper No. WP BRP, 128 (2021)
+9. Anthony, L.F.W., Kanding, B., Selvan, R.: Carbontracker: track-
+ing and predicting the carbon footprint of training deep learning
+models. In: ICML Workshop on Challenges in Deploying and
+Monitoring Machine Learning Systems (July 2020).arXiv:2007.
+03051
+10. Araujo, H., Mousavi, M.R., Varshosaz, M.: Testing, validation,
+and veriﬁcation of robotic and autonomous systems: a systematic
+review. ACM Trans. Softw. Eng. Methodol.32(2) (mar 2023)
+11. Aroyo, A.M., De Bruyne, J., Dheu, O., Fosch-Villaronga, E.,
+Gudkov, A., Hoch, H., Jones, S., Lutz, C., Sætra, H., Solberg, M.,
+et al.: Overtrusting robots: setting a research agenda to mitigate
+overtrust in automation. Paladyn. J. Behav. Robot.12(1), 423–436
+(2021)
+12. Bach, T.A., Khan, A., Hallock, H., Beltrão, G., Sousa, S.: A
+systematic literature review of user trust in AI-enabled systems:
+An hci perspective. Int. J. Hum.-Comput. Interact., 1–16 (2022)
+13. Bai, L., Chen, C., Wang, W., Carin, L.: Certiﬁed adversarial ro-
+bustness with additive noise. In: Wallach, H., Larochelle, H.,
+Beygelzimer, A., d’Alché-Buc, F., Fox, E., Garnett, R. (eds.) Ad-
+vances in Neural Information Processing Systems, vol. 32. Curran
+Associates, Red Hook (2019)
+14. Barocas, S., Hardt, M., Narayanan, A.: Fairness and Machine
+Learning: Limitations and Opportunities. MIT Press, Cambridge
+(2023)
+15. Bastani, O., Ioannou, Y., Lampropoulos, L., Vytiniotis, D., Nori,
+A., Criminisi, A.: Measuring neural net robustness with con-
+straints. Adv. Neural Inf. Process. Syst.29 (2016)
+16. Bradley, M.M., Lang, P.J.: Measuring emotion: behavior, feel-
+ing, and physiology. In: Cognitive Neuroscience of Emotion,
+pp. 242–276. Oxford University Press, London (2000)
+17. Brzowski, M., Nathan-Roberts, D.: Trust measurement in human–
+automation interaction: a systematic review. In: Proceedings of
+the Human Factors and Ergonomics Society Annual Meeting,
+vol. 63, pp. 1595–1599. SAGE Publications Sage CA, Los Ange-
+les (2019)
+18. Carter, J.A.: Simion and kelp on trustworthy AI. Asian J. Philos.
+2(1), 18 (2023)
+19. Chang, L.J., Doll, B.B., van ’t Wout, M., Frank, M.J., Sanfey,
+A.G.: Seeing is believing: trustworthiness as a dynamic belief.
+Cogn. Psychol. 61(2), 87–105 (2010)
+20. Chen, H., Zhang, H., Si, S., Li, Y., Boning, D., Hsieh, C.-J.:
+Robustness veriﬁcation of tree-based models. Adv. Neural Inf.
+Process. Syst. 32 (2019)
+21. Chen, J., Mishler, S., Hu, B.: Automation error type and methods
+of communicating automation reliability aﬀect trust and perfor-
+mance: an empirical study in the cyber domain. IEEE Trans.
+Human-Mach. Syst. 51(5), 463–473 (2021)
+22. Cho, J.E., Hu, H.: The eﬀect of service quality on trust and
+commitment varying across generations. Int. J. Consum. Stud.
+33(4), 468–476 (2009)
+23. Cohen, J., Rosenfeld, E., Kolter, Z.: Certiﬁed adversarial robust-
+ness via randomized smoothing. In: Chaudhuri, K., Salakhutdi-
+nov, R. (eds.) Proceedings of the 36th International Conference on
+Machine Learning. Proceedings of Machine Learning Research,
+vol. 97, pp. 1310–1320. PMLR (09–15 Jun 2019)
+24. Corbett-Davies, S., Gaebler, J.D., Nilforoshan, H., Shroﬀ, R.,
+Goel, S.: The measure and mismeasure of fairness. J. Mach.
+Learn. Res. 24, 312 (2023)
+25. Critchley, H.D.: Electrodermal responses: what happens in the
+brain. Neuroscientist 8(2), 132–142 (2002)
+26. Daschner, S., Obermaier, R.: Algorithm aversion? On the inﬂu-
+ence of advice accuracy on trust in algorithmic advice. J. Decis.
+Syst. 31(sup1), 77–97 (2022)
+27. Davis, F.D.: A technology acceptance model for empirically test-
+ing new end-user information systems: Theory and results. PhD
+thesis, Massachusetts Institute of Technology (1985)
+28. De Visser, E.J., Peeters, M.M.M., Jung, M.F., Kohn, S., Shaw,
+T.H., Pak, R., Neerincx, M.A.: Towards a theory of longitudinal
+trust calibration in human–robot teams. Int. J. Soc. Robot. 12(2),
+459–478 (2020)
+29. Ding, X., Wei, T., Cao, C.: Towards a four-dimensional dynamic
+trust model in b2c cross-border e-commerce. In: Proceedings
+of the 2022 13th International Conference on E-Education, E-
+Business, E-Management, and E-Learning, pp. 414–418 (2022)
+30. Dolgov, I., Kaltenbach, E.K., Khalaf, A.S., Toups, Z.O.: Mea-
+suring human performance in the ﬁeld. In: Human Factors in
+Practice, pp. 37–54. CRC Press, Boca Raton (2017)
+31. Duarte, J., Siegel, S., Young, L.: Trust and credit: the role of
+appearance in peer-to-peer lending. Rev. Financ. Stud. 25(8),
+2455–2484 (2012)
+32. Dwork, C., Kenthapadi, K., McSherry, F., Mironov, I., Naor, M.:
+Our data, ourselves: privacy via distributed noise generation. In:
+Advances in Cryptology-EUROCRYPT 2006: 24th Annual Inter-
+national Conference on the Theory and Applications of Crypto-
+graphic Techniques, St. Petersburg, Russia, May 28-June 1, 2006.
+Proceedings 25, pp. 486–503. Springer (2006)
+33. Dzhelyova, M., Perrett, D.I., Jentzsch, I.: Temporal dynamics of
+trustworthiness perception. Brain Res.1435, 81–90 (2012)
+34. Ehlers, R.: Formal veriﬁcation of piece-wise linear feed-forward
+neural networks. In: D’Souza, D., Kumar, K.N. (eds.) Auto-
+mated Technology for Veriﬁcation and Analysis - 15th Interna-
+tional Symposium, ATVA 2017, Pune, India, October 3-6, 2017,
+Proceedings. Lecture Notes in Computer Science, vol. 10482,
+pp. 269–286. Springer, Berlin (2017)
+35. Fahim, M.A.A., Khan, M.M.H., Jensen, T., Albayram, Y., Coman,
+E.: Do integral emotions aﬀect trust? The mediating eﬀect of
+emotions on trust in the context of human-agent interaction. In:
+Designing Interactive Systems Conference 2021, pp. 1492–1503
+(2021)
+36. Fer, V., Lafond, D., Coppin, G., Bollaert, M., Grisvard, O., De
+Loor, P.: Trust in automation: analysis and model of operator
+trust in decision aid AI over time. In: Conference on Artiﬁcial
+Intelligence for Defense (2023)
+Springer
+
+--- PDF PAGE 15 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+37. Fishbein, M., Ajzen, I.: Belief, Attitude, Intention, and Behav-
+ior: An Introduction to Theory and Research. Longman Higher
+Education (1977)
+38. Gambetta, D.: Trust: Making and Breaking Cooperative Rela-
+tions. Wiley-Basil Blackwell (1988)
+39. Gefen, D., Karahanna, E., Straub, D.W.: Trust and tam in online
+shopping: an integrated model. MIS Q., 51–90 (2003)
+40. Gehr, T., Mirman, M., Drachsler-Cohen, D., Tsankov, P., Chaud-
+huri, S., Vechev, M.: Ai2: safety and robustness certiﬁcation of
+neural networks with abstract interpretation. In: 2018 IEEE Sym-
+posium on Security and Privacy (SP), pp. 3–18. IEEE (2018)
+41. Gillath, O., Ai, T., Branicky, M.S., Keshmiri, S., Davison, R.B.,
+Spaulding, R.: Attachment and trust in artiﬁcial intelligence.
+Comput. Hum. Behav.115, 106607 (2021)
+42. Glikson, E., Woolley, A.W.: Human trust in artiﬁcial intelligence:
+review of empirical research. Acad. Manag. Ann.14(2), 627–660
+(2020)
+43. Gold, C., Körber, M., Hohenberger, C., Lechner, D., Bengler,
+K.: Trust in automation–before and after the experience of take-
+over scenarios in a highly automated vehicle. Proc. Manuf. 3,
+3025–3032 (2015)
+44. Goodyear, K., Parasuraman, R., Chernyak, S., Madhavan, P.,
+Deshpande, G., Krueger, F.: Advice taking from humans and ma-
+chines: an fmri and eﬀective connectivity study. Front. Human
+Neurosci. 10, 542 (2016)
+45. Gulati, S., Sousa, S., Lamas, D.: Design, development and evalua-
+tion of a human-computer trust scale. Behav. Inf. Technol.38(10),
+1004–1015 (2019)
+46. Gupta, U., Kim, Y.G., Lee, S., Tse, J., Lee, H.-H.S., Wei, G.-Y.,
+Brooks, D., Wu, C.-J.: Chasing carbon: the elusive environmental
+footprint of computing. IEEE MICRO42(4), 37–47 (2022)
+47. Hancock, P.A., Billings, D.R., Schaefer, K.E., Chen, J.Y.C., De
+Visser, E.J., Parasuraman, R.: A meta-analysis of factors aﬀecting
+trust in human-robot interaction. Hum. Factors 53(5), 517–527
+(2011)
+48. Hancock, P.A., Kessler, T.T., Kaplan, A.D., Brill, J.C., Szalma,
+J.L.: Evolving trust in robots: speciﬁcation through sequential
+and comparative meta-analyses. Hum. Factors63(7), 1196–1229
+(2021)
+49. Hannun, A.Y., Guo, C., van der Maaten, L.: Measuring data leak-
+age in machine-learning models with Fisher information (ex-
+tended abstract). In: Raedt, L.D. (ed.) IJCAI, pp. 5284–5288
+(2022)
+50. Hardin, R.: Trust and Trustworthiness. Russell Sage Foundation
+Series on Trust. Russell Sage Foundation, Thousand Oaks (2002)
+51. Hardin, R.: Trust, vol. 10. Polity (2006)
+52. Hergeth, S., Lorenz, L., Vilimek, R., Krems, J.F.: Keep your
+scanners peeled: gaze behavior as a measure of automation trust
+during highly automated driving. Hum. Factors 58(3), 509–519
+(2016)
+53. Hickman, E., Petrin, M.: Trustworthy AI and corporate gover-
+nance: the eu’s ethics guidelines for trustworthy artiﬁcial intel-
+ligence from a company law perspective. Eur. Bus. Organ. Law
+Rev.22, 593–625 (2021)
+54. High-Level Expert Group on Artiﬁcial Intelligence (AI HLEG):
+Assessment list for trustworthy AI (ALTAI) (2020). Last ac-
+cessed: 08 April 2024
+55. High-Level Expert Group on Artiﬁcial Intelligence (AI HLEG):
+Ethics guidelines for trustworthy AI (2019). Last accessed: 08
+April 2024
+56. Hirshﬁeld, L.M., Bobko, P., Barelka, A., Hirshﬁeld, S.H., Far-
+rington, M.T., Gulbronson, S., Paverman, D.: Using noninvasive
+brain measurement to explore the psychological eﬀects of com-
+puter malfunctions on users during human-computer interactions.
+Adv. Hum.-Comput. Interact.2014, 2–2 (2014)
+57. Hoﬀ, K.A., Bashir, M.: Trust in automation: integrating empiri-
+cal evidence on factors that inﬂuence trust. Hum. Factors 57(3),
+407–434 (2015)
+58. Hoﬀman, R., Mueller, S., Klein, G., Litman, J.: Measuring trust
+in the XAI context. In: Tech reports for the DARPA XAI program:
+Task Area 2. PsyArXiv (2021)
+59. Hoﬀman, R.R., Mueller, S.T., Klein, G., Litman, J.: Measures
+for explainable AI: explanation goodness, user satisfaction, men-
+tal models, curiosity, trust, and human-AI performance. Front.
+Comput. Sci. 5, 1096257 (2023)
+60. Hu, H., Salcic, Z., Sun, L., Dobbie, G., Yu, P.S., Zhang, X.:
+Membership inference attacks on machine learning: a survey.
+ACM Comput. Surv.54(11s), 1–37 (2022)
+61. Huang, S., Papernot, N., Goodfellow, I., Duan, Y., Abbeel, P.: Ad-
+versarial attacks on neural network policies (2017). arXiv preprint
+arXiv:1702.02284
+62. Innovate UK: Report on the core principles and opportunities for
+responsible and trustworthy ai (2023)
+63. Institute of Electrical and Electronics Engineers IEEE: IEEE
+P7009: IEEE Draft Standard for Fail-Safe Design of Autonomous
+and Semi-Autonomous Systems (2024). Last accessed: 08 April
+2024
+64. International Organization for Standardization (ISO): ISO 10218-
+1:2011 robots and robotic devices safety requirements for indus-
+trial robots (2011). Last accessed: 08 April 2024
+65. International Organization for Standardization (ISO): ISO
+9001:2015 quality management systems — requirements (2015).
+Last accessed: 01 July 2024
+66. International Organization for Standardization (ISO): ISO/IEC
+27001:2022 information security, cybersecurity and privacy pro-
+tection — information security management systems — require-
+ments, 201. Last accessed: 01 July 2024
+67. Jacovi, A., Marasović, A., Miller, T., Goldberg, Y.: Formalizing
+trust in artiﬁcial intelligence: prerequisites, causes and goals of
+human trust in AI. In: Proceedings of the 2021 ACM Confer-
+ence on Fairness, Accountability, and Transparency, pp. 624–635
+(2021)
+68. Jayaraman, B., Evans, D.: Evaluating diﬀerentially private ma-
+chine learning in practice. In: 28th USENIX Security Symposium
+(USENIX Security 19), pp. 1895–1912 (2019)
+69. Jian, J.-Y., Bisantz, A.M., Drury, C.G.: Foundations for an em-
+pirically determined scale of trust in automated systems. Int. J.
+Cogn. Ergon. 4(1), 53–71 (2000)
+70. Johnson, D., Grayson, K.: Cognitive and aﬀective trust in service
+relationships. J. Bus. Res.58(4), 500–507 (2005)
+71. Jones, K.: Trustworthiness. Ethics 123(1), 61–85 (2012)
+72. Jung, E.-S., Dong, S.-Y., Lee, S.-Y.: Neural correlates of variations
+in human trust in human-like machines during non-reciprocal
+interactions. Sci. Rep. 9(1), 9975 (2019)
+73. Kantchelian, A., Tygar, J.D., Joseph, A.: Evasion and harden-
+ing of tree ensemble classiﬁers. In: International Conference on
+Machine Learning, pp. 2387–2396. PMLR (2016)
+74. Kaplan, A.D., Kessler, T.T., Brill, J.C., Hancock, P.A.: Trust in
+artiﬁcial intelligence: meta-analytic ﬁndings. Hum. Factors65(2),
+337–359 (2023)
+75. Katz, G., Huang, D.A., Ibeling, D., Julian, K., Lazarus, C., Lim,
+R., Shah, P., Thakoor, S., Wu, H., Zeljić, A., Dill, D.L., Kochen-
+derfer, M.J., Barrett, C.: The marabou framework for veriﬁca-
+tion and analysis of deep neural networks. In: Dillig, I., Tasiran,
+S. (eds.) Computer Aided Veriﬁcation, pp. 443–452. Springer,
+Cham (2019)
+76. Kaur, D., Uslu, S., Rittichier, K.J., Durresi, A.: Trustworthy artiﬁ-
+cial intelligence: a review. ACM Comput. Surv.55(2) (jan 2022)
+77. Kearns, M., Roth, A.: The Ethical Algorithm: The Science of So-
+cially Aware Algorithm Design. Oxford University Press, London
+(2019)
+Springer
+
+--- PDF PAGE 16 ---
+M. Liebherr et al.
+78. Kelly, S., Kaye, S.-A., Oviedo-Trespalacios, O.: What factors con-
+tribute to the acceptance of artiﬁcial intelligence? A systematic
+review. Telemat. Inform.77, 101925 (2023)
+79. Kelp, C., Simion, M.: What is trustworthiness? Noûs 57(3),
+667–683 (2023)
+80. Khatri, V., Brown, C.V.: Designing data governance. Commun.
+ACM 53(1), 148–152 (2010)
+81. Khawaji, A., Zhou, J., Chen, F., Marcus, N.: Using galvanic skin
+response (gsr) to measure trust and cognitive load in the text-chat
+environment. In: Proceedings of the 33rd Annual ACM Confer-
+ence Extended Abstracts on Human Factors in Computing Sys-
+tems, pp. 1989–1994 (2015)
+82. Kohn, S.C., de Visser, E.J., Wiese, E., Lee, Y.-C., Shaw, T.H.:
+Measurement of trust in automation: a narrative review and ref-
+erence guide. Front. Psychol.12, 604977 (2021)
+83. Komiak, S.Y.X., Benbasat, I.: The eﬀects of personalization and
+familiarity on trust and adoption of recommendation agents. MIS
+Q., 941–960 (2006)
+84. Körber, M.: Theoretical considerations and development of a
+questionnaire to measure trust in automation. In: Proceedings
+of the 20th Congress of the International Ergonomics Associa-
+tion (IEA 2018) Volume VI: Transport Ergonomics and Human
+Factors (TEHF), Aerospace Human Factors and Ergonomics 20,
+pp. 13–30. Springer, Berlin (2019)
+85. Körber, M., Prasch, L., Bengler, K.: Why do I have to drive now?
+Post hoc explanations of takeover requests. Hum. Factors 60(3),
+305–323 (2018)
+86. Kusche, I.: Possible harms of artiﬁcial intelligence and the eu ai
+act: fundamental rights and risk. J. Risk Res., 1–14 (2024)
+87. Kyung, N., Kwon, H.E.: Rationally trust, but emotionally? The
+roles of cognitive and aﬀective trust in laypeople’s acceptance of
+AI for preventive care operations. Prod. Oper. Manag. (2022)
+88. Lacoste, A., Luccioni, A., Schmidt, V., Dandres, T.: Quantifying
+the carbon emissions of machine learning (2019). CoRR. arXiv:
+1910.09700
+89. Lankton, N.K., McKnight, D.H., Tripp, J.: Technology, human-
+ness, and trust: rethinking trust in technology. J. Assoc. Inf. Syst.
+16(10), 1 (2015)
+90. Lee, J., Moray, N.: Trust, control strategies and allocation of func-
+tion in human-machine systems. Ergonomics35(10), 1243–1270
+(1992)
+91. Lee, J.D., See, K.A.: Trust in automation: designing for appropri-
+ate reliance. Hum. Factors46(1), 50–80 (2004)
+92. Lee, M., Ruijten, P., Frank, L., IJsselsteijn, W.: Here’s looking
+at you, robot: the transparency conundrum in hri. In: 2023 32nd
+IEEE International Conference on Robot and Human Interactive
+Communication (RO-MAN), pp. 2120–2127. IEEE (2023)
+93. Lewis, J.D., Weigert, A.: Trust as a social reality. Soc. Forces
+63(4), 967–985 (1985)
+94. Lu, Y., Sarter, N.: Feedback on system or operator performance:
+which is more useful for the timely detection of changes in re-
+liability, trust calibration and appropriate automation usage? In:
+Proceedings of the Human Factors and Ergonomics Society An-
+nual Meeting, vol. 63, pp. 312–316. SAGE Publications Sage CA,
+Los Angeles (2019)
+95. Lv, X., Yang, Y., Qin, D., Cao, X., Xu, H.: Artiﬁcial intelligence
+service recovery: the role of empathic response in hospitality
+customers’ continuous usage intention. Comput. Hum. Behav.
+126, 106993 (2022)
+96. Madsen, M., Gregor, S.: Measuring human-computer trust. In:
+11th Australasian Conference on Information Systems, vol. 53,
+pp. 6–8. Citeseer (2000)
+97. Mayer, R.C., Davis, J.H., Schoorman, F.D.: An integrative model
+of organizational trust. Acad. Manag. Rev.20(3), 709–734 (1995)
+98. McAllister, D.J.: Aﬀect-and cognition-based trust as foundations
+for interpersonal cooperation in organizations. Acad. Manag. J.
+38(1), 24–59 (1995)
+99. McKnight, D.H., Choudhury, V., Kacmar, C.: Developing and
+validating trust measures for e-commerce: an integrative typol-
+ogy. Inf. Syst. Res.13(3), 334–359 (2002)
+100. Mcknight, D.H., Carter, M., Thatcher, J.B., Clay, P.F.: Trust in
+a speciﬁc technology: an investigation of its components and
+measures. ACM Trans. Manag. Inf. Syst.2(2), 1–25 (2011)
+101. Mehrabi, N., Morstatter, F., Saxena, N., Lerman, K., Galstyan, A.:
+A survey on bias and fairness in machine learning. ACM Comput.
+Surv. 54(6) (July 2021)
+102. Merritt, S.M.: Aﬀective processes in human–automation interac-
+tions. Hum. Factors 53(4), 356–370 (2011)
+103. Molm, L.D., Takahashi, N., Peterson, G.: Risk and trust in social
+exchange: an experimental test of a classical proposition. Am. J.
+Sociol. 105(5), 1396–1427 (2000)
+104. Mousavi, M.R., Cavalcanti, A., Fisher, M., Dennis, L., Hi-
+erons, R., Kaddouh, B., Law, E.L.-C., Richardson, R., Ringer,
+J.O., Tyukin, I., Woodcock, J.: Trustworthy autonomous systems
+through veriﬁability. Computer 56(2), 40–47 (2023)
+105. Naiseh, M., Al-Thani, D., Jiang, N., Ali, R.: Explainable recom-
+mendation: when design meets trust calibration. World Wide Web
+24(5), 1857–1884 (2021)
+106. Naiseh, M., Al-Thani, D., Jiang, N., Ali, R.: How the diﬀerent
+explanation classes impact trust calibration: the case of clini-
+cal decision support systems. Int. J. Hum.-Comput. Stud. 169,
+102941 (2023)
+107. Narayanan, A.: The limits of the quantitative approach to
+discrimination (2022). Available online from https://www.cs.
+princeton.edu/~arvindn/talks/baldwin-discrimination/baldwin-
+discrimination-transcript.pdf
+108. Narodytska, N., Kasiviswanathan, S., Ryzhyk, L., Sagiv, M.,
+Walsh, T.: Verifying properties of binarized deep neural net-
+works. In: Proceedings of the AAAI Conference on Artiﬁcial
+Intelligence, vol. 32 (2018)
+109. National Cyber Security Centre (NCSC): Guidelines for secure
+ai system development (2023). Last accessed: 08 April 2024
+110. National Institute of Standards and Technology: Artiﬁcial intel-
+ligence risk management framework (AI RMF 1.0). Technical
+report, US Department of Commerce (2023)
+111. Neumann, P.G., Watson, R.N.M.: Capabilities revisited: a holistic
+approach to bottom-to-top assurance of trustworthy systems. In:
+Fourth Layered Assurance Workshop, Austin, Texas, December
+2010
+112. Okamura, K., Yamada, S.: Adaptive trust calibration for human-
+AI collaboration. PLoS ONE 15(2), e0229132 (2020)
+113. Open Roboethics Institute: Foresight into AI ethics in healthcare
+(faie-h): a toolkit for creating an ethics roadmap for your health-
+care AI project (2020). Last accessed: 08 April 2024
+114. Parasuraman, R., Manzey, D.H.: Complacency and bias in human
+use of automation: an attentional integration. Hum. Factors52(3),
+381–410 (2010)
+115. Parasuraman, R., Riley, V.: Humans and automation: use, misuse,
+disuse, abuse. Hum. Factors39(2), 230–253 (1997)
+116. Percy, C., Dragicevic, S., Sarkar, S., d’Avila Garcez, A.S.: Ac-
+countability in AI: from principles to industry-speciﬁc accredita-
+tion. AI Commun. 34(3), 181–196 (2021)
+117. Pessach, D., Shmueli, E.: A review on fairness in machine learn-
+ing. ACM Comput. Surv.55(3) (February 2022)
+118. Raji, I.D., Smart, A., White, R.N., Mitchell, M., Gebru, T.,
+Hutchinson, B., Smith-Loud, J., Theron, D., Barnes, P.: Clos-
+ing the AI accountability gap: deﬁning an end-to-end framework
+for internal algorithmic auditing. In: FAT* ’20, pp. 33–44. ACM,
+New York (2020)
+119. Ranzato, F., Zanella, M.: Robustness veriﬁcation of support vec-
+tor machines. In: Static Analysis: 26th International Symposium,
+SAS 2019, Porto, Portugal, October 8–11, 2019, Proceedings 26,
+pp. 8–11. Springer (2019)
+Springer
+
+--- PDF PAGE 17 ---
+Dynamic calibration of trust and trustworthiness in AI-enabled systems
+120. Razin, Y.S., Feigh, K.M.: Converging measures and an emergent
+model: a meta-analysis of human-automation trust questionnaires
+(2023). arXiv preprint arXiv:2303.13799
+121. Reisman, D., Schultz, J., Crawford, K., Whittaker, M.: Algorith-
+mic impact assessments: a practical framework for public agency.
+AI Now, 9 (2018)
+122. Robbins, B.G.: What is trust? A multidisciplinary review, critique,
+and synthesis. Sociol. Compass 10(10), 972–986 (2016)
+123. Rotter, J.B.: Interpersonal trust, trustworthiness, and gullibility.
+Am. Psychol. 35(1), 1 (1980)
+124. Ryan, M.: In ai we trust: ethics, artiﬁcial intelligence, and relia-
+bility. Sci. Eng. Ethics26(5), 2749–2767 (2020)
+125. Schaefer, K.E.: Measuring trust in human robot interactions: de-
+velopment of the “trust perception scale-hri”. In: Robust Intelli-
+gence and Trust in Autonomous Systems, pp. 191–218. Springer,
+Berlin (2016)
+126. Schoorman, F.D., Mayer, R.C., Davis, J.H.: An integrative model
+of organizational trust: Past, present, and future (2007)
+127. Sifakis, J.: Trustworthy computing systems. In: SENSORNETS,
+p. 5 (2012)
+128. Sifakis, J., Harel, D.: Trustworthy autonomous system develop-
+ment. ACM Trans. Embed. Comput. Syst.22(3), 1–24 (2023)
+129. Singh, G., Gehr, T., Mirman, M., Püschel, M., Vechev, M.: Fast
+and eﬀective robustness certiﬁcation. Adv. Neural Inf. Process.
+Syst. 31 (2018)
+130. Smuha, N.A., Ahmed-Rengers, E., Harkens, A., Li, W., Ma-
+cLaren, J., Piselli, R., Yeung, K.: How the EU can achieve legally
+trustworthy AI: a response to the European Commission’s pro-
+posal for an artiﬁcial intelligence act. SSRN (2021)
+131. Solaiman, I., Talat, Z., Agnew, W., Ahmad, L., Baker, D., Blod-
+gett, S.L., Chen, C., Daumé, H. III, Dodge, J., Duan, I., et al.:
+Evaluating the social impact of generative ai systems in systems
+and society (2023). arXiv preprint arXiv:2306.05949
+132. Stamboliev, E., Christiaens, T.: How empty is trustworthy ai? A
+discourse analysis of the ethics guidelines of trustworthy ai. Crit.
+Policy Stud. 19(1), 39–56 (2025)
+133. Tjeng, V., Xiao, K., Tedrake, R.: Evaluating robustness of neural
+networks with mixed integer programming (2017). arXiv preprint
+arXiv:1711.07356
+134. Ul Hassan, M., Rehmani, M.H., Chen, J.: Diﬀerential privacy
+techniques for cyber physical systems: a survey. IEEE Commun.
+Surv. Tutor.22(1), 746–789 (2020)
+135. Ullrich, D., Butz, A., Diefenbach, S.: The development of
+overtrust: an empirical simulation and psychological analysis
+in the context of human–robot interaction. Front. Robot. AI 8,
+554578 (2021)
+136. Van Dongen, K., Van Maanen, P.-P.: A framework for explain-
+ing reliance on decision aids. Int. J. Hum.-Comput. Stud. 71(4),
+410–424 (2013)
+137. Wang, D., Yang, Q., Abdul, A.M., Lim, B.Y.: Designing theory-
+driven user-centric explainable AI. In: Brewster, S.A., Fitzpatrick,
+G., Cox, A.L., Kostakos, V. (eds.) Proceedings of the 2019 CHI
+Conference on Human Factors in Computing Systems, CHI 2019,
+Glasgow, Scotland, UK, May 04-09, 2019, p. 601. ACM (2019)
+138. Wang, E.K., Chen, C.-M., Zhao, D., Ip, W.H., Yung, K.L.: A
+dynamic trust model in Internet of things. Soft Comput. 24,
+5773–5782 (2020)
+139. Waytz, A., Norton, M.I.: Botsourcing and outsourcing: robot,
+British, Chinese, and German workers are for thinking—not
+feeling—jobs. Emotion 14(2), 434 (2014)
+140. Weidinger, L., Rauh, M., Marchal, N., Manzini, A., Hendricks,
+L . A . ,M a t e o s - G a r c i a ,J . ,B e r g m a n ,S . ,K a y ,J . ,G r i ﬃ n ,C . ,B a r i a c h ,
+B., et al.: Sociotechnical safety evaluation of generative ai systems
+(2023). arXiv preprint arXiv:2310.11986
+141. Weng, L., Zhang, H., Chen, H., Song, Z., Hsieh, C.-J., Daniel,
+L., Boning, D., Dhillon, I.: Towards fast computation of certi-
+ﬁed robustness for relu networks. In: International Conference on
+Machine Learning, pp. 5276–5285. PMLR (2018)
+142. Wiegmann, D.A., Rich, A., Zhang, H.: Automated diagnostic
+aids: the eﬀects of aid reliability on users’ trust and reliance.
+Theor. Issues Ergon.2(4), 352–367 (2001)
+143. Wischnewski, M., Krämer, N., Müller, E.: Measuring and un-
+derstanding trust calibrations for automated systems: a survey of
+the state-of-the-art and future directions. In: Proceedings of the
+2023 CHI Conference on Human Factors in Computing Systems,
+pp. 1–16 (2023)
+144. Wischnewski, M., Krämer, N.C., Müller, E.: Measuring and un-
+derstanding trust calibrations for automated systems: a survey of
+the state-of-the-art and future directions. In: Schmidt, A., Väänä-
+nen, K., Goyal, T., Kristensson, P.O., Peters, A., Mueller, S.,
+Williamson, J.R., Wilson, M.L. (eds.) Proceedings of the 2023
+CHI Conference on Human Factors in Computing Systems, CHI
+2023, Hamburg, Germany, April 23-28, 2023, pp. 755:1–755:16.
+ACM (2023)
+145. Wojton, H.M., Porter, D., Lane, S.T., Bieber, C., Madhavan, P.:
+Initial validation of the trust of automated systems test (toast). J.
+Soc. Psychol. 160(6), 735–750 (2020)
+146. Woods, D.D.: Trust emerges from the dynamics of reciprocity,
+responsibility and resilience in networked systems. Presentation
+at the working meeting on trust in cyberdomains. Institute for
+Human and Machine Cognition, Pensacola, FL. Supported by the
+Human Eﬀectiveness Directorate, Air Force Research Laboratory,
+Wright-Patterson AFB, OH (2009)
+147. Xiang, W., Tran, H.-D., Johnson, T.T.: Output reachable set es-
+timation and veriﬁcation for multilayer neural networks. IEEE
+Trans. Neural Netw. Learn. Syst.29(11), 5777–5783 (2018)
+148. Yang, R., Wibowo, S.: User trust in artiﬁcial intelligence: a com-
+prehensive conceptual framework. EM32(4), 2053–2077 (2022)
+149. Yuksel, B.F., Collisson, P., Czerwinski, M.: Brains or beauty: how
+to engender trust in user-agent interactions. ACM Trans. Internet
+Technol. 17(1), 1–20 (2017)
+150. Zanella-Beguelin, S., Wutschitz, L., Tople, S., Salem, A., Rühle,
+V., Paverd, A., Naseri, M., Köpf, B., Jones, D.: Bayesian esti-
+mation of diﬀerential privacy. In: International Conference on
+Machine Learning, pp. 40624–40636. PMLR (2023)
+151. Zicari, R.V., Brodersen, J., Brusseau, J., Düdder, B., Eichhorn, T.,
+Ivanov, T., Kararigas, G., Kringen, P., McCullough, M., Möslein,
+F., Mushtaq, N., Roig, G., Stürtz, N., Tolle, K., Tithi, J.J. van
+Halem, I., Westerlund, M.: Z-inspection (R): a process to assess
+trustworthy ai. IEEE Trans. Technol. Soc.2(2), 83–97 (2021)
+Publisher’s note Springer Nature remains neutral with regard to ju-
+risdictional claims in published maps and institutional aﬃliations.
+Springer
