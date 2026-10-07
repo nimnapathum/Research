@@ -1,6 +1,6 @@
 import 'server-only';
 import { readdir, readFile, stat } from 'node:fs/promises';
-import { dirname, join, posix, resolve } from 'node:path';
+import { join, posix, resolve } from 'node:path';
 
 export type ResearchDoc = { path: string; title: string; category: string; updatedAt: string };
 const root = resolve(process.env.RESEARCH_DOCS_ROOT || join(process.cwd(), '../../..'));
@@ -65,16 +65,4 @@ export function listResearchDocs(): Promise<ResearchDoc[]> {
 export async function readResearchDoc(path: string, docs: ResearchDoc[]): Promise<string | null> {
   if (!docs.some((doc) => doc.path === path)) return null;
   return readFile(join(root, path), 'utf8');
-}
-export function linkedDoc(from: string, href: string, docs: ResearchDoc[]): string | null {
-  if (href.startsWith('#')) return href;
-  if (/^https?:\/\//i.test(href)) return href;
-  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('//')) return null;
-  const [file, anchor] = href.split('#', 2);
-  if (!file) return null;
-  let decoded: string;
-  try { decoded = decodeURIComponent(file); } catch { return null; }
-  const relative = posix.normalize(posix.join(dirname(from).replaceAll('\\', '/'), decoded));
-  if (!docs.some((doc) => doc.path === relative)) return null;
-  return `/researcher/research?doc=${encodeURIComponent(relative)}${anchor ? `#${encodeURIComponent(anchor)}` : ''}`;
 }

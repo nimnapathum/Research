@@ -11,7 +11,7 @@ For a hosted deployment, follow [the Oracle Cloud deployment guide](DEPLOY_ORACL
 - Published pre-task, after-task, and after-both forms copied from `study-system/instruments/forms.json`; one response per stage/task; researcher form drafts, versioning, and publishing. A replay-interview note form is seeded as a draft.
 - Participant IDE event JSON/JSONL upload; researcher IDE event, adjudicated `summary.json`, and `opportunities.csv` imports. Files are hashed, raw text is retained in PostgreSQL, and event IDs are deduplicated.
 - Researcher dashboard, participant/form/import lists, responses, descriptive coverage and condition/class charts, and JSON export.
-- Researcher-only **Research** library showing Markdown files from the research workspace, task materials, pilot guides, instruments, and study-system notes. Search by title or path and follow links between Markdown documents. The sidebar index is cached for 30 seconds so opening a file does not rescan every file each time; selected file contents are read when opened.
+- Researcher-only **Research** library showing Markdown files from the research workspace, task materials, pilot guides, instruments, and study-system notes. Search by title or path and follow links between Markdown documents. The sidebar index is cached for 30 seconds. Switching documents fetches only the selected file and keeps up to eight recently viewed files in the browser; it does not render the whole page again.
 - **Researchers** page for creating another researcher or supervisor login. The generated temporary password is shown once. New researcher accounts have the same access as the existing researcher account.
 
 **The controlled checkpoint app in `../study-system/app` remains authoritative for exact proposal exposure, first keep/reject, confidence on the frozen code, and final artifact hashes.** This portal does not replace that flow or infer cognitive mode from event counts. Screen recordings, official agent transcripts, interviews, independent security reviews, and qualitative mode/check coding still follow the existing study protocol.
@@ -52,7 +52,7 @@ Before moving to a VM or live pilot, confirm the approved consent text and data-
 
 ## Verification
 
-`npm run typecheck` and `npm run build` pass. `node --env-file=.env scripts/smoke.mjs` exercises the research library and its access control, researcher-account creation/sign-in, participant assignment/sign-in, dashboard rendering, a pre-task response, IDE event import, and analytics. It removes its temporary accounts and import. This script needs the local API, web app, and database.
+`npm run typecheck` and `npm run build` pass. `npm run test:research-docs` checks document delivery and access control without a database. `node --env-file=.env scripts/smoke.mjs` exercises the research library and its access control, researcher-account creation/sign-in, participant assignment/sign-in, dashboard rendering, a pre-task response, IDE event import, and analytics. It removes its temporary accounts and import. The larger smoke script needs the local API, web app, and database.
 
 ## Layout
 

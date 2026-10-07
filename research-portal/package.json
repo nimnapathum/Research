@@ -10,7 +10,8 @@
     "typecheck": "npm run typecheck -w @study/api && npm run typecheck -w @study/web",
     "db:migrate": "node --env-file=.env scripts/migrate.mjs",
     "db:seed": "node --env-file=.env scripts/seed-forms.mjs",
-    "admin:create": "node --env-file=.env scripts/create-admin.mjs"
+    "admin:create": "node --env-file=.env scripts/create-admin.mjs",
+    "test:research-docs": "node scripts/test-research-docs.mjs"
   },
   "engines": { "node": ">=24.15" },
   "dependencies": { "pg": "8.23.1" },

@@ -38,6 +38,14 @@ try {
   if (!dashboard.ok || !(await dashboard.text()).includes('Study operations')) throw new Error('Researcher dashboard failed');
   const library = await fetch(`${root}/researcher/research?doc=RQ.md`, { headers: { cookie: researcherCookie } });
   if (!library.ok || !(await library.text()).includes('Study documents')) throw new Error('Research document viewer failed');
+  const document = await call('/api/research/docs?doc=RQ.md', {}, researcherCookie);
+  if (!document.body.source?.includes('RQ1')) throw new Error('Research document API did not return Markdown');
+  const anonymousDocument = await fetch(`${root}/api/research/docs?doc=RQ.md`);
+  if (anonymousDocument.status !== 401) throw new Error('Anonymous research document access was not blocked');
+  const invalidDocument = await fetch(`${root}/api/research/docs?doc=../.env`, {
+    headers: { cookie: researcherCookie }
+  });
+  if (invalidDocument.status !== 404) throw new Error('Research document path validation failed');
   const colleague = await call('/api/backend/researcher/accounts', json({
     email: `researcher-${code.toLowerCase()}@example.invalid`, displayName: 'Smoke Test Supervisor'
   }), researcherCookie);
@@ -65,6 +73,10 @@ try {
   if (![302, 303, 307, 308].includes(denied.status) || !denied.headers.get('location')?.includes('/dashboard')) {
     throw new Error('Participant could access researcher document viewer');
   }
+  const participantDocument = await fetch(`${root}/api/research/docs?doc=RQ.md`, {
+    headers: { cookie: participantCookie }
+  });
+  if (participantDocument.status !== 403) throw new Error('Participant could access research document API');
   const accountDenied = await fetch(`${root}/api/backend/researcher/accounts`, {
     headers: { cookie: participantCookie }
   });
