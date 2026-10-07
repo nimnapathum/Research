@@ -30,7 +30,7 @@ export default async function ResearchPage({ searchParams }: {
         <li>How do security checks before and after provisional retention relate to repair or retention?</li>
         <li>Do these patterns differ for SQL injection and path traversal?</li>
       </ol></div><div><strong>Current stage</strong><p>Pilot preparation. Participant outcomes and preliminary results are not yet available.</p>
-        <p className="small">Start with <Link href="/researcher/research?doc=RQ.md" prefetch={false}>RQs and rationale</Link>, <Link href="/researcher/research?doc=METHODOLOGY.md" prefetch={false}>methodology</Link>, and <Link href="/researcher/research?doc=study-system%2Fpilot%2FSESSION_RUNBOOK.md" prefetch={false}>session runbook</Link>.</p></div></div>
+        <p className="small">Start with <Link href="/researcher/research?doc=RQ.md" prefetch={false} scroll={false}>RQs and rationale</Link>, <Link href="/researcher/research?doc=METHODOLOGY.md" prefetch={false} scroll={false}>methodology</Link>, and <Link href="/researcher/research?doc=study-system%2Fpilot%2FSESSION_RUNBOOK.md" prefetch={false} scroll={false}>session runbook</Link>.</p></div></div>
     </section>
     <div className="document-layout"><ResearchDocList docs={docs} selected={selected} />
       <article className="card document-content"><div className="document-meta"><span>{metadata.category}</span>
@@ -40,7 +40,7 @@ export default async function ResearchPage({ searchParams }: {
             const target = linkedDoc(selected, href || '', docs);
             if (!target) return <span>{children}</span>;
             if (target.startsWith('http')) return <a href={target} target="_blank" rel="noopener noreferrer">{children}</a>;
-            return <Link href={target} prefetch={false}>{children}</Link>;
+            return <Link href={target} prefetch={false} scroll={target.includes('#')}>{children}</Link>;
           }, img: ({ alt }) => <span className="muted">[Image: {alt || 'not available in the Markdown viewer'}]</span> }}>
           {source}</ReactMarkdown></div>
       </article></div></Shell>;

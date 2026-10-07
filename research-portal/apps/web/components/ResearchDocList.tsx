@@ -1,7 +1,12 @@
 'use client';
-import Link from 'next/link';
+import Link, { useLinkStatus } from 'next/link';
 import { useState } from 'react';
 import type { ResearchDoc } from '@/lib/research-docs';
+
+function DocumentLinkLabel({ doc }: { doc: ResearchDoc }) {
+  const { pending } = useLinkStatus();
+  return <><span>{doc.title}</span><small>{pending ? 'Opening document…' : doc.path}</small></>;
+}
 
 export function ResearchDocList({ docs, selected }: { docs: ResearchDoc[]; selected: string }) {
   const [query, setQuery] = useState('');
@@ -14,8 +19,9 @@ export function ResearchDocList({ docs, selected }: { docs: ResearchDoc[]; selec
     <nav aria-label="Research documents">{groups.map((group) => <div key={group}>
       <h2 className="document-group">{group}</h2>
       {filtered.filter((doc) => doc.category === group).map((doc) =>
-        <Link key={doc.path} href={`/researcher/research?doc=${encodeURIComponent(doc.path)}`} prefetch={false}
+        <Link key={doc.path} href={`/researcher/research?doc=${encodeURIComponent(doc.path)}`}
+          prefetch={false} scroll={false} aria-current={selected === doc.path ? 'page' : undefined}
           className={`document-link${selected === doc.path ? ' active' : ''}`}>
-          <span>{doc.title}</span><small>{doc.path}</small></Link>)}
+          <DocumentLinkLabel doc={doc} /></Link>)}
     </div>)}</nav></aside>;
 }
