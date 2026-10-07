@@ -6,6 +6,9 @@ export type ResearchDoc = { path: string; title: string; category: string; updat
 const root = resolve(process.env.RESEARCH_DOCS_ROOT || join(process.cwd(), '../../..'));
 const roots = ['', 'tasks', 'study-system', 'research-portal'];
 const excluded = new Set(['node_modules', '.git', '.next', 'dist', '.agents', '.codex', '.study-capture']);
+const indexTtlMs = 30_000;
+let indexCache: { docs: ResearchDoc[]; expiresAt: number } | undefined;
+let indexBuild: Promise<ResearchDoc[]> | undefined;
 
 async function scan(relative: string, paths: string[]) {
   const entries = await readdir(join(root, relative), { withFileTypes: true });
@@ -26,7 +29,7 @@ function category(path: string) {
   if (path.startsWith('study-system/')) return 'Study system';
   return 'Research foundation';
 }
-export async function listResearchDocs(): Promise<ResearchDoc[]> {
+async function buildResearchDocIndex(): Promise<ResearchDoc[]> {
   const paths: string[] = [];
   for (const relative of roots) {
     if (relative === '') {
@@ -47,6 +50,17 @@ export async function listResearchDocs(): Promise<ResearchDoc[]> {
       category: category(path), updatedAt: info.mtime.toISOString() };
   }));
   return docs.sort((a, b) => a.category.localeCompare(b.category) || a.title.localeCompare(b.title));
+}
+export function listResearchDocs(): Promise<ResearchDoc[]> {
+  if (indexCache && Date.now() < indexCache.expiresAt) return Promise.resolve(indexCache.docs);
+  if (indexBuild) return indexBuild;
+  indexBuild = buildResearchDocIndex()
+    .then((docs) => {
+      indexCache = { docs, expiresAt: Date.now() + indexTtlMs };
+      return docs;
+    })
+    .finally(() => { indexBuild = undefined; });
+  return indexBuild;
 }
 export async function readResearchDoc(path: string, docs: ResearchDoc[]): Promise<string | null> {
   if (!docs.some((doc) => doc.path === path)) return null;

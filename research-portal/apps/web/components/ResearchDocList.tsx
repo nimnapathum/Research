@@ -14,7 +14,7 @@ export function ResearchDocList({ docs, selected }: { docs: ResearchDoc[]; selec
     <nav aria-label="Research documents">{groups.map((group) => <div key={group}>
       <h2 className="document-group">{group}</h2>
       {filtered.filter((doc) => doc.category === group).map((doc) =>
-        <Link key={doc.path} href={`/researcher/research?doc=${encodeURIComponent(doc.path)}`}
+        <Link key={doc.path} href={`/researcher/research?doc=${encodeURIComponent(doc.path)}`} prefetch={false}
           className={`document-link${selected === doc.path ? ' active' : ''}`}>
           <span>{doc.title}</span><small>{doc.path}</small></Link>)}
     </div>)}</nav></aside>;
