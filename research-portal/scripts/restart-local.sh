@@ -4,8 +4,12 @@ set -Eeuo pipefail
 PROJECT_ROOT="/Users/nimnapathum/Documents/ChatGPT/Research/research-portal"
 NODE24="/opt/homebrew/opt/node@24/bin"
 LOG_DIR="$PROJECT_ROOT/.local-logs"
+STUDY_ROOT="/Users/nimnapathum/Documents/ChatGPT/Research/study-system"
 
 export PATH="$NODE24:$PATH"
+export STUDY_MATERIALS_ROOT="$STUDY_ROOT"
+export STUDY_PUBLIC_URL="http://127.0.0.1:4175"
+export CHECKPOINT_BRIDGE_ENABLED=1
 cd "$PROJECT_ROOT"
 
 echo "Using Node: $(node --version)"
@@ -28,8 +32,13 @@ stop_port() {
 
 stop_port 4000
 stop_port 3000
+stop_port 4175
 
 mkdir -p "$LOG_DIR"
+
+echo "Starting recorded-task checkpoint service..."
+nohup node "$STUDY_ROOT/app/server.mjs" >"$LOG_DIR/checkpoint.log" 2>&1 &
+CHECKPOINT_PID=$!
 
 echo "Starting API..."
 nohup npm run dev:api >"$LOG_DIR/api.log" 2>&1 &
@@ -47,6 +56,16 @@ echo
 echo "Processes:"
 echo "API PID: $API_PID"
 echo "Web PID: $WEB_PID"
+echo "Checkpoint PID: $CHECKPOINT_PID"
+
+echo
+echo "Checkpoint check:"
+if curl -fsS http://127.0.0.1:4175/health; then
+  echo
+  echo "Checkpoint service is running."
+else
+  echo "Checkpoint service is not healthy. See $LOG_DIR/checkpoint.log"
+fi
 
 echo
 echo "API check:"
@@ -69,3 +88,4 @@ echo
 echo "Logs:"
 echo "  tail -f $LOG_DIR/api.log"
 echo "  tail -f $LOG_DIR/web.log"
+echo "  tail -f $LOG_DIR/checkpoint.log"

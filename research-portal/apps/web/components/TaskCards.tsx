@@ -1,9 +1,10 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Link from 'next/link';
 import type { StudyTask } from '@/lib/types';
 
-export function TaskCards({ tasks }: { tasks: StudyTask[] }) {
+export function TaskCards({ tasks, access }: { tasks: StudyTask[]; access: Record<string, { allowed: boolean; reason?: string }> }) {
   const router = useRouter();
   const [error, setError] = useState('');
   async function change(id: string, status: string) {
@@ -19,7 +20,9 @@ export function TaskCards({ tasks }: { tasks: StudyTask[] }) {
       <div><h3>Task {task.task_order} · {task.project_id === 'A' ? 'Resource catalogue' : 'Support archive'}</h3>
         <div className="meta"><span className="code">{task.external_task_id}</span> · {task.condition} orientation · checkpoints {task.checkpoint_order.join(' → ')}</div>
       </div><span className={`pill ${task.status === 'submitted' ? 'good' : task.status === 'paused' ? 'warn' : 'gray'}`}>{task.status.replace('_', ' ')}</span>
-    </div><div className="form-inline"><div className="form-field"><label htmlFor={`status-${task.id}`}>My progress</label>
+    </div>{access[task.id]?.allowed ? <p><Link className="button" href={`/participant/tasks/${task.id}`}>Open task sheet and codebase</Link></p>
+      : <p className="small muted">{access[task.id]?.reason}</p>}
+      <div className="form-inline"><div className="form-field"><label htmlFor={`status-${task.id}`}>My progress</label>
       <select id={`status-${task.id}`} value={task.status} onChange={(event) => void change(task.id, event.target.value)}>
         <option value="not_started" disabled>Not started</option><option value="in_progress">In progress</option>
         <option value="paused">Paused</option><option value="submitted">Submitted</option>

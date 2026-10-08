@@ -1,6 +1,6 @@
 # Measures, security adjudication, and evaluation
 
-**Status:** analysis plan to freeze after pilot and before main study. The unit for RQ1 is a reviewed **candidate snapshot**; for RQ2 it is an **exposed vulnerable opportunity in the final repository**; for RQ3 it is an **event-coded opportunity**; for RQ4 it is the class-specific version of these units. Never silently exchange denominators.
+**Status:** analysis plan to freeze after pilot and before main study. The unit for RQ1 is a reviewed **candidate snapshot**; for RQ2 it is an **exposed vulnerable opportunity in the final repository**; for RQ3 it is an **event-coded opportunity**; for RQ4 it is the class-specific version of these units. Never silently exchange denominators. [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md) separates source-backed rationale from unvalidated adaptations.
 
 ## 1. Data dictionary
 
@@ -9,18 +9,21 @@
 | participant_id | Person; assigned | Pseudonymous ID |
 | project, task_order, condition | Task; randomization sheet | A/B, 1/2, acceleration/exploration encouragement |
 | candidate_id, checkpoint, class | Opportunity; manifest | Stable ID; SQL/path; vulnerable/secure expected status |
-| eligible_exposure | Opportunity; video/agent log | 1 only if candidate rendered or diff was visible and participant could act |
+| eligible_exposure | Opportunity; client reveal event checked against video | 1 only if candidate was meaningfully visible and participant could act; an applied-file event alone is insufficient |
 | candidate_security | Candidate; pre-study oracle | Secure/vulnerable/indeterminate for *target criterion* |
 | reviewed_snapshot_hash | Candidate review gate; sandbox/patch | Exact **proposed-change** state attached to confidence, even if rejected |
 | snapshot_security | Frozen proposal; blinded oracle/review | Secure/vulnerable/indeterminate for target criterion |
 | confidence | Snapshot form | 0–100% chance this exact code meets stated security requirement; optional short reason |
 | provisional_decision | Opportunity; checkpoint form | First keep/reject choice and timestamp; later replacement is coded separately |
+| exposure_to_first_decision_ms | Opportunity; client-confirmed apply time and first-decision time | Wall-clock descriptive interval for both keep and reject; check video visibility and pause/wait time before interpreting |
 | post_decision_path, target_detected, security_repair | Opportunity; video, transcript and code-diff coding | Keep/edit/replace/reject path, and whether target detection or intentional repair has evidence |
 | verification_event | Timestamped action; fused evidence | Security-specific check type, timing, target, result |
 | observed_mode | Time interval; coded video + interview | Acceleration/exploration/mixed/unclear plus evidence and rater confidence |
 | final_target_vulnerability | Exposed vulnerable opportunity; final repository oracle | 1 if the relevant final feature still has target weakness; 0 if removed/blocked; missing if no assessable feature |
 | final_functionality | Feature; normal tests/adjudication | Pass/fail/partial; report separately |
 | additional_vulnerability | Final code; independent review | New SQL/path/other finding outside the target candidate |
+| capture_coverage | Task; measurement audit | Hook count, readable transcript/video presence, pointer coverage and missingness; a file's presence does not prove complete capture |
+| pointer_window | Optional five-second interval; recorder | Move count/distance/speed, clicks and scrolls; exploratory OS/device-dependent context, never a mode or trust label |
 
 Store the raw agent response, eligible controlled candidate, and frozen reviewed-proposal security separately: the whole repository context could make a candidate behave differently from its isolated patch. The controlled first proposal is immutable until the first decision/rating, then further edits are timestamped. Confidence must be paired with **snapshot_security** even if the participant rejects the proposal. If a participant deletes the feature, final target vulnerability may be absent but functional task failure must be visible in reporting.
 
@@ -45,6 +48,8 @@ Always report components:
 - At most, a descriptive signed gap mean(p−y). It mixes secure underconfidence and vulnerable overconfidence, so never report it alone.
 
 Participant task means, rather than all items treated as independent, are the paired basis. A person with four judgments per task cannot be assigned a stable personal calibration score. If a candidate is never exposed or no confidence is recorded, report the missingness and its reason.
+
+The implemented export adds `exposure_to_first_decision_ms` to `opportunities.csv`, plus `capture_coverage.csv` and `pointer_windows_exploratory.csv`. These outputs support audit and descriptive pilot work. They are not extra primary outcomes; video and interview coding remain necessary for RQ3 and observed mode. A hook records selected agent actions, and the optional pointer recorder sees motion across applications while it runs. Neither establishes that the participant inspected a security sink.
 
 **Observed mode:** Two coders segment video/transcript using [INTERVIEW_AND_FORMS.md](INTERVIEW_AND_FORMS.md), then report how confidence outcomes vary by mode within assigned condition and by “mode alignment” (assignment versus observation). This is exploratory association, not a second randomized treatment.
 

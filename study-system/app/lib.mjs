@@ -62,15 +62,28 @@ export function openStore() {
       kind TEXT NOT NULL, path TEXT NOT NULL, sha256 TEXT, notes TEXT, created_at TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS ingests (source_sha256 TEXT PRIMARY KEY, task_id TEXT NOT NULL, event_id TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS client_status (
+      task_id TEXT PRIMARY KEY REFERENCES tasks(task_id), last_seen_at TEXT NOT NULL,
+      workspace_sha256 TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS client_jobs (
+      job_id TEXT PRIMARY KEY, task_id TEXT NOT NULL REFERENCES tasks(task_id),
+      checkpoint_id TEXT NOT NULL, kind TEXT NOT NULL, status TEXT NOT NULL,
+      review_id TEXT, last_hash TEXT, updated_at TEXT NOT NULL,
+      pending_decision_json TEXT,
+      UNIQUE(task_id, checkpoint_id, kind)
+    );
   `);
   const reviewColumns = db.prepare('PRAGMA table_info(reviews)').all().map((row) => row.name);
   if (!reviewColumns.includes('baseline_sha256')) db.exec('ALTER TABLE reviews ADD COLUMN baseline_sha256 TEXT');
+  const jobColumns = db.prepare('PRAGMA table_info(client_jobs)').all().map((row) => row.name);
+  if (!jobColumns.includes('pending_decision_json')) db.exec('ALTER TABLE client_jobs ADD COLUMN pending_decision_json TEXT');
   const seed = db.prepare("SELECT value FROM meta WHERE key = 'assignment_seed'").get();
   if (!seed) db.prepare('INSERT INTO meta (key, value) VALUES (?, ?)').run('assignment_seed', randomBytes(24).toString('hex'));
   return { db, dir };
 }
 
-export function createSession(store, participantId) {
+export function createSession(store, participantId, requestedTasks = null) {
   if (!/^P[0-9]{3,}$/.test(participantId)) throw new Error('Use a pseudonym such as P014');
   if (store.db.prepare('SELECT 1 FROM sessions WHERE participant_id = ?').get(participantId)) {
     throw new Error('Participant ID already exists');
@@ -78,6 +91,31 @@ export function createSession(store, participantId) {
   const ordinal = store.db.prepare('SELECT COUNT(*) AS n FROM sessions').get().n;
   const seed = store.db.prepare("SELECT value FROM meta WHERE key = 'assignment_seed'").get().value;
   const assignment = assignmentFor(participantId, ordinal, seed);
+  if (requestedTasks !== null) {
+    if (!Array.isArray(requestedTasks) || requestedTasks.length !== 2 ||
+        new Set(requestedTasks.map((task) => task.task_order)).size !== 2 ||
+        new Set(requestedTasks.map((task) => task.project_id)).size !== 2 ||
+        new Set(requestedTasks.map((task) => task.condition)).size !== 2) {
+      throw new Error('Expected two distinct assigned tasks');
+    }
+    const ordered = [...requestedTasks].sort((a, b) => a.task_order - b.task_order);
+    for (const [index, task] of ordered.entries()) {
+      if (task.task_order !== index + 1 || task.task_id !== `${participantId}-T${index + 1}` ||
+          !['A', 'B'].includes(task.project_id) ||
+          !['acceleration', 'exploration'].includes(task.condition) ||
+          !Array.isArray(task.checkpoint_order) || task.checkpoint_order.length !== 4 ||
+          new Set(task.checkpoint_order).size !== 4 ||
+          task.checkpoint_order.some((step) => !['Q1', 'Q2', 'F1', 'F2'].includes(step))) {
+        throw new Error('Invalid assigned task');
+      }
+    }
+    // Keep the balanced candidate-status profile, while using the portal's
+    // participant-visible project, condition and checkpoint order.
+    assignment.tasks = ordered.map((task, index) => ({ ...assignment.tasks[index],
+      task_id: task.task_id, project_id: task.project_id, condition: task.condition,
+      task_order: task.task_order, checkpoint_order: task.checkpoint_order }));
+    assignment.source = 'research-portal-assignment';
+  }
   const sessionId = `S${String(ordinal + 1).padStart(3, '0')}`;
   const token = randomBytes(24).toString('hex');
   const createdAt = new Date().toISOString();

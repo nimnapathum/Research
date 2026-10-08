@@ -1,6 +1,6 @@
 # Security trust in agent-assisted coding: living research plan
 
-**Status:** working protocol and runnable engineering prototype, 6 October 2026. The aim and four research questions below are the current version supplied by the researcher. Task stimuli, instrument wording, and analysis choices remain subject to a pilot and supervisor/ethics review.
+**Status:** working protocol and runnable engineering prototype, 8 October 2026. The aim and four research questions below are the current version supplied by the researcher. The researcher reports ethics approval; reconcile the approved materials with the current recording, proposal-source and optional pointer procedures. Task stimuli, instrument wording, and analysis choices still require a human pilot and protocol freeze.
 
 ## Aim
 
@@ -19,9 +19,9 @@ RQ2's intended evidence is: exposed vulnerabilities, participant decisions, repa
 
 ## Read this set in order
 
-For a concise supervisor-facing version, use the editable [LaTeX progress report](Research_Progress_Report.tex) or its [eight-page PDF](output/pdf/Research_Progress_Report.pdf). It states explicitly that no pilot or participant results exist yet.
+The [LaTeX progress report](Research_Progress_Report.tex) and [eight-page PDF](output/pdf/Research_Progress_Report.pdf) are earlier progress snapshots. Use the current Markdown protocol and [design traceability audit](DESIGN_TRACEABILITY.md) for the latest implementation limits. No pilot or participant results exist yet.
 
-For the implementation sequence and current remaining work, see [BUILD_PLAN.md](BUILD_PLAN.md) and the [artifact status](study-system/STATUS.md). Both [participant starter projects](study-system/STATUS.md), eight checkpoint sheets, 16 constructed prototype candidates, forms, capture adapters, a local checkpoint app, and blinded analysis scripts now exist. A two-task synthetic dry run passed. This is software verification, not a participant or Antigravity pilot.
+For current remaining work, see the [artifact status](study-system/STATUS.md) and [pilot readiness audit](study-system/pilot/READINESS_AUDIT.md). Two participant projects, eight checkpoint sheets, 16 constructed prototype candidates, forms, the password portal and instrumented ZIP, Antigravity hook/client, and blinded analysis scripts now exist. Synthetic two-task portal and analysis dry runs passed. This is software verification, not a participant or Antigravity pilot.
 
 | File | Purpose |
 | --- | --- |
@@ -35,6 +35,7 @@ For the implementation sequence and current remaining work, see [BUILD_PLAN.md](
 | [IDE_TELEMETRY.md](IDE_TELEMETRY.md) | Extension, agent transcript, provenance, and logging feasibility |
 | [INTERVIEW_AND_FORMS.md](INTERVIEW_AND_FORMS.md) | Screening, snapshot confidence forms, retrospective interview |
 | [REFERENCES.md](REFERENCES.md) | Evidence ledger with direct links and limits of each source |
+| [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md) | Current code-to-RQ and source-to-decision validity audit |
 | [LITERATURE_MAP.md](LITERATURE_MAP.md) | How the 45 attached PDFs relate to this narrowed study |
 | [DECISIONS.md](DECISIONS.md) | Design choices, source support, pilot gates, and unresolved choices |
 
@@ -42,14 +43,14 @@ For the implementation sequence and current remaining work, see [BUILD_PLAN.md](
 
 **Fixed by the researcher's latest request:** four RQs above; security rather than generic correctness; two agent-assisted coding tasks per participant; acceleration and exploration encouragement; SQL injection and path traversal; final code security and confidence; junior developers/final-year computing students as target population; screen recording and interview.
 
-**Built as an engineering prototype, not yet experimentally validated:** JavaScript/Node with built-in SQLite; four short feature checkpoints per task; two vulnerable and two secure constructed proposals per task; one SQL and one path opportunity of each security status; a provisional keep/reject decision and exact-snapshot confidence rating at each checkpoint; a companion extension and Antigravity hook source; a blinded security-adjudication queue. The controlled proposals are not unmodified Antigravity outputs.
+**Built as an engineering prototype, not yet experimentally validated:** JavaScript/Node with built-in SQLite; four short feature checkpoints per task; two vulnerable and two secure constructed proposals per task; one SQL and one path opportunity of each security status; a provisional keep/reject decision and exact-snapshot confidence rating at each checkpoint; a participant portal, task ZIP, Antigravity workspace hook and local client; optional cross-platform pointer summaries; and a blinded security-adjudication queue. The controlled proposals are not unmodified Antigravity outputs. The VS Code companion extension remains source only and is not installed in the standalone desktop route.
 
 **Decide after pilot:** exact agent/version and account policy, whether the IDE exposes every necessary event, final package difficulty/time, wording of encouragement, whether to allow a genuinely free agent after a controlled suggestion, sample size from precision/power simulation, exact primary confidence summary, and any optional workspace-instruction experiment.
 
 ## Important boundaries
 
 - The assigned condition is a manipulation. **Observed mode is a coded description**, not a mind state inferred from click speed. A mismatch between assignment and observed mode is useful evidence, not automatically a failed participant.
-- A vulnerable opportunity is counted only when the participant was actually exposed to an eligible agent-generated vulnerable candidate. A task file containing a vulnerable example is insufficient.
+- A vulnerable opportunity is counted only when the participant was meaningfully exposed to an eligible **supplied** vulnerable candidate. A task file containing a vulnerable example is insufficient. A future claim of agent-generated code requires documented provenance or an explicit constructed-stimulus framing.
 - Acceptance is provisional. Final retention is evaluated from the final submitted repository, whether the candidate was kept unchanged, repaired, replaced, or rejected.
 - Security confidence refers to a saved code snapshot and stated security criteria. A generic “How much do you trust AI?” score answers a different question.
 - The study can support comparisons within the chosen tasks and cohort. It cannot establish that the two CWEs are the most common LLM failures or generalize directly to senior engineers or production systems.
@@ -63,10 +64,11 @@ The February 2026 [original proposal](</Users/nimnapathum/Trust Calibration in D
 | 2026-10-05 | Freeze the supplied aim and RQ1–RQ4 as current wording | User's latest instruction |
 | 2026-10-05 | Move insecure workspace instructions out of the core protocol | Not present in finalized RQs; optional extension requires separate randomization and analysis |
 | 2026-10-05 | Recommend balanced known secure and vulnerable agent suggestions | Gives a denominator for trust alignment and equal exposure across conditions; pilot required |
+| 2026-10-08 | Audit portal, capture and analysis against RQs and sources | Fixed project labels and assignment defaults; documented which methods are sourced and which require original pilot validation |
 
 ## Next build gates
 
 1. Supervisor reviews RQ wording and whether RQ1's two clauses are one coherent primary question.
-2. Test the full workflow on the chosen Antigravity host and Node 24.21.0; document prompt/response provenance, hook and extension behaviour, and video alignment.
-3. Obtain ethics approval, then pilot 4–6 target-population participants. Inspect difficulty, condition separation, exposure, confidence wording, recording completeness, and interview recall.
+2. Use the checkpoint CLI's balanced allocation before entering each portal assignment. Collect genuine agent proposal provenance, or disclose constructed stimuli accurately.
+3. Reconcile the reported ethics approval with final materials. Test the full workflow on each intended Antigravity/OS host; document hook, transcript, video, optional pointer and clock alignment. Then pilot 4–6 target-population participants and inspect difficulty, condition separation, exposure, confidence wording and interview recall.
 4. Independently review and freeze the final candidate set, protocol, analysis plan, and materials **before** the main sample. Record deviations and missing data.

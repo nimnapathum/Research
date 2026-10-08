@@ -1,16 +1,23 @@
-import { appendFileSync, readFileSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { appendFileSync, readFileSync, realpathSync } from 'node:fs';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const captureDir = dirname(fileURLToPath(import.meta.url));
-const workspace = resolve(captureDir, '..');
+const workspace = realpathSync(resolve(captureDir, '..'));
+const phase = process.argv[2] || 'tool';
 const configPath = join(workspace, 'study/CAPTURE_CONFIG.json');
 let raw = '';
 for await (const chunk of process.stdin) raw += chunk;
 
 function localPath(value) {
   if (!value || typeof value !== 'string') return null;
-  const rel = relative(workspace, resolve(value));
+  let path;
+  try { path = realpathSync(resolve(value)); }
+  catch {
+    try { path = join(realpathSync(dirname(resolve(value))), basename(value)); }
+    catch { return null; }
+  }
+  const rel = relative(workspace, path);
   return rel === '..' || rel.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) ? null : rel;
 }
 function commandHint(command) {
@@ -23,7 +30,11 @@ try {
   const call = input.toolCall || {};
   const name = call.name || '';
   let event = null;
-  if (name === 'run_command') {
+  if (phase === 'pre') {
+    event = { event_type: 'agent_invocation_started', data: { invocation_number: input.invocationNum ?? null } };
+  } else if (phase === 'post') {
+    event = { event_type: 'agent_invocation_ended', data: { invocation_number: input.invocationNum ?? null } };
+  } else if (name === 'run_command') {
     const command = String(call.args?.CommandLine || '');
     if (/\b(codeql|snyk|sonar|semgrep)\b|npm\s+audit/i.test(command)) {
       event = { event_type: 'scanner_run', data: { command_hint: commandHint(command), tool_name: name } };
@@ -43,7 +54,7 @@ try {
       event_type: event.event_type, data: { ...event.data, conversation_id: input.conversationId || null,
         step_index: Number.isInteger(input.stepIdx) ? input.stepIdx : null,
         model_name: input.modelName || null, transcript_path: input.transcriptPath || null,
-        tool_failed: Boolean(input.error) }
+        tool_failed: Boolean(input.error), capture_timestamp_utc: new Date().toISOString() }
     };
     try {
       const response = await fetch(`${config.collector_url}/api/event`, {

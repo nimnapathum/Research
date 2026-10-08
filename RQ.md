@@ -1,14 +1,14 @@
 # Research aim, questions, and defenses
 
-**Canonical status:** current researcher-supplied wording, 5 October 2026. Editorial suggestions are explicitly labeled. Source support and its limits are in [REFERENCES.md](REFERENCES.md).
+**Canonical status:** researcher-supplied RQ wording retained, reviewed against the 8 October 2026 implementation. Source support and its limits are in [REFERENCES.md](REFERENCES.md); the code-to-RQ audit is in [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md).
 
 ## Aim
 
 > Examine whether developers working with a coding agent in acceleration and exploration episodes differ in their security judgments, reliance on generated changes, verification, and Trust calibration on security.
 
-The practical object of study is a developer judging an **agent-produced change to a specific repository**, deciding what to keep, checking it, and submitting code that can be assessed for named security requirements. “Trust calibration” here means the relationship between stated **security confidence** and actual security of the **same saved code snapshot**. Reliance and verification are observed behaviors, not synonyms for confidence.
+The intended object of study is a developer judging a **supplied agent-origin change to a specific repository**, deciding what to keep, checking it, and submitting code that can be assessed for named security requirements. “Trust calibration” here is operationalized as the relationship between stated **security confidence** and assessed security of the **same saved code snapshot**. Four judgments per task cannot establish a stable individual calibration trait. Reliance and verification are observed behaviors, not synonyms for confidence.
 
-**Current implementation caveat:** the 16 runnable candidate patches are researcher-constructed software prototypes. They support engineering and pilot testing, but the main study cannot call them unmodified agent output. The [candidate provenance protocol](study-system/pilot/CANDIDATE_PROVENANCE.md) requires either a genuine target-agent pool or an explicit constructed-stimulus description before participant use.
+**Current implementation caveat:** the 16 runnable candidate patches are researcher-constructed software prototypes. They support engineering and mechanics testing, but the main study cannot call them unmodified agent output. The [candidate provenance protocol](study-system/pilot/CANDIDATE_PROVENANCE.md) requires either a genuine target-agent pool or an explicit constructed-stimulus description before participant use. The portal also permits manual assignment entry; the randomized-encouragement claim depends on a locked allocation record, not on the portal UI alone.
 
 ## Finalized RQs (verbatim)
 

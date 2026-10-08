@@ -11,6 +11,7 @@ The links below are primary papers or official technical sources. “Use” mean
 | Serafini | Serafini et al., [Exploring the Impact of Intervention Methods on Developers' Security Behavior in a Manipulated ChatGPT Study](https://doi.org/10.1145/3706598.3713989), CHI 2025 | Direct precedent for a manipulated AI study and testing security guidance/warnings | Password-storage task and intervention effects are not the present mode comparison |
 | Okamura | Okamura and Yamada, [Adaptive trust calibration for human-AI collaboration](https://doi.org/10.1371/journal.pone.0229132), PLOS ONE 2020 | General human-automation rationale for matching reliance to capability | Not a developer or code-security experiment |
 | Lee | Lee and See, [Trust in Automation: Designing for Appropriate Reliance](https://doi.org/10.1518/hfes.46.1.50_30392), Human Factors 2004 | Conceptual distinction between trust and appropriate reliance | Theory, not a coding-task effect estimate |
+| Brier | Brier, [Verification of Forecasts Expressed in Terms of Probability](https://doi.org/10.1175/1520-0493%281950%29078%3C0001%3AVOFEIT%3E2.0.CO%3B2), 1950 | Basis for scoring 0–100% binary security judgments as probabilities | The score combines calibration and discrimination; it does not validate our questionnaire wording or estimate a stable person-level trait from four items |
 | Tang | Tang et al., [A Study on Developer Behaviors for Validating and Repairing LLM-Generated Code Using Eye Tracking and IDE Actions](https://arxiv.org/abs/2405.16081) (28 participants) | Observable validation and repair behavior in AI-assisted programming | Focused on correctness and prepared code, not these security CWEs |
 | Mozannar | Mozannar et al., [Reading Between the Lines: Modeling User Behavior and Costs in AI-Assisted Programming](https://doi.org/10.1145/3613904.3641936), CHI 2024 | Event/screen replay with retrospective programmer-state coding | Its CUPS labels are not Barke modes |
 | Wu | Wu et al., [How Do Developers Interact with AI? An Exploratory Study on Modeling Developer Programming Behavior](https://arxiv.org/abs/2604.16393) (2026) | Intent/action/tool/emotion coding with screen replay and interviews | Different categories and assistant context; adapt with piloting |
@@ -25,6 +26,7 @@ The links below are primary papers or official technical sources. “Use” mean
 | Antigravity-hooks | Official [Antigravity hooks documentation](https://www.antigravity.google/docs/hooks/) | Potential logging of agent tool events and transcript location | Actual event completeness/version must be pilot-verified |
 | Antigravity-rules | Official [Antigravity rules documentation](https://www.antigravity.google/docs/rules/) | Workspace instruction exposure is plausible | Hidden rule treatment is outside current core RQs |
 | VS-Code | Official [VS Code extension API](https://code.visualstudio.com/api/references/vscode-api) | File, editor, terminal, and extension API possibilities | Does not grant access to every third-party agent prompt/response |
+| pynput | Official [platform limitations](https://pynput.readthedocs.io/en/latest/limitations.html) | Practical limits of optional pointer capture on macOS, Windows and Linux/X11; Wayland XWayland sees only some applications | Technical support is not evidence that pointer speed measures developer mode, trust, or security attention |
 | Basha | Basha et al., [CodeWatcher](https://arxiv.org/abs/2510.11536) (2025) | Example of IDE event capture and limits of AI-origin inference | Its classifier had limited recall; do not use origin prediction as truth |
 
 ## Source-to-decision map
@@ -34,7 +36,8 @@ The links below are primary papers or official technical sources. “Use” mean
 - **Two conditions and observed mode:** Barke gives concepts; Mozannar/Wu support retrospective coding. No paper validates the proposed condition manipulation in this exact setting.
 - **Agent suggestion and review workflow:** Khalid/Oh/Serafini/Perry/Tang support participant code tests, controlled flaws, and review; balanced four-checkpoint exposure in an agent workflow is a methodological adaptation, not a direct replication.
 - **Final security adjudication:** OWASP and CodeQL support multi-method review; the task-specific exploit tests are original research instruments to validate.
-- **IDE and transcript plan:** Antigravity/VS Code official docs and Basha. The actual telemetry claims remain conditional until a pilot.
+- **IDE and transcript plan:** Antigravity/VS Code official docs and Basha. The actual telemetry claims remain conditional until an exact-host pilot.
+- **Probability and optional timing/pointer metrics:** Brier and Mozannar support probability scoring and post-acceptance timing questions; `pynput` only supports collection feasibility. The five-second summary interval, mouse-speed fields and multi-OS package are this study's exploratory engineering decisions, not validated cognitive-mode measures.
 
 ## Original proposal
 

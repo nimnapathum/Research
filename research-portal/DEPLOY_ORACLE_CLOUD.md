@@ -308,9 +308,10 @@ Follow Certbot's prompt for a certificate contact email. The certificate and ren
 1. Sign in at `https://study.example.org/login` as `firstuser@gmail.com` with the temporary password; change it under **Account**.
 2. Open **Research** and confirm the Markdown library loads. If it is empty, check `RESEARCH_DOCS_ROOT` and the copied repository tree.
 3. Create a disposable researcher and participant account. Sign in as each in a private browser window; verify the participant sees only their own portal. Remove or deactivate pilot accounts according to your study procedure.
-4. Check a pre-task questionnaire, an after-task questionnaire, and a small IDE event upload using nonparticipant sample data. Check the upload appears in researcher views.
-5. Reboot the VM once; confirm HTTPS, sign-in, and both services return. Run `sudo systemctl status security-trust-api security-trust-web nginx postgresql`.
-6. Complete the research protocol's separate checkpoint, IDE capture, consent, screen recording, interview, and security-adjudication rehearsals before real data collection. The portal's analytics are descriptive study monitoring, not the final security analysis.
+4. Submit the pre-task questionnaire as the disposable participant. Confirm it opens Task 1's page and shows the assigned sheets. This deployment guide does not yet configure the checkpoint service or its HTTPS origin; with `CHECKPOINT_BRIDGE_ENABLED=0`, the recorded-task ZIP is unavailable and the portal must show an explicit error. Do not invite participants for recorded tasks until you deploy the checkpoint service, set the same restricted `STUDY_DATA_DIR` for it and both portal services, configure a participant-reachable HTTPS `STUDY_PUBLIC_URL`, set `STUDY_MATERIALS_ROOT=/srv/security-trust/Research/study-system`, enable the bridge, and complete the exact-host rehearsal. If the approved procedure uses the 15 MB transcript uploader, its base64 JSON request can approach 21 MB: configure a separate checkpoint-proxy upload limit above 21 MB and verify it, or use the researcher’s approved manual attachment route. The local `restart-local.sh` handles the three-service flow on one computer only.
+5. Check an after-task questionnaire and a small IDE event upload using nonparticipant sample data. Check the upload appears in researcher views.
+6. Reboot the VM once; confirm HTTPS, sign-in, and both services return. Run `sudo systemctl status security-trust-api security-trust-web nginx postgresql`.
+7. Complete the research protocol's separate checkpoint, IDE capture, consent, screen recording, interview, and security-adjudication rehearsals before real data collection. Use the checkpoint app's instrumented package, not the portal's starter ZIP, for recorded coding. The portal's analytics are descriptive study monitoring, not the final security analysis.
 
 Do not upload real participant recordings to this portal; its current upload path handles IDE events and study data, not video/audio files.
 
@@ -350,6 +351,8 @@ Never rerun `admin:create` on an established database. Review form-version chang
 | Login loops on HTTPS | Confirm `COOKIE_SECURE=true`, valid certificate, and HTTPS URL. |
 | Form actions return 403 | Confirm Nginx forwards the original `Host` and `X-Forwarded-Proto`; use one canonical HTTPS domain. |
 | Research page is empty | Check `RESEARCH_DOCS_ROOT=/srv/security-trust/Research` and file permissions. |
+| Task sheets are unavailable | Check `STUDY_MATERIALS_ROOT=/srv/security-trust/Research/study-system` (or the `study-system` directory under `RESEARCH_DOCS_ROOT`) and web-service file permissions. |
+| Recorded-task ZIP is unavailable | Check checkpoint-service health, shared `STUDY_DATA_DIR`, `CHECKPOINT_BRIDGE_ENABLED=1`, and participant-reachable HTTPS `STUDY_PUBLIC_URL`. This hosted setup is not complete in the current guide. |
 | Upload returns 413 | Keep Nginx `client_max_body_size 8m` above the API's 6 MB JSON limit; use smaller event batches when needed. |
 | Build process is killed | Check VM free memory (`free -h`); use a VM with more memory for the build. |
 

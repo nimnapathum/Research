@@ -1,16 +1,18 @@
 # Participant forms, interview, and coding guide
 
-**Status:** draft instruments; pilot for clarity, order effects, and time. Interview questions are **adapted from concepts and methods** in cited studies, not claimed as verbatim validated questionnaire items.
+**Status:** draft instruments; pilot for clarity, order effects, security priming, and time. Interview questions are **adapted from concepts and methods** in cited studies, not claimed as verbatim validated questionnaire items. The current code proposals are constructed prototypes; participant wording about “agent-generated” code must match the final provenance and approved disclosure.
 
 ## 1. Before coding: screening form
 
 Record age eligibility per ethics policy, degree/role, years of paid development, JavaScript/Node familiarity, SQL and filesystem API experience, prior security training, prior use of coding agents, Antigravity familiarity, and frequency of reviewing AI code. Use 5-point anchored familiarity scales plus one practical baseline item per target class (identify the risk in a small query/path snippet). Do not use these items to shame participants or exclude them after assignment. [Danilova et al.](https://arxiv.org/abs/2103.04429) supports screening actual programmer characteristics; [Kaur et al.](https://www.usenix.org/conference/usenixsecurity22/presentation/kaur) supports clear recruitment reporting.
 
+The implemented `forms.json` currently asks direct SQL and path recognition questions before coding. They can teach the precise target risks and change later checking. Decide with the pilot whether to retain, move or soften them before freezing the main protocol; record any change in the approved instrument version.
+
 ## 2. One short form at each checkpoint
 
 Freeze and show the checkpoint's **exact proposed-change snapshot** or its diff. The candidate remains unchanged through the first decision/rating, even if the participant rejects it. Then ask:
 
-1. “Will you provisionally keep or reject this agent change?” (Record the decision before confidence; a later reversal is a new event. The rated snapshot remains the reviewed proposal.)
+1. “Will you provisionally keep or reject this proposed change?” (This is the implemented wording. Record the decision before confidence; a later reversal is a new event. The rated snapshot remains the reviewed proposal.)
 2. “For this exact proposed code, what is the chance, from 0% to 100%, that it meets the stated security requirement for this feature?” (Number in 10% increments or continuous slider; pilot which is understood better.)
 3. “What led to that estimate?” (one sentence, optional but encouraged).
 4. “What, if anything, will you check before final submission?” (optional prospective plan; distinguish plan from observed action).

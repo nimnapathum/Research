@@ -19,6 +19,7 @@ export default async function FormPage({ params, searchParams }: {
   if (form.stage === 'after_task' && !selectedTask) return <Shell user={user}><div className="alert error">Select an assigned task for this form.</div></Shell>;
   return <Shell user={user}><div className="hero"><div><p className="eyebrow">{form.stage.replace('_', ' ')} · version {form.version}</p>
     <h1>{form.title}</h1><p>{selectedTask ? `For ${selectedTask.external_task_id}. ` : ''}Please answer from your own experience. You may skip optional text questions.</p></div></div>
-    <div style={{ maxWidth: 780 }}><QuestionnaireForm form={form} taskId={task} /></div>
+    <div style={{ maxWidth: 780 }}><QuestionnaireForm form={form} taskId={task}
+      nextTaskId={form.stage === 'pre_task' ? dashboard.tasks.find((item) => item.task_order === 1)?.id : undefined} /></div>
   </Shell>;
 }

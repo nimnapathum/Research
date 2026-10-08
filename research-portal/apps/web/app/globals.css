@@ -167,6 +167,8 @@ a:hover { text-decoration: underline; }
   letter-spacing: -.025em;
 }
 .card h3 { margin: 0 0 8px; font-size: 1rem; }
+.task-sheet summary { cursor: pointer; font-weight: 700; }
+.task-sheet[open] summary { margin-bottom: 15px; }
 .card p { color: var(--muted); line-height: 1.6; }
 .card p:first-child { margin-top: 0; }
 .card p:last-child { margin-bottom: 0; }

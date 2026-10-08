@@ -1,0 +1,39 @@
+name: Cross-platform capture package checks
+
+on:
+  push:
+    paths:
+      - 'study-system/**'
+      - 'research-portal/scripts/test-checkpoint-bridge.mjs'
+      - '.github/workflows/cross-platform-capture.yml'
+  pull_request:
+    paths:
+      - 'study-system/**'
+      - 'research-portal/scripts/test-checkpoint-bridge.mjs'
+      - '.github/workflows/cross-platform-capture.yml'
+
+jobs:
+  package-and-telemetry:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recorded ZIP and assignment test
+        working-directory: research-portal
+        run: node scripts/test-checkpoint-bridge.mjs
+      - name: Pointer aggregation self-test (no OS input monitoring)
+        run: python study-system/capture/pointer_recorder.py --self-test
+      - name: Syntax checks
+        run: |
+          node --check study-system/app/server.mjs
+          node --check study-system/app/participant-remote.mjs
+          node --check study-system/capture/participant-client.mjs

@@ -24,7 +24,7 @@
     "proposal_sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "sequence": { "type": "integer", "minimum": 1 },
     "source": {
-      "enum": ["checkpoint-ui", "companion-extension", "antigravity-hook", "transcript-import", "snapshotter", "researcher-video-code", "collector"]
+      "enum": ["checkpoint-ui", "companion-extension", "antigravity-hook", "transcript-import", "snapshotter", "researcher-video-code", "collector", "participant-portal", "participant-client", "pointer-recorder"]
     },
     "actor": { "enum": ["participant", "agent", "system", "researcher", "unknown"] },
     "event_type": {
@@ -32,7 +32,9 @@
         "task_started", "checkpoint_started", "prompt_sent", "response_visible",
         "candidate_exposed", "diff_opened", "file_viewed", "file_saved",
         "test_run", "scanner_run", "provisional_decision", "confidence_recorded",
-        "repair_performed", "final_snapshot_saved", "task_ended", "logging_gap"
+        "repair_performed", "final_snapshot_saved", "task_ended", "logging_gap",
+        "checkpoint_skipped", "participant_client_connected", "task_page_opened",
+        "package_downloaded", "review_conflict", "agent_invocation_started", "agent_invocation_ended", "pointer_summary", "workspace_changed"
       ]
     },
     "evidence_ref": { "type": "string", "minLength": 1 },

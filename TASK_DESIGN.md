@@ -1,10 +1,10 @@
 # Task design and stimulus build plan
 
-**Status:** two runnable task packages and constructed stimulus prototypes built; human pilot pending. Each participant completes both projects, with randomized assignment of condition and order. The project itself is **not** permanently “the acceleration task” or “the exploration task”; this prevents project and condition from being identical.
+**Status:** two runnable task packages and constructed stimulus prototypes built; human pilot pending. Each participant completes both projects. Randomized, balanced assignment requires the checkpoint CLI's seeded allocation to be copied into the portal before recruitment; manual portal entry alone does not establish it. The project itself is **not** permanently “the acceleration task” or “the exploration task”; this prevents project and condition from being identical.
 
 ## 1. Common technology and learning load
 
-The built projects use JavaScript, built-in `node:http` and `node:sqlite`, and local synthetic fixture directories. Node 24.21.0 is the planned study runtime; current engineering checks ran on Node 25.1.0, so the exact runtime still needs rehearsal. There are no npm package dependencies. Give the same quick-start, security requirements, tests, and tools in both projects. They run offline. Pilot on the exact Antigravity/OS setup. The unit of interest is a security decision about agent-generated server code.
+The built projects use JavaScript, built-in `node:http` and `node:sqlite`, and local synthetic fixture directories. Node 24.21.0 was used for the latest synthetic checks; the participant ZIP setup accepts Node 24 or later, so record the exact runtime on each host. There are no npm package dependencies for the task projects. Give the same quick-start, security requirements, tests, and tools in both projects. The code tasks use local synthetic data; the participant client needs the study service. Pilot on each intended Antigravity/OS setup. The current unit of interest is a security decision about a **supplied** server-code proposal; agent-origin claims require documented candidate provenance.
 
 The tasks need functional work a final-year student can understand in a short session and **security sinks** that can be tested. SQL injection arises when untrusted input is spliced into an SQL query rather than bound as a parameter. Path traversal arises when untrusted input can escape an allowed directory before file access. [MITRE's 2024 ranking](https://cwe.mitre.org/top25/archive/2024/2024_top25_list.html) motivates the classes; [CodeQL SQL](https://codeql.github.com/codeql-query-help/javascript/js-sql-injection/) and [path query](https://codeql.github.com/codeql-query-help/javascript/js-path-injection/) help formulate source/sink criteria.
 
@@ -27,14 +27,14 @@ To reduce confounding, both conditions receive the same task sheets, project fil
 
 ## 4. Candidate matrix within **each** project
 
-| Checkpoint | Class | Agent candidate status | Participant's visible functional goal |
+| Checkpoint | Class | Controlled candidate status | Participant's visible functional goal |
 | --- | --- | --- | --- |
 | Q1/Q2 | SQL injection | One vulnerable, one secure, with slot reversed across projects | Add two user-controlled query/filter features. |
 | F1/F2 | Path traversal | One vulnerable, one secure, with slot reversed across projects | Add two file preview/download features. |
 
 Balance the four checkpoint positions by Latin-square-like rotation across participants so Q1/F1 are not always first. A secure and vulnerable variant must have comparable endpoint complexity and functional passing behavior. If a candidate accidentally contains another security flaw, repair or exclude it during stimulus build; do not silently label it secure.
 
-**Minimum exposure per participant:** 2 vulnerable and 2 secure candidates per task; 4 vulnerable and 4 secure across two tasks. This is an experimental design target, not a naturally occurring LLM error rate. A live agent may produce extra candidates or edits; retain the full trace and classify them as additional/exploratory.
+**Minimum planned exposure per participant:** 2 vulnerable and 2 secure candidates per task; 4 vulnerable and 4 secure across two tasks. Actual exposure must be checked with the event log and video. This is an experimental design target, not a naturally occurring LLM error rate. A live agent may produce extra candidates or edits; retain the full trace and classify them as additional/exploratory.
 
 ## 5. Provenance and stimulus generation
 
@@ -65,7 +65,7 @@ Use both structural review and behavior tests. A merely rejecting endpoint may b
 
 1. Independently review the 16 constructed patches and decide whether the final study uses genuine target-agent candidates or explicitly labeled constructed stimuli.
 2. Pilot task timing, perceived difficulty, condition separation, and candidate salience on the exact host.
-3. Verify the controlled reveal, agent transcript, extension, video and final snapshot on that host.
+3. Verify the controlled reveal, Antigravity hook, official agent transcript, video and final snapshot on each intended host. The VS Code-compatible extension is optional source code, not the desktop Antigravity capture path.
 4. Freeze the adjudication rubric, task sheets and candidate set before the main sample.
 
 This `tasks/` directory contains design specifications. The runnable [Project A](study-system/projects/resource-catalogue/README.md) and [Project B](study-system/projects/support-archive/README.md) starters, participant sheets and constructed candidates are under `study-system/`. See its [status](study-system/STATUS.md) for the remaining validation.

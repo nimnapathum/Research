@@ -4,6 +4,7 @@ import type { ParticipantDashboard, ResearcherOverview, StudyUser } from '@/lib/
 import { Shell } from '@/components/Shell';
 import { BarChart } from '@/components/BarChart';
 import { TaskCards } from '@/components/TaskCards';
+import { taskAccess } from '@/lib/task-access';
 
 export default async function DashboardPage() {
   const user = await serverApi<StudyUser>('auth/me');
@@ -32,19 +33,24 @@ export default async function DashboardPage() {
   }
   const data = await serverApi<ParticipantDashboard>('participant/dashboard');
   const uniqueForms = [...new Map(data.questionnaires.map((form) => [form.id, form])).values()];
+  const access = Object.fromEntries(data.tasks.map((task) => [task.id, taskAccess(data, task)]));
   return <Shell user={user}><div className="hero"><div><p className="eyebrow">Participant {user.participant_code}</p>
-    <h1>Continue your study session</h1><p>Your task cards, questionnaires, and event uploads are collected here. Follow the researcher’s checkpoint instructions while coding.</p></div></div>
-    <h2 className="section-title">Your two tasks</h2><TaskCards tasks={data.tasks} />
+    <h1>Continue your study session</h1><p>Complete the pre-task form, then open Task 1 for its sheets, recorded-task ZIP, and Antigravity capture setup.</p></div></div>
+    <h2 className="section-title">Your two tasks</h2><TaskCards tasks={data.tasks} access={access} />
     <h2 className="section-title">Questionnaires</h2><div className="grid two">{uniqueForms.map((form) => {
       const taskForms = form.stage === 'after_task';
       const taskLinks = taskForms ? data.tasks.map((task) => ({ task, done: data.questionnaires.some((row) =>
         row.id === form.id && row.response_task_id === task.id) })) : [];
       const done = !taskForms && data.questionnaires.some((row) => row.id === form.id && row.response_id);
+      const afterBothReady = form.stage !== 'after_both' || data.tasks.every((task) => task.status === 'submitted' &&
+        data.questionnaires.some((row) => row.stage === 'after_task' && row.response_task_id === task.id));
       return <section className="card" key={form.id}><div className="row"><h2>{form.title}</h2><span className={`pill ${done ? 'good' : 'gray'}`}>{done ? 'submitted' : form.stage.replace('_', ' ')}</span></div>
         {taskForms ? <div className="stack">{taskLinks.map(({ task, done: submitted }) => <div className="row" key={task.id}>
           <span className="small">Task {task.task_order} · {task.external_task_id}</span>{submitted ? <span className="pill good">Submitted</span>
-            : <Link className="button secondary" href={`/forms/${form.id}?task=${task.id}`}>Open form</Link>}</div>)}</div>
-          : done ? <p className="small">Your response is saved.</p> : <Link className="button secondary" href={`/forms/${form.id}`}>Open form</Link>}
+            : task.status === 'submitted' ? <Link className="button secondary" href={`/forms/${form.id}?task=${task.id}`}>Open form</Link>
+            : <span className="small muted">Available after recorded final code</span>}</div>)}</div>
+          : done ? <p className="small">Your response is saved.</p> : afterBothReady ? <Link className="button secondary" href={`/forms/${form.id}`}>Open form</Link>
+          : <p className="small muted">Available after both tasks and after-task forms.</p>}
       </section>})}</div>
     <h2 className="section-title">Evidence uploads</h2><div className="card"><p>You can import an IDE event export for your assigned tasks. Research staff will review the capture quality.</p>
       <Link className="button secondary" href="/participant/upload">Upload event file</Link>

@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openStore } from '../app/lib.mjs';
+import { measurementAudit } from '../app/measurement-audit.mjs';
 import { readCsv, writeCsv } from './csv.mjs';
 
 const reviewOutput = resolve(process.argv[2] || 'blinded-review-output');
@@ -87,6 +88,8 @@ const opportunities = records.map((review) => {
     proposal_sha256: review.proposal_sha256, eligible_exposure: Boolean(review.exposed_at),
     skip_reason: skip?.reason_code || '',
     provisional_decision: review.decision || '', security_probability_pct: review.confidence,
+    exposure_to_first_decision_ms: review.exposed_at && review.decision_at
+      ? Date.parse(review.decision_at) - Date.parse(review.exposed_at) : null,
     proposal_security: proposal.target_status || 'unadjudicated',
     proposal_functionality: proposal.functionality || 'unadjudicated',
     final_security: final.target_status || (review.final_sha256 ? 'unadjudicated' : 'no_final_snapshot'),
@@ -110,7 +113,8 @@ const opportunityHeader = [
   'participant_id', 'task_id', 'task_order', 'project_id', 'condition', 'checkpoint_id', 'class',
   'review_id', 'candidate_id', 'expected_candidate_status', 'proposal_sha256', 'eligible_exposure',
   'skip_reason',
-  'provisional_decision', 'security_probability_pct', 'proposal_security', 'proposal_functionality',
+  'provisional_decision', 'security_probability_pct', 'exposure_to_first_decision_ms',
+  'proposal_security', 'proposal_functionality',
   'final_security', 'final_functionality', 'brier', 'observed_mode', 'verification_coded',
   'checks_before', 'checks_after_keep', 'checks_after_reject', 'post_decision_path',
   'target_detected', 'security_repair', 'exposed_vulnerable',
@@ -145,6 +149,41 @@ writeCsv(join(output, 'task_summary.csv'), Object.keys(taskSummary[0] || {
   scored_count: '', complete_rq1: '', mean_brier: '', exposed_vulnerable_count: '',
   security_success_count: '', security_success_rate: '', final_snapshot_available: ''
 }), taskSummary);
+
+const audit = measurementAudit(store);
+const captureCoverage = audit.tasks.map((item) => ({
+  participant_id: item.participant_id, task_id: item.task_id, condition: item.condition,
+  agent_hook_events: item.source_counts['antigravity-hook'] || 0,
+  pointer_windows: item.event_counts.pointer_summary || 0,
+  pointer_covered_ms: item.pointer_covered_ms,
+  video_attached: item.evidence.some((evidence) => evidence.kind === 'video' && evidence.file_present),
+  transcript_attached: item.evidence.some((evidence) => evidence.kind === 'agent-transcript' && evidence.file_present),
+  core_warnings: item.warnings.join(';'), optional_notes: item.optional_notes.join(';')
+}));
+writeCsv(join(output, 'capture_coverage.csv'), [
+  'participant_id', 'task_id', 'condition', 'agent_hook_events', 'pointer_windows',
+  'pointer_covered_ms', 'video_attached', 'transcript_attached', 'core_warnings', 'optional_notes'
+], captureCoverage);
+const pointerWindows = store.db.prepare('SELECT e.task_id,t.participant_id,t.condition,e.event_json FROM events e JOIN tasks t ON e.task_id = t.task_id ORDER BY t.participant_id,t.task_order,e.sequence')
+  .all().flatMap((row) => {
+    const event = JSON.parse(row.event_json);
+    if (event.event_type !== 'pointer_summary' || event.source !== 'pointer-recorder') return [];
+    const data = event.data || {};
+    const seconds = data.elapsed_ms / 1000;
+    return [{
+      participant_id: row.participant_id, task_id: row.task_id, condition: row.condition,
+      window_started_utc: data.window_started_utc, elapsed_ms: data.elapsed_ms,
+      move_events: data.move_events, move_events_per_s: seconds > 0 ? data.move_events / seconds : null,
+      distance_px: data.distance_px, distance_px_per_s: seconds > 0 ? data.distance_px / seconds : null,
+      median_speed_px_s: data.median_speed_px_s, p90_speed_px_s: data.p90_speed_px_s,
+      clicks: data.clicks, scrolls: data.scrolls, platform: data.platform
+    }];
+  });
+writeCsv(join(output, 'pointer_windows_exploratory.csv'), [
+  'participant_id', 'task_id', 'condition', 'window_started_utc', 'elapsed_ms',
+  'move_events', 'move_events_per_s', 'distance_px', 'distance_px_per_s',
+  'median_speed_px_s', 'p90_speed_px_s', 'clicks', 'scrolls', 'platform'
+], pointerWindows);
 
 const formRows = store.db.prepare('SELECT * FROM forms ORDER BY created_at').all().map((row) => ({
   form_id: row.form_id, participant_id: row.participant_id, task_id: row.task_id,

@@ -4,6 +4,8 @@ import { basename, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createSession, hashTree, logEvent, openStore, taskFor } from './lib.mjs';
+import { ingestTelemetryRows } from './telemetry-ingest.mjs';
+import { measurementAudit } from './measurement-audit.mjs';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const root = resolve(here, '..');
@@ -43,7 +45,8 @@ if (command === 'create') {
   const [participantId] = args;
   const result = createSession(store, participantId);
   console.log(JSON.stringify(result, null, 2));
-  console.log(`Participant form URL: http://127.0.0.1:4175/form/pre?token=${result.token}`);
+  const publicUrl = (process.env.STUDY_PUBLIC_URL || `http://127.0.0.1:${process.env.STUDY_PORT || 4175}`).replace(/\/+$/, '');
+  console.log(`Participant session URL: ${publicUrl}/session?token=${result.token}`);
 } else if (command === 'configure-capture') {
   const [taskId, workspaceText] = args;
   if (!workspaceText) fail('Usage: configure-capture TASK_ID WORKSPACE');
@@ -59,8 +62,10 @@ if (command === 'create') {
   }, null, 2) + '\n', { mode: 0o600 });
   const hooks = {
     'study-observer': {
+      PreInvocation: [{ type: 'command', command: `${shellQuote(process.execPath)} ${shellQuote(hookPath)} pre`, timeout: 8 }],
+      PostInvocation: [{ type: 'command', command: `${shellQuote(process.execPath)} ${shellQuote(hookPath)} post`, timeout: 8 }],
       PostToolUse: [{ matcher: 'run_command|write_to_file|replace_file_content|multi_replace_file_content|view_file',
-        hooks: [{ type: 'command', command: `${shellQuote(process.execPath)} ${shellQuote(hookPath)}`, timeout: 8 }] }]
+        hooks: [{ type: 'command', command: `${shellQuote(process.execPath)} ${shellQuote(hookPath)} tool`, timeout: 8 }] }]
     }
   };
   writeFileSync(join(workspace, '.agents/hooks.json'), JSON.stringify(hooks, null, 2) + '\n');
@@ -146,6 +151,36 @@ if (command === 'create') {
       exposed: Boolean(review?.exposed_at), workspace_sha256: hash }
   });
   console.log(`Skipped ${checkpoint}. Exposure and decision remain exactly as recorded. Workspace hash: ${hash}`);
+} else if (command === 'skip-remote') {
+  const [taskId, checkpoint, reasonCode, ...notesParts] = args;
+  const allowedReasons = ['early_edit', 'patch_failure', 'capture_failure', 'participant_declined', 'time_limit', 'other'];
+  if (!['Q1', 'Q2', 'F1', 'F2'].includes(checkpoint) || !allowedReasons.includes(reasonCode)) {
+    fail('Usage: skip-remote TASK_ID Q1|Q2|F1|F2 early_edit|patch_failure|capture_failure|participant_declined|time_limit|other NOTES');
+  }
+  const task = taskFor(store, taskId);
+  if (!task || task.final_sha256) fail('Unknown or finalized task');
+  const notes = notesParts.join(' ').trim();
+  if (!notes) fail('Add a factual note explaining the remote skip');
+  const { next, reviews } = checkpointProgress(taskId, task);
+  if (checkpoint !== next) fail(`Next assigned checkpoint is ${next || 'none'}`);
+  const review = reviews.find((row) => row.checkpoint_id === checkpoint);
+  if (review?.decision_at) fail('Checkpoint already has a decision');
+  const job = store.db.prepare("SELECT * FROM client_jobs WHERE task_id = ? AND checkpoint_id = ? AND kind = 'review'")
+    .get(taskId, checkpoint);
+  if (!job) fail('Remote checkpoint has not been requested');
+  const last = store.db.prepare('SELECT workspace_sha256, last_seen_at FROM client_status WHERE task_id = ?').get(taskId);
+  const hash = last?.workspace_sha256 || review?.baseline_sha256 || 'unavailable';
+  store.db.prepare('INSERT INTO skips VALUES (?, ?, ?, ?, ?, ?)').run(taskId, checkpoint, reasonCode, notes, hash, new Date().toISOString());
+  store.db.prepare('UPDATE client_jobs SET status = ?, pending_decision_json = NULL, updated_at = ? WHERE job_id = ?')
+    .run('skipped', new Date().toISOString(), job.job_id);
+  logEvent(store, taskId, 'checkpoint_skipped', {
+    checkpoint_id: checkpoint, candidate_id: review?.candidate_id,
+    proposal_sha256: review?.proposal_sha256,
+    data: { reason_code: reasonCode, notes, review_id: review?.review_id || null,
+      exposed: Boolean(review?.exposed_at), workspace_sha256: hash,
+      hash_last_seen_at: last?.last_seen_at || null, delivery: 'participant-client' }
+  });
+  console.log(`Remote checkpoint skipped. Last reported workspace hash: ${hash}`);
 } else if (command === 'finalize') {
   const [taskId, workspaceText] = args;
   if (!workspaceText) fail('Usage: finalize TASK_ID WORKSPACE');
@@ -194,22 +229,13 @@ if (command === 'create') {
   if (!workspaceText) fail('Usage: ingest-fallback TASK_ID WORKSPACE');
   const { workspace } = taskAndWorkspace(taskId, workspaceText);
   let imported = 0;
-  for (const name of ['hook-fallback.jsonl', 'extension-fallback.jsonl']) {
+  for (const name of ['hook-fallback.jsonl', 'extension-fallback.jsonl', 'pointer-summary.jsonl']) {
     const path = join(workspace, '.study-capture', name);
     if (!existsSync(path)) continue;
     const lines = readFileSync(path, 'utf8').split('\n').filter(Boolean);
-    for (const line of lines) {
-      const sourceSha = createHash('sha256').update(taskId).update(name).update(line).digest('hex');
-      if (store.db.prepare('SELECT 1 FROM ingests WHERE source_sha256 = ?').get(sourceSha)) continue;
-      const row = JSON.parse(line);
-      if (row.task_id !== taskId || !['antigravity-hook', 'companion-extension'].includes(row.source)) fail('Fallback row task/source mismatch');
-      const event = logEvent(store, taskId, row.event_type, {
-        source: row.source, actor: row.actor || 'unknown',
-        data: { ...(row.data || {}), capture_timestamp_utc: row.timestamp_utc, imported_from_fallback: true },
-        evidence_ref: `.study-capture/${name}`
-      });
-      store.db.prepare('INSERT INTO ingests VALUES (?, ?, ?)').run(sourceSha, taskId, event.event_id);
-      imported++;
+    const rows = lines.map((line) => ({ name, record: JSON.parse(line) }));
+    for (let index = 0; index < rows.length; index += 50) {
+      imported += ingestTelemetryRows(store, taskId, rows.slice(index, index + 50)).imported;
     }
   }
   console.log(`Imported ${imported} new fallback events for ${taskId}`);
@@ -219,6 +245,8 @@ if (command === 'create') {
   const raw = existsSync(rawPath) ? readFileSync(rawPath, 'utf8').split('\n').filter(Boolean).length : 0;
   const reviews = store.db.prepare('SELECT task_id, checkpoint_id, exposed_at, decision_at, proposal_sha256 FROM reviews').all();
   const skips = store.db.prepare('SELECT * FROM skips ORDER BY task_id, created_at').all();
+  const remoteJobs = store.db.prepare('SELECT task_id, checkpoint_id, kind, status, updated_at FROM client_jobs ORDER BY task_id, rowid').all();
+  const clients = store.db.prepare('SELECT task_id, last_seen_at, workspace_sha256 FROM client_status ORDER BY task_id').all();
   const incomplete = reviews.filter((row) => (!row.exposed_at || !row.decision_at) &&
     !skips.some((skip) => skip.task_id === row.task_id && skip.checkpoint_id === row.checkpoint_id));
   const taskRows = store.db.prepare('SELECT task_id, final_sha256 FROM tasks').all();
@@ -245,11 +273,19 @@ if (command === 'create') {
   });
   console.log(JSON.stringify({ indexed_events: events, raw_events: raw, event_stream_match: events === raw,
     tasks: taskRows.length, reviews: reviews.length, skips: skips.length,
+    remote_jobs: remoteJobs, participant_clients: clients,
     skipped_checkpoints: skips, incomplete_reviews: incomplete,
     missing_session_forms: missingSessionForms, missing_by_task: missingByTask }, null, 2));
   if (events !== raw || incomplete.length || missingByTask.some((row) => row.missing_checkpoints.length)) process.exitCode = 1;
+} else if (command === 'audit-measurements') {
+  const [outputPath] = args;
+  const report = measurementAudit(store);
+  if (outputPath) {
+    writeFileSync(resolve(outputPath), JSON.stringify(report, null, 2) + '\n', { mode: 0o600 });
+    console.log(`Measurement audit written to ${resolve(outputPath)}`);
+  } else console.log(JSON.stringify(report, null, 2));
 } else {
-  console.log('Commands: create P001 | configure-capture TASK_ID WORKSPACE | prepare TASK_ID CHECKPOINT WORKSPACE | skip TASK_ID CHECKPOINT WORKSPACE REASON NOTES | finalize TASK_ID WORKSPACE | attach TASK_ID KIND FILE [NOTES] | ingest-fallback TASK_ID WORKSPACE | audit');
+  console.log('Commands: create P001 | configure-capture TASK_ID WORKSPACE | prepare TASK_ID CHECKPOINT WORKSPACE | skip TASK_ID CHECKPOINT REASON NOTES | skip-remote TASK_ID CHECKPOINT REASON NOTES | finalize TASK_ID WORKSPACE | attach TASK_ID KIND FILE [NOTES] | ingest-fallback TASK_ID WORKSPACE | audit | audit-measurements [OUTPUT_JSON]');
   if (command) process.exitCode = 1;
 }
 

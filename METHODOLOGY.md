@@ -1,17 +1,17 @@
 # Methodology: participant study protocol
 
-**Status:** proposed protocol for piloting. Read with [RQ.md](RQ.md), [TASK_DESIGN.md](TASK_DESIGN.md), and [MEASURES_AND_EVALUATION.md](MEASURES_AND_EVALUATION.md). This is a research plan, not a claim that the tasks, extension, or manipulation are already validated.
+**Status:** proposed protocol for piloting, updated to the current portal/client build. Read with [RQ.md](RQ.md), [TASK_DESIGN.md](TASK_DESIGN.md), [MEASURES_AND_EVALUATION.md](MEASURES_AND_EVALUATION.md), and [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md). Software dry runs have passed; the participant procedure and manipulation have not been validated with people.
 
 ## 1. Design in one sentence
 
-Run a **within-participant, randomized, counterbalanced** study in which each early-career participant completes two JavaScript coding tasks with an agent: one under acceleration encouragement and one under exploration encouragement. At several short feature checkpoints, participants see controlled agent-produced secure or vulnerable changes, judge exact code snapshots, decide what to keep, verify/revise, and submit final code.
+Run a **within-participant study with preassigned, balanced order** in which each early-career participant completes two JavaScript coding tasks with an agent: one under acceleration encouragement and one under exploration encouragement. At four feature checkpoints in each task, participants see controlled supplied secure or vulnerable changes, judge exact code snapshots, decide what to keep, verify/revise, and submit final code. The present changes are constructed prototypes; calling them agent-generated requires the provenance step described below.
 
 The assigned condition is the primary comparison. The observed interaction mode is independently coded from participant intention, video, prompts, and actions. Analysis of observed mode is associative because people may move between modes.
 
 ## 2. Causal and observational structure
 
 ~~~text
-randomized order + condition + project + candidate sequence
+preassigned order + condition + project + candidate sequence
     -> agent interaction and actual candidate exposure
     -> provisional keep/reject + snapshot security confidence
     -> verification and repair
@@ -21,7 +21,7 @@ experience, prior agent use, SQL/path knowledge, task familiarity
     -> behavior, confidence, and security outcome
 ~~~
 
-The condition can be compared as randomized encouragement if the manipulation is assigned independently of participant skill and project. **Do not describe this as the pure effect of an internal cognitive state.** Both task context and agent behavior can influence mode and outcomes. Mode coding tests whether the encouragement produced distinguishable episodes and provides explanatory context.
+The condition can be compared as randomized encouragement **only if** a random, balanced allocation schedule is fixed before recruitment and followed at account creation. The portal currently accepts researcher-entered assignments and does not randomize them. **Do not describe the contrast as the pure effect of an internal cognitive state.** Both task context and agent behavior can influence mode and outcomes. Mode coding tests whether the encouragement produced distinguishable episodes and provides explanatory context.
 
 ## 3. Participants and scope
 
@@ -43,6 +43,8 @@ Each participant completes **Project A and Project B**, one under each condition
 | 2 | A + exploration | B + acceleration |
 | 3 | B + acceleration | A + exploration |
 | 4 | B + exploration | A + acceleration |
+
+Generate and retain a private allocation record before recruitment. The recommended current route is to run `node study-system/app/cli.mjs create P014` **before** making that person's password-portal account, then copy its exact project, condition and checkpoint orders into the portal. The checkpoint service uses a seeded balanced schedule for the sequence, candidate-status profile and checkpoint order; the portal checks the shape of entered tasks and rejects a later mismatch with an existing checkpoint session, but **does not itself generate or enforce balance**. Audit the realized project/order/status table before interpreting condition effects. If manual allocation was not randomized, report the comparison as an assigned-condition association rather than a randomized effect.
 
 Each project has the same workload shape: four small feature checkpoints, two SQL-related and two path-related. Each class has one known vulnerable and one known secure eligible candidate per condition. Randomize/counterbalance checkpoint order with constraints that avoid a predictable vulnerability sequence. Use different names/data in A and B and pre-test for comparable time and difficulty. [Barke et al.](https://arxiv.org/abs/2206.15000) grounds the two intent descriptions; the *task manipulation* is this study's own instrument and needs a manipulation check.
 
@@ -78,14 +80,18 @@ At each checkpoint: (1) display a functional request plus explicit security crit
 
 ## 7. Data streams
 
-1. Agent and IDE records: prompts/responses where available, tool calls, candidate IDs/diffs, file edits, tests/terminal actions, provisional decisions, snapshot hashes, timestamps.
+1. Agent and IDE records: the current Antigravity workspace hook records model invocation and selected tool metadata; the local client sends workspace hashes and frozen baseline/proposal/final states. Full prompts/replies require a readable official transcript and screen recording. The VS Code-compatible extension source is **not** an installed standalone Antigravity extension.
 2. Screen recording with participant consent, for context missed by hooks and verification coding. Store no personal account notifications.
 3. Short checkpoint confidence and reason forms.
-4. Final Git/repository snapshots per task.
+4. Final repository snapshots per task, with task/checkpoint order, candidate ID and hashes retained in the checkpoint database.
 5. Retrospective interview audio/transcript with selected video clips and participant mode explanations.
 6. Researcher oracle results and two blinded human security reviews.
 
 See [IDE_TELEMETRY.md](IDE_TELEMETRY.md) for feasible versus pilot-dependent captures and [INTERVIEW_AND_FORMS.md](INTERVIEW_AND_FORMS.md) for scripts.
+
+**Participant delivery:** The researcher creates a private portal account and two assignments. The participant completes the pre-task form, downloads the task-specific ZIP, opens only that extracted workspace in Antigravity, runs `node study/setup.mjs` and `node study/client.mjs`, then follows the web task sheet and checkpoint page. Task 2 unlocks after Task 1 final code and after-task form. The client applies the controlled proposal after reveal and uploads the final snapshot. The researcher separately attaches approved screen video; the participant can explicitly upload the official transcript file. This route requires Node 24+, Git and an approved HTTPS service when participant machines are remote. See the [portal runbook](study-system/pilot/PARTICIPANT_PORTAL_RUNBOOK.md) and [OS guide](study-system/pilot/CROSS_PLATFORM_CAPTURE.md).
+
+**Optional pilot telemetry:** The ZIP includes a Python pointer recorder for macOS, Windows and Linux/X11. It stores five-second aggregate motion summaries while explicitly running; it observes pointer activity across applications. Linux Wayland is unsupported by this recorder. Pointer data are exploratory context only, can be absent without invalidating RQ1–RQ4, and must be covered by approved participant information before collection. The [measurement inventory](study-system/pilot/MEASUREMENT_INVENTORY.md) distinguishes built, manual and unverified streams.
 
 ## 8. Bias controls and quality gates
 
