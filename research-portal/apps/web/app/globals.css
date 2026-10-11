@@ -363,6 +363,38 @@ tbody tr:last-child td { border-bottom: 0; }
 .task-card select { max-width: 190px; }
 .form-builder-item { margin: 12px 0; padding: 15px; border: 1px solid var(--line); border-radius: 8px; }
 
+.creation-card { border-top: 3px solid var(--accent); }
+.creation-intro { display: flex; align-items: start; justify-content: space-between; gap: 22px; }
+.creation-intro h2 { margin-bottom: 6px; font-size: 1.25rem; }
+.creation-intro p { max-width: 650px; margin: 0; }
+.creation-badge { flex: 0 0 auto; padding: 10px 14px; border-radius: 9px; background: var(--accent-soft);
+  color: var(--accent); font-size: 1.1rem; font-weight: 750; line-height: 1.2; text-align: center; }
+.creation-badge small { font-size: .69rem; font-weight: 620; }
+.creation-form { display: flex; align-items: end; gap: 14px; flex-wrap: wrap; margin-top: 22px; }
+.creation-form .form-field { flex: 1 1 260px; margin: 0; font-size: .86rem; font-weight: 650; }
+.creation-form input { display: block; width: 100%; min-height: 43px; margin-top: 7px; padding: 10px 12px;
+  border: 1px solid #b8c5d0; border-radius: 8px; }
+.credential-panel { display: grid; gap: 16px; margin-top: 20px; padding: 20px; border: 1px solid #a7c7b4;
+  border-radius: 10px; background: #f3faf5; }
+.credential-panel h3 { margin: 0 0 4px; }
+.credential-panel p { margin: 0; }
+.credential-grid, .assignment-preview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.credential-grid > div, .assignment-preview > div { display: grid; gap: 4px; min-width: 0; padding: 13px;
+  border: 1px solid #d1e3d7; border-radius: 8px; background: #fff; }
+.credential-grid span, .assignment-preview small { color: var(--muted); font-size: .77rem; }
+.credential-grid strong { width: fit-content; font-size: .97rem; user-select: all; }
+.assignment-preview span { font-size: .85rem; text-transform: capitalize; }
+.workflow-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.workflow-strip > div { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 11px 14px;
+  border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--muted); font-size: .82rem; }
+.workflow-strip strong { display: grid; flex: 0 0 25px; place-items: center; width: 25px; height: 25px;
+  border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: .8rem; }
+.allocation-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.allocation-grid > div { display: flex; flex-direction: column; gap: 4px; padding: 13px;
+  border: 1px solid var(--line); border-radius: 8px; background: #fbfcfd; }
+.allocation-grid strong { color: var(--accent); font-size: 1.35rem; line-height: 1; }
+.allocation-grid span { color: var(--muted); font-size: .78rem; }
+
 .research-summary { margin-bottom: 18px; }
 .research-summary p { margin: 8px 0; }
 .research-summary ol { padding-left: 22px; line-height: 1.55; }
@@ -430,6 +462,9 @@ tbody tr:last-child td { border-bottom: 0; }
   .grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 650px) {
+  .workflow-strip, .allocation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .creation-intro { flex-direction: column; }
+  .credential-grid, .assignment-preview { grid-template-columns: 1fr; }
   .topbar-inner { padding: 13px 16px 0; }
   .nav { margin-top: 8px; }
   .nav a, .nav button { min-height: 41px; padding: 7px 11px; }

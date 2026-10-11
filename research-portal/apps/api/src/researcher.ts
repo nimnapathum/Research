@@ -1,13 +1,14 @@
 import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException,
   Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomInt } from 'node:crypto';
 import { DbService } from './db.service';
 import { hashPassword, researcherOnly, SessionGuard, type StudyRequest } from './auth';
 import { validateSchema } from './forms';
 import { ImportService, type UploadInput } from './imports';
+import { callCheckpointBridge } from './checkpoint-bridge';
 
-type TaskInput = { projectId: 'A' | 'B'; condition: 'acceleration' | 'exploration';
-  taskOrder: 1 | 2; externalTaskId: string; checkpointOrder?: string[] };
+type ReservedTask = { task_id: string; project_id: 'A' | 'B'; condition: 'acceleration' | 'exploration';
+  task_order: 1 | 2; checkpoint_order: string[] };
 
 @UseGuards(SessionGuard)
 @Controller('researcher')
@@ -18,35 +19,35 @@ export class ResearcherController {
   @Get('accounts')
   async accounts(@Req() request: StudyRequest) {
     this.require(request);
-    const result = await this.db.query(`SELECT id,email,display_name,created_at,disabled_at
+    const result = await this.db.query(`SELECT id,username,display_name,created_at,disabled_at
       FROM users WHERE role='researcher' ORDER BY created_at`);
     return result.rows;
   }
 
   @Post('accounts')
   async createResearcher(@Req() request: StudyRequest,
-    @Body() body: { email?: string; displayName?: string }) {
+    @Body() body: { username?: string; displayName?: string }) {
     this.require(request);
-    const email = String(body?.email || '').trim().toLowerCase();
+    const username = String(body?.username || '').trim().toLowerCase();
     const displayName = String(body?.displayName || '').trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 ||
-      displayName.length > 120) throw new BadRequestException('Provide a valid email and a name of at most 120 characters');
+    if (!/^[a-z][a-z0-9_-]{2,39}$/.test(username) ||
+      displayName.length > 120) throw new BadRequestException('Use a 3–40 character username starting with a letter');
     const password = randomBytes(18).toString('base64url');
     const hash = await hashPassword(password);
     try {
       const account = await this.db.transaction(async (client) => {
-        const inserted = await client.query<{ id: string; email: string; display_name: string | null }>(
-          `INSERT INTO users(email,password_hash,role,display_name)
-           VALUES($1,$2,'researcher',$3) RETURNING id,email,display_name`,
-          [email, hash, displayName || null]);
+        const inserted = await client.query<{ id: string; username: string; display_name: string | null }>(
+          `INSERT INTO users(username,password_hash,role,display_name)
+           VALUES($1,$2,'researcher',$3) RETURNING id,username,display_name`,
+          [username, hash, displayName || null]);
         await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id,details)
           VALUES($1,'create_researcher','user',$2,$3::jsonb)`,
-          [request.studyUser.id, inserted.rows[0].id, JSON.stringify({ email })]);
+          [request.studyUser.id, inserted.rows[0].id, JSON.stringify({ username })]);
         return inserted.rows[0];
       });
       return { ...account, temporary_password: password };
     } catch (error) {
-      if ((error as { code?: string }).code === '23505') throw new ConflictException('An account with this email already exists');
+      if ((error as { code?: string }).code === '23505') throw new ConflictException('This username already exists');
       throw error;
     }
   }
@@ -74,7 +75,7 @@ export class ResearcherController {
   @Get('participants')
   async participants(@Req() request: StudyRequest) {
     this.require(request);
-    const users = await this.db.query(`SELECT u.id,u.email,u.participant_code,u.display_name,u.created_at,
+    const users = await this.db.query(`SELECT u.id,u.username,u.participant_code,u.display_name,u.created_at,
       count(t.id)::int AS task_count,count(t.id) FILTER (WHERE t.status='submitted')::int AS submitted_tasks
       FROM users u LEFT JOIN study_tasks t ON t.participant_id=u.id
       WHERE u.role='participant' GROUP BY u.id ORDER BY u.created_at DESC`);
@@ -85,49 +86,67 @@ export class ResearcherController {
 
   @Post('participants')
   async createParticipant(@Req() request: StudyRequest,
-    @Body() body: { email?: string; participantCode?: string; displayName?: string; tasks?: TaskInput[] }) {
+    @Body() body: { displayName?: string }) {
     this.require(request);
-    const email = String(body?.email || '').trim().toLowerCase();
-    const code = String(body?.participantCode || '').trim().toUpperCase();
-    const tasks = body?.tasks;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !/^P\d{3,}$/.test(code) ||
-      !Array.isArray(tasks) || tasks.length !== 2 ||
-      new Set(tasks.map((task) => task.taskOrder)).size !== 2 ||
-      new Set(tasks.map((task) => task.projectId)).size !== 2 ||
-      new Set(tasks.map((task) => task.condition)).size !== 2) {
-      throw new BadRequestException('Provide a participant email/code and one task for each project, condition, and order');
+    if (process.env.CHECKPOINT_BRIDGE_ENABLED !== '1') {
+      throw new BadRequestException('Start the checkpoint service before creating participants');
     }
-    for (const task of tasks) {
-      if (!['A','B'].includes(task.projectId) || !['acceleration','exploration'].includes(task.condition) ||
-        ![1,2].includes(task.taskOrder) || task.externalTaskId !== `${code}-T${task.taskOrder}` ||
-        !Array.isArray(task.checkpointOrder) || task.checkpointOrder.length !== 4 ||
-        new Set(task.checkpointOrder).size !== 4 ||
-        task.checkpointOrder.some((item) => !['Q1','Q2','F1','F2'].includes(item))) {
-        throw new BadRequestException('Task assignment must exactly match the existing study-system assignment');
-      }
-    }
+    const displayName = String(body?.displayName || '').trim();
+    if (displayName.length > 120) throw new BadRequestException('Name must be at most 120 characters');
     const password = randomBytes(18).toString('base64url');
     const hash = await hashPassword(password);
+    let code = '';
+    let reserved = false;
     try {
       const result = await this.db.transaction(async (client) => {
-        const user = await client.query<{ id: string }>(`INSERT INTO users(email,password_hash,role,participant_code,display_name)
+        // Serialize portal reservations so the checkpoint allocator's block order
+        // and portal accounts stay in the same order under concurrent requests.
+        await client.query('SELECT pg_advisory_xact_lock(827451, 1)');
+        let reservation: Record<string, unknown> | null = null;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          code = `P${randomInt(10_000_000, 100_000_000)}`;
+          const exists = await client.query('SELECT 1 FROM users WHERE participant_code=$1', [code]);
+          if (exists.rowCount) continue;
+          try {
+            reservation = callCheckpointBridge({ command: 'reserve', participant_code: code });
+            reserved = true;
+            break;
+          } catch (error) {
+            if ((error as Error).message === 'Participant ID already exists') continue;
+            throw error;
+          }
+        }
+        if (!reservation) throw new ConflictException('Could not allocate a unique participant ID; try again');
+        const tasks = reservation?.tasks as ReservedTask[] | undefined;
+        if (!Array.isArray(tasks) || tasks.length !== 2 ||
+            new Set(tasks.map((task) => task.project_id)).size !== 2 ||
+            new Set(tasks.map((task) => task.condition)).size !== 2 ||
+            tasks.some((task, index) => task.task_id !== `${code}-T${index + 1}` || task.task_order !== index + 1 ||
+              !Array.isArray(task.checkpoint_order) || task.checkpoint_order.length !== 4)) {
+          throw new Error('Checkpoint service returned an invalid assignment');
+        }
+        const user = await client.query<{ id: string }>(`INSERT INTO users(username,password_hash,role,participant_code,display_name)
           VALUES($1,$2,'participant',$3,$4) RETURNING id`,
-        [email, hash, code, String(body.displayName || '').trim().slice(0, 120) || null]);
+        [code.toLowerCase(), hash, code, displayName || null]);
         for (const task of tasks) {
           await client.query(`INSERT INTO study_tasks
             (participant_id,external_task_id,project_id,condition,task_order,checkpoint_order)
             VALUES($1,$2,$3,$4,$5,$6::jsonb)`,
-          [user.rows[0].id, task.externalTaskId, task.projectId, task.condition,
-            task.taskOrder, JSON.stringify(task.checkpointOrder)]);
+          [user.rows[0].id, task.task_id, task.project_id, task.condition,
+            task.task_order, JSON.stringify(task.checkpoint_order)]);
         }
         await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id,details)
           VALUES($1,'create_participant','user',$2,$3::jsonb)`,
         [request.studyUser.id, user.rows[0].id, JSON.stringify({ participant_code: code })]);
-        return user.rows[0];
+        return { ...user.rows[0], tasks };
       });
-      return { ...result, email, participant_code: code, temporary_password: password };
+      return { ...result, username: code.toLowerCase(), participant_code: code, temporary_password: password };
     } catch (error) {
-      if ((error as { code?: string }).code === '23505') throw new ConflictException('Email, participant code, or task ID already exists');
+      if (reserved) {
+        try { callCheckpointBridge({ command: 'cancel-reservation', participant_code: code }); }
+        catch (cleanupError) { console.error('Checkpoint reservation needs reconciliation', code, cleanupError); }
+      }
+      if ((error as { code?: string }).code === '23505') throw new ConflictException('Participant ID already exists; try again');
       throw error;
     }
   }
@@ -256,7 +275,7 @@ export class ResearcherController {
   async export(@Req() request: StudyRequest) {
     this.require(request);
     const [users, tasks, questionnaires, responses, imports, events, summaries, opportunities] = await Promise.all([
-      this.db.query(`SELECT id,email,role,participant_code,display_name,created_at FROM users ORDER BY created_at`),
+      this.db.query(`SELECT id,username,role,participant_code,display_name,created_at FROM users ORDER BY created_at`),
       this.db.query('SELECT * FROM study_tasks ORDER BY created_at'),
       this.db.query('SELECT * FROM questionnaires ORDER BY created_at'),
       this.db.query('SELECT * FROM questionnaire_responses ORDER BY submitted_at'),

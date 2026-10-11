@@ -8,7 +8,7 @@ const derive = (password: string, salt: Buffer) => new Promise<Buffer>((resolve,
   scryptCallback(password, salt, 64, { N: 2 ** 17, r: 8, p: 1, maxmem: 256 * 1024 * 1024 },
     (error, key) => error ? reject(error) : resolve(key));
 });
-export type StudyUser = { id: string; email: string; role: 'researcher' | 'participant'; participant_code: string | null; display_name: string | null };
+export type StudyUser = { id: string; username: string; role: 'researcher' | 'participant'; participant_code: string | null; display_name: string | null };
 export type StudyRequest = Request & { studyUser: StudyUser; sessionToken: string };
 const dummyHash = `scrypt:17:${'0'.repeat(32)}:${'0'.repeat(128)}`;
 const attempts = new Map<string, { count: number; until: number }>();
@@ -38,7 +38,7 @@ export class SessionGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<StudyRequest>();
     const token = /^Bearer ([A-Za-z0-9_-]{30,})$/.exec(request.headers.authorization || '')?.[1];
     if (!token) throw new UnauthorizedException();
-    const result = await this.db.query<StudyUser>(`SELECT u.id,u.email,u.role,u.participant_code,u.display_name
+    const result = await this.db.query<StudyUser>(`SELECT u.id,u.username,u.role,u.participant_code,u.display_name
       FROM login_sessions s JOIN users u ON u.id=s.user_id
       WHERE s.token_hash=$1 AND s.expires_at>now() AND s.revoked_at IS NULL AND u.disabled_at IS NULL`, [digest(token)]);
     if (!result.rows[0]) throw new UnauthorizedException();
@@ -52,23 +52,23 @@ export class SessionGuard implements CanActivate {
 export class AuthController {
   constructor(private readonly db: DbService) {}
   @Post('login')
-  async login(@Body() body: { email?: string; password?: string }) {
-    const email = String(body?.email || '').trim().toLowerCase();
+  async login(@Body() body: { username?: string; password?: string }) {
+    const username = String(body?.username || '').trim().toLowerCase();
     const password = String(body?.password || '');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !password || password.length > 200) {
-      throw new UnauthorizedException('Invalid email or password');
+    if (!/^[a-z][a-z0-9_-]{2,39}$/.test(username) || !password || password.length > 200) {
+      throw new UnauthorizedException('Invalid username or password');
     }
-    const attempt = attempts.get(email);
+    const attempt = attempts.get(username);
     if (attempt && attempt.count >= 5 && attempt.until > Date.now()) throw new ForbiddenException('Try again later');
-    const account = await this.db.query<StudyUser & { password_hash: string }>(`SELECT id,email,role,participant_code,display_name,password_hash
-      FROM users WHERE lower(email)=$1 AND disabled_at IS NULL`, [email]);
+    const account = await this.db.query<StudyUser & { password_hash: string }>(`SELECT id,username,role,participant_code,display_name,password_hash
+      FROM users WHERE username=$1 AND disabled_at IS NULL`, [username]);
     const correct = await verifyPassword(password, account.rows[0]?.password_hash || dummyHash);
     if (!account.rows[0] || !correct) {
-      attempts.set(email, { count: (attempt?.until && attempt.until > Date.now() ? attempt.count : 0) + 1,
+      attempts.set(username, { count: (attempt?.until && attempt.until > Date.now() ? attempt.count : 0) + 1,
         until: Date.now() + 15 * 60_000 });
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException('Invalid username or password');
     }
-    attempts.delete(email);
+    attempts.delete(username);
     const token = randomBytes(32).toString('base64url');
     const days = Math.max(1, Math.min(30, Number(process.env.SESSION_DAYS || 7)));
     await this.db.query(`INSERT INTO login_sessions(token_hash,user_id,expires_at)

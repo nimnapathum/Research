@@ -22,6 +22,41 @@ const input = JSON.parse(readFileSync(0, 'utf8'));
 const store = openStore();
 const code = input.participant_code;
 if (!/^P[0-9]{3,}$/.test(code)) throw new Error('Invalid participant code');
+function atomic(action) {
+  store.db.exec('BEGIN IMMEDIATE');
+  try {
+    const value = action();
+    store.db.exec('COMMIT');
+    return value;
+  } catch (error) {
+    store.db.exec('ROLLBACK');
+    throw error;
+  }
+}
+if (input.command === 'reserve') {
+  const result = atomic(() => createSession(store, code));
+  process.stdout.write(JSON.stringify({ participant_code: code, tasks: result.assignment.tasks.map(
+    ({ task_id, project_id, condition, task_order, checkpoint_order }) =>
+      ({ task_id, project_id, condition, task_order, checkpoint_order })) }));
+  process.exit(0);
+}
+if (input.command === 'cancel-reservation') {
+  atomic(() => {
+    const session = store.db.prepare('SELECT ordinal FROM sessions WHERE participant_id = ?').get(code);
+    if (!session) return;
+    const newest = store.db.prepare('SELECT MAX(ordinal) AS ordinal FROM sessions').get();
+    if (session.ordinal !== newest.ordinal ||
+        store.db.prepare('SELECT 1 FROM reviews WHERE task_id LIKE ? LIMIT 1').get(`${code}-T%`) ||
+        store.db.prepare('SELECT 1 FROM forms WHERE participant_id = ? LIMIT 1').get(code) ||
+        store.db.prepare('SELECT 1 FROM events WHERE task_id LIKE ? LIMIT 1').get(`${code}-T%`)) {
+      throw new Error('Reservation has activity or a later allocation; reconcile it manually');
+    }
+    store.db.prepare('DELETE FROM tasks WHERE participant_id = ?').run(code);
+    store.db.prepare('DELETE FROM sessions WHERE participant_id = ?').run(code);
+  });
+  process.stdout.write(JSON.stringify({ cancelled: true }));
+  process.exit(0);
+}
 const requested = input.tasks;
 if (!Array.isArray(requested) || requested.length !== 2) throw new Error('Two portal tasks are required');
 

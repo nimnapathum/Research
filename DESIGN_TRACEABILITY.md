@@ -6,7 +6,7 @@
 
 The planned causal comparison is between **assigned acceleration-encouragement and exploration-encouragement task conditions**. The observed interaction mode is coded separately from prompts, video, actions and replay interview. The study asks whether security confidence about an exact supplied code state aligns with blinded security assessment, and whether exposed target weaknesses survive in the final feature. It cannot infer an internal cognitive state from the condition card, decision time, pointer speed, or a passing test.
 
-At present, the reviewed patches are **researcher-constructed prototypes** and the portal permits **manual assignment entry**. The current system is suitable for software and mechanics rehearsals. A study reporting outcomes of *agent-generated* changes must collect a documented genuine-agent proposal pool or describe the stimuli honestly as constructed. A randomized-condition claim requires a locked, balanced allocation record made before participants are enrolled; the portal currently checks assignment shape and later consistency with the checkpoint system, but does not generate that record.
+At present, the reviewed patches are **researcher-constructed prototypes**. The current system is suitable for software and mechanics rehearsals. A study reporting outcomes of *agent-generated* changes must collect a documented genuine-agent proposal pool or describe the stimuli honestly as constructed. The portal now reserves the checkpoint service's seeded balanced allocation and stores the returned sequence. A randomized-condition claim still requires a locked allocation record, a realized-balance audit, and disclosure of any abandoned reservations or researcher-operated CLI sessions.
 
 ## Decision-to-evidence map
 
@@ -35,7 +35,7 @@ The [measurement inventory](study-system/pilot/MEASUREMENT_INVENTORY.md) lists o
 
 ## Decisions to freeze before the main sample
 
-1. Use the checkpoint CLI's seeded allocation (`node study-system/app/cli.mjs create P014`) before creating the matching portal account. Keep its output private, enter the exact project/condition/checkpoint orders, and audit balance by task order, project and candidate status. The portal's former fixed defaults were not randomization evidence.
+1. Create each password-portal participant through **Participants**. The portal generates a random pseudonymous ID, reserves the checkpoint service's seeded balanced allocation, and copies its exact project/condition/checkpoint orders. Audit realized balance by task order, project and candidate status. The CLI remains an alternative for researcher-operated sessions outside the portal.
 2. Decide and document proposal provenance and participant disclosure. Never label constructed prototypes as unmodified agent output.
 3. Reconcile final consent wording with screen, transcript, and optional global pointer capture. Rehearse each intended OS and Antigravity version; record any missing stream.
 3a. Treat the downloaded `study/CAPTURE_CONFIG.json` as a live session credential: it is inside the agent-readable workspace. Before hosted participant use, replace that shared session credential with a task-scoped client credential or document and approve the precise exposure and retention risk. Never place personal or production secrets in the coding workspace.

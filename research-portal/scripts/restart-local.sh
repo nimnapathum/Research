@@ -14,6 +14,8 @@ cd "$PROJECT_ROOT"
 
 echo "Using Node: $(node --version)"
 echo "Using npm:  $(npm --version)"
+echo "Applying portal database migrations..."
+npm run db:migrate
 
 stop_port() {
   local port="$1"

@@ -1,4 +1,4 @@
-export type StudyUser = { id: string; email: string; role: 'researcher' | 'participant';
+export type StudyUser = { id: string; username: string; role: 'researcher' | 'participant';
   participant_code: string | null; display_name: string | null };
 export type StudyTask = { id: string; external_task_id: string; project_id: 'A' | 'B';
   condition: 'acceleration' | 'exploration'; task_order: number; checkpoint_order: string[];

@@ -8,8 +8,9 @@ import pg from 'pg';
 
 const root = process.env.PORTAL_BASE_URL || 'http://127.0.0.1:3000';
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const code = `P${Math.floor(900000 + Math.random() * 99999)}`;
-const email = `smoke-owner-${code.toLowerCase()}@example.invalid`;
+const smokeId = randomBytes(5).toString('hex');
+const ownerUsername = `smoke-owner-${smokeId}`;
+let code;
 const password = randomBytes(18).toString('base64url');
 let participantId;
 let researcherId;
@@ -30,12 +31,12 @@ try {
   const salt = randomBytes(16).toString('hex');
   const key = await promisify(scryptCallback)(password, Buffer.from(salt, 'hex'), 64,
     { N: 2 ** 17, r: 8, p: 1, maxmem: 256 * 1024 * 1024 });
-  const inserted = await pool.query(`INSERT INTO users(email,password_hash,role)
-    VALUES($1,$2,'researcher') RETURNING id`, [email, `scrypt:17:${salt}:${key.toString('hex')}`]);
+  const inserted = await pool.query(`INSERT INTO users(username,password_hash,role)
+    VALUES($1,$2,'researcher') RETURNING id`, [ownerUsername, `scrypt:17:${salt}:${key.toString('hex')}`]);
   ownerId = inserted.rows[0].id;
-  const researcherLogin = await call('/api/auth/login', json({ email, password }));
+  const researcherLogin = await call('/api/auth/login', json({ username: ownerUsername, password }));
   const blockedOrigin = await fetch(`${root}/api/auth/login`, {
-    ...json({ email, password }), headers: { 'content-type': 'application/json', origin: 'https://another-site.example' }
+    ...json({ username: ownerUsername, password }), headers: { 'content-type': 'application/json', origin: 'https://another-site.example' }
   });
   if (blockedOrigin.status !== 403) throw new Error('Cross-origin login request was not blocked');
   const researcherCookie = researcherLogin.response.headers.get('set-cookie')?.split(';')[0];
@@ -53,25 +54,23 @@ try {
   });
   if (invalidDocument.status !== 404) throw new Error('Research document path validation failed');
   const colleague = await call('/api/backend/researcher/accounts', json({
-    email: `researcher-${code.toLowerCase()}@example.invalid`, displayName: 'Smoke Test Supervisor'
+    username: `researcher-${smokeId}`, displayName: 'Smoke Test Supervisor'
   }), researcherCookie);
   researcherId = colleague.body.id;
   const colleagueLogin = await call('/api/auth/login', json({
-    email: colleague.body.email, password: colleague.body.temporary_password
+    username: colleague.body.username, password: colleague.body.temporary_password
   }));
   const colleagueCookie = colleagueLogin.response.headers.get('set-cookie')?.split(';')[0];
   const colleagueAccounts = await call('/api/backend/researcher/accounts', {}, colleagueCookie);
   if (!colleagueAccounts.body.some((row) => row.id === researcherId)) throw new Error('New researcher permissions failed');
   const participant = await call('/api/backend/researcher/participants', json({
-    email: `${code.toLowerCase()}@example.invalid`, participantCode: code,
-    tasks: [
-      { projectId: 'A', condition: 'acceleration', taskOrder: 1, externalTaskId: `${code}-T1`, checkpointOrder: ['Q1','Q2','F1','F2'] },
-      { projectId: 'B', condition: 'exploration', taskOrder: 2, externalTaskId: `${code}-T2`, checkpointOrder: ['F2','F1','Q2','Q1'] }
-    ]
+    displayName: 'Smoke Test Participant'
   }), researcherCookie);
   participantId = participant.body.id;
+  code = participant.body.participant_code;
+  if (!/^P\d{8}$/.test(code) || participant.body.tasks.length !== 2) throw new Error('Automatic allocation failed');
   const participantLogin = await call('/api/auth/login',
-    json({ email: `${code.toLowerCase()}@example.invalid`, password: participant.body.temporary_password }));
+    json({ username: participant.body.username, password: participant.body.temporary_password }));
   const participantCookie = participantLogin.response.headers.get('set-cookie')?.split(';')[0];
   const denied = await fetch(`${root}/researcher/research?doc=RQ.md`, {
     headers: { cookie: participantCookie }, redirect: 'manual'

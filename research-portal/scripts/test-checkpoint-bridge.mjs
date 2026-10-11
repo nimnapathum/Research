@@ -4,7 +4,6 @@ import { tmpdir } from 'node:os';
 import { resolve, join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { DatabaseSync } from 'node:sqlite';
-import { createSession, openStore } from '../../study-system/app/lib.mjs';
 
 const data = mkdtempSync(join(tmpdir(), 'checkpoint-bridge-test-'));
 const script = resolve('../study-system/app/portal-bridge.mjs');
@@ -91,13 +90,13 @@ try {
   const second = call('package', { task_id: 'P901-T2' });
   assert.equal(second.status, 0, second.stderr.toString());
   assert.ok(zipNames(second.stdout).includes('study/setup.mjs'));
-  process.env.STUDY_DATA_DIR = data;
-  const reservedStore = openStore();
-  const reserved = createSession(reservedStore, 'P902');
-  reservedStore.db.close();
-  delete process.env.STUDY_DATA_DIR;
-  const reservedTasks = reserved.assignment.tasks.map(({ task_id, project_id, condition, task_order, checkpoint_order }) =>
-    ({ task_id, project_id, condition, task_order, checkpoint_order }));
+  const reserved = call('reserve', { participant_code: 'P902' });
+  assert.equal(reserved.status, 0, reserved.stderr.toString());
+  const reservedTasks = JSON.parse(reserved.stdout.toString()).tasks;
+  assert.equal(reservedTasks.length, 2);
+  assert.equal(new Set(reservedTasks.map((task) => task.project_id)).size, 2);
+  assert.equal(new Set(reservedTasks.map((task) => task.condition)).size, 2);
+  assert.ok(reservedTasks.every((task) => !('candidate_status_by_checkpoint' in task)));
   const matchingReserved = call('status', { participant_code: 'P902', tasks: reservedTasks,
     task_id: 'P902-T1' });
   assert.equal(matchingReserved.status, 0, matchingReserved.stderr.toString());
@@ -105,5 +104,14 @@ try {
     tasks: [{ ...reservedTasks[0], condition: reservedTasks[1].condition }, reservedTasks[1]],
     task_id: 'P902-T1' });
   assert.notEqual(wrongReserved.status, 0, 'portal must reject an assignment unlike the CLI reservation');
-  console.log('PASS: recorded-task ZIP, private setup files, matching assignment, form handoff, and task gating');
+  const cancelled = call('cancel-reservation', { participant_code: 'P903' });
+  assert.equal(cancelled.status, 0, cancelled.stderr.toString());
+  const next = call('reserve', { participant_code: 'P903' });
+  assert.equal(next.status, 0, next.stderr.toString());
+  const cancelledNext = call('cancel-reservation', { participant_code: 'P903' });
+  assert.equal(cancelledNext.status, 0, cancelledNext.stderr.toString());
+  const again = call('reserve', { participant_code: 'P903' });
+  assert.equal(again.status, 0, again.stderr.toString());
+  assert.deepEqual(JSON.parse(again.stdout.toString()).tasks, JSON.parse(next.stdout.toString()).tasks);
+  console.log('PASS: automatic allocation, rollback, recorded-task ZIP, matching assignment, form handoff, and task gating');
 } finally { rmSync(data, { recursive: true, force: true }); }
