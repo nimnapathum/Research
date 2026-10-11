@@ -19,16 +19,18 @@ export function CaptureStatus({ taskId, initial }: { taskId: string; initial: Ch
     const timer = setInterval(() => void refresh(), 5000);
     return () => { active = false; clearInterval(timer); };
   }, [taskId]);
-  return <div className="subcard" aria-live="polite">
-    <strong>Live study connection</strong>
-    <p><span className={`pill ${status.connected ? 'good' : 'warn'}`}>
-      {status.connected ? 'Study client connected' : 'Study client disconnected'}</span>{' '}
-      <span className={`pill ${status.agent_capture_seen ? 'good' : 'gray'}`}>
-        {status.agent_capture_seen ? 'Agent hook observed' : 'Waiting for agent activity'}</span>{' '}
-      <span className={`pill ${status.pointer_capture_seen ? 'good' : 'gray'}`}>
-        {status.pointer_capture_seen ? 'Optional pointer summaries received' : 'Optional pointer capture inactive'}</span></p>
-    {status.next_checkpoint && <p className="small">Next checkpoint: <strong>{status.next_checkpoint}</strong></p>}
-    {status.final_submitted && <p className="small">Final recorded code received.</p>}
+  const guidance = status.final_submitted ? 'Final recorded code received. Complete the portal steps below.'
+    : !status.connected ? 'Run node study/client.mjs in the recorded project and leave it open.'
+      : !status.agent_capture_seen ? 'Ask the agent to inspect a file or run a test, then check again.'
+        : `Capture is ready. Continue in the checkpoint study page${status.next_checkpoint ? ` at ${status.next_checkpoint}` : ''}.`;
+  return <div className="capture-status">
+    <div className="capture-indicators"><div><span>Study client</span><strong className={status.connected ? 'good' : 'warn'}>
+      {status.connected ? 'Connected' : 'Not connected'}</strong></div>
+      <div><span>Agent hook</span><strong className={status.agent_capture_seen ? 'good' : 'muted'}>
+        {status.agent_capture_seen ? 'Observed' : 'Waiting for activity'}</strong></div></div>
+    <p className="small" role="status" aria-live="polite">{guidance}</p>
+    {status.pointer_capture_seen && <p className="small muted">Optional pointer summaries received.</p>}
+    <p className="small muted">Checks every five seconds.</p>
     {error && <p className="small error" role="alert">Status could not refresh: {error}</p>}
   </div>;
 }

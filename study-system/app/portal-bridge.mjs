@@ -129,7 +129,8 @@ if (input.command === 'ensure') {
   const next = JSON.parse(task.checkpoint_order_json).find((step) => !done.has(step)) || null;
   process.stdout.write(JSON.stringify({ connected: Boolean(latest && Date.now() - Date.parse(latest.last_seen_at) < 15000),
     last_seen_at: latest?.last_seen_at || null, agent_capture_seen: Boolean(capture),
-    pointer_capture_seen: Boolean(pointer),
+    pointer_capture_seen: Boolean(pointer), completed_checkpoints: [...done],
+    skipped_checkpoints: [...skips.map((row) => row.checkpoint_id)],
     task_url: `${publicUrl}/task?token=${encodeURIComponent(session.token)}&task_id=${encodeURIComponent(task.task_id)}`,
     next_checkpoint: next, final_submitted: Boolean(task.final_sha256) }));
 } else if (input.command === 'mirror-form') {

@@ -12,6 +12,7 @@ import { heartbeat, currentJob, requestReview, prepareReview, reviewJob, markApp
 
 const store = openStore();
 const root = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
+const pageCss = readFileSync(new URL('./ui.css', import.meta.url), 'utf8');
 const formVersion = JSON.parse(readFileSync(resolve(root, 'instruments/forms.json'), 'utf8')).version;
 const port = Number(process.env.STUDY_PORT || 4175);
 const publicUrl = (process.env.STUDY_PUBLIC_URL || `http://127.0.0.1:${port}`).replace(/\/+$/, '');
@@ -32,12 +33,26 @@ function respond(res, status, body, type = 'application/json; charset=utf-8') {
   res.end(type.startsWith('application/json') ? JSON.stringify(body) : body);
 }
 function page(title, content, script = '') {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><style>
-body{font:16px/1.5 system-ui,sans-serif;max-width:850px;margin:2rem auto;padding:0 1rem;color:#111;background:#fff}
-main{border:1px solid #aaa;padding:1.5rem}pre{white-space:pre-wrap;overflow:auto;border:1px solid #aaa;padding:1rem;background:#f7f7f7}
-label{display:block;margin:1.2rem 0 .3rem}input,select,textarea,button{font:inherit;padding:.45rem}input[type=number]{width:8rem}textarea{width:95%;min-height:4rem}
-button{margin-top:1rem}small{display:block;color:#444}.error{color:#900}hr{border:0;border-top:1px solid #aaa;margin:1.5rem 0}
-</style></head><body><main>${content}</main>${script}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><style>${pageCss}</style></head>
+  <body><header class="site-header"><div class="site-header-inner"><strong>Security Trust Study</strong><span>Checkpoint workspace</span></div></header>
+  <main class="page-shell">${content}</main>${script}</body></html>`;
+}
+function studyInline(text) {
+  return escapeHtml(text).replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+function studyMarkdown(source) {
+  return source.trim().split(/\n\s*\n/).map((block) => {
+    const lines = block.trim().split('\n');
+    if (/^#{1,3} /.test(lines[0])) {
+      const heading = lines.shift().replace(/^#{1,3} /, '');
+      return `<h3>${studyInline(heading)}</h3>${lines.length ? `<p>${studyInline(lines.join(' '))}</p>` : ''}`;
+    }
+    if (lines.every((line) => /^\d+\. /.test(line))) {
+      return `<ol>${lines.map((line) => `<li>${studyInline(line.replace(/^\d+\. /, ''))}</li>`).join('')}</ol>`;
+    }
+    return `<p>${studyInline(lines.join(' '))}</p>`;
+  }).join('');
 }
 function formItem(item) {
   const required = item.required ? ' required' : '';
@@ -63,6 +78,33 @@ function ownedTask(session, taskId) {
 function hasForm(participantId, kind, taskId = null) {
   return Boolean(store.db.prepare('SELECT 1 FROM forms WHERE participant_id = ? AND kind = ? AND task_id IS ?')
     .get(participantId, kind, taskId));
+}
+function checkpointProgress(task) {
+  const sequence = JSON.parse(task.checkpoint_order_json);
+  const reviews = store.db.prepare('SELECT checkpoint_id, decision_at FROM reviews WHERE task_id = ?').all(task.task_id);
+  const skips = new Set(store.db.prepare('SELECT checkpoint_id FROM skips WHERE task_id = ?').all(task.task_id)
+    .map((row) => row.checkpoint_id));
+  const decided = new Set(reviews.filter((row) => row.decision_at).map((row) => row.checkpoint_id));
+  const resolved = new Set([...decided, ...skips]);
+  return { sequence, skips, resolved, current: sequence.find((id) => !resolved.has(id)) || null };
+}
+function checkpointTimeline(progress, finalSubmitted, label = 'Task progress') {
+  const { sequence, skips, resolved, current } = progress;
+  const recorded = sequence.filter((id) => resolved.has(id)).length + Number(Boolean(finalSubmitted));
+  const steps = sequence.map((id, index) => {
+    const state = skips.has(id) ? 'skipped' : resolved.has(id) ? 'done' : id === current ? 'current' : 'pending';
+    const status = state === 'skipped' ? 'Skipped' : state === 'done' ? 'Completed' : state === 'current' ? 'Current' : 'Pending';
+    return `<li class="timeline-step ${state}"${state === 'current' ? ' aria-current="step"' : ''}>
+      <span class="timeline-marker" aria-hidden="true">${state === 'done' ? '✓' : state === 'skipped' ? '–' : index + 1}</span>
+      <span class="timeline-label"><strong>Checkpoint ${escapeHtml(id)}</strong><small>${status}</small></span></li>`;
+  });
+  const finalState = finalSubmitted ? 'done' : current ? 'pending' : 'current';
+  steps.push(`<li class="timeline-step ${finalState}"${finalState === 'current' ? ' aria-current="step"' : ''}>
+    <span class="timeline-marker" aria-hidden="true">${finalSubmitted ? '✓' : sequence.length + 1}</span>
+    <span class="timeline-label"><strong>Final code</strong><small>${finalSubmitted ? 'Submitted' : finalState === 'current' ? 'Current' : 'Pending'}</small></span></li>`);
+  return `<div class="timeline-heading"><h2>${escapeHtml(label)}</h2><span>${recorded} of ${sequence.length + 1} recorded</span></div>
+    <progress class="timeline-progress" value="${recorded}" max="${sequence.length + 1}" aria-label="${escapeHtml(label)}: ${recorded} of ${sequence.length + 1} steps recorded">${recorded} of ${sequence.length + 1}</progress>
+    <ol class="checkpoint-timeline">${steps.join('')}</ol>`;
 }
 function taskAvailable(session, task) {
   if (!hasForm(session.participant_id, 'pre_task')) throw new Error('Complete pre-task questions first');
@@ -115,8 +157,10 @@ function adminAuditPage() {
 function formPage(kind, token, taskId) {
   const form = forms[kind];
   const fields = form.items.map(formItem).join('');
-  const content = `<h1>${escapeHtml(form.title)}</h1><p>${escapeHtml(form.timing)}. Your participant code is used; do not enter a name or email address.</p>
-  <form id="study-form">${fields}<button type="submit">Save answers</button></form><p id="message" role="status"></p>`;
+  const content = `<a class="back-link" href="/session?token=${encodeURIComponent(token)}">← Back to session</a>
+  <div class="page-heading"><p class="eyebrow">Study questions</p><h1>${escapeHtml(form.title)}</h1>
+  <p>${escapeHtml(form.timing)}. Your participant code is used; do not enter a name or email address.</p></div>
+  <form id="study-form" class="panel">${fields}<button type="submit">Save answers</button></form><p id="message" class="status-line" role="status"></p>`;
   const script = `<script>
 const kind=${JSON.stringify(kind)}, token=${JSON.stringify(token)}, taskId=${JSON.stringify(taskId || '')};
 document.getElementById('study-form').addEventListener('submit', async (event) => {
@@ -139,17 +183,17 @@ document.getElementById('study-form').addEventListener('submit', async (event) =
 
 function practicePage() {
   const example = `-export function label(name) { return name; }\n+export function label(name) { return name.trim(); }`;
-  return page('Practice review', `<h1>Practice review</h1>
-  <p>This short example teaches the review controls. It does not save an answer or change an IDE file.</p>
-  <p>Requirement: remove spaces at the beginning and end of a name before displaying it.</p>
+  return page('Practice review', `<div class="page-heading"><p class="eyebrow">Unscored practice</p><h1>Practice review</h1>
+  <p>This short example teaches the review controls. It does not save an answer or change an IDE file.</p></div>
+  <section class="panel"><p>Requirement: remove spaces at the beginning and end of a name before displaying it.</p></section>
   <button id="practice-reveal">Show proposed change</button>
-  <section id="practice-proposal" hidden><pre id="practice-patch"></pre>
+  <section id="practice-proposal" class="panel" hidden><h2>Proposed change</h2><pre id="practice-patch"></pre>
   <label for="practice-decision">Would you provisionally keep or reject this change?</label>
   <select id="practice-decision"><option value="">Select one</option><option>Keep</option><option>Reject</option></select>
   <label for="practice-confidence">What is the chance (0–100%) that it meets the requirement?</label>
   <input id="practice-confidence" type="number" min="0" max="100" step="1">
   <button id="practice-record">Record practice answer</button></section>
-  <p id="practice-message" role="status"></p>`, `<script>
+  <p id="practice-message" class="status-line" role="status"></p>`, `<script>
 const sample=${JSON.stringify(example)};
 document.getElementById('practice-reveal').addEventListener('click',()=>{
   document.getElementById('practice-patch').textContent=sample;
@@ -176,38 +220,38 @@ function sessionPage(session, token) {
   const cards = tasks.map((task, index) => {
     const previousFinished = index === 0 || (Boolean(tasks[index - 1].final_sha256) &&
       hasForm(session.participant_id, 'after_task', tasks[index - 1].task_id));
-    if (!preDone || !previousFinished) return `<section><h2>Task ${task.task_order}</h2><p>${!preDone ? 'Available after pre-task questions.' : `Available after Task ${task.task_order - 1} and its after-task questions.`}</p></section>`;
+    if (!preDone || !previousFinished) return `<section><p class="eyebrow">Task ${task.task_order} · Upcoming</p><h2>Task ${task.task_order}</h2><p>${!preDone ? 'Available after pre-task questions.' : `Available after Task ${task.task_order - 1} and its after-task questions.`}</p>
+      <div class="task-card-progress">${checkpointTimeline(checkpointProgress(task), task.final_sha256, `Task ${task.task_order} checkpoints`)}</div></section>`;
     const name = task.project_id === 'A' ? 'Resource catalogue' : 'Support archive';
-    const sequence = JSON.parse(task.checkpoint_order_json);
+    const progress = checkpointProgress(task);
+    const sequence = progress.sequence;
     const taskLink = `/task?token=${encodeURIComponent(token)}&task_id=${encodeURIComponent(task.task_id)}`;
     const packageLink = `/package?token=${encodeURIComponent(token)}&task_id=${encodeURIComponent(task.task_id)}`;
     const afterLink = `/form/after-task?token=${encodeURIComponent(token)}&task_id=${encodeURIComponent(task.task_id)}`;
-    return `<section><h2>Task ${task.task_order}: ${name}</h2><p>Assigned work style: <strong>${escapeHtml(task.condition)}</strong>. Four short steps: ${sequence.join(', ')}.</p>
-      <p><a href="${packageLink}">Download this task's codebase (.zip)</a></p>
-      <p><a href="${taskLink}">Open task sheet and progress</a></p>
-      ${task.final_sha256 ? portalManaged ? '<p>Final code received. Return to the login portal, mark this task submitted, and complete its after-task questions there.</p>'
-        : `<p>Final code received. <a href="${afterLink}">After-task questions</a></p>` : ''}</section>`;
-  }).join('<hr>');
+    return `<section><p class="eyebrow">Task ${task.task_order} · ${task.final_sha256 ? 'Submitted' : 'Available'}</p><h2>Task ${task.task_order}: ${name}</h2><p>Assigned work style: <strong>${escapeHtml(task.condition)}</strong>. Four short steps: ${sequence.join(', ')}.</p>
+      <div class="task-card-progress">${checkpointTimeline(progress, task.final_sha256, `Task ${task.task_order} checkpoints`)}</div>
+      <div class="action-row"><a class="button secondary" href="${packageLink}">Download this task's codebase (.zip)</a>
+      <a class="button" href="${taskLink}">Open task sheet and progress</a></div>
+      ${task.final_sha256 ? portalManaged ? '<p class="notice good">Final code received. Return to the login portal, mark this task submitted, and complete its after-task questions there.</p>'
+        : `<p class="notice good">Final code received. <a href="${afterLink}">After-task questions</a></p>` : ''}</section>`;
+  }).join('');
   const finalLink = `/form/after-both?token=${encodeURIComponent(token)}`;
-  return page('Your study session', `<h1>Study session ${escapeHtml(session.session_id)}</h1>
-    <p>Use this page for task instructions and answers. Do the coding in Antigravity with the downloaded project.</p>
-    ${preDone ? '<p>Pre-task questions received.</p>' : `<p><a href="/form/pre?token=${encodeURIComponent(token)}">Complete pre-task questions first</a>.</p>`}
-    ${preDone ? `<h2>Before coding</h2><ol><li>Install Antigravity and sign in. Install Node.js 24 so <code>node --version</code> works in a terminal.</li>
+  return page('Your study session', `<div class="page-heading"><p class="eyebrow">Participant workspace</p><h1>Study session ${escapeHtml(session.session_id)}</h1>
+    <p>Use this page for task instructions and answers. Do the coding in Antigravity with the downloaded project.</p></div>
+    ${preDone ? '<p class="notice good">Pre-task questions received.</p>' : `<p class="notice warning"><a href="/form/pre?token=${encodeURIComponent(token)}">Complete pre-task questions first</a>.</p>`}
+    ${preDone ? `<section class="panel"><h2>Before coding</h2><ol><li>Install Antigravity and sign in. Install Node.js 24 so <code>node --version</code> works in a terminal.</li>
     <li>Download and extract the first codebase ZIP. Open that extracted folder in Antigravity.</li>
     <li>In the project terminal run <code>node study/setup.mjs</code>, then <code>node study/client.mjs</code> in a terminal you leave open.</li>
     <li>Confirm the <code>study-observer</code> workspace hook is enabled in Antigravity. The task page will show whether the client and agent capture have connected.</li></ol>
-    <p><a href="/practice">Try the unscored review controls</a>.</p>` : '<p>Setup instructions unlock after the pre-task questions.</p>'}<hr>${cards}
+    <p><a href="/practice">Try the unscored review controls</a>.</p></section>` : '<p>Setup instructions unlock after the pre-task questions.</p>'}<h2>Your tasks</h2><div class="task-grid">${cards}</div>
     ${tasks.every((task) => task.final_sha256 && hasForm(session.participant_id, 'after_task', task.task_id)) ?
       portalManaged ? '<p>Complete the final questions after both tasks in the login portal.</p>' : `<p><a href="${finalLink}">Final questions after both tasks</a></p>` : ''}`);
 }
 
 function taskPage(session, token, task) {
   const portalManaged = JSON.parse(session.assignment_json).source === 'research-portal-assignment';
-  const sequence = JSON.parse(task.checkpoint_order_json);
-  const reviews = store.db.prepare('SELECT checkpoint_id, review_id, decision_at FROM reviews WHERE task_id = ?').all(task.task_id);
-  const skips = store.db.prepare('SELECT checkpoint_id FROM skips WHERE task_id = ?').all(task.task_id);
-  const completed = new Set([...reviews.filter((row) => row.decision_at), ...skips].map((row) => row.checkpoint_id));
-  const current = sequence.find((id) => !completed.has(id));
+  const progress = checkpointProgress(task);
+  const { sequence, resolved, current } = progress;
   logEvent(store, task.task_id, 'task_page_opened', {
     source: 'participant-portal', actor: 'participant', checkpoint_id: current || undefined,
     data: { task_order: task.task_order }
@@ -216,15 +260,18 @@ function taskPage(session, token, task) {
   const condition = readFileSync(resolve(root, 'instruments', `CONDITION_${task.condition.toUpperCase()}.md`), 'utf8');
   const sheet = current ? readFileSync(resolve(root, 'instruments', project, `${current}_TASK.md`), 'utf8') : '';
   const taskId = task.task_id;
-  const content = `<p><a href="/session?token=${encodeURIComponent(token)}">Back to session</a></p><h1>Task ${task.task_order}: ${escapeHtml(project.replace('-', ' '))}</h1>
-    <p>Complete the steps in this order: ${sequence.map((id) => `${id}${completed.has(id) ? ' ✓' : ''}`).join(' → ')}.</p>
-    <h2>Work style</h2><pre>${escapeHtml(condition)}</pre>
-    ${current ? `<h2>Current task sheet: ${current}</h2><pre>${escapeHtml(sheet)}</pre>
-      <p>Open the downloaded project in Antigravity. Ask the coding agent to inspect or discuss this step, then request the supplied proposal. Keep <code>node study/client.mjs</code> running.</p>
-      <p id="capture-status">Checking the study client…</p><button id="request-review">I am ready to review the proposal</button><p id="review-status" role="status"></p>` :
-      task.final_sha256 ? portalManaged ? '<p>Your final code has been received. Return to the login portal for the after-task form.</p>'
-        : '<p>Your final code has been received. Return to your session page for the after-task form.</p>'
-        : '<p>All steps are recorded. Submit the final code from your current workspace.</p><button id="finish-task">Submit final code</button><p id="review-status" role="status"></p>'}`;
+  const content = `<a class="back-link" href="/session?token=${encodeURIComponent(token)}">← Back to session</a>
+    <div class="page-heading"><p class="eyebrow">Task ${task.task_order} · Checkpoint study</p><h1>Task ${task.task_order}: ${escapeHtml(project.replace('-', ' '))}</h1>
+    <p>Complete the steps in this order: ${sequence.map((id) => `${id}${resolved.has(id) ? ' ✓' : ''}`).join(' → ')}.</p></div>
+    <section class="panel">${checkpointTimeline(progress, task.final_sha256)}</section>
+    <div class="two-column"><section class="panel"><h2>Work style</h2><div class="study-copy">${studyMarkdown(condition)}</div></section>
+    ${current ? `<section class="panel"><h2>Current task sheet: ${current}</h2><div class="study-copy">${studyMarkdown(sheet)}</div></section>` :
+      `<section class="panel"><h2>Task status</h2><p>${task.final_sha256 ? 'Final code received.' : 'All steps are recorded.'}</p></section>`}</div>
+    ${current ? `<section class="panel"><h2>Continue in Antigravity</h2><p>Open the downloaded project in Antigravity. Ask the coding agent to inspect or discuss this step, then request the supplied proposal. Keep <code>node study/client.mjs</code> running.</p>
+      <p id="capture-status" class="status-line" role="status">Checking the study client…</p><div class="action-row"><button id="request-review">I am ready to review the proposal</button></div><p id="review-status" class="status-line" role="status"></p></section>` :
+      task.final_sha256 ? portalManaged ? '<p class="notice good">Your final code has been received. Return to the login portal for the after-task form.</p>'
+        : '<p class="notice good">Your final code has been received. Return to your session page for the after-task form.</p>'
+        : '<section class="panel"><h2>Submit your work</h2><p>All steps are recorded. Submit the final code from your current workspace.</p><button id="finish-task">Submit final code</button><p id="review-status" class="status-line" role="status"></p></section>'}`;
   const script = `<script>
 const token=${JSON.stringify(token)},taskId=${JSON.stringify(taskId)},checkpoint=${JSON.stringify(current || '')};
 async function post(path,body){const r=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token,task_id:taskId,...body})});const v=await r.json();if(!r.ok)throw Error(v.error);return v;}
@@ -245,17 +292,19 @@ function reviewPage(session, review, token, skipped) {
   const sheet = readFileSync(resolve(root, 'instruments', project, `${review.checkpoint_id}_TASK.md`), 'utf8');
   const locked = skipped ? '<p>This checkpoint was stopped by the researcher. Return to the task workspace.</p>' :
     review.decision_at ? '<p>This review has already been recorded.</p>' : '';
-  const content = `<h1>Review proposed change</h1><p>Task ${escapeHtml(task.task_id)}, checkpoint ${escapeHtml(review.checkpoint_id)}</p>
-  <h2>Requirement</h2><pre>${escapeHtml(sheet)}</pre><p>The proposal below is a frozen code snapshot. You may inspect it, ask the agent questions, and run checks. Do not edit it until you submit your first decision and confidence rating.</p>
-  ${skipped ? locked : ''}<button id="reveal"${review.exposed_at || skipped ? ' hidden' : ''}>Show proposed change</button>
-  <section id="proposal"${review.exposed_at ? '' : ' hidden'}><h2>Proposed change</h2><pre id="patch">${review.exposed_at ? escapeHtml(review.patch_text) : ''}</pre>
+  const content = `<a class="back-link" href="/task?token=${encodeURIComponent(token)}&task_id=${encodeURIComponent(task.task_id)}">← Return to task progress</a>
+  <div class="page-heading"><p class="eyebrow">Checkpoint ${escapeHtml(review.checkpoint_id)}</p><h1>Review proposed change</h1><p>Task ${escapeHtml(task.task_id)}, checkpoint ${escapeHtml(review.checkpoint_id)}</p></div>
+  <section class="panel"><h2>Requirement</h2><div class="study-copy">${studyMarkdown(sheet)}</div></section>
+  <p class="review-rule">The proposal below is a frozen code snapshot. You may inspect it, ask the agent questions, and run checks. Do not edit it until you submit your first decision and confidence rating.</p>
+  ${skipped ? locked : ''}<div class="action-row"><button id="reveal"${review.exposed_at || skipped ? ' hidden' : ''}>Show proposed change</button></div>
+  <section id="proposal" class="panel"${review.exposed_at ? '' : ' hidden'}><h2>Proposed change</h2><pre id="patch">${review.exposed_at ? escapeHtml(review.patch_text) : ''}</pre>
   <small>Snapshot: ${escapeHtml(review.proposal_sha256)}</small>
-  ${skipped ? '' : locked}<form id="review-form"${review.decision_at || skipped ? ' hidden' : ''}>
+  ${skipped ? '' : locked}<form id="review-form" class="review-form"${review.decision_at || skipped ? ' hidden' : ''}>
   <label for="decision">Will you provisionally keep or reject this exact proposed change?</label><select id="decision" required><option value="">Select one</option><option value="keep">Keep</option><option value="reject">Reject</option></select>
   <label for="confidence">What is the chance (0–100%) that this exact proposed code meets the security requirement above?</label><input id="confidence" type="number" min="0" max="100" step="1" required>
   <label for="reason">What evidence led to that estimate? (optional)</label><textarea id="reason" maxlength="500"></textarea>
   <label for="planned">What, if anything, will you check before final submission? (optional)</label><textarea id="planned" maxlength="500"></textarea>
-  <button type="submit">Record decision and confidence</button></form></section><p id="message" role="status"></p>
+  <button type="submit">Record decision and confidence</button></form></section><p id="message" class="status-line" role="status"></p>
   <p><a href="/task?token=${encodeURIComponent(token)}&task_id=${encodeURIComponent(task.task_id)}">Return to task progress</a></p>`;
   const script = `<script>
 const token=${JSON.stringify(token)},reviewId=${JSON.stringify(review.review_id)};

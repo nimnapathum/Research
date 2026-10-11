@@ -10,7 +10,8 @@ const script = join(root, 'app/portal-bridge.mjs');
 
 export type CheckpointStatus = { connected: boolean; last_seen_at: string | null;
   agent_capture_seen: boolean; pointer_capture_seen: boolean;
-  task_url: string; next_checkpoint: string | null; final_submitted: boolean };
+  task_url: string; next_checkpoint: string | null; final_submitted: boolean;
+  completed_checkpoints: string[]; skipped_checkpoints: string[] };
 
 export function checkpointAvailable() {
   return process.env.CHECKPOINT_BRIDGE_ENABLED === '1' && existsSync(script);
