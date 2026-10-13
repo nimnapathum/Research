@@ -9,6 +9,9 @@ import { checkpointAvailable, checkpointInput, checkpointJson, portalPreAnswers,
 import { serverApi } from '@/lib/server-api';
 import { taskAccess } from '@/lib/task-access';
 import { taskSheets } from '@/lib/starter-package';
+import { naturalTaskMaterials } from '@/lib/natural-package';
+import { naturalEvidenceStatus } from '@/lib/natural-evidence';
+import { NaturalEvidenceUpload } from '@/components/NaturalEvidenceUpload';
 import type { ParticipantDashboard, StudyUser } from '@/lib/types';
 
 export default async function ParticipantTaskPage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,6 +24,50 @@ export default async function ParticipantTaskPage({ params }: { params: Promise<
   const access = taskAccess(data, task);
   if (!access.allowed) return <Shell user={user}><Link href="/dashboard">← Your study session</Link>
     <div className="alert" role="status">{access.reason}</div></Shell>;
+
+  if (process.env.STUDY_PROTOCOL === 'natural') {
+    const natural = naturalTaskMaterials(task, data.tasks);
+    const hasAgentObserver = natural.protocolVersion.endsWith('-r3');
+    const evidence = await naturalEvidenceStatus(user.participant_code!, task.external_task_id);
+    return <Shell user={user}>
+      <Link className="session-back" href="/dashboard">← Your study session</Link>
+      <div className="hero session-hero"><div><p className="eyebrow">Natural coding · Task {task.task_order} of 2 · {task.external_task_id}</p>
+        <h1>{task.project_id === 'A' ? 'Resource catalogue' : 'Support archive'}</h1>
+        <p>Work with the coding agent in your assigned orientation. You may ask it to edit, inspect, test, or repair from the first prompt.</p></div>
+        <span className="pill gray">{natural.protocolVersion}</span></div>
+      <div className="notice"><strong>Code naturally with the agent</strong><p>This task has no proposal reveal, keep/reject gate, or checkpoint client. The portal receives the files listed below and gives a hash receipt for each. The researcher still checks recording playback, transcript readability, and code coverage before using the data.</p></div>
+      {!hasAgentObserver && <div className="notice"><strong>Previously issued package</strong><p>This frozen package predates the agent transcript observer. Save its conversation separately. Ask the researcher for a fresh participant assignment to rehearse automatic transcript capture; repeated downloads keep the original package.</p></div>}
+      <nav className="session-nav" aria-label="On this page"><a href="#download">Download</a><a href="#brief">Task and work guidance</a><a href="#capture">Capture setup and finishing</a><a href="#evidence">Upload evidence</a></nav>
+      <section className="card" id="download"><h2>1. Download your project</h2>
+        <p>Extract the ZIP, open only its project folder in Antigravity, and read <code>study/START_HERE.md</code>. You need Node.js 24 or newer. This natural task does not use <code>study/setup.mjs</code>, <code>study/client.mjs</code>, or a checkpoint page.</p>
+        <a className="button" href={`/api/participant/tasks/${task.id}/package`}>Download natural-task ZIP</a>
+      </section>
+      <div className="grid two" id="brief" style={{ marginTop: 16 }}><section className="card markdown-body"><ReactMarkdown remarkPlugins={[remarkGfm]}>{natural.taskSheet}</ReactMarkdown></section>
+        <section className="card markdown-body"><ReactMarkdown remarkPlugins={[remarkGfm]}>{natural.orientation}</ReactMarkdown>
+          <p className="small">This guidance is for how you approach the task. Read it yourself; do not attach this card to the agent as an instruction file. Write your own prompts.</p></section></div>
+      <section className="card" id="capture" style={{ marginTop: 16 }}><h2>2. Set up capture, then code</h2>
+        <p>Run these commands in the terminal <strong>inside the extracted project folder</strong>. The study scripts are already in the ZIP; no separate study extension is needed for this task. These Node.js commands work on Windows, macOS, and Linux. Keep the portal page open for the final upload.</p>
+        <ol>
+          {hasAgentObserver && <li><strong>Set up conversation capture:</strong> in a project terminal run:<pre><code>{`node study/agent-observer.mjs setup ../${task.external_task_id}-agent`}</code></pre>
+            In Antigravity&apos;s agent panel, open Customizations → Hooks and confirm <code>study-natural-observer</code> is enabled. Then run this in the same terminal and leave it open:<pre><code>node study/agent-observer.mjs watch</code></pre>
+            After both watchers and the screen recording are running, start a fresh task conversation for this project. The observer must see its SessionStart; it does not collect older or unrelated conversations.</li>}
+          <li><strong>Before your first agent prompt:</strong> finish the practice with the researcher and start the approved screen recording. In a separate project terminal, start the code watcher and leave it running:<pre><code>{`node study/capture.mjs watch . ../${task.external_task_id}-capture`}</code></pre>
+            Check that <code>../{task.external_task_id}-capture</code> contains an initial snapshot. Tell the researcher if the watcher reports an error.</li>
+          <li><strong>During the task:</strong> {!hasAgentObserver && <>Start a fresh agent conversation for this project. </>} work with the agent normally; it may edit immediately. The code watcher saves source snapshots. {hasAgentObserver
+            ? <>The agent observer separately saves registered conversation records and hook timestamps. After the first prompt and response, run <code>node study/agent-observer.mjs status</code> in another terminal and confirm <code>transcript_records</code> is above zero. Ask the researcher to confirm that the captured sample includes your actual prompt and response; a nonzero count alone does not prove coverage. If records are missing or errors appear, tell the researcher and preserve the conversation separately.</>
+            : <>Save a readable Antigravity conversation export separately.</>} Screen recording is still required to show your inspections and decisions.</li>
+          <li><strong>When you would submit:</strong> stop editing and wait for the agent to finish. In another project terminal, save the exact final code and then answer the two security questions <em>before</em> the researcher shows hidden assessment results or debriefs you. You may run your own security checks throughout coding.<pre><code>{`node study/capture.mjs snapshot . ../${task.external_task_id}-final\nnode study/rate.mjs ../${task.external_task_id}-final`}</code></pre>
+            The rating file is saved beside the final folder as <code>../{task.external_task_id}-rating.json</code>.</li>
+          <li><strong>After rating:</strong> wait until the agent has finished and stop {hasAgentObserver ? 'both watchers' : 'the watcher'} with Ctrl+C. Check <code>../{task.external_task_id}-capture/CAPTURE_HEALTH.json</code> for errors. {hasAgentObserver && <>Also check <code>../{task.external_task_id}-agent/AGENT_CAPTURE_HEALTH.json</code>; it should show <code>stopped</code> and captured records. Upload <code>AGENT_TRANSCRIPT.jsonl</code> from that agent folder as the agent transcript, and keep the entire folder until the researcher checks it. </>}Stop and save the screen recording. Upload the final manifest and rating below, then complete the short after-task form. Compress the entire capture folder and entire final folder as separate ZIPs, then upload the remaining files.</li>
+        </ol>
+        <p className="small">The observers save files locally; upload them when the task ends. Conversation capture timestamps indicate when a record was observed, while original timestamps remain in the raw transcript. Neither watcher determines cognitive mode or human acceptance automatically.</p>
+        <p className="small">After uploading all seven files and answering the after-task form, return to the overview and set “My progress” to “Submitted”. Task 2 opens after both steps are complete. After Task 2, complete the final session form and the interview with the researcher.</p>
+        <Link className="button secondary" href="/dashboard">Return to your study session</Link></section>
+      <div style={{ marginTop: 16 }}><NaturalEvidenceUpload taskId={task.id} externalTaskId={task.external_task_id}
+        afterTaskFormId={data.questionnaires.find((form) => form.stage === 'after_task')?.id}
+        afterTaskCompleted={data.questionnaires.some((form) => form.stage === 'after_task' && form.response_task_id === task.id)} initial={evidence} /></div>
+    </Shell>;
+  }
 
   let materials: Awaited<ReturnType<typeof taskSheets>>;
   try { materials = await taskSheets(task); } catch (error) {

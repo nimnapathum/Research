@@ -2,7 +2,8 @@ export type StudyUser = { id: string; username: string; role: 'researcher' | 'pa
   participant_code: string | null; display_name: string | null };
 export type StudyTask = { id: string; external_task_id: string; project_id: 'A' | 'B';
   condition: 'acceleration' | 'exploration'; task_order: number; checkpoint_order: string[];
-  status: 'not_started' | 'in_progress' | 'paused' | 'submitted'; started_at: string | null; submitted_at: string | null };
+  status: 'not_started' | 'in_progress' | 'paused' | 'submitted'; started_at: string | null; submitted_at: string | null;
+  final_rating_received?: boolean };
 export type FormItem = { id: string; label: string; type: 'choice' | 'number' | 'scale' | 'text';
   required?: boolean; options?: string[]; min?: number; max?: number; maxLength?: number; anchors?: Record<string,string> };
 export type Questionnaire = { id: string; title: string; stage: string; version: number; status?: string;

@@ -9,6 +9,7 @@ const researcherLinks = [
   { href: '/researcher/research', label: 'Research' },
   { href: '/researcher/participants', label: 'Participants' },
   { href: '/researcher/questionnaires', label: 'Questionnaires' },
+  { href: '/researcher/evidence', label: 'Evidence' },
   { href: '/researcher/imports', label: 'Imports' },
   { href: '/researcher/analytics', label: 'Analytics' },
   { href: '/researcher/responses', label: 'Responses' },
@@ -21,9 +22,10 @@ const participantLinks = [
   { href: '/account', label: 'Account' },
 ];
 
-export function Navigation({ researcher }: { researcher: boolean }) {
+export function Navigation({ researcher, natural = false }: { researcher: boolean; natural?: boolean }) {
   const pathname = usePathname();
-  const links = researcher ? researcherLinks : participantLinks;
+  const links = researcher ? researcherLinks.filter((link) => natural || link.href !== '/researcher/evidence')
+    : participantLinks.filter((link) => !natural || link.href !== '/participant/upload');
   return <nav className="nav" aria-label="Main navigation">
     {links.map(({ href, label }) => {
       const active = pathname === href || (href === '/dashboard' && pathname.startsWith('/forms/'));

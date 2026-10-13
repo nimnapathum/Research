@@ -5,11 +5,33 @@ import { DbService } from './db.service';
 import { validateAnswers } from './forms';
 import { ImportService, type UploadInput } from './imports';
 import { callCheckpointBridge } from './checkpoint-bridge';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 @UseGuards(SessionGuard)
 @Controller('participant')
 export class ParticipantController {
   constructor(private readonly db: DbService, private readonly imports: ImportService) {}
+  private finalRatingReady(participantCode: string | null, taskId: string): boolean {
+    const root = process.env.STUDY_EVIDENCE_ROOT;
+    if (!root || !participantCode || !/^P\d{8}$/.test(participantCode) ||
+        !taskId.startsWith(`${participantCode}-T`)) return false;
+    try {
+      const folder = join(root, participantCode, taskId);
+      const manifest = JSON.parse(readFileSync(join(folder, 'final_manifest.data'), 'utf8'));
+      const rating = JSON.parse(readFileSync(join(folder, 'rating_json.data'), 'utf8'));
+      return manifest.workspace === taskId && rating.participant_task_id === taskId &&
+        /^sha256:[a-f0-9]{64}$/.test(manifest.snapshot_sha256) &&
+        manifest.snapshot_sha256 === rating.final_snapshot_sha256 && manifest.protocol_version === rating.protocol_version;
+    } catch { return false; }
+  }
+  private schemaFor(stage: string, schema: unknown) {
+    if (process.env.STUDY_PROTOCOL !== 'natural' || stage !== 'pre_task' ||
+        !schema || typeof schema !== 'object') return schema;
+    const source = schema as { items?: Array<{ id?: string }> };
+    return { ...source, items: (source.items || []).filter((item) =>
+      item.id !== 'sql_baseline' && item.id !== 'path_baseline') };
+  }
   private participant(request: StudyRequest) {
     if (request.studyUser.role !== 'participant') throw new ForbiddenException('Participant access required');
     return request.studyUser;
@@ -39,7 +61,10 @@ export class ParticipantController {
       WHEN 'pre_task' THEN 1 WHEN 'after_task' THEN 2 WHEN 'after_both' THEN 3 ELSE 4 END`, [user.id]);
     const uploads = await this.db.query(`SELECT id,kind,original_filename,imported_count,created_at
       FROM import_batches WHERE participant_id=$1 ORDER BY created_at DESC LIMIT 20`, [user.id]);
-    return { user, tasks: tasks.rows, questionnaires: forms.rows, uploads: uploads.rows };
+    return { user, tasks: tasks.rows.map((task) => ({ ...task,
+      final_rating_received: process.env.STUDY_PROTOCOL === 'natural' &&
+        this.finalRatingReady(user.participant_code, task.external_task_id) })), questionnaires: forms.rows.map((form) =>
+      ({ ...form, schema_json: this.schemaFor(form.stage, form.schema_json) })), uploads: uploads.rows };
   }
   @Get('questionnaires/:id')
   async questionnaire(@Req() request: StudyRequest, @Param('id') id: string) {
@@ -49,7 +74,8 @@ export class ParticipantController {
     if (!form.rows[0]) throw new NotFoundException('Questionnaire unavailable');
     const answers = await this.db.query(`SELECT task_id,answers,submitted_at FROM questionnaire_responses
       WHERE questionnaire_id=$1 AND participant_id=$2 ORDER BY submitted_at`, [id, user.id]);
-    return { ...form.rows[0], responses: answers.rows };
+    return { ...form.rows[0], schema_json: this.schemaFor(form.rows[0].stage, form.rows[0].schema_json),
+      responses: answers.rows };
   }
   @Post('responses')
   async respond(@Req() request: StudyRequest, @Body() body: { questionnaireId?: string; taskId?: string; answers?: unknown }) {
@@ -60,11 +86,22 @@ export class ParticipantController {
     const taskSpecific = form.rows[0].stage === 'after_task';
     if (taskSpecific !== Boolean(body.taskId)) throw new BadRequestException('Task selection does not match questionnaire stage');
     if (taskSpecific) {
-      const task = await this.db.query('SELECT 1 FROM study_tasks WHERE id=$1 AND participant_id=$2', [body.taskId, user.id]);
+      const task = await this.db.query('SELECT external_task_id,status FROM study_tasks WHERE id=$1 AND participant_id=$2', [body.taskId, user.id]);
       if (!task.rowCount) throw new ForbiddenException('Task does not belong to this participant');
+      if (process.env.STUDY_PROTOCOL === 'natural' &&
+          !this.finalRatingReady(user.participant_code, task.rows[0].external_task_id)) {
+        throw new BadRequestException('Save and upload the final manifest and security rating before the after-task form');
+      }
     }
-    const answers = validateAnswers(form.rows[0].schema_json, body.answers);
-    if (['after_task', 'after_both'].includes(form.rows[0].stage) && process.env.CHECKPOINT_BRIDGE_ENABLED === '1') {
+    if (form.rows[0].stage === 'after_both') {
+      const completed = await this.db.query(`SELECT t.id FROM study_tasks t WHERE t.participant_id=$1
+        AND t.status='submitted' AND EXISTS (SELECT 1 FROM questionnaire_responses r JOIN questionnaires q
+        ON q.id=r.questionnaire_id WHERE r.participant_id=$1 AND r.task_id=t.id AND q.stage='after_task')`, [user.id]);
+      if (completed.rowCount !== 2) throw new BadRequestException('Complete both tasks and their after-task forms first');
+    }
+    const answers = validateAnswers(this.schemaFor(form.rows[0].stage, form.rows[0].schema_json), body.answers);
+    if (['after_task', 'after_both'].includes(form.rows[0].stage) &&
+        process.env.CHECKPOINT_BRIDGE_ENABLED === '1' && process.env.STUDY_PROTOCOL !== 'natural') {
       const context = await this.checkpointContext(user);
       const selected = context.taskRows.find((task) => task.id === body.taskId);
       try {
@@ -91,7 +128,34 @@ export class ParticipantController {
     @Body() body: { status?: string }) {
     const user = this.participant(request);
     if (!['in_progress', 'paused', 'submitted'].includes(String(body?.status))) throw new BadRequestException('Invalid task status');
-    if (body.status === 'submitted' && process.env.CHECKPOINT_BRIDGE_ENABLED === '1') {
+    const context = await this.checkpointContext(user);
+    const selectedTask = context.taskRows.find((task) => task.id === id);
+    if (!selectedTask) throw new NotFoundException('Task not found');
+    if (context.taskRows[1]?.id === id) {
+      const first = context.taskRows[0];
+      const ready = await this.db.query(`SELECT 1 FROM study_tasks t WHERE t.id=$1 AND t.status='submitted'
+        AND EXISTS (SELECT 1 FROM questionnaire_responses r JOIN questionnaires q ON q.id=r.questionnaire_id
+          WHERE r.participant_id=$2 AND r.task_id=t.id AND q.stage='after_task')`, [first.id, user.id]);
+      if (!ready.rowCount) throw new BadRequestException('Complete Task 1 and its after-task form first');
+    }
+    const current = await this.db.query('SELECT status FROM study_tasks WHERE id=$1', [id]);
+    if (current.rows[0]?.status === 'submitted' && body.status !== 'submitted') {
+      throw new BadRequestException('This task is already submitted; ask the researcher to record a correction');
+    }
+    if (body.status === 'submitted' && process.env.STUDY_PROTOCOL === 'natural') {
+      const selected = await this.db.query<{ external_task_id: string }>(
+        'SELECT external_task_id FROM study_tasks WHERE id=$1 AND participant_id=$2', [id, user.id]);
+      if (!selected.rows[0]) throw new NotFoundException('Task not found');
+      const evidenceRoot = process.env.STUDY_EVIDENCE_ROOT;
+      if (!evidenceRoot || !user.participant_code) throw new BadRequestException('Natural evidence storage is unavailable');
+      try {
+        const receipt = JSON.parse(readFileSync(join(evidenceRoot, user.participant_code,
+          selected.rows[0].external_task_id, 'READY.json'), 'utf8')) as { task_id?: string };
+        if (receipt.task_id !== selected.rows[0].external_task_id) throw new Error('Evidence task mismatch');
+      } catch { throw new BadRequestException('Upload all natural-task evidence and resolve receipt issues before submitting'); }
+    }
+    if (body.status === 'submitted' && process.env.CHECKPOINT_BRIDGE_ENABLED === '1' &&
+        process.env.STUDY_PROTOCOL !== 'natural') {
       const context = await this.checkpointContext(user);
       const selected = context.taskRows.find((task) => task.id === id);
       if (!selected) throw new NotFoundException('Task not found');

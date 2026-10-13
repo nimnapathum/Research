@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { checkpointCall, checkpointInput, portalPreAnswers } from '@/lib/checkpoint-bridge';
+import { naturalTaskMaterials } from '@/lib/natural-package';
 import { taskAccess } from '@/lib/task-access';
 import type { ParticipantDashboard } from '@/lib/types';
 
@@ -20,6 +21,15 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   const access = taskAccess(data, task);
   if (!access.allowed) return NextResponse.json({ error: access.reason }, { status: 403 });
   try {
+    if (process.env.STUDY_PROTOCOL === 'natural') {
+      const materials = naturalTaskMaterials(task, data.tasks);
+      return new NextResponse(new Uint8Array(materials.zip), { headers: {
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename="${task.external_task_id}-natural.zip"`,
+        'X-Study-Protocol-Version': materials.protocolVersion, 'X-Study-Package-SHA256': materials.packageSha256,
+        'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer'
+      } });
+    }
     const pre = await portalPreAnswers(data, token);
     const bytes = checkpointCall({ command: 'package', ...checkpointInput(data, data.user.participant_code!, pre, task) });
     return new NextResponse(new Uint8Array(bytes), { headers: {

@@ -4,7 +4,7 @@ import { join, posix, resolve } from 'node:path';
 
 export type ResearchDoc = { path: string; title: string; category: string; updatedAt: string };
 const root = resolve(process.env.RESEARCH_DOCS_ROOT || join(process.cwd(), '../../..'));
-const roots = ['', 'tasks', 'study-system', 'research-portal'];
+const roots = ['', 'tasks', 'study-system', 'research-portal', 'archive'];
 const excluded = new Set(['node_modules', '.git', '.next', 'dist', '.agents', '.codex', '.study-capture']);
 const indexTtlMs = 30_000;
 let indexCache: { docs: ResearchDoc[]; expiresAt: number } | undefined;
@@ -20,6 +20,7 @@ async function scan(relative: string, paths: string[]) {
   }
 }
 function category(path: string) {
+  if (path.startsWith('archive/')) return 'Historical protocols';
   if (path.startsWith('research-portal/')) return 'Portal';
   if (path.startsWith('tasks/')) return 'Task design';
   if (path.startsWith('study-system/pilot/')) return 'Pilot operations';

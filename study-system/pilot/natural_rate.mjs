@@ -31,7 +31,7 @@ async function choice(label, options) {
   }
 }
 try {
-  console.log(`Rate the exact final code snapshot ${manifest.snapshot_sha256}. No security test feedback should be shown yet.`);
+  console.log(`Rate the exact final code snapshot ${manifest.snapshot_sha256} before the researcher's hidden security assessment or debrief. Your own checks during coding are allowed.`);
   const sql_probability_pct = await probability('Chance the SQL filtering feature meets its stated security requirement');
   const sql_reason = (await rl.question('Why did you give that SQL estimate? ')).trim();
   const path_probability_pct = await probability('Chance the file-access feature meets its stated security requirement');
@@ -40,7 +40,7 @@ try {
   const agent_shaped = (await rl.question('Which parts did the agent materially shape? (or none) ')).trim();
   const relied_on_agent = (await rl.question('Did you rely on the agent to judge security? Briefly explain (or no): ')).trim();
   const response = { participant_task_id: task.task_id, project_id: task.project_id,
-    condition: task.condition, final_snapshot_sha256: manifest.snapshot_sha256,
+    protocol_version: task.protocol_version, final_snapshot_sha256: manifest.snapshot_sha256,
     rated_at: new Date().toISOString(), sql_probability_pct, sql_reason,
     path_probability_pct, path_reason, submit_as_is, agent_shaped, relied_on_agent };
   writeFileSync(output, JSON.stringify(response, null, 2) + '\n', { flag: 'wx', mode: 0o600 });

@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Questionnaire } from '@/lib/types';
 
-export function QuestionnaireForm({ form, taskId, nextTaskId }: { form: Questionnaire; taskId?: string; nextTaskId?: string }) {
+export function QuestionnaireForm({ form, taskId, nextTaskId, returnToTaskId }: { form: Questionnaire; taskId?: string; nextTaskId?: string; returnToTaskId?: string }) {
   const router = useRouter();
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -23,7 +23,7 @@ export function QuestionnaireForm({ form, taskId, nextTaskId }: { form: Question
         body: JSON.stringify({ questionnaireId: form.id, taskId: taskId || undefined, answers }) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Could not save response');
-      router.push(nextTaskId ? `/participant/tasks/${nextTaskId}` : '/dashboard'); router.refresh();
+      router.push(nextTaskId ? `/participant/tasks/${nextTaskId}` : returnToTaskId ? `/participant/tasks/${returnToTaskId}#evidence` : '/dashboard'); router.refresh();
     } catch (failure) { setError((failure as Error).message); setBusy(false); }
   }
   if (answered) return <div className="alert success">This questionnaire was already submitted for this task or session.</div>;

@@ -13,18 +13,21 @@ type Analytics = {
 export default async function AnalyticsPage() {
   const user = await serverApi<StudyUser>('auth/me');
   const data = await serverApi<Analytics>('researcher/analytics');
+  const natural = process.env.STUDY_PROTOCOL === 'natural';
   return <Shell user={user}><div className="hero"><div><p className="eyebrow">Descriptive monitoring</p><h1>Analytics</h1>
     <p>Use these counts to spot missing data. Interpret condition effects with the preregistered analysis and blinded adjudication.</p></div></div>
-    <div className="grid two"><section className="card"><h2>Eligible exposure by condition</h2>
+    {natural && <div className="notice"><strong>Natural-task analysis uses a separate dataset</strong>
+      <p>The older opportunity charts and summary imports describe controlled checkpoint proposals. Use the natural feature tables, evidence audit and paired analysis plan for current tasks. Uploaded recordings and code snapshots do not create adjudicated security or mode labels automatically.</p></div>}
+    {!natural && <div className="grid two"><section className="card"><h2>Eligible exposure by condition</h2>
       <BarChart rows={data.byCondition.map((row) => ({ label: row.condition, value: row.exposed }))} />
       {data.byCondition.length > 0 && <div className="table-wrap"><table><thead><tr><th>Condition</th><th>Scored</th><th>Mean Brier</th><th>Target retained</th></tr></thead>
         <tbody>{data.byCondition.map((row) => <tr key={row.condition}><td>{row.condition}</td><td>{row.scored}</td>
           <td>{row.mean_brier === null ? '—' : Number(row.mean_brier).toFixed(3)}</td><td>{row.target_retained}</td></tr>)}</tbody></table></div>}
     </section><section className="card"><h2>Eligible exposure by vulnerability class</h2>
-      <BarChart rows={data.byClass.map((row) => ({ label: row.weakness_class, value: row.exposed }))} /></section></div>
+      <BarChart rows={data.byClass.map((row) => ({ label: row.weakness_class, value: row.exposed }))} /></section></div>}
     <div className="grid two" style={{ marginTop: 16 }}><section className="card"><h2>IDE events by day</h2>
       <BarChart rows={data.eventsByDay.map((row) => ({ label: String(row.day).slice(0, 10), value: row.count }))} /></section>
-      <section className="card"><h2>Latest study analysis</h2>{data.latestSummary ? <><p className="small">
+      <section className="card"><h2>{natural ? 'Historical controlled analysis' : 'Latest study analysis'}</h2>{data.latestSummary ? <><p className="small">
         Imported {new Date(data.latestSummary.created_at).toLocaleString()}</p><pre className="json-box">{JSON.stringify(data.latestSummary.summary, null, 2)}</pre></>
         : <div className="empty">No adjudicated summary imported.</div>}</section></div>
     <section className="card" style={{ marginTop: 16 }}><h2>Participant data coverage</h2>

@@ -10,3 +10,6 @@ tmp/
 *.out
 *.synctex.gz
 *.tsbuildinfo
+research-portal/.local-evidence/
+research-portal/.local-packages/
+research-portal/.local-logs/

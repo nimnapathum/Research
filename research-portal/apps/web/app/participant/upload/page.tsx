@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { serverApi } from '@/lib/server-api';
 import type { ParticipantDashboard, StudyUser } from '@/lib/types';
 import { Shell } from '@/components/Shell';
@@ -5,6 +6,7 @@ import { EventUpload } from '@/components/EventUpload';
 
 export default async function ParticipantUploadPage() {
   const user = await serverApi<StudyUser>('auth/me');
+  if (user.role !== 'participant' || process.env.STUDY_PROTOCOL === 'natural') redirect('/dashboard');
   const dashboard = await serverApi<ParticipantDashboard>('participant/dashboard');
   return <Shell user={user}><div className="hero"><div><p className="eyebrow">Participant evidence</p><h1>Upload IDE events</h1>
     <p>Import a JSON or JSONL event export from your coding session. The researcher can also import files for you.</p></div></div>

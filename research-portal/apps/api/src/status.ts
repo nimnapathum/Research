@@ -7,6 +7,6 @@ export class HealthController {
   @Get('health')
   async health() {
     await this.db.query('SELECT 1');
-    return { ok: true, service: 'research-portal-api' };
+    return { ok: true, service: 'research-portal-api', protocol: process.env.STUDY_PROTOCOL || 'controlled' };
   }
 }

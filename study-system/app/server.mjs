@@ -295,7 +295,7 @@ function reviewPage(session, review, token, skipped) {
   const content = `<a class="back-link" href="/task?token=${encodeURIComponent(token)}&task_id=${encodeURIComponent(task.task_id)}">← Return to task progress</a>
   <div class="page-heading"><p class="eyebrow">Checkpoint ${escapeHtml(review.checkpoint_id)}</p><h1>Review proposed change</h1><p>Task ${escapeHtml(task.task_id)}, checkpoint ${escapeHtml(review.checkpoint_id)}</p></div>
   <section class="panel"><h2>Requirement</h2><div class="study-copy">${studyMarkdown(sheet)}</div></section>
-  <p class="review-rule">The proposal below is a frozen code snapshot. You may inspect it, ask the agent questions, and run checks. Do not edit it until you submit your first decision and confidence rating.</p>
+  <p class="review-rule">This is a fixed, preselected study proposal, not a live display of the coding agent's edits. The patch below stays frozen even if the workspace changes later. Review the exact applied code before giving your first decision and confidence rating; after that, you may edit or replace it. This controlled-review page is separate from the natural-coding rehearsal.</p>
   ${skipped ? locked : ''}<div class="action-row"><button id="reveal"${review.exposed_at || skipped ? ' hidden' : ''}>Show proposed change</button></div>
   <section id="proposal" class="panel"${review.exposed_at ? '' : ' hidden'}><h2>Proposed change</h2><pre id="patch">${review.exposed_at ? escapeHtml(review.patch_text) : ''}</pre>
   <small>Snapshot: ${escapeHtml(review.proposal_sha256)}</small>
