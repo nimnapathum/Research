@@ -1,3 +1,5 @@
+> Natural-task analysis now uses [NATURAL_ANALYSIS_PLAN.md](../../NATURAL_ANALYSIS_PLAN.md), `natural_summary.py`, `audit_natural_evidence.py` and `natural-templates/`. The controlled exports described below are historical and separate.
+
 # Security adjudication and RQ analysis
 
 **Status: runnable pipeline, awaiting participant data and independent reviewers.** It never treats a scanner alert or one attack probe as the final security truth. The target classes are SQL injection and path traversal only; functionality and additional weaknesses are separate findings. See the [data and figure plan](../../DATA_AND_FIGURE_PLAN.md) for the full inventory and proposed RQ displays.

@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Participant information and consent wording — local draft
 
 **The researcher reports institutional ethics approval, but the approved documents are not in this workspace.** Reconcile this draft with the actual approved wording and replace all bracketed fields before recruitment. If the approved protocol differs from the final procedure, follow the institution's amendment process.

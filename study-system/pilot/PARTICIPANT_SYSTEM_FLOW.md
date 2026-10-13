@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Participant-facing study flow and system boundary
 
 **Design decision:** participants should use a study web page for instructions and answers, plus Antigravity for coding. They should **never receive the whole `study-system/` repository**. This file distinguishes that intended flow from the current engineering prototype.

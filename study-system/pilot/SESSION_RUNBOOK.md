@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Researcher session runbook — draft
 
 Use this with the institution-approved materials on a dedicated study machine. Ethics approval has been reported by the researcher; reconcile the exact approved recording, disclosure and retention wording before using the local drafts. The current candidates are constructed engineering prototypes; replace or explicitly label them before a human pilot. Keep `study-system/stimuli/`, app data, review maps and hidden oracles **outside** every participant workspace. Never open the research repository as the participant's Antigravity workspace. Use the [facilitator script](FACILITATOR_SCRIPT.md), [practice](PRACTICE_TASK.md) and [host checklist](HOST_REHEARSAL_CHECKLIST.md).

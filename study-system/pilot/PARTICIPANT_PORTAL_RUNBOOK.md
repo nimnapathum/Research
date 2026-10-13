@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Participant portal and Antigravity setup — pilot runbook
 
 This is the implemented participant-facing route. It uses a private web session for forms and task sheets, a downloadable project ZIP for coding, and a Node helper in that project to connect the IDE workspace to the web app. Do not give participants the `study-system/` repository.

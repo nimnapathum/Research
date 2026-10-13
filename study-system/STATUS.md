@@ -1,3 +1,5 @@
+> Current natural-study implementation and release status: [RESEARCH_AUDIT.md](../RESEARCH_AUDIT.md). Details below retain the older controlled system inventory.
+
 # Artifact status and next gates — 12 October 2026
 
 This is the current inventory for the security trust study. **Built** means a file or program exists and passed the stated engineering check; it does not mean that the research design has been validated with people. The [aim and RQs](../RQ.md) remain the governing scope.

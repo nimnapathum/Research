@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Antigravity desktop capture: researcher quickstart
 
 This guide is for a **researcher-only local Mac rehearsal** with Antigravity desktop and the direct checkpoint app. For the current portal/ZIP route on macOS, Windows or Linux, use the [participant portal runbook](PARTICIPANT_PORTAL_RUNBOOK.md) and [cross-platform guide](CROSS_PLATFORM_CAPTURE.md). The code in `capture/extension/` is VS Code extension source; it is not an installable Antigravity desktop extension. Desktop capture uses workspace `PreInvocation`, `PostInvocation` and selected `PostToolUse` hooks. Google documents `.agents/hooks.json` and the Hooks panel for [Antigravity](https://www.antigravity.google/docs/hooks/). The hook records invocation and selected tool metadata; it does not by itself copy the full chat transcript or record the screen.

@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Pilot session and revision log template
 
 Copy this template for each pilot session. Store it in restricted researcher data; use a pseudonymous ID only. Do not use the template as a substitute for raw logs, video or consent.

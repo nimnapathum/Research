@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Proposal collection record, one row per agent attempt
 
 Copy this into restricted researcher data for every candidate-generation attempt, including rejected attempts. Do not expose this file or security labels in the participant workspace. Use the [provenance protocol](CANDIDATE_PROVENANCE.md).

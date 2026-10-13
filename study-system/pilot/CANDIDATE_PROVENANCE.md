@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Controlled proposal provenance — collection protocol
 
 The current 16 patches are **researcher-constructed prototypes** for testing the study software. Their manifests mark `main_study_eligible: false`. If the study describes the reviewed changes as *agent-generated*, build and freeze a genuine candidate pool first. If a balanced genuine pool cannot be obtained, retain the controlled design but describe the selected changes as constructed proposals shown during agent-assisted work.

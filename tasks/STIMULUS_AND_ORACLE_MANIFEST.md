@@ -1,3 +1,5 @@
+> Historical controlled task specification. Current natural-task features and exposure rules are in [TASK_DESIGN.md](../TASK_DESIGN.md).
+
 # Stimulus and oracle manifest
 
 **Purpose:** lock exactly what the agent produced, what the researcher selected/changed, what the participant saw, and how security status was established. This is a template for main-study stimuli. Sixteen researcher-constructed patches now exist across the two projects and eight checkpoints under [study-system/stimuli](../study-system/stimuli/). They passed functional and target-security oracle checks but are not authentic Antigravity candidate records or independently adjudicated stimuli.

@@ -1,0 +1,1 @@
+participant_id,task_id,condition,project_id,task_order,vulnerability_class,final_snapshot_sha256,confidence_snapshot_sha256,probability_secure_pct,security_status,functionality_status,review_status,missing_reason,evidence_ref

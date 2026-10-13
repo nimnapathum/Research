@@ -1,0 +1,1 @@
+participant_id,task_id,change_id,vulnerability_class,origin_status,code_snapshot_sha256,exposure_confirmed,agent_applied_seconds,human_inspected_seconds,endorsement_seconds,continuation_seconds,intentional_repair,final_survival,evidence_ref,uncertainty

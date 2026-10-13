@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Debrief script — reconcile with the approved ethics wording
 
 Use only after both tasks and the replay interview, so the explanation cannot affect measured decisions. The facilitator must use the paragraph matching the actual proposal provenance. Do not claim that constructed patches were generated naturally by the agent.

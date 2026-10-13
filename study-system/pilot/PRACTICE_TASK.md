@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Neutral practice, before measured tasks
 
 **Purpose:** teach the agent-mode workflow and the review controls without mentioning SQL injection or path traversal. This is training, not a scored checkpoint. Use the same practice for every participant.

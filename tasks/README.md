@@ -1,3 +1,5 @@
+> Historical controlled task specification. Current natural-task features and exposure rules are in [TASK_DESIGN.md](../TASK_DESIGN.md).
+
 # Task package specifications
 
 The files here describe the participant task design. Runnable [resource catalogue](../study-system/projects/resource-catalogue/README.md) and [support archive](../study-system/projects/support-archive/README.md) starter apps now exist separately, with all eight task sheets and 16 constructed prototype candidates. They are engineering artifacts, not yet validated participant stimuli or genuine Antigravity output. Each project must appear under both conditions across the sample.

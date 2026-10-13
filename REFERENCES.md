@@ -6,7 +6,7 @@ The links below are primary papers or official technical sources. “Use” mean
 | --- | --- | --- | --- |
 | Barke | Barke et al., [Grounded Copilot: How Programmers Interact with Code-Generating Models](https://arxiv.org/abs/2206.15000) (20 observed programmers) | Acceleration/exploration as grounded descriptions of developer intent with a code assistant | Does not validate an automatic IDE-event mode classifier or show a security effect |
 | Perry | Perry et al., [Do Users Write More Insecure Code with AI Assistants?](https://arxiv.org/abs/2211.03622), CCS 2023 | AI assistance, security outcome, and user belief can diverge; one JavaScript SQL task had 36% versus 7% SQL-injection vulnerability | Assistant and tasks differ from Antigravity; 36/7 is one task result |
-| Khalid | Khalid et al., [(Don't) Trust, but (Don't) Verify: Developers' Attention to Security in AI-Generated Code](https://arxiv.org/abs/2609.21020) (2026 preprint, 100 developers) | Direct adjacent study of selection, evaluation, security and trust; helps design candidate choice and interview | Uses its own tasks/UI; preprint as of this plan; some confidence was associated with security, so avoid blanket overtrust claim |
+| Khalid | Khalid et al., [(Don't) Trust, but (Don't) Verify: Developers' Attention to Security in AI-Generated Code](https://arxiv.org/abs/2609.21020) (2026 preprint, 100 developers) | Direct adjacent study of selection, evaluation, security and trust; helps design candidate choice and interview | Uses its own tasks/UI; preprint listed as forthcoming S&P 2027 as of 13 October 2026; some confidence was associated with security, so avoid blanket overtrust claim |
 | Oh | Oh et al., [Poisoned ChatGPT Finds Work for Idle Hands: Exploring Developers' Coding Practices with Insecure Suggestions from Poisoned AI Models](https://arxiv.org/abs/2312.06227), IEEE S&P 2024 | Direct precedent for controlled insecure AI suggestions and observing whether developers retain them | Poisoning and interface differ from our controlled agent proposal; do not transfer its outcome rate |
 | Serafini | Serafini et al., [Exploring the Impact of Intervention Methods on Developers' Security Behavior in a Manipulated ChatGPT Study](https://doi.org/10.1145/3706598.3713989), CHI 2025 | Direct precedent for a manipulated AI study and testing security guidance/warnings | Password-storage task and intervention effects are not the present mode comparison |
 | Okamura | Okamura and Yamada, [Adaptive trust calibration for human-AI collaboration](https://doi.org/10.1371/journal.pone.0229132), PLOS ONE 2020 | General human-automation rationale for matching reliance to capability | Not a developer or code-security experiment |
@@ -42,3 +42,12 @@ The links below are primary papers or official technical sources. “Use” mean
 ## Original proposal
 
 Researcher-provided PDF: [22000526_Research_Proposal.pdf](</Users/nimnapathum/Trust Calibration in Developer-LLM + SE/LLM4SE/LLM4SE/22000526_Research_Proposal.pdf>). Treat its citations and design claims as historical material; verify each source before carrying it into the final thesis. The current design intentionally supersedes its generic trust, mode-classifier, and correctness-error framing.
+
+## Sources verified for the natural protocol audit
+
+Checked primary pages on 13 October 2026 for Barke, Perry, Khalid, Mozannar, Tang and the official Antigravity hook documentation. Mozannar is also accessible at [arXiv:2210.14306](https://arxiv.org/abs/2210.14306). The documents use these studies as precedents for components; our cards, timing, ratings and integration rules remain adaptations requiring pilot evidence.
+
+- Lakens (2022), [Sample Size Justification](https://doi.org/10.1525/collabra.33267): supports transparent resource/sensitivity/precision arguments; does not prescribe 30 for this design or justify using an unstable small-pilot effect as truth.
+- Gneiting and Raftery (2007), [Strictly Proper Scoring Rules, Prediction, and Estimation](https://doi.org/10.1198/016214506000001437): supports proper probability scoring; does not validate our security-rating wording or make Brier score a pure measure of trust.
+
+See [RESEARCH_AUDIT.md](RESEARCH_AUDIT.md) for the current source-to-refinement mapping.

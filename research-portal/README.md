@@ -2,7 +2,9 @@
 
 A localhost support app for the two-task coding-agent study. It uses Next.js 16 (participant/researcher pages), NestJS 12 (API), and PostgreSQL (accounts and study data). Sign-in now uses a username and password. Existing researcher accounts keep the part before `@` as their username when valid and unique; otherwise migration assigns `researcher-<ID>`. The first researcher password is in the ignored, mode-0600 file [`.local-admin-credentials`](.local-admin-credentials). Change it on the Account page.
 
-For a hosted deployment, follow [the Oracle Cloud deployment guide](DEPLOY_ORACLE_CLOUD.md). It covers the supported Ubuntu image, PostgreSQL, systemd, Nginx, HTTPS, verification, and backups.
+**Current local rehearsal (natural-2026-10-13-r3):** `scripts/restart-local.sh` selects the revised natural-task workflow. Start with [LOCAL_NATURAL_REHEARSAL.md](LOCAL_NATURAL_REHEARSAL.md). The controlled-checkpoint instructions below describe the older optional mode and do not apply to a `-natural.zip` task. The local app is reachable only on this computer. First-served natural packages are frozen under `.local-packages/`; use fresh participant accounts when refining the protocol.
+
+For an existing hosted portal running the natural workflow, follow [the hosted natural update guide](HOSTED_NATURAL_UPDATE.md). The [original Oracle Cloud deployment guide](DEPLOY_ORACLE_CLOUD.md) covers initial infrastructure but predates natural evidence uploads.
 
 ## What is working
 

@@ -1,18 +1,14 @@
-# Research aim, questions, and defenses
+# Aim and research questions
 
-**Protocol update, 13 October 2026:** The researcher-set RQs below remain the research aims, but the forced checkpoint implementation is under revision. [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) is the proposed human-pilot method. Under it, RQ1 confidence concerns the **final task snapshot**; RQ2 covers final task security and separately confirmed natural agent-origin vulnerable changes; RQ3 uses observed integration rather than a forced keep/reject click. The checkpoint-specific operational claims farther down this file describe the older controlled design and must be rewritten before a main-study protocol is frozen. A separate controlled review probe would answer exact-candidate confidence questions, not natural acceptance.
-
-**Canonical status:** researcher-supplied RQ wording retained, reviewed against the 8 October 2026 implementation. Source support and its limits are in [REFERENCES.md](REFERENCES.md); the code-to-RQ audit is in [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md).
+Current operational protocol: natural-2026-10-13-r3. The exact researcher-supplied RQs are preserved below. Their natural-task interpretation and the proposed RQ3 refinement are explicit; the supervisor-facing main-study wording must be frozen before main recruitment. Historical controlled-candidate defences are retained in [the archive](archive/2026-10-13-controlled/RQ.md).
 
 ## Aim
 
 > Examine whether developers working with a coding agent in acceleration and exploration episodes differ in their security judgments, reliance on generated changes, verification, and Trust calibration on security.
 
-The intended object of study is a developer judging a **supplied agent-origin change to a specific repository**, deciding what to keep, checking it, and submitting code that can be assessed for named security requirements. “Trust calibration” here is operationalized as the relationship between stated **security confidence** and assessed security of the **same saved code snapshot**. Four judgments per task cannot establish a stable individual calibration trait. Reliance and verification are observed behaviors, not synonyms for confidence.
+The assigned comparison is acceleration/exploration **encouragement**. Observed mode is coded implementation intent, not an automatically detected mental state. Security confidence is a probability about the exact final feature. Trust is interpreted with stated reliance, inspection and interview evidence; final confidence alone is not agent trust.
 
-**Current implementation caveat:** the 16 runnable candidate patches are researcher-constructed software prototypes. They support engineering and mechanics testing, but the main study cannot call them unmodified agent output. The [candidate provenance protocol](study-system/pilot/CANDIDATE_PROVENANCE.md) requires either a genuine target-agent pool or an explicit constructed-stimulus description before participant use. The portal now reserves the checkpoint service's seeded balanced allocation automatically; the randomized-encouragement claim still depends on auditing actual allocations and deviations. The [data and figure plan](DATA_AND_FIGURE_PLAN.md) maps collected evidence to each RQ.
-
-## Finalized RQs (verbatim)
+## Researcher-supplied wording
 
 **RQ1:** How does alignment between developers’ security confidence and assessed code security differ between acceleration-oriented and exploration-oriented conditions? How does this relate to observed interaction mode?
 
@@ -24,91 +20,27 @@ The intended object of study is a developer judging a **supplied agent-origin ch
 
 **RQ4:** Do these patterns differ between SQL injection and path traversal opportunities?
 
-**Analysis priority with 30 completed participants:** RQ1 has one prespecified primary paired estimate; RQ2 is a key secondary security outcome; RQ3 uses event coding and interview/video explanation; RQ4 is exploratory. All four remain research questions, but the fixed sample does not support four equally powered confirmatory tests. Report effect sizes, intervals and observed cases, including inconclusive results. The [sample rationale](METHODOLOGY.md) explains the resource and sensitivity argument.
+## Natural-task interpretation and defence
 
-### Small wording issue to decide with the supervisor
-
-RQ1/RQ2 use “acceleration-oriented and exploration-oriented conditions”; RQ3 uses “acceleration-encouragement and exploration-encouragement.” The protocol will use **randomly assigned encouragement condition** for causal comparisons and **observed interaction mode** for descriptive/associational analysis. The RQs can stay verbatim, but this distinction must be stated wherever results are presented. RQ4 is an effect-modification question about RQ1–RQ3, not a claim that the two vulnerability classes are equally prevalent.
-
-## What changed from the attached proposal
-
-The attached *Understanding Trust Miscalibration Across Developer Cognitive Modes in LLM-Assisted Software Engineering* (February 2026) is an **initial proposal**, not the current protocol. It suggested five broad questions: acceptance speed and checking; confidence and correctness; checking and errors; automatic mode detection from IDE events; and variation by general software-engineering task type. It also suggested familiar algorithm versus unfamiliar library tasks, roughly 30 mixed-experience participants, Python, generic planted errors, and expected calibration error.
-
-| February proposal | Current study | Why the change matters |
+| RQ | Answering evidence | Defensible interpretation and boundary |
 | --- | --- | --- |
-| General correctness/trust | Security confidence versus assessed SQL/path security | A concrete harm and a defensible oracle replace vague “good code.” |
-| Speed/acceptance as main behavior | Provisional keep/reject, repair, final retention | A fast click cannot establish overreliance; the final artifact can be inspected. |
-| Automatic cognitive-mode detection RQ | Assigned encouragement plus triangulated observed mode | The literature describes modes but does not validate a clickstream diagnostic. |
-| General task-type variation | SQL injection versus path traversal opportunities | Same explicit security outcomes can be compared across two weakness classes. |
-| Senior/junior comparison | Defined novice/early-career cohort | Reduces one source of heterogeneity and limits generalization honestly. |
-| Generic correctness errors | Controlled exposed secure/insecure agent changes | Both confidence and retention need known, balanced security states. |
-| Think-aloud during coding | Primarily retrospective, video-cued interview | Avoids imposing continuous verbalization that could change checking. |
+| 1 | Two final-feature probabilities per task, exact hashes, blinded security labels, observed intent episodes. | Compare probability accuracy and security-confidence distributions. A Brier score is not pure calibration, and four judgments do not establish an individual trust trait. |
+| 2 | Every final assigned feature, functionality and target-security assessment; actual agent-origin change histories where observable. | Final vulnerabilities need not be agent-caused. Report all tasks; survival among confirmed insecure exposures is a secondary conditional description. |
+| 3 | Video/transcript/code sequence around application, inspection, continuation, checks and repairs. | Natural editing has no guaranteed keep click or insecure exposure. Use uncertainty and separate application from human endorsement. Verification–outcome association is not its causal effect. |
+| 4 | Class-specific outcomes/behaviour within the same two conditions. | SQL/path have distinct mechanisms and are feasible to test. With 30 people and sparse events, interaction claims are exploratory. |
 
-The old proposal's assumption that acceleration necessarily causes weaker security checking is **a hypothesis**, not an established result. Exploration may bring uncertainty and deeper checking, or it may cause reliance on an unfamiliar API. Either outcome is scientifically useful.
+**Recommended RQ3 wording for the natural study:** How do security verification behaviours before and after observed integration of agent-generated changes differ between acceleration and exploration encouragement, and how are they associated with target vulnerabilities in the final code?
 
-## Why security-specific calibration is worth studying
+Known exposed vulnerabilities can still be studied where actually confirmed. This refinement removes the implication that every participant receives one. The pilot may establish that retention is too sparse to estimate; preserve that outcome rather than forcing flaws into natural agent output. A controlled review study is an alternative procedure with its own question and dataset.
 
-[Perry et al.](https://arxiv.org/abs/2211.03622) experimentally studied AI assistance on security tasks and found an overall security disadvantage for assisted participants while assisted participants more often believed their solutions were secure. In their JavaScript SQL task, 36% of AI-assisted participants versus 7% of controls wrote SQL-injection-vulnerable code. This supports measuring the *confidence–security gap*, but does not predict this study's condition effect.
+## Why the aim remains worthwhile
 
-[Khalid et al.](https://arxiv.org/abs/2609.21020) directly examine whether developers identify insecure AI suggestions, how they evaluate them, and how trust shapes selection. This **narrows the novelty claim**: the present project contributes the within-person condition comparison, exact temporal verification and final-repository trace for two named classes, if carried out successfully. Khalid et al.'s preprint also reports that confidence can track actual security; it would be inaccurate to claim that developers universally overtrust.
+The verified literature motivates three components: interaction purpose, security beliefs/outcomes, and contextual verification evidence. Barke's acceleration/exploration distinction is observational; our encouragement is a new manipulation. Perry motivates collecting code security and beliefs together. Khalid's security evaluation work limits the novelty claim: this study adds a paired encouragement comparison and temporal natural-agent evidence if executed successfully. Mozannar supports retrospective activity interpretation, not our exact mode or trust labels. Source links and limitations are in [REFERENCES.md](REFERENCES.md).
 
-[Okamura and Yamada](https://doi.org/10.1371/journal.pone.0229132) show why trust needs to match automation capability in safety-relevant decisions. That work is human-automation theory outside coding; it motivates the concept, not an empirical prediction for SQL injection. Generic satisfaction or overall trust can be high even if a developer misses a concrete vulnerability. This study therefore asks about security confidence in a specified artifact.
+The contribution is a reproducible task/assessment and evidence-linking method plus bounded empirical estimates for early-career JavaScript developers under these settings. It does not prove that acceleration is always unsafe, that juniors are careless, or that SQL/path are the most frequent LLM flaws. Explicit security requirements mean this is security-salient coding. A source supporting one component does not validate the complete method.
 
-## RQ defenses and what would answer them
+## Changes from the first proposal
 
-### RQ1: confidence alignment
+The initial February proposal covered generic correctness/trust and proposed automatic mode inference from IDE events. The current work narrows the outcome to security, fixes SQL/path classes, uses a defined early-career cohort, and treats mode as coded intent. The earlier controlled checkpoint design guaranteed candidate exposure but constrained natural coding. The current protocol removes those gates and rates final features; it trades guaranteed insecure exposure for freer interaction.
 
-**Why valid:** Security confidence and secure code can diverge in AI-assisted programming ([Perry et al.](https://arxiv.org/abs/2211.03622)). Trust is contextual rather than a single enduring attitude; [Wang et al.](https://doi.org/10.1145/3630106.3658984) and [Brown et al.](https://doi.org/10.1145/3664646.3664757) discuss developer, suggestion, and context factors. [Barke et al.](https://arxiv.org/abs/2206.15000) give a grounded distinction between acceleration and exploration intentions.
-
-**Answer with:** A 0–100% confidence judgment for each frozen reviewed snapshot and its independently adjudicated secure/insecure label. Report mean confidence on secure items and on insecure items separately, their separation, and a proper accuracy score such as Brier score. Compare paired task-level summaries by assigned condition. Relate observed mode codes to these outcomes descriptively, with task and order context.
-
-**Defense under questioning:** One or two answers per class do not estimate a person's full calibration curve. Use “alignment” at item and pooled levels; avoid claiming a stable individual psychological trait. Confidence is an explicit judgment, while trust as a wider construct is triangulated with reliance and interview evidence.
-
-### RQ2: final vulnerability retention
-
-**Why valid:** AI-assisted security outcomes can differ ([Perry et al.](https://arxiv.org/abs/2211.03622)), and judging a suggestion is only part of an integration workflow ([Khalid et al.](https://arxiv.org/abs/2609.21020)). Code that is initially vulnerable may be rejected, repaired, or remain. Counting only “accepted suggestions” selects on a post-condition action and hides successful rejection.
-
-Controlled exposure to insecure AI suggestions has direct precedent in [Oh et al.](https://arxiv.org/abs/2312.06227) and a manipulated ChatGPT study by [Serafini et al.](https://doi.org/10.1145/3706598.3713989). These support a deliberate security stimulus as a defensible method; the report must say whether each candidate was raw agent output or edited by the researcher.
-
-**Answer with:** For **every exposed vulnerable opportunity**, record agent exposure, provisional keep/reject, edits, final affected feature, and oracle status. Report the full all-exposed flow, including missing or unassessable final features. Compare target-vulnerability retention among assessable final features and bound how missing features could affect the result. Separately report the all-exposed rate of functional **and** target-secure final features, functionality, and extra security findings. Compare assigned conditions with participant-paired data.
-
-**Defense:** This measures the developer–agent *workflow* under controlled opportunities, not a natural prevalence of agent defects. The agent-produced candidate must be genuinely observed by the participant; a flaw secretly placed in starter code is a different causal source.
-
-### RQ3: verification timing and association
-
-**Why valid:** [Khalid et al.](https://arxiv.org/abs/2609.21020) study evaluation of generated security choices; [Tang et al.](https://arxiv.org/abs/2405.16081) demonstrate that validation and repair behavior can be observed; [Mozannar et al.](https://doi.org/10.1145/3613904.3641936) and [Wu et al.](https://arxiv.org/abs/2604.16393) support combining event traces with screen replay and retrospective labels. None alone answers this exact before/after-provisional-keep security question in the proposed agent workflow.
-
-**Answer with:** Timestamped security-specific checks before a participant provisionally keeps a change, then checks after keep through submission. Examples: inspect data flow, ask the agent about input validation, run an attack test, inspect a diff, run SAST, repair and re-test. Code actions with video plus transcript; do not infer security checking from time spent or ordinary passing tests alone. Compare behaviors by condition. Describe associations with final removal/retention among exposed vulnerable items.
-
-**Defense:** Verification may occur because a participant already suspects a flaw, so association is not a causal effect of checking. Post-keep analysis applies only to kept changes; report the kept denominator and avoid comparing it as if random.
-
-### RQ4: SQL injection versus path traversal
-
-**Why valid:** The [MITRE 2024 CWE Top 25](https://cwe.mitre.org/top25/archive/2024/2024_top25_list.html) ranks CWE-89 SQL injection #3 and CWE-22 path traversal #5. Both are high-impact, common enough to justify study, and testable with small JavaScript apps. They exercise different source-to-sink reasoning: database query construction versus filesystem path containment. [CodeQL's JavaScript query help for SQL injection](https://codeql.github.com/codeql-query-help/javascript/js-sql-injection/) and [path injection](https://codeql.github.com/codeql-query-help/javascript/js-path-injection/) show the two code-review patterns.
-
-**Answer with:** Balanced secure and vulnerable opportunities for each class in each condition; class-specific confidence, checking, and final retention. Estimate a condition-by-class difference with uncertainty, then inspect qualitative mechanisms. A small study treats this as exploratory, even though it is a named RQ.
-
-**Defense:** MITRE ranks software weaknesses by its own prevalence/severity methodology; it does **not** show these are the two most exposed LLM-generated vulnerabilities. Choose these classes for seriousness, distinct mechanisms, implementation feasibility, and objective tests. Do not claim generality to secrets, XSS, command injection, or other languages.
-
-## Intended contribution
-
-1. A **method** for linking an agent suggestion, the exact reviewed snapshot, confidence, provisional decision, verification actions, and final security outcome.
-2. Evidence about whether **assigned workflow orientation** and **observed mode** are associated with different security judgments and behaviors among early-career developers.
-3. A small, reproducible **task and oracle set** for two weakness classes, with secure and vulnerable agent candidates and provenance.
-4. Design implications for review support: where in the workflow security checks are missed and whether a later check repairs a problem. This is contingent on observed results, not guaranteed.
-
-## How to interpret possible results
-
-- If assigned conditions differ, mode coding shows the intended shift, and project/order controls are credible, report an effect of the **assigned encouragement package** on the named outcomes. Do not automatically identify a pure internal cognitive-state effect.
-- If assigned conditions differ but observed mode does not, report a task-context/framing effect and a failed mode manipulation. The mode theory is not confirmed by that contrast.
-- If observed modes differ but the security outcomes do not, the study still contributes a bounded null estimate with confidence intervals and a record of security-check practices.
-- If people in exploration have more residual vulnerabilities, that is compatible with reliance under unfamiliarity; it would contradict a simple “acceleration is always riskier” story.
-- If RQ4 estimates are noisy, give the class-specific counts and intervals and avoid treating a nonsignificant interaction as proof the classes behave identically.
-
-## Claims this study should avoid
-
-- “Acceleration causes insecure code” unless randomization, manipulation, and analysis support the specific assigned-condition effect.
-- “Clickstream proves cognitive mode.” Mode inference requires contextual coding and participant explanation.
-- “Junior developers are naturally careless.” Measure baseline skills and report variation; errors under uncertain agent output are not a character trait.
-- “SonarQube/Snyk/CodeQL detects every vulnerability.” Use tests and human adjudication as the oracle; scanners are supplementary.
-- “These two vulnerabilities are the most common AI errors.” No cited source establishes that.
+RQ1 is the primary probability-alignment estimate, RQ2 is a key secondary final-security outcome, RQ3 explains verification sequences, and RQ4 is exploratory. The [analysis plan](NATURAL_ANALYSIS_PLAN.md) defines units, denominators, missingness and sparse-event limits. Keep assignment comparisons separate from observational mode associations, preserve negative/inconclusive findings, and freeze the final questions and analysis before main data.

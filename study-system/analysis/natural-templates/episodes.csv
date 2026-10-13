@@ -1,0 +1,1 @@
+participant_id,task_id,episode_id,coder_id,start_seconds,end_seconds,mode,active_or_waiting,trace_ref,replay_ref,uncertainty

@@ -1,3 +1,5 @@
+> Historical r1 CLI rehearsal guide. The r2 kit moves the encouragement card outside the agent workspace and updates task identity. Use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the local portal guide](../../research-portal/LOCAL_NATURAL_REHEARSAL.md) for the current steps.
+
 # Natural-workflow rehearsal and pilot gate — 13 October 2026
 
 This is a **researcher-operated rehearsal kit** for the revised [method](../../NATURAL_WORKFLOW_METHOD.md). It bypasses the current portal's controlled proposal gate. The portal, its participant ZIP, its after-task form and its analysis export still implement the older protocol. Do not give those to a natural-workflow participant. A real participant pilot requires the institution-approved information/consent and data-handling procedure to cover this revised flow; the approved documents are not present here for comparison.

@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # A-Q1 prototype readiness and validity checks
 
 **Historical first-slice record.** The local app, both full task projects, all eight checkpoints and the two-task synthetic dry run were built after this note. Its pending implementation steps below are superseded by the current [artifact status](../STATUS.md) and [session runbook](SESSION_RUNBOOK.md). No participant has completed the protocol.

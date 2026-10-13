@@ -1,6 +1,8 @@
 # Deploy the research portal on Oracle Cloud
 
-This guide deploys the current `research-portal` code with PostgreSQL on one Oracle Cloud VM. It is written for a new VM, a domain name such as `study.example.org`, and an Ubuntu 24.04 image. Replace the example domain, IP address, email, and paths with yours. Run the commands in order; commands marked **Mac** run on your computer, and the others run over SSH on the VM.
+**Current natural workflow:** use [HOSTED_NATURAL_UPDATE.md](HOSTED_NATURAL_UPDATE.md) to update an existing portal and enable evidence uploads and researcher retrieval. The instructions below describe the earlier controlled-checkpoint deployment and its 8 MB upload limit; they are not sufficient for the natural workflow.
+
+This guide deploys the older `research-portal` code with PostgreSQL on one Oracle Cloud VM. It is written for a new VM, a domain name such as `study.example.org`, and an Ubuntu 24.04 image. Replace the example domain, IP address, email, and paths with yours. Run the commands in order; commands marked **Mac** run on your computer, and the others run over SSH on the VM.
 
 ## 0. Resolve the Ubuntu 20.04 image first
 

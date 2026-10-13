@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Readiness audit for the first participant pilot — 12 October 2026
 
 **13 October design update:** The recommended human pilot now uses [uninterrupted natural coding](../../NATURAL_WORKFLOW_METHOD.md). The current portal, ZIP and review-gate scripts have not been migrated, so this audit's software passes do **not** clear the revised pilot. The approved ethics materials must be checked against the changed procedure. All readiness items below refer to the older controlled-checkpoint route unless explicitly updated.

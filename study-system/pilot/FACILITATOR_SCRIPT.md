@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Facilitator script — use with the approved participant materials
 
 **Legacy checkpoint script.** The proposed natural-coding pilot in [NATURAL_WORKFLOW_METHOD.md](../../NATURAL_WORKFLOW_METHOD.md) removes the pause/reveal/no-edit instructions below. Do not read this script to participants in that pilot. A new approved script is required before recruitment.

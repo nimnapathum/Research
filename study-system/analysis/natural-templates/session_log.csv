@@ -1,0 +1,1 @@
+participant_id,task_id,protocol_version,project_id,condition,task_order,os,ide_version,model,node_version,review_settings,conversation_id,first_prompt_at,last_coding_at,finish_reason,clock_offset_seconds,video_ref,transcript_ref,interview_ref,capture_quality,media_quality,deviation,missing_reason

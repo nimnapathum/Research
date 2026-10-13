@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Pilot measurement inventory: two coding-agent tasks
 
 > **Protocol distinction:** Most entries below describe the earlier controlled-checkpoint design. For the revised natural agent workflow, use [NATURAL_DATA_COVERAGE.md](NATURAL_DATA_COVERAGE.md) as the operational capture and safety checklist. Checkpoint exposure/decision latencies and old hook upload claims do not apply to the natural ZIP.

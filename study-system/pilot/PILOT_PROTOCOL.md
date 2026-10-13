@@ -1,3 +1,5 @@
+> Historical controlled-workflow material. For the current natural task use [NATURAL_SESSION_RUNBOOK.md](NATURAL_SESSION_RUNBOOK.md) and [the current methodology](../../NATURAL_WORKFLOW_METHOD.md). This document is retained for the older prototype.
+
 # Human pilot and freeze plan — draft
 
 **Superseded for the next natural-coding human pilot:** This page tests the existing eight-checkpoint software protocol. The revised proposed pilot is [NATURAL_WORKFLOW_METHOD.md](../../NATURAL_WORKFLOW_METHOD.md). Keep this page for a separately labeled mechanics rehearsal only; do not interpret it as validation of natural agent use.

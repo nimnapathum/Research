@@ -1,3 +1,5 @@
+> Historical controlled task specification. Current natural-task features and exposure rules are in [TASK_DESIGN.md](../TASK_DESIGN.md).
+
 # Project A: resource catalogue
 
 **Status:** all four starter routes and prototype variants are implemented; participant validation and authentic candidate provenance are pending. This project can be assigned to either acceleration or exploration encouragement.
