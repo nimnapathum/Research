@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Security repair">
+<style>
+.line{fill:none;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.dark{fill:#2A1A0E}
+.rust{fill:#D4621A}
+.gold{fill:#F4AE52}
+.cream{fill:#FEF3E2}
+.creamline{fill:#FEF3E2;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.rustline{fill:#D4621A;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.goldline{fill:#F4AE52;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<path class="creamline" d="M128 23 207 55v62c0 54-30 91-79 116-49-25-79-62-79-116V55l79-32Z"/>
+<path d="M85 181 151 115" fill="none" stroke="#D4621A" stroke-width="22" stroke-linecap="round"/>
+<path class="line" d="m146 104 18-18 18 18-18 18"/>
+<circle class="goldline" cx="82" cy="184" r="17"/>
+</svg>

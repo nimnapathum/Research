@@ -1,5 +1,7 @@
 # Design decisions and questions to settle
 
+**13 October revision:** The checkpoint choices below are historical design decisions for the built prototype, not the recommended human-pilot workflow. [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) prioritizes uninterrupted agent use; it keeps guaranteed secure/insecure review stimuli only as a separately labeled optional experiment. The revised method needs software and ethics reconciliation before recruitment.
+
 **Rule:** “Fixed” means supplied by the researcher as the current aim/RQs or fundamental scope. “Proposed” means a recommended choice supported by relevant prior research or technical guidance, but not yet validated for this task. “Pilot gate” means the study should not recruit a main sample until that choice works in the actual setup.
 
 | Choice | Status | Defense / evidence | Gate or next action |

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Keep or reject decision">
+<style>
+.line{fill:none;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.dark{fill:#2A1A0E}
+.rust{fill:#D4621A}
+.gold{fill:#F4AE52}
+.cream{fill:#FEF3E2}
+.creamline{fill:#FEF3E2;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.rustline{fill:#D4621A;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.goldline{fill:#F4AE52;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<path class="line" d="M128 212v-80M128 132 72 77M128 132l56-55"/>
+<circle class="goldline" cx="70" cy="72" r="35"/>
+<path class="line" d="m53 72 12 12 23-25"/>
+<circle class="creamline" cx="186" cy="72" r="35"/>
+<path class="line" d="m174 60 24 24m0-24-24 24"/>
+<circle class="rustline" cx="128" cy="213" r="12"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Coding agent">
+<style>
+.line{fill:none;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.dark{fill:#2A1A0E}
+.rust{fill:#D4621A}
+.gold{fill:#F4AE52}
+.cream{fill:#FEF3E2}
+.creamline{fill:#FEF3E2;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.rustline{fill:#D4621A;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.goldline{fill:#F4AE52;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<rect class="creamline" x="28" y="48" width="200" height="160" rx="22"/>
+<path class="rustline" d="M50 48h156a22 22 0 0 1 22 22v25H28V70a22 22 0 0 1 22-22Z"/>
+<circle class="cream" cx="56" cy="72" r="7"/><circle class="gold" cx="78" cy="72" r="7"/>
+<path class="line" d="m70 125 24 20-24 20M112 166h57"/>
+<path class="goldline" d="m181 113 5 13 13 5-13 5-5 13-5-13-13-5 13-5 5-13Z"/>
+</svg>

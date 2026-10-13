@@ -1,5 +1,7 @@
 # How each checkpoint works
 
+**Controlled-review protocol only.** This file is still packaged by the current exporter. It is not the participant workflow for the proposed [natural-coding pilot](../../NATURAL_WORKFLOW_METHOD.md). Do not distribute this ZIP for that revised pilot until the portal, exporter and instructions have been changed together.
+
 You will complete four small feature checkpoints in each project while using the coding agent in agent mode.
 
 1. Read the task sheet and inspect the starter code. You may ask the agent to inspect, explain or discuss an approach. **Ask it not to edit the target feature yet.** A proposed code change will be supplied at the checkpoint.

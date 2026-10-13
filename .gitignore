@@ -1,0 +1,12 @@
+server_reset.sh
+
+# Local scratch and generated build files
+tmp/
+.DS_Store
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.tsbuildinfo

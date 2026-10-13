@@ -1,5 +1,7 @@
 # Research aim, questions, and defenses
 
+**Protocol update, 13 October 2026:** The researcher-set RQs below remain the research aims, but the forced checkpoint implementation is under revision. [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) is the proposed human-pilot method. Under it, RQ1 confidence concerns the **final task snapshot**; RQ2 covers final task security and separately confirmed natural agent-origin vulnerable changes; RQ3 uses observed integration rather than a forced keep/reject click. The checkpoint-specific operational claims farther down this file describe the older controlled design and must be rewritten before a main-study protocol is frozen. A separate controlled review probe would answer exact-candidate confidence questions, not natural acceptance.
+
 **Canonical status:** researcher-supplied RQ wording retained, reviewed against the 8 October 2026 implementation. Source support and its limits are in [REFERENCES.md](REFERENCES.md); the code-to-RQ audit is in [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md).
 
 ## Aim
@@ -8,7 +10,7 @@
 
 The intended object of study is a developer judging a **supplied agent-origin change to a specific repository**, deciding what to keep, checking it, and submitting code that can be assessed for named security requirements. “Trust calibration” here is operationalized as the relationship between stated **security confidence** and assessed security of the **same saved code snapshot**. Four judgments per task cannot establish a stable individual calibration trait. Reliance and verification are observed behaviors, not synonyms for confidence.
 
-**Current implementation caveat:** the 16 runnable candidate patches are researcher-constructed software prototypes. They support engineering and mechanics testing, but the main study cannot call them unmodified agent output. The [candidate provenance protocol](study-system/pilot/CANDIDATE_PROVENANCE.md) requires either a genuine target-agent pool or an explicit constructed-stimulus description before participant use. The portal also permits manual assignment entry; the randomized-encouragement claim depends on a locked allocation record, not on the portal UI alone.
+**Current implementation caveat:** the 16 runnable candidate patches are researcher-constructed software prototypes. They support engineering and mechanics testing, but the main study cannot call them unmodified agent output. The [candidate provenance protocol](study-system/pilot/CANDIDATE_PROVENANCE.md) requires either a genuine target-agent pool or an explicit constructed-stimulus description before participant use. The portal now reserves the checkpoint service's seeded balanced allocation automatically; the randomized-encouragement claim still depends on auditing actual allocations and deviations. The [data and figure plan](DATA_AND_FIGURE_PLAN.md) maps collected evidence to each RQ.
 
 ## Finalized RQs (verbatim)
 
@@ -21,6 +23,8 @@ The intended object of study is a developer judging a **supplied agent-origin ch
 **RQ3:** How do security verification behaviors before and after provisional retention of agent-generated code differ between acceleration-encouragement and exploration-encouragement conditions, and how are these behaviors associated with removal or retention of known exposed vulnerabilities in the final submission?
 
 **RQ4:** Do these patterns differ between SQL injection and path traversal opportunities?
+
+**Analysis priority with 30 completed participants:** RQ1 has one prespecified primary paired estimate; RQ2 is a key secondary security outcome; RQ3 uses event coding and interview/video explanation; RQ4 is exploratory. All four remain research questions, but the fixed sample does not support four equally powered confirmatory tests. Report effect sizes, intervals and observed cases, including inconclusive results. The [sample rationale](METHODOLOGY.md) explains the resource and sensitivity argument.
 
 ### Small wording issue to decide with the supervisor
 

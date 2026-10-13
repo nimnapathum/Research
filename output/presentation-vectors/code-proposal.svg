@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Code proposal">
+<style>
+.line{fill:none;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.dark{fill:#2A1A0E}
+.rust{fill:#D4621A}
+.gold{fill:#F4AE52}
+.cream{fill:#FEF3E2}
+.creamline{fill:#FEF3E2;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.rustline{fill:#D4621A;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.goldline{fill:#F4AE52;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<path class="creamline" d="M60 27h113l35 35v165H60a15 15 0 0 1-15-15V42a15 15 0 0 1 15-15Z"/>
+<path class="goldline" d="M173 27v35h35"/>
+<path class="line" d="M76 92h42M76 130h56M76 171h50"/>
+<path class="line" d="M159 130h32M175 114v32"/>
+<path class="line" d="M159 171h32"/>
+<path d="M75 150h63" stroke="#D4621A" stroke-width="11" stroke-linecap="round"/>
+</svg>

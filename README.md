@@ -1,6 +1,6 @@
 # Security trust in agent-assisted coding: living research plan
 
-**Status:** working protocol and runnable engineering prototype, 8 October 2026. The aim and four research questions below are the current version supplied by the researcher. The researcher reports ethics approval; reconcile the approved materials with the current recording, proposal-source and optional pointer procedures. Task stimuli, instrument wording, and analysis choices still require a human pilot and protocol freeze.
+**Status, 13 October 2026:** the proposed next human pilot now uses [uninterrupted natural coding](NATURAL_WORKFLOW_METHOD.md). The researcher confirms ethics approval covers this procedure. Participants will work on their own computers through a hosted portal. The runnable portal/ZIP still implements an older controlled-checkpoint experiment; it is **not ready for the revised participant pilot**. A [portable natural rehearsal kit](study-system/pilot/NATURAL_REHEARSAL_TODAY.md) exists for researcher-only testing, but the portal must deliver and collect the revised task, final rating, snapshots, video and transcript before the participant route is ready. See the [current readiness decision](study-system/pilot/READINESS_2026-10-13.md).
 
 ## Aim
 
@@ -17,6 +17,8 @@ For use in formal writing: **Examine how acceleration-oriented and exploration-o
 
 RQ2's intended evidence is: exposed vulnerabilities, participant decisions, repairs, and final code security. See [RQ.md](RQ.md) for the exact wording and justification.
 
+The revised free-coding method cannot guarantee the “known exposed vulnerabilities” assumed by RQ3. [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) gives the proposed wording change and the alternative of a separate controlled review experiment. Resolve this before freezing the main-study RQs.
+
 ## Read this set in order
 
 The [LaTeX progress report](Research_Progress_Report.tex) and [eight-page PDF](output/pdf/Research_Progress_Report.pdf) are earlier progress snapshots. Use the current Markdown protocol and [design traceability audit](DESIGN_TRACEABILITY.md) for the latest implementation limits. No pilot or participant results exist yet.
@@ -26,12 +28,15 @@ For current remaining work, see the [artifact status](study-system/STATUS.md) an
 | File | Purpose |
 | --- | --- |
 | [RQ.md](RQ.md) | Aim, exact RQs, comparison with the February proposal, defenses, claims and boundaries |
-| [METHODOLOGY.md](METHODOLOGY.md) | Participant study and runnable session sequence |
+| [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) | Proposed natural-coding pilot, measures, tradeoffs and software migration |
+| [METHODOLOGY.md](METHODOLOGY.md) | Archived controlled-checkpoint protocol implemented by the current prototype |
+| [Methodology flow image](output/figures/methodology_flow.png) ([editable SVG](output/figures/methodology_flow.svg)) | **Older checkpoint workflow**; update before showing as the current method |
 | [TASK_DESIGN.md](TASK_DESIGN.md) | Two-task design and controlled security opportunities |
 | [tasks/README.md](tasks/README.md) | Required files for each task package and status of task artifacts |
 | [tasks/RESOURCE_CATALOGUE.md](tasks/RESOURCE_CATALOGUE.md) | Example project A, used under either condition |
 | [tasks/SUPPORT_ARCHIVE.md](tasks/SUPPORT_ARCHIVE.md) | Example project B, used under either condition |
 | [MEASURES_AND_EVALUATION.md](MEASURES_AND_EVALUATION.md) | Operational definitions, security oracle, analysis and reporting |
+| [DATA_AND_FIGURE_PLAN.md](DATA_AND_FIGURE_PLAN.md) | Quantitative/qualitative data inventory, prior-study transfers, and proposed figures by RQ |
 | [IDE_TELEMETRY.md](IDE_TELEMETRY.md) | Extension, agent transcript, provenance, and logging feasibility |
 | [INTERVIEW_AND_FORMS.md](INTERVIEW_AND_FORMS.md) | Screening, snapshot confidence forms, retrospective interview |
 | [REFERENCES.md](REFERENCES.md) | Evidence ledger with direct links and limits of each source |
@@ -45,7 +50,7 @@ For current remaining work, see the [artifact status](study-system/STATUS.md) an
 
 **Built as an engineering prototype, not yet experimentally validated:** JavaScript/Node with built-in SQLite; four short feature checkpoints per task; two vulnerable and two secure constructed proposals per task; one SQL and one path opportunity of each security status; a provisional keep/reject decision and exact-snapshot confidence rating at each checkpoint; a participant portal, task ZIP, Antigravity workspace hook and local client; optional cross-platform pointer summaries; and a blinded security-adjudication queue. The controlled proposals are not unmodified Antigravity outputs. The VS Code companion extension remains source only and is not installed in the standalone desktop route.
 
-**Decide after pilot:** exact agent/version and account policy, whether the IDE exposes every necessary event, final package difficulty/time, wording of encouragement, whether to allow a genuinely free agent after a controlled suggestion, sample size from precision/power simulation, exact primary confidence summary, and any optional workspace-instruction experiment.
+**Decide after pilot:** exact agent/version and account policy, whether the IDE exposes every necessary event, final package difficulty/time, wording of encouragement, whether to allow a genuinely free agent after a controlled suggestion, the sensitivity/precision of the fixed 30-participant target, exact primary confidence summary, and any optional workspace-instruction experiment.
 
 ## Important boundaries
 
@@ -65,10 +70,13 @@ The February 2026 [original proposal](</Users/nimnapathum/Trust Calibration in D
 | 2026-10-05 | Move insecure workspace instructions out of the core protocol | Not present in finalized RQs; optional extension requires separate randomization and analysis |
 | 2026-10-05 | Recommend balanced known secure and vulnerable agent suggestions | Gives a denominator for trust alignment and equal exposure across conditions; pilot required |
 | 2026-10-08 | Audit portal, capture and analysis against RQs and sources | Fixed project labels and assignment defaults; documented which methods are sourced and which require original pilot validation |
+| 2026-10-11 | Link data inventory and research figure plan to current exports | Separates automatic, manually coded and optional streams; specifies denominators and displays for each RQ |
+| 2026-10-12 | Set a bounded target of 30 completed participants and add the methodology flow image | Keeps the analysis hierarchy and visual session sequence consistent with the current plan |
+| 2026-10-13 | Prefer uninterrupted coding for the next human feasibility pilot | The forced reveal/no-edit/rating gate may suppress the natural acceleration/exploration behaviors under study; the existing portal becomes a controlled-review prototype |
 
 ## Next build gates
 
 1. Supervisor reviews RQ wording and whether RQ1's two clauses are one coherent primary question.
-2. Use the checkpoint CLI's balanced allocation before entering each portal assignment. Collect genuine agent proposal provenance, or disclose constructed stimuli accurately.
+2. Create password-portal participants with its automatic balanced checkpoint allocation. Audit the realized sequences. Collect genuine agent proposal provenance, or disclose constructed stimuli accurately.
 3. Reconcile the reported ethics approval with final materials. Test the full workflow on each intended Antigravity/OS host; document hook, transcript, video, optional pointer and clock alignment. Then pilot 4–6 target-population participants and inspect difficulty, condition separation, exposure, confidence wording and interview recall.
 4. Independently review and freeze the final candidate set, protocol, analysis plan, and materials **before** the main sample. Record deviations and missing data.

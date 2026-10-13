@@ -1,6 +1,6 @@
 # Measures, security adjudication, and evaluation
 
-**Status:** analysis plan to freeze after pilot and before main study. The unit for RQ1 is a reviewed **candidate snapshot**; for RQ2 it is an **exposed vulnerable opportunity in the final repository**; for RQ3 it is an **event-coded opportunity**; for RQ4 it is the class-specific version of these units. Never silently exchange denominators. [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md) separates source-backed rationale from unvalidated adaptations.
+**Status:** analysis specification for the **older controlled-checkpoint design**. Do not apply its exact-candidate Brier scores or exposed-proposal retention denominators to the proposed natural-coding pilot. Use [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) for the revised units and migration requirements. [DATA_AND_FIGURE_PLAN.md](DATA_AND_FIGURE_PLAN.md) likewise describes the current checkpoint export and needs revision after implementation. [DESIGN_TRACEABILITY.md](DESIGN_TRACEABILITY.md) separates source-backed rationale from unvalidated adaptations.
 
 ## 1. Data dictionary
 
@@ -87,12 +87,12 @@ For SQL and path separately, show the RQ1 confidence components, RQ2 retention f
 
 ## 7. Primary statistical approach
 
-- Freeze a **primary** RQ1 contrast (recommended paired Brier task-mean difference) and an RQ2 contrast before recruitment. Recommended RQ2 contrast is the paired difference in **all-exposed functional-and-target-secure success**; also report target-vulnerability retention among assessable final features with missingness bounds. RQ3 and RQ4 are secondary/exploratory; state this hierarchy to reduce multiple-testing ambiguity.
+- Freeze **one primary** RQ1 contrast (recommended paired Brier task-mean difference) and a **key secondary** RQ2 contrast before recruitment. Recommended RQ2 contrast is the paired difference in **all-exposed functional-and-target-secure success**; also report target-vulnerability retention among assessable final features with missingness bounds. RQ3 is process-focused and RQ4 exploratory. This hierarchy matches the fixed target of 30 completed participants; do not present all four RQs as equally powered confirmatory tests.
 - Analyze the **intention-to-treat encouragement** assignment first, including participants whose observed mode does not match. Use participant-paired difference summaries and intervals from a participant-level bootstrap or an order-respecting randomization/permutation test; include project, task order, class, and candidate version in a mixed model only if model size is justified.
 - For binary RQ2 with two vulnerable opportunities per task, participant means are coarse. Report raw counts/flows and an exact or bootstrap interval; avoid fragile model coefficients if cells are sparse.
 - Covariates (prior AI use, baseline SQL/path knowledge, professional/student status) are prespecified for sensitivity/description; do not select them post hoc to rescue significance. Project and order matter because every person does both tasks.
 - Missing exposure, unavailable transcript, unreadable snapshot, skipped confidence, and lost final file are separate missingness categories. Show outcomes under optimistic/pessimistic bounds when missingness could change conclusions.
-- Before main recruitment, use pilot variance/event rates to simulate precision for paired effects and class interaction. Pick a feasible sample target and publish the detectable effect/interval width; **do not** cite 30 as universally sufficient.
+- Before main recruitment, use pilot missingness/event rates and plausible paired-variance ranges for a sensitivity/precision analysis at **30 complete participants**. Publish the detectable effect/expected interval width and show the wide uncertainty for RQ2 and class interaction; **do not** cite 30 as universally sufficient. See [METHODOLOGY.md](METHODOLOGY.md) for the bounded-sample rationale.
 - Give estimates, uncertainty, denominators, and examples of divergent cases, not only p-values.
 
 ## 8. Behavioral coding quality and triangulation

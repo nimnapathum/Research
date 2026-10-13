@@ -1,5 +1,7 @@
 # Human pilot and freeze plan — draft
 
+**Superseded for the next natural-coding human pilot:** This page tests the existing eight-checkpoint software protocol. The revised proposed pilot is [NATURAL_WORKFLOW_METHOD.md](../../NATURAL_WORKFLOW_METHOD.md). Keep this page for a separately labeled mechanics rehearsal only; do not interpret it as validation of natural agent use.
+
 **Purpose:** find protocol failures before testing RQ1–RQ4. The software dry run is not a human pilot. The researcher reports institutional ethics approval; confirm that the approved consent, proposal-source disclosure, recording and retention wording covers the final procedure before recruiting or recording anyone.
 
 ## Pilot sequence
@@ -22,4 +24,4 @@
 | Can a junior participant's miss be distinguished from lack of knowledge? | Baseline recognition, experience, think-aloud/replay account, verification trace. | Clarify interpretation and report knowledge-stratified sensitivity; do not label every miss overtrust. |
 | Did data streams and privacy controls work? | `audit`, raw log/video/transcript alignment, consent and storage check. | Repair capture; mark missingness explicitly; repeat host rehearsal. |
 
-The pilot should produce a feasibility report with counts and examples, not claims that acceleration or exploration caused vulnerability retention. A final sample size requires a stated precision or power target and observed pilot variance; four to eight pilots are not enough to establish RQ effects.
+The pilot should produce a feasibility report with counts and examples, not claims that acceleration or exploration caused vulnerability retention. The main target is 30 completed participants; before main recruitment, report a sensitivity/precision analysis for that fixed target across plausible paired variances and missingness. Four to eight pilots are not enough to estimate an RQ effect reliably.

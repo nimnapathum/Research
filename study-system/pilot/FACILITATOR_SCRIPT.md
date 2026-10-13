@@ -1,5 +1,7 @@
 # Facilitator script — use with the approved participant materials
 
+**Legacy checkpoint script.** The proposed natural-coding pilot in [NATURAL_WORKFLOW_METHOD.md](../../NATURAL_WORKFLOW_METHOD.md) removes the pause/reveal/no-edit instructions below. Do not read this script to participants in that pilot. A new approved script is required before recruitment.
+
 Use the institution-approved consent and information sheet verbatim. This script only standardizes study operation. Add its version and any deviation to the session log. The researcher knows candidate status; avoid discussing it until debrief.
 
 ## Start, about 10 minutes

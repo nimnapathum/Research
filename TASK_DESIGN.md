@@ -1,6 +1,6 @@
 # Task design and stimulus build plan
 
-**Status:** two runnable task packages and constructed stimulus prototypes built; human pilot pending. Each participant completes both projects. Randomized, balanced assignment requires the checkpoint CLI's seeded allocation to be copied into the portal before recruitment; manual portal entry alone does not establish it. The project itself is **not** permanently “the acceleration task” or “the exploration task”; this prevents project and condition from being identical.
+**Status:** task/stimulus plan for the **older controlled-checkpoint design**. Two runnable projects and constructed candidate prototypes exist, but their mandatory reveal gates are not the recommended natural-coding pilot. See [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) before changing participant materials. Each participant still completes both projects under counterbalanced assigned conditions; the project itself is not permanently tied to one condition.
 
 ## 1. Common technology and learning load
 

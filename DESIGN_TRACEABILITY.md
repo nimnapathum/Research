@@ -1,5 +1,7 @@
 # Design traceability and validity audit
 
+**Design status:** This audit covers the built controlled-checkpoint prototype. The proposed [natural-coding pilot](NATURAL_WORKFLOW_METHOD.md) has not been implemented in the portal/client or validated with participants.
+
 **Status: 8 October 2026.** This connects the current software to [the RQs](RQ.md), [methodology](METHODOLOGY.md), [evaluation plan](MEASURES_AND_EVALUATION.md), and [source ledger](REFERENCES.md). A citation motivates a decision; it does not validate this particular task, instrument, or Antigravity implementation. The engineering dry runs used synthetic data. No human result has been observed.
 
 ## What the study can claim

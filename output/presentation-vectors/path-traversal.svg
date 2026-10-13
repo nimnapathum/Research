@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Path traversal risk">
+<style>
+.line{fill:none;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.dark{fill:#2A1A0E}
+.rust{fill:#D4621A}
+.gold{fill:#F4AE52}
+.cream{fill:#FEF3E2}
+.creamline{fill:#FEF3E2;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.rustline{fill:#D4621A;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.goldline{fill:#F4AE52;stroke:#2A1A0E;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<path class="creamline" d="M30 82a14 14 0 0 1 14-14h59l20 22h89a14 14 0 0 1 14 14v104a14 14 0 0 1-14 14H44a14 14 0 0 1-14-14V82Z"/>
+<path class="line" d="M52 126h148"/>
+<path d="M72 189c19-27 39-41 61-43 29-3 44-19 51-52" fill="none" stroke="#D4621A" stroke-width="14" stroke-linecap="round"/>
+<path class="line" d="m165 98 23-20 19 23"/>
+<circle class="gold" cx="73" cy="189" r="7"/>
+</svg>

@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="2250" viewBox="0 0 3000 2250" role="img" aria-labelledby="title desc">
+<title id="title">Research methodology flow</title>
+<desc id="desc">Four-stage flow from preparation and pilot to recruitment, two coding tasks with four security review checkpoints each, evidence collection, and analysis.</desc>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M 1 1 L 11 6 L 1 11" fill="none" stroke="#315f66" stroke-width="2.2"/></marker></defs>
+<rect width="3000" height="2250" fill="#ffffff"/>
+<text x="72" y="82" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="59" font-weight="700" text-anchor="start">Research methodology</text>
+<text x="75" y="119" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="400" text-anchor="start">Security trust calibration during agent-assisted JavaScript coding</text>
+<rect x="65" y="155" width="2870" height="320" rx="28" fill="#f5f7f7" stroke="#d1dadd" stroke-width="2"/>
+<rect x="95" y="179" width="67" height="67" rx="18" fill="#315f66" stroke="#315f66" stroke-width="0"/>
+<text x="129" y="226" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="middle">1</text>
+<text x="185" y="227" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" text-anchor="start">Prepare and pilot before main data collection</text>
+<rect x="100" y="260" width="890" height="175" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="130" y="310" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="start">Match tasks and proposals</text>
+<text x="130" y="354" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Two small JavaScript projects</text>
+<text x="130" y="389" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">SQL injection and path traversal</text>
+<text x="130" y="424" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Secure and vulnerable code variants</text>
+<rect x="1055" y="260" width="890" height="175" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1085" y="310" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="start">Validate evidence</text>
+<text x="1085" y="354" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Normal and attack tests; review rubric</text>
+<text x="1085" y="389" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Record candidate origin and exact diff</text>
+<text x="1085" y="424" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Label constructed stimuli honestly</text>
+<rect x="2010" y="260" width="890" height="175" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="2040" y="310" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="start">Pilot, revise, freeze</text>
+<text x="2040" y="354" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">4–6 separate pilot participants</text>
+<text x="2040" y="389" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Test capture, task timing, mode separation</text>
+<text x="2040" y="424" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Freeze materials before main study</text>
+<path d="M 993 347 L 1047 347" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M 1948 347 L 2002 347" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M 1500 478 L 1500 517" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="65" y="525" width="2870" height="285" rx="28" fill="#f5f7f7" stroke="#d1dadd" stroke-width="2"/>
+<rect x="95" y="549" width="67" height="67" rx="18" fill="#315f66" stroke="#315f66" stroke-width="0"/>
+<text x="129" y="596" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="middle">2</text>
+<text x="185" y="597" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" text-anchor="start">Recruit, prepare, and allocate 30 completed participants</text>
+<rect x="100" y="625" width="890" height="145" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="130" y="675" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Recruit and consent</text>
+<text x="130" y="719" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Final-year CS/IT students and junior SEs</text>
+<text x="130" y="754" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Basic JavaScript and IDE eligibility</text>
+<rect x="1055" y="625" width="890" height="145" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1085" y="675" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Baseline and training</text>
+<text x="1085" y="719" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Experience, security and agent-use survey</text>
+<text x="1085" y="754" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Portal ZIP, Antigravity and agent-mode practice</text>
+<rect x="2010" y="625" width="890" height="145" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="2040" y="675" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Balanced assignment</text>
+<text x="2040" y="719" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Project A + B; one task per condition</text>
+<text x="2040" y="754" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="start">Counterbalance project and task order</text>
+<path d="M 993 697 L 1047 697" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M 1948 697 L 2002 697" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M 1500 813 L 1500 857" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="65" y="865" width="2870" height="750" rx="28" fill="#f5f7f7" stroke="#d1dadd" stroke-width="2"/>
+<rect x="95" y="889" width="67" height="67" rx="18" fill="#315f66" stroke="#315f66" stroke-width="0"/>
+<text x="129" y="936" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="middle">3</text>
+<text x="185" y="937" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" text-anchor="start">Participant session: two coding tasks with the same review workflow</text>
+<rect x="100" y="970" width="1100" height="130" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="130" y="1020" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="start">Task 1</text>
+<text x="130" y="1064" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Project A or B; assigned acceleration or exploration; 35–45 min</text>
+<rect x="1260" y="970" width="480" height="130" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1290" y="1020" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="start">Reset</text>
+<text x="1290" y="1064" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">5-minute break; new workspace</text>
+<rect x="1800" y="970" width="1100" height="130" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1830" y="1020" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="start">Task 2</text>
+<text x="1830" y="1064" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Other project and other condition; 35–45 min</text>
+<path d="M 1204 1035 L 1252 1035" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M 1744 1035 L 1792 1035" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="100" y="1161" fill="#315f66" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Inside each task: repeat four feature checkpoints</text>
+<text x="2900" y="1161" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="400" text-anchor="end">1 secure + 1 vulnerable SQL; 1 secure + 1 vulnerable path</text>
+<rect x="100" y="1200" width="420" height="205" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="130" y="1250" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" text-anchor="start">1  Feature brief</text>
+<text x="130" y="1294" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">Function and explicit</text>
+<text x="130" y="1329" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">security requirement</text>
+<path d="M 525 1302 L 568 1302" fill="none" stroke="#315f66" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="575" y="1200" width="420" height="205" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="605" y="1250" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" text-anchor="start">2  Agent work</text>
+<text x="605" y="1294" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">Discuss, inspect, plan</text>
+<text x="605" y="1329" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">before target edit</text>
+<path d="M 1000 1302 L 1043 1302" fill="none" stroke="#315f66" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1050" y="1200" width="420" height="205" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1080" y="1250" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" text-anchor="start">3  Reveal proposal</text>
+<text x="1080" y="1294" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">Controlled secure or</text>
+<text x="1080" y="1329" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">vulnerable code applied</text>
+<path d="M 1475 1302 L 1518 1302" fill="none" stroke="#315f66" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1525" y="1200" width="420" height="205" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1555" y="1250" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" text-anchor="start">4  Review</text>
+<text x="1555" y="1294" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">Frozen snapshot;</text>
+<text x="1555" y="1329" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">inspect, ask, test</text>
+<path d="M 1950 1302 L 1993 1302" fill="none" stroke="#315f66" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="2000" y="1200" width="420" height="205" rx="22" fill="#e8f0f0" stroke="#9caeb4" stroke-width="3"/>
+<text x="2030" y="1250" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" text-anchor="start">5  Decide and rate</text>
+<text x="2030" y="1294" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">Provisional keep/reject</text>
+<text x="2030" y="1329" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">0–100% security confidence</text>
+<path d="M 2425 1302 L 2468 1302" fill="none" stroke="#315f66" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="2475" y="1200" width="420" height="205" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="2505" y="1250" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" text-anchor="start">6  Repair and test</text>
+<text x="2505" y="1294" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">Edit or replace freely;</text>
+<text x="2505" y="1329" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="start">check final feature</text>
+<rect x="100" y="1455" width="2800" height="112" rx="18" fill="#e8f0f0" stroke="#c0d2d3" stroke-width="2"/>
+<text x="130" y="1501" fill="#315f66" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">Captured throughout</text>
+<text x="510" y="1501" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Portal decisions and ratings  •  screen video  •  agent transcript  •  client/IDE events  •  diffs and hashes</text>
+<text x="130" y="1541" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="400" text-anchor="start">At each task end: final repository snapshot and short post-task form</text>
+<path d="M 1500 1618 L 1500 1662" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="65" y="1670" width="2870" height="490" rx="28" fill="#f5f7f7" stroke="#d1dadd" stroke-width="2"/>
+<rect x="95" y="1694" width="67" height="67" rx="18" fill="#315f66" stroke="#315f66" stroke-width="0"/>
+<text x="129" y="1741" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="700" text-anchor="middle">4</text>
+<text x="185" y="1742" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" text-anchor="start">Interview, assess security, and answer the research questions</text>
+<rect x="100" y="1780" width="890" height="225" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="130" y="1830" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Participant reflection</text>
+<text x="130" y="1874" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Video-cued interview after both tasks</text>
+<text x="130" y="1909" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Ask why code was kept, checked, repaired</text>
+<text x="130" y="1944" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Clarify intention and observed mode</text>
+<rect x="1055" y="1780" width="890" height="225" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="1085" y="1830" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Independent assessment</text>
+<text x="1085" y="1874" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Normal + attack oracles; blinded review</text>
+<text x="1085" y="1909" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Code pre/post decision security checks</text>
+<text x="1085" y="1944" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">Code observed mode separately from assignment</text>
+<rect x="2010" y="1780" width="890" height="225" rx="22" fill="white" stroke="#9caeb4" stroke-width="3"/>
+<text x="2040" y="1830" fill="#1d2b34" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="start">Paired and process analysis</text>
+<text x="2040" y="1874" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">RQ1 confidence–security alignment</text>
+<text x="2040" y="1909" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">RQ2 final vulnerability retention</text>
+<text x="2040" y="1944" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="start">RQ3 checks; RQ4 SQL/path exploratory</text>
+<path d="M 993 1892 L 1047 1892" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M 1948 1892 L 2002 1892" fill="none" stroke="#315f66" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="1500" y="2104" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="400" text-anchor="middle">Interpret assigned encouragement and observed interaction mode separately; 30 people are the independent participant sample.</text>
+<text x="2940" y="2220" fill="#455861" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="end">Protocol summary • 12 Oct 2026</text>
+</svg>

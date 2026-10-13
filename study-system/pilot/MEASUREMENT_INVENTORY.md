@@ -1,5 +1,7 @@
 # Pilot measurement inventory: two coding-agent tasks
 
+> **Protocol distinction:** Most entries below describe the earlier controlled-checkpoint design. For the revised natural agent workflow, use [NATURAL_DATA_COVERAGE.md](NATURAL_DATA_COVERAGE.md) as the operational capture and safety checklist. Checkpoint exposure/decision latencies and old hook upload claims do not apply to the natural ZIP.
+
 **Status: measurement plan, not a claim that every stream is implemented or validated.** This document records what to capture during each participant's acceleration-encouragement and exploration-encouragement tasks. It complements [the RQ evaluation plan](../../MEASURES_AND_EVALUATION.md), [the event contract](../contracts/README.md), and [the capture status](../capture/README.md). The assigned condition is the experimental comparison. An observed acceleration/exploration label is a separately coded description of an *episode*, not a property inferred from a mouse speed or a task card.
 
 ## 1. Measurement rules
@@ -17,7 +19,7 @@
 | Capture | Derived measure / purpose | Source and current state |
 | --- | --- | --- |
 | Pseudonymous ID; student/junior role; paid experience; JavaScript, SQL and file API familiarity; security training; agent and Antigravity experience; usual review habit | Describe cohort; examine skill and familiarity as alternative explanations | Portal pre-task form: **built**. The two explicit SQL/path baseline questions may prime the target; decide before full pilot whether to retain them. |
-| Assigned condition, project, task order, checkpoint order, controlled candidate version and security class | Intention-to-treat comparison; order, project and class checks | Portal and checkpoint database: **built**. Researcher must counterbalance portal assignments. |
+| Assigned condition, project, task order, checkpoint order, controlled candidate version and security class | Intention-to-treat comparison; order, project and class checks | Portal reserves the checkpoint service's seeded balanced allocation: **built**. Researcher audits realized balance and any CLI-only or abandoned reservations. |
 | Machine/OS, display resolution and scale, input device (mouse/trackpad), Antigravity and model version, agent settings, extension/hook versions, network interruptions | Interpret timing and telemetry variation; reproduce a session | Researcher log: **manual**, not yet a portal form. |
 | Consent/recording start and stop, practice completion, breaks, interruptions, accessibility accommodations, participant withdrawal | Define active analysis windows and exclusions | Researcher log and video: **manual**. Compare any new telemetry against approved consent wording. |
 
