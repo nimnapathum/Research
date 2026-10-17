@@ -16,8 +16,17 @@ const packageRoot = process.env.STUDY_PACKAGE_ROOT || join(process.cwd(), '.loca
 let userId;
 let researcherId;
 function zip(source, output) {
-  const result = spawnSync('zip', ['-q', '-r', output, '.'], { cwd: source, encoding: 'utf8' });
-  if (result.status !== 0) throw new Error(`ZIP creation failed: ${result.stderr}`);
+  const result = spawnSync('python3', ['-c', `
+from pathlib import Path
+from zipfile import ZipFile, ZIP_DEFLATED
+import sys
+root = Path(sys.argv[1])
+with ZipFile(sys.argv[2], 'w', ZIP_DEFLATED) as archive:
+    for path in sorted(root.rglob('*')):
+        if path.is_file():
+            archive.write(path, path.relative_to(root))
+`, source, output], { encoding: 'utf8' });
+  if (result.status !== 0) throw new Error(`ZIP creation failed: ${result.error?.message || result.stderr || result.status}`);
 }
 async function request(path, options = {}, cookie = '') {
   const response = await fetch(`${root}${path}`, { ...options,
@@ -94,8 +103,13 @@ try {
   writeFileSync(zipPath, bytes);
   const workspace = join(folder, code + '-T1-natural (1)');
   mkdirSync(workspace);
-  const unpacked = spawnSync('unzip', ['-q', zipPath, '-d', workspace], { encoding: 'utf8' });
-  if (unpacked.status !== 0) throw new Error(`Natural ZIP could not be extracted: ${unpacked.stderr}`);
+  const unpacked = spawnSync('python3', ['-c', `
+from zipfile import ZipFile
+import sys
+with ZipFile(sys.argv[1]) as archive:
+    archive.extractall(sys.argv[2])
+`, zipPath, workspace], { encoding: 'utf8' });
+  if (unpacked.status !== 0) throw new Error(`Natural ZIP could not be extracted: ${unpacked.error?.message || unpacked.stderr || unpacked.status}`);
   const final = join(folder, 'final');
   const snapshot = spawnSync(process.execPath, ['study/capture.mjs', 'snapshot', '.', final],
     { cwd: workspace, encoding: 'utf8' });
