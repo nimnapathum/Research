@@ -4,6 +4,7 @@ dist/
 .env
 .env.local
 .local-admin-credentials
+.researcher-recovery-*.txt
 *.log
 .DS_Store
 coverage/

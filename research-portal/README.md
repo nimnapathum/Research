@@ -45,6 +45,8 @@ For manual startup, run the checkpoint app with Node 24 and the same `STUDY_DATA
 
 To add your supervisor, open **Researchers**, enter a username and optional name, and create the account. Send the one-time password privately. Ask them to sign in and change it on **Account**. This is a full researcher account with access to study data and exports.
 
+If an existing researcher forgets their password, run `npm run admin:reset-password -- firstuser` on the machine connected to the relevant database. The command saves a new temporary password in an ignored, mode-0600 `.researcher-recovery-*.txt` file and revokes that account's previous sessions. Read the file locally, sign in using the **username** (`firstuser`, not the legacy email), and change the password on **Account**. Run this separately on the VM if the hosted database needs recovery. Do not rerun `admin:create` on an established database.
+
 ## Data and safeguards
 
 The browser sends requests through Next.js route handlers; the Nest API receives session bearer tokens only from the web server. Session tokens are hashed in the database. Passwords use scrypt; participant codes and task IDs are validated; SQL uses parameters. The web cookie is HTTP-only and SameSite Lax. Mutation routes check request Origin. Set `COOKIE_SECURE=true` when the hosted site uses HTTPS. The Nest API should remain on a private loopback or internal network.

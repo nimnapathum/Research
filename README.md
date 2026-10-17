@@ -6,6 +6,7 @@ Read [RESEARCH_AUDIT.md](RESEARCH_AUDIT.md) first. It lists every stage's diffic
 
 | Current document | Purpose |
 | --- | --- |
+| [METHODOLOGY_TIMELINE_AND_JUSTIFICATION.md](METHODOLOGY_TIMELINE_AND_JUSTIFICATION.md) | Chronological method, every current questionnaire group and measure, prior-study precedent, original decisions and validation gates |
 | [RQ.md](RQ.md) | Original RQs, natural operational wording, aim and defences |
 | [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) | Current study design and participant sequence |
 | [NATURAL_ANALYSIS_PLAN.md](NATURAL_ANALYSIS_PLAN.md) | Primary paired score, security outcomes, missingness and qualitative analysis |

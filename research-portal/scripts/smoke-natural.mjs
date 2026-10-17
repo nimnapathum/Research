@@ -11,7 +11,8 @@ const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const folder = mkdtempSync(join(tmpdir(), 'natural-portal-smoke-'));
 const code = `P${randomInt(10_000_000, 100_000_000)}`;
 const password = randomBytes(18).toString('base64url');
-const evidenceRoot = join(process.cwd(), '.local-evidence');
+const evidenceRoot = process.env.STUDY_EVIDENCE_ROOT || join(process.cwd(), '.local-evidence');
+const packageRoot = process.env.STUDY_PACKAGE_ROOT || join(process.cwd(), '.local-packages');
 let userId;
 let researcherId;
 function zip(source, output) {
@@ -198,7 +199,9 @@ try {
   if (userId) await pool.query('DELETE FROM users WHERE id=$1', [userId]);
   if (researcherId) await pool.query('DELETE FROM users WHERE id=$1', [researcherId]);
   await pool.end();
-  rmSync(join(evidenceRoot, code), { recursive: true, force: true });
-  for (const index of [1, 2]) rmSync(join(process.cwd(), '.local-packages', `${code}-T${index}.json`), { force: true });
+  if (userId) {
+    rmSync(join(evidenceRoot, code), { recursive: true, force: true });
+    for (const index of [1, 2]) rmSync(join(packageRoot, `${code}-T${index}.json`), { force: true });
+  }
   rmSync(folder, { recursive: true, force: true });
 }
