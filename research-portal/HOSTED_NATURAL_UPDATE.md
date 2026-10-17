@@ -1,5 +1,7 @@
 # Update the hosted portal for natural-task rehearsals
 
+> The 17 October 2026 hosted release is already deployed and tested. See [HOSTED_REHEARSAL_STATUS.md](HOSTED_REHEARSAL_STATUS.md) for the current state and self-rehearsal/pilot gate. The steps below describe how to perform a future deployment; the current release uses a separate checkout instead of overwriting `/srv/security-trust/Research`.
+
 This is the update path for the existing `nimnapathum.tech` portal. It prepares the two-service Next.js/NestJS site to serve natural-task ZIPs and receive seven evidence files per task. Participant code/agent observers still run on the participant computer; the web app receives their outputs. The old checkpoint HTTP page is not part of the natural task, but the server-side assignment bridge still needs its private SQLite data directory.
 
 **Do this during a maintenance window.** Copying code and rebuilding Next.js can affect a running site even before the manual restart. Back up PostgreSQL, the current `.env`, and any existing evidence/SQLite data first. Never copy these private files into Git. The current 1 GB VM needs enough free disk for two recordings plus code archives per participant; check `df -h` and `free -h` before enabling uploads. Ubuntu 20.04 should be upgraded or replaced with a supported image before real participant collection; see [the original deployment guide](DEPLOY_ORACLE_CLOUD.md).

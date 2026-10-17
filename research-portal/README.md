@@ -4,6 +4,8 @@ A localhost support app for the two-task coding-agent study. It uses Next.js 16 
 
 **Current local rehearsal (natural-2026-10-13-r3):** `scripts/restart-local.sh` selects the revised natural-task workflow. Start with [LOCAL_NATURAL_REHEARSAL.md](LOCAL_NATURAL_REHEARSAL.md). The controlled-checkpoint instructions below describe the older optional mode and do not apply to a `-natural.zip` task. The local app is reachable only on this computer. First-served natural packages are frozen under `.local-packages/`; use fresh participant accounts when refining the protocol.
 
+**Hosted status:** The deployed natural portal and pilot gate are documented in [HOSTED_REHEARSAL_STATUS.md](HOSTED_REHEARSAL_STATUS.md). Use that document for the Oracle VM; the older checkpoint walkthrough below is historical.
+
 For an existing hosted portal running the natural workflow, follow [the hosted natural update guide](HOSTED_NATURAL_UPDATE.md). The [original Oracle Cloud deployment guide](DEPLOY_ORACLE_CLOUD.md) covers initial infrastructure but predates natural evidence uploads.
 
 ## What is working
