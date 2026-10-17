@@ -1,6 +1,6 @@
 # Hosted natural-study rehearsal and pilot gate
 
-Updated 17 October 2026. The hosted portal at **https://nimnapathum.tech** is running the natural-task protocol (`natural-2026-10-13-r3`) from Git commit `e8885cc`. Its current deployment is the isolated release `/srv/security-trust/releases/a81b916`; that directory name is historical, so check `git rev-parse HEAD` for the actual commit. The older, locally modified checkout at `/srv/security-trust/Research` was left untouched.
+Updated 17 October 2026. The hosted portal at **https://nimnapathum.tech** is running the natural-task protocol (`natural-2026-10-13-r3`). Its current deployment is the isolated release `/srv/security-trust/releases/a81b916`; that directory name is historical, so check `git rev-parse HEAD` for the actual commit. The older, locally modified checkout at `/srv/security-trust/Research` was left untouched.
 
 ## What is working now
 
@@ -27,7 +27,7 @@ The web path is ready for **self-rehearsal**. Real participant pilots require th
 - Run the security adjudication rehearsal on secure and vulnerable SQL-injection and path-traversal reference implementations, then on the self-rehearsal final code. Keep attack fixtures and expected labels outside participant packages. Record reviewer disagreements and tool blind spots.
 - Confirm the approved consent and data-retention wording covers this natural workflow, screen/video, raw agent transcript, local snapshots, hosted storage, interview and withdrawal. The researcher has reported ethics approval; check the exact approved materials against the deployed flow.
 - Freeze the pilot version of task cards, forms, IDE/model settings and allowed variation. Separate rehearsal records from pilot analysis. Treat observed interaction mode as coded evidence, not as a fact proved by the assigned condition.
-- Put the hosted VM on a supported security-update path before collecting identifiable recordings: it is Ubuntu 20.04 and `pro status` reports **not attached** to Ubuntu Pro. Upgrade/rebuild the VM or attach an eligible Ubuntu Pro subscription, then repeat the hosted smoke checks.
+- Put the hosted VM on a supported security-update path before collecting identifiable recordings: it is Ubuntu 20.04 and `pro status` reports **not attached** to Ubuntu Pro. [Canonical says 20.04 standard security maintenance ended in May 2025](https://ubuntu.com/20-04). Upgrade/rebuild the VM or attach an eligible Ubuntu Pro subscription, then repeat the hosted smoke checks.
 - Establish and test an encrypted backup and restore procedure covering PostgreSQL, `study-data`, `evidence`, `packages`, and the secret environment file under the approved retention rules. A local one-time dump is not a recovery plan.
 
 Do not treat the portal **Analytics** page as the final research analysis. Natural-task outcomes require blinded final-code adjudication and the analysis tables in [study-system/analysis/README.md](../study-system/analysis/README.md). If a recording or upload needs replacement, keep the original and log the correction; the portal has no fully audited replacement/waiver flow yet.
