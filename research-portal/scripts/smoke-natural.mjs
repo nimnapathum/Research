@@ -74,6 +74,7 @@ try {
   const page = await fetch(`${root}/participant/tasks/${tasks[0].id}`, { headers: { cookie } });
   const html = await page.text();
   if (!page.ok || !html.includes('Download natural-task ZIP') ||
+      !html.includes('The Resource catalogue stores learning resources and their text previews') ||
       !html.includes('node study/capture.mjs watch') ||
       !html.includes('node study/capture.mjs snapshot') ||
       !html.includes('node study/agent-observer.mjs setup') ||
@@ -207,6 +208,10 @@ with ZipFile(sys.argv[1]) as archive:
   const secondDownload = await fetch(`${root}/api/participant/tasks/${tasks[1].id}/package`, { headers: { cookie } });
   if (!secondDownload.ok || !secondDownload.headers.get('content-disposition')?.includes(`${code}-T2-natural.zip`)) {
     throw new Error('Task 2 natural package unavailable');
+  }
+  const secondPage = await fetch(`${root}/participant/tasks/${tasks[1].id}`, { headers: { cookie } });
+  if (!secondPage.ok || !(await secondPage.text()).includes('The Support archive stores support tickets and their text attachments')) {
+    throw new Error('Plain-language Support archive task brief unavailable');
   }
   const secondZip = join(folder, 'task2.zip');
   writeFileSync(secondZip, Buffer.from(await secondDownload.arrayBuffer()));
