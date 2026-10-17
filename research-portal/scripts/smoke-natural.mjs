@@ -208,10 +208,77 @@ with ZipFile(sys.argv[1]) as archive:
   if (!secondDownload.ok || !secondDownload.headers.get('content-disposition')?.includes(`${code}-T2-natural.zip`)) {
     throw new Error('Task 2 natural package unavailable');
   }
+  const secondZip = join(folder, 'task2.zip');
+  writeFileSync(secondZip, Buffer.from(await secondDownload.arrayBuffer()));
+  const secondWorkspace = join(folder, `${code}-T2-natural`);
+  mkdirSync(secondWorkspace);
+  const secondUnpack = spawnSync('python3', ['-c', `
+from zipfile import ZipFile
+import sys
+with ZipFile(sys.argv[1]) as archive:
+    archive.extractall(sys.argv[2])
+`, secondZip, secondWorkspace], { encoding: 'utf8' });
+  if (secondUnpack.status !== 0) throw new Error(`Task 2 ZIP failed: ${secondUnpack.stderr}`);
+  const secondFinal = join(folder, 'final2');
+  const secondSnapshot = spawnSync(process.execPath, ['study/capture.mjs', 'snapshot', '.', secondFinal],
+    { cwd: secondWorkspace, encoding: 'utf8' });
+  if (secondSnapshot.status !== 0) throw new Error(`Task 2 snapshot failed: ${secondSnapshot.stderr}`);
+  const secondManifest = JSON.parse(readFileSync(join(secondFinal, 'SNAPSHOT_MANIFEST.json'), 'utf8'));
+  if (secondManifest.workspace !== `${code}-T2`) throw new Error('Task 2 snapshot identity mismatch');
+  const secondCapture = join(folder, 'capture2');
+  const secondInitial = spawnSync(process.execPath, ['study/capture.mjs', 'snapshot', '.', join(secondCapture, 'S0001')],
+    { cwd: secondWorkspace, encoding: 'utf8' });
+  if (secondInitial.status !== 0) throw new Error(`Task 2 capture failed: ${secondInitial.stderr}`);
+  writeFileSync(join(secondCapture, 'CAPTURE_HEALTH.json'), JSON.stringify({ workspace: `${code}-T2`,
+    protocol_version: secondManifest.protocol_version, status: 'stopped', snapshot_count: 1, errors: [] }));
+  const secondRating = join(folder, 'rating2.json');
+  writeFileSync(secondRating, JSON.stringify({ participant_task_id: `${code}-T2`,
+    protocol_version: secondManifest.protocol_version, final_snapshot_sha256: secondManifest.snapshot_sha256,
+    sql_probability_pct: 50, path_probability_pct: 50, rated_at: new Date().toISOString() }));
+  zip(secondCapture, join(folder, 'capture2.zip'));
+  zip(secondFinal, join(folder, 'final2.zip'));
+  const secondFiles = [
+    ['capture_zip', join(folder, 'capture2.zip')],
+    ['capture_health', join(secondCapture, 'CAPTURE_HEALTH.json')],
+    ['final_zip', join(folder, 'final2.zip')],
+    ['final_manifest', join(secondFinal, 'SNAPSHOT_MANIFEST.json')],
+    ['rating_json', secondRating]
+  ];
+  for (const [kind, path] of secondFiles) {
+    const response = await request(`/api/participant/tasks/${tasks[1].id}/evidence?kind=${kind}`,
+      { method: 'PUT', headers: { 'x-filename': encodeURIComponent(path.split('/').at(-1)) },
+        body: readFileSync(path) }, cookie);
+    if (!response.response.ok) throw new Error(`Task 2 ${kind} failed: ${JSON.stringify(response.body)}`);
+  }
+  const secondAfter = await request('/api/backend/participant/responses', json({ questionnaireId: after.id,
+    taskId: tasks[1].id, answers: afterAnswers }), cookie);
+  if (!secondAfter.response.ok) throw new Error(`Task 2 after-task form failed: ${JSON.stringify(secondAfter.body)}`);
+  const secondObserver = observerRecords.map((row) => ({ ...row, task_id: `${code}-T2` }))
+    .map((row) => JSON.stringify(row)).join('\n') + '\n';
+  for (const [kind, content] of [['agent_transcript', secondObserver],
+    ['screen_recording', 'Synthetic smoke recording for Task 2']]) {
+    const response = await request(`/api/participant/tasks/${tasks[1].id}/evidence?kind=${kind}`,
+      { method: 'PUT', headers: { 'x-filename': kind === 'agent_transcript' ? 'AGENT_TRANSCRIPT.jsonl' : 'screen_recording.txt' },
+        body: content }, cookie);
+    if (!response.response.ok) throw new Error(`Task 2 ${kind} failed: ${JSON.stringify(response.body)}`);
+  }
+  const secondSubmitted = await request(`/api/backend/participant/tasks/${tasks[1].id}/status`,
+    json({ status: 'submitted' }, 'PATCH'), cookie);
+  if (!secondSubmitted.response.ok) throw new Error(`Task 2 submission failed: ${JSON.stringify(secondSubmitted.body)}`);
+  const afterBoth = dashboard.body.questionnaires.find((item) => item.stage === 'after_both');
+  if (!afterBoth) throw new Error('Final session form unavailable');
+  const finalAnswers = Object.fromEntries(afterBoth.schema_json.items.map((item) => [item.id,
+    item.type === 'choice' ? item.options[0] : item.type === 'text' ? 'smoke' : item.min ?? 1]));
+  const finalForm = await request('/api/backend/participant/responses', json({ questionnaireId: afterBoth.id,
+    answers: finalAnswers }), cookie);
+  if (!finalForm.response.ok) throw new Error(`Final session form failed: ${JSON.stringify(finalForm.body)}`);
+  const secondAudited = spawnSync('python3', ['../study-system/analysis/audit_natural_evidence.py',
+    join(evidenceRoot, code, `${code}-T2`)], { encoding: 'utf8' });
+  if (secondAudited.status !== 0) throw new Error(`Task 2 archive/hash audit failed: ${secondAudited.stdout}${secondAudited.stderr}`);
   const audited = spawnSync('python3', ['../study-system/analysis/audit_natural_evidence.py',
     join(evidenceRoot, code, `${code}-T1`)], { encoding: 'utf8' });
   if (audited.status !== 0) throw new Error(`Received archive/hash audit failed: ${audited.stdout}${audited.stderr}`);
-  console.log(`PASS: natural page/commands, frozen ZIPs, neutral agent context, early after-task form, seven receipts, researcher retrieval, archive/hash audit, submission and Task 2 gates (${code})`);
+  console.log(`PASS: natural page/commands, frozen ZIPs, seven receipts per task, researcher retrieval, archive/hash audit, both submissions and final form (${code})`);
 } finally {
   if (userId) await pool.query('DELETE FROM users WHERE id=$1', [userId]);
   if (researcherId) await pool.query('DELETE FROM users WHERE id=$1', [researcherId]);
