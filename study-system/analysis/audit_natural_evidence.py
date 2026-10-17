@@ -7,7 +7,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 KINDS = ['capture_zip', 'capture_health', 'final_zip', 'final_manifest', 'rating_json',
-         'agent_transcript', 'screen_recording']
+         'agent_transcript']
 
 
 def digest_file(path):
@@ -143,7 +143,7 @@ def audit(folder):
             'verified_receipt_count': len(receipts), 'capture_snapshot_count': len(capture),
             'final_snapshot_sha256': manifest.get('snapshot_sha256'),
             'agent_capture_health': agent_capture,
-            'manual_checks_required': ['play/read media', 'transcript completeness', 'recording/snapshot clock alignment',
+            'manual_checks_required': ['open researcher-linked Meet video and check playback', 'transcript completeness', 'recording/snapshot clock alignment',
                                        'code/file coverage including omitted files', 'rating before researcher feedback',
                                        'interview linkage', 'blinded functionality/security assessment'],
             'note': 'This audit checks linked file integrity. It does not infer participant behaviour or establish code security.'}

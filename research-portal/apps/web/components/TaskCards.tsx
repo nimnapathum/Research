@@ -29,6 +29,6 @@ export function TaskCards({ tasks, access, natural = false }: { tasks: StudyTask
       <select id={`status-${task.id}`} value={task.status} disabled={!access[task.id]?.allowed || task.status === 'submitted'} onChange={(event) => void change(task.id, event.target.value)}>
         <option value="not_started" disabled>Not started</option><option value="in_progress">In progress</option>
         <option value="paused">Paused</option><option value="submitted">Submitted</option>
-      </select></div><p className="small muted">{natural ? 'Submit after all seven evidence receipts on the task page are complete.' : 'This marker helps you resume. The checkpoint app records the actual code submission.'}</p></div>
+      </select></div><p className="small muted">{natural ? 'Submit after all six evidence receipts on the task page are complete.' : 'This marker helps you resume. The checkpoint app records the actual code submission.'}</p></div>
     </div>)}</div>;
 }

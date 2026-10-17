@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException,
+import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException,
   Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { randomBytes, randomInt } from 'node:crypto';
 import { DbService } from './db.service';
@@ -82,6 +82,54 @@ export class ResearcherController {
     const tasks = await this.db.query(`SELECT id,participant_id,external_task_id,project_id,condition,task_order,
       checkpoint_order,status,started_at,submitted_at FROM study_tasks ORDER BY task_order`);
     return { participants: users.rows, tasks: tasks.rows };
+  }
+
+  @Get('recordings')
+  async recordings(@Req() request: StudyRequest) {
+    this.require(request);
+    const result = await this.db.query(`SELECT r.id,r.drive_url,r.label,r.notes,r.created_at,
+      u.participant_code FROM session_recordings r JOIN users u ON u.id=r.participant_id
+      ORDER BY r.created_at DESC`);
+    return result.rows;
+  }
+
+  @Post('recordings/:participant')
+  async addRecording(@Req() request: StudyRequest, @Param('participant') participant: string,
+    @Body() body: { driveUrl?: string; label?: string; notes?: string }) {
+    this.require(request);
+    if (!/^P\d{8}$/.test(participant)) throw new BadRequestException('Invalid participant code');
+    const driveUrl = String(body?.driveUrl || '').trim();
+    let url: URL;
+    try { url = new URL(driveUrl); } catch { throw new BadRequestException('Enter a Google Drive link'); }
+    if (url.protocol !== 'https:' || url.hostname !== 'drive.google.com' || url.username || url.password ||
+        driveUrl.length > 2048) throw new BadRequestException('Use an HTTPS drive.google.com link');
+    const label = String(body?.label || '').trim();
+    const notes = String(body?.notes || '').trim();
+    if (label.length > 120 || notes.length > 1000) throw new BadRequestException('Recording label or notes are too long');
+    const person = await this.db.query<{ id: string }>(`SELECT id FROM users WHERE participant_code=$1 AND role='participant'`, [participant]);
+    if (!person.rows[0]) throw new NotFoundException('Participant not found');
+    return this.db.transaction(async (client) => {
+      const saved = await client.query(`INSERT INTO session_recordings(participant_id,drive_url,label,notes,created_by)
+        VALUES($1,$2,$3,$4,$5) RETURNING id,drive_url,label,notes,created_at`,
+      [person.rows[0].id, url.toString(), label, notes, request.studyUser.id]);
+      await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id,details)
+        VALUES($1,'add_session_recording','session_recording',$2,$3::jsonb)`,
+      [request.studyUser.id, saved.rows[0].id, JSON.stringify({ participant_code: participant })]);
+      return { ...saved.rows[0], participant_code: participant };
+    });
+  }
+
+  @Delete('recordings/:id')
+  async deleteRecording(@Req() request: StudyRequest, @Param('id') id: string) {
+    this.require(request);
+    if (!/^[0-9a-f-]{36}$/.test(id)) throw new BadRequestException('Invalid recording ID');
+    return this.db.transaction(async (client) => {
+      const removed = await client.query(`DELETE FROM session_recordings WHERE id=$1 RETURNING id`, [id]);
+      if (!removed.rows[0]) throw new NotFoundException('Recording link not found');
+      await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id)
+        VALUES($1,'delete_session_recording','session_recording',$2)`, [request.studyUser.id, id]);
+      return { deleted: true };
+    });
   }
 
   @Post('participants')
@@ -274,7 +322,7 @@ export class ResearcherController {
   @Get('export')
   async export(@Req() request: StudyRequest) {
     this.require(request);
-    const [users, tasks, questionnaires, responses, imports, events, summaries, opportunities] = await Promise.all([
+    const [users, tasks, questionnaires, responses, imports, events, summaries, opportunities, recordings] = await Promise.all([
       this.db.query(`SELECT id,username,role,participant_code,display_name,created_at FROM users ORDER BY created_at`),
       this.db.query('SELECT * FROM study_tasks ORDER BY created_at'),
       this.db.query('SELECT * FROM questionnaires ORDER BY created_at'),
@@ -283,11 +331,12 @@ export class ResearcherController {
         FROM import_batches ORDER BY created_at`),
       this.db.query('SELECT * FROM captured_events ORDER BY occurred_at'),
       this.db.query('SELECT * FROM analysis_runs ORDER BY created_at'),
-      this.db.query('SELECT * FROM analysis_opportunities ORDER BY import_id,row_number')
+      this.db.query('SELECT * FROM analysis_opportunities ORDER BY import_id,row_number'),
+      this.db.query('SELECT id,participant_id,drive_url,label,notes,created_by,created_at FROM session_recordings ORDER BY created_at')
     ]);
-    return { exported_at_utc: new Date().toISOString(), schema_version: 'portal-1',
+    return { exported_at_utc: new Date().toISOString(), schema_version: 'portal-2',
       users: users.rows, tasks: tasks.rows, questionnaires: questionnaires.rows,
       responses: responses.rows, imports: imports.rows, events: events.rows,
-      summaries: summaries.rows, opportunities: opportunities.rows };
+      summaries: summaries.rows, opportunities: opportunities.rows, recordings: recordings.rows };
   }
 }

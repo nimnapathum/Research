@@ -2,9 +2,9 @@
 
 > The 17 October 2026 hosted release is already deployed and tested. See [HOSTED_REHEARSAL_STATUS.md](HOSTED_REHEARSAL_STATUS.md) for the current state and self-rehearsal/pilot gate. The steps below describe how to perform a future deployment; the current release uses a separate checkout instead of overwriting `/srv/security-trust/Research`.
 
-This is the update path for the existing `nimnapathum.tech` portal. It prepares the two-service Next.js/NestJS site to serve natural-task ZIPs and receive seven evidence files per task. Participant code/agent observers still run on the participant computer; the web app receives their outputs. The old checkpoint HTTP page is not part of the natural task, but the server-side assignment bridge still needs its private SQLite data directory.
+This is the update path for the existing `nimnapathum.tech` portal. It prepares the two-service Next.js/NestJS site to serve natural-task ZIPs and receive six evidence files per task. Participant code/agent observers still run on the participant computer; the web app receives their outputs. The researcher stores consented Google Meet video in approved Drive storage and links it in the portal. The old checkpoint HTTP page is not part of the natural task, but the server-side assignment bridge still needs its private SQLite data directory.
 
-**Do this during a maintenance window.** Copying code and rebuilding Next.js can affect a running site even before the manual restart. Back up PostgreSQL, the current `.env`, and any existing evidence/SQLite data first. Never copy these private files into Git. The current 1 GB VM needs enough free disk for two recordings plus code archives per participant; check `df -h` and `free -h` before enabling uploads. Ubuntu 20.04 should be upgraded or replaced with a supported image before real participant collection; see [the original deployment guide](DEPLOY_ORACLE_CLOUD.md).
+**Do this during a maintenance window.** Copying code and rebuilding Next.js can affect a running site even before the manual restart. Back up PostgreSQL, the current `.env`, and any existing evidence/SQLite data first. Never copy these private files into Git. Check `df -h` and `free -h` before enabling uploads. Ubuntu 20.04 should be upgraded or replaced with a supported image before real participant collection; see [the original deployment guide](DEPLOY_ORACLE_CLOUD.md).
 
 ## 1. Put the pushed code on the VM
 
@@ -49,11 +49,11 @@ If the VM already has assignment data in another `STUDY_DATA_DIR`, keep that exi
 
 ## 3. Permit streamed evidence uploads and downloads in Nginx
 
-The old Nginx example has `client_max_body_size 8m`; that blocks the new recording, transcript, and code ZIP uploads. Add these locations inside the existing HTTPS `server` block for `nimnapathum.tech`, before the general `location /` block. Keep the existing login rate limit and proxy headers. Do not expose ports 3000, 4000, 4175, or PostgreSQL publicly.
+The old Nginx example has `client_max_body_size 8m`; that can block transcript and code ZIP uploads. Add these locations inside the existing HTTPS `server` block for `nimnapathum.tech`, before the general `location /` block. Keep the existing login rate limit and proxy headers. Do not expose ports 3000, 4000, 4175, or PostgreSQL publicly.
 
 ```nginx
 location ~ ^/api/participant/tasks/[^/]+/evidence$ {
-    client_max_body_size 1100m;
+    client_max_body_size 550m;
     proxy_http_version 1.1;
     proxy_request_buffering off;
     proxy_read_timeout 600s;
@@ -75,7 +75,7 @@ location ^~ /api/researcher/evidence/ {
 }
 ```
 
-The application still caps each evidence kind (for example 50 MiB for the agent transcript and 1 GiB for a screen recording). The larger Nginx limit only allows those app-level checks to run. Large uploads use disk and bandwidth; verify free space and a successful recording-sized transfer on the actual VM. Test the Nginx configuration with `sudo nginx -t`, then reload it when you are ready.
+The application still caps each required evidence kind (for example 50 MiB for the agent transcript and 500 MiB for code history). The larger Nginx limit only allows those app-level checks to run. Video is no longer uploaded by participants. Test the Nginx configuration with `sudo nginx -t`, then reload it when you are ready.
 
 ## 4. Build, migrate, and restart manually
 
@@ -100,6 +100,6 @@ curl -i https://nimnapathum.tech/api/participant/tasks/probe/evidence
 curl -i https://nimnapathum.tech/api/researcher/evidence/P00000000/P00000000-T1/final_manifest
 ```
 
-The API health JSON must report `"protocol":"natural"`. Both evidence URLs should return JSON `401 Not signed in` without a cookie. A Next.js HTML `404` means the current route is not deployed; a JSON `404` from the participant route means `STUDY_PROTOCOL` is not `natural`. Log in with a disposable synthetic participant, complete pre-task questions, download a `-natural.zip`, and test all seven uploads. Then sign in as a researcher, open **Evidence**, download the same files, compare SHA-256 hashes, play the recording, and inspect the agent transcript and code archive. Confirm that a participant cannot open the researcher download URL. Do not use an empty placeholder video for the real rehearsal.
+The API health JSON must report `"protocol":"natural"`. Both evidence URLs should return JSON `401 Not signed in` without a cookie. A Next.js HTML `404` means the current route is not deployed; a JSON `404` from the participant route means `STUDY_PROTOCOL` is not `natural`. Log in with a disposable synthetic participant, complete pre-task questions, download a `-natural.zip`, and test all six uploads. Then sign in as a researcher, open **Evidence**, add a Drive link, check its access, download the six files, compare SHA-256 hashes, and inspect the agent transcript and code archive. Confirm that a participant cannot open the researcher download URL.
 
 The portal's **Analytics** page remains descriptive and shows historical controlled-checkpoint summaries. Natural mode and security labels require the separate evidence audit, blinded review, and analysis described in `study-system/analysis/README.md`. A successful web upload proves transfer and hash identity, not complete Antigravity capture or valid research data.

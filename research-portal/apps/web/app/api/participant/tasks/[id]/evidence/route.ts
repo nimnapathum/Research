@@ -38,6 +38,7 @@ export async function PUT(request: NextRequest, route: { params: Promise<{ id: s
   if (result instanceof NextResponse) return result;
   const kind = request.nextUrl.searchParams.get('kind') as EvidenceKind | null;
   if (!kind || !(kind in evidenceKinds)) return NextResponse.json({ error: 'Unsupported evidence kind' }, { status: 400 });
+  if (kind === 'screen_recording') return NextResponse.json({ error: 'The researcher links Google Meet recordings separately' }, { status: 400 });
   if (!request.body) return NextResponse.json({ error: 'Choose a file to upload' }, { status: 400 });
   const declared = Number(request.headers.get('content-length'));
   if (Number.isFinite(declared) && declared > evidenceKinds[kind]) {

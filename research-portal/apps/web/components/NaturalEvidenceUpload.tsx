@@ -11,8 +11,7 @@ const kinds = [
   ['capture_zip', 'Code history ZIP', 'Compress the entire TASK-capture folder after stopping its watcher.'],
   ['capture_health', 'Capture health JSON', 'Select TASK-capture/CAPTURE_HEALTH.json.'],
   ['final_zip', 'Final code ZIP', 'Compress the entire TASK-final folder.'],
-  ['agent_transcript', 'Agent transcript', 'For an observer-enabled task, select TASK-agent/AGENT_TRANSCRIPT.jsonl after stopping its watcher. Otherwise use the researcher-approved conversation export.'],
-  ['screen_recording', 'Screen recording', 'Select the recording that covers this task.']
+  ['agent_transcript', 'Agent transcript', 'For an observer-enabled task, select TASK-agent/AGENT_TRANSCRIPT.jsonl after stopping its watcher. Otherwise use the researcher-approved conversation export.']
 ] as const;
 const labelFor = (kind: string) => kinds.find((item) => item[0] === kind)?.[1] || kind;
 
@@ -40,7 +39,7 @@ export function NaturalEvidenceUpload({ taskId, externalTaskId, afterTaskFormId,
     <p>Upload the final manifest and rating first, then answer the short after-task form while the task is fresh in your memory. Upload the larger files afterward. Keep your originals until the researcher checks them.</p>
     {afterTaskCompleted && <p className="alert success">Your after-task answers are saved. Finish the remaining uploads, then mark the task submitted on the overview.</p>}
     {status.rating_ready && afterTaskFormId && !afterTaskCompleted && <p><Link className="button" href={`/forms/${afterTaskFormId}?task=${taskId}`}>Complete the after-task questions now</Link></p>}
-    <p className="small">A receipt confirms storage, not capture quality. Contact the researcher if you selected the wrong file or a recording is missing; do not upload a substitute or empty placeholder.</p>
+    <p className="small">A receipt confirms storage, not capture quality. The researcher records the Google Meet session separately. Contact the researcher if you selected the wrong file; do not upload a substitute or empty placeholder.</p>
     <div className="stack">{kinds.map(([kind, label, help]) => {
       const saved = status.items[kind];
       return <div className="row" key={kind}><div><strong>{label}</strong><p className="small muted">{help.replaceAll('TASK', externalTaskId)}</p>
@@ -55,7 +54,7 @@ export function NaturalEvidenceUpload({ taskId, externalTaskId, afterTaskFormId,
     {status.agent_capture?.format === 'study_observer' && <p className="small">Agent observer: {status.agent_capture.status} · {status.agent_capture.transcript_records} transcript records · {status.agent_capture.hook_events} hook events. Record counts are not necessarily prompt counts.</p>}
     {status.warnings?.map((warning) => <div className="alert" role="status" key={warning}>{warning}</div>)}
     <div className={`alert ${status.ready ? 'success' : ''}`} role="status">
-      {status.ready ? 'All seven task evidence files were received and the final rating matches the final snapshot hash.'
+      {status.ready ? 'All six task evidence files were received and the final rating matches the final snapshot hash.'
         : `Evidence incomplete: ${status.missing.length ? status.missing.map(labelFor).join(', ') : 'check issues below'}.`}
       {status.issues.map((issue) => <p key={issue}>{issue}</p>)}
     </div>

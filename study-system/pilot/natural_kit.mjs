@@ -13,6 +13,7 @@ const projects = { A: 'resource-catalogue', B: 'support-archive' };
 import { walkFiles, runCapture } from './natural_capture.mjs';
 const ignored = new Set(['.git', 'node_modules', '.DS_Store', '.study-capture']);
 const protocolVersion = 'natural-2026-10-13-r3';
+const orientationRevision = '2026-10-18-v2';
 function fail(message) { throw new Error(message); }
 function safeId(value) {
   if (!/^[A-Z0-9-]{3,30}$/.test(value ?? '')) fail('Use a pseudonymous ID of 3–30 capital letters, digits or hyphens');
@@ -29,7 +30,7 @@ if (command === 'create') {
   if (!Number.isInteger(sequence) || sequence < 0 || sequence > 3) fail('Sequence must be 0, 1, 2 or 3');
   if (!destinationText || existsSync(destination)) fail('Use a new, nonexistent destination directory');
   mkdirSync(destination, { recursive: true });
-  const allocation = { participant_id: id, protocol_version: protocolVersion, sequence, tasks: [] };
+  const allocation = { participant_id: id, protocol_version: protocolVersion, orientation_revision: orientationRevision, sequence, tasks: [] };
   for (const [index, [projectId, condition]] of combinations[sequence].entries()) {
     const taskId = `${id}-T${index + 1}`;
     const workspace = join(destination, taskId);
@@ -42,8 +43,8 @@ if (command === 'create') {
     const endpoint = projectId === 'A' ? 'resources?topic=math' : 'tickets?status=open';
     const fileEndpoint = projectId === 'A' ? 'previews?name=algebra.txt' : 'attachments?name=account.txt';
     const orientation = condition === 'acceleration'
-      ? 'Use the agent to carry out a short implementation plan. Choose your next step as you normally would; you may change plans whenever needed.'
-      : 'Use the agent to work out an implementation approach. Ask it about options or unfamiliar code as you normally would; choose and revise an approach when ready.';
+      ? `For this task, approach the coding agent as a way to carry out a plan you can form from the task brief and existing code. Decide on a useful next implementation step, ask the agent to help carry it out, and move to the next step when you are ready. You may change your plan, ask questions, inspect code, and use any checks you think are appropriate. The goal is to complete both requested features; there is no instruction to rush or skip review.`
+      : `For this task, approach the coding agent as a partner for figuring out how to implement the features. Use it to understand relevant code, compare possible approaches, or resolve unfamiliar details before choosing your next implementation step. You may move ahead whenever you are ready, revise your approach, inspect code, and use any checks you think are appropriate. The goal is to complete both requested features; there is no instruction to delay delivery or add extra features.`;
     const collection = projectId === 'A' ? 'learning resources and their text previews' : 'support tickets and their text attachments';
     const items = projectId === 'A' ? 'resources' : 'tickets';
     const filter = projectId === 'A' ? 'topic' : 'status';
@@ -72,7 +73,7 @@ The study scripts are included; no separate study extension is needed.
    \`node study/agent-observer.mjs watch\`
 
    Leave this terminal running.
-2. Start the approved screen recording. In a second project terminal, run:
+2. Confirm that the researcher has started the approved Google Meet recording. In a second project terminal, run:
 
    \`node study/capture.mjs watch . ../${taskId}-capture\`
 
@@ -89,7 +90,7 @@ After the first prompt and response, run this in another project terminal:
 
 \`node study/agent-observer.mjs status\`
 
-Check that \`transcript_records\` is above zero. Ask the researcher to confirm the captured sample includes your actual prompt and response; a nonzero count alone does not prove coverage. If records are missing or a watcher reports an error, tell the researcher and preserve the conversation separately. The code watcher saves ordinary source/text files; it excludes hidden files, likely secrets, and symlinks. Keep your study code in ordinary project files. Screen recording is still required.
+Check that \`transcript_records\` is above zero. Ask the researcher to confirm the captured sample includes your actual prompt and response; a nonzero count alone does not prove coverage. If records are missing or a watcher reports an error, tell the researcher and preserve the conversation separately. The code watcher saves ordinary source/text files; it excludes hidden files, likely secrets, and symlinks. Keep your study code in ordinary project files. The researcher handles the Google Meet recording.
 
 ## 4. Save and rate the final code
 
@@ -101,7 +102,7 @@ When you would submit, stop editing, wait for the agent to finish, and tell the 
 
 Answer the security questions about that exact final snapshot before researcher assessment feedback or debriefing. You may run your own checks throughout coding. The rating is saved as \`../${taskId}-rating.json\`.
 
-Stop both watcher terminals with Ctrl+C. Check \`../${taskId}-capture/CAPTURE_HEALTH.json\` for errors. Check \`../${taskId}-agent/AGENT_CAPTURE_HEALTH.json\`: it should show \`stopped\` and captured records. Tell the researcher about any other status. Stop and save the screen recording.
+Stop both watcher terminals with Ctrl+C. Check \`../${taskId}-capture/CAPTURE_HEALTH.json\` for errors. Check \`../${taskId}-agent/AGENT_CAPTURE_HEALTH.json\`: it should show \`stopped\` and captured records. Tell the researcher about any other status and mark your task finish time for the Meet recording.
 
 ## 5. Upload and finish
 
@@ -109,10 +110,10 @@ Return to this task's portal page:
 
 1. Upload \`../${taskId}-final/SNAPSHOT_MANIFEST.json\` and \`../${taskId}-rating.json\` first.
 2. Complete the short after-task questionnaire. It returns you to the task's uploads.
-3. Compress the entire \`${taskId}-capture\` and \`${taskId}-final\` folders into separate ZIPs using your operating system's compression tool. Upload those two ZIPs, \`CAPTURE_HEALTH.json\`, \`${taskId}-agent/AGENT_TRANSCRIPT.jsonl\`, and your screen recording. These complete the seven evidence files.
-4. After all seven receipts and the after-task form are complete, return to the overview and set My progress to Submitted. Task 2 opens after both steps are complete. After Task 2, complete the final session form and interview with the researcher.
+3. Compress the entire \`${taskId}-capture\` and \`${taskId}-final\` folders into separate ZIPs using your operating system's compression tool. Upload those two ZIPs, \`CAPTURE_HEALTH.json\`, \`${taskId}-agent/AGENT_TRANSCRIPT.jsonl\`. These complete the six evidence files.
+4. After all six receipts and the after-task form are complete, return to the overview and set My progress to Submitted. Task 2 opens after both steps are complete. After Task 2, complete the final session form and interview with the researcher.
 
-Keep all original output folders and recordings until the researcher checks them. A receipt confirms storage, not recording quality. Contact the researcher about a wrong or missing file.
+Keep all original output folders until the researcher checks them. The researcher stores and links the Meet recording separately. A receipt confirms file storage, not evidence quality. Contact the researcher about a wrong or missing file.
 
 Conversation collection timestamps mean when the observer saw a record. Original timestamps remain in the raw transcript. Neither watcher automatically decides cognitive mode or human acceptance.
 `);
@@ -122,7 +123,7 @@ Conversation collection timestamps mean when the observer saw a record. Original
     writeFileSync(join(workspace, 'README.md'), `# ${label} starter project\n\nThis local Node.js service uses synthetic data and has no external packages or accounts. Read study/START_HERE.md and study/TASK.md; read your work orientation on the portal page. You may inspect every file and use the coding agent as you normally would.\n\nRun \`npm test\` for the original endpoint. The two requested feature checks are \`npm run test:q1\` and \`npm run test:f1\`; they are expected to fail before you implement those features. The service runs on \`http://127.0.0.1:${projectId === 'A' ? '4173' : '4174'}\` with \`npm start\`.\n`);
     writeFileSync(join(workspace, 'AGENTS.md'), `# Project guidance for the coding agent\n\nWork only inside this project. Read study/TASK.md. The participant may ask you to inspect, explain, plan, edit, test, or repair at any time. Keep the study collection scripts/configuration as supplied; tell the participant if collection needs researcher help. Keep the original endpoint working. Treat SQL request values as data and keep file reads inside ${folder}/.\n`);
     writeFileSync(join(study, 'SESSION_INFO.json'), JSON.stringify({ task_id: taskId, project_id: projectId,
-      protocol_version: protocolVersion, task_order: index + 1 }, null, 2) + '\n');
+      protocol_version: protocolVersion, orientation_revision: orientationRevision, task_order: index + 1 }, null, 2) + '\n');
     allocation.tasks.push({ task_id: taskId, project_id: projectId, condition,
       workspace, task_order: index + 1 });
     const zipEntries = new Map(walkFiles(workspace).map((path) =>

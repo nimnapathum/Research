@@ -62,7 +62,7 @@ export default async function DashboardPage() {
           : done ? <p className="small">Your response is saved.</p> : afterBothReady ? <Link className="button secondary" href={`/forms/${form.id}`}>Open form</Link>
           : <p className="small muted">Available after both tasks and after-task forms.</p>}
       </section>})}</div>
-    <h2 className="section-title">Evidence uploads</h2><div className="card"><p>{natural ? 'Open each task page to upload its screen recording, agent transcript, code history, final code, capture health, and security rating. The researcher must still check the content and recording quality.' : 'You can import an IDE event export for your assigned tasks. Research staff will review the capture quality.'}</p>
+    <h2 className="section-title">Evidence uploads</h2><div className="card"><p>{natural ? 'Open each task page to upload the agent transcript, code history, final code, capture health, and security rating files. The researcher records Google Meet and links the video separately.' : 'You can import an IDE event export for your assigned tasks. Research staff will review the capture quality.'}</p>
       {!natural && <><Link className="button secondary" href="/participant/upload">Upload event file</Link>
         <p className="small muted">{data.uploads.length} file{data.uploads.length === 1 ? '' : 's'} imported so far.</p></>}</div>
   </Shell>;

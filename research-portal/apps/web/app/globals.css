@@ -29,6 +29,33 @@ body {
 }
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
+.evidence-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.evidence-filters input, .evidence-filters select, .evidence-recording-form input, .evidence-recording-form textarea {
+  width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--white); color: var(--ink);
+}
+.evidence-filters input { flex: 1 1 240px; }
+.evidence-filters select { flex: 0 1 190px; }
+.evidence-list { display: grid; gap: 8px; }
+.evidence-item { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.evidence-toggle { width: 100%; min-height: 64px; padding: 12px 15px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; text-align: left; border: 0; background: var(--white); color: var(--ink); }
+.evidence-toggle:hover { background: var(--accent-soft); }
+.evidence-toggle small { display: block; color: var(--muted); margin-top: 3px; }
+.evidence-expanded { border-top: 1px solid var(--line); padding: 16px; background: #fbfcfd; }
+.evidence-task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.evidence-task { padding: 14px; border: 1px solid var(--line); border-radius: 9px; background: var(--white); }
+.evidence-task > span { display: block; }
+.evidence-task .button { margin-top: 6px; }
+.evidence-expanded h3 { margin: 20px 0 4px; }
+.evidence-recording { border-top: 1px solid var(--line); padding: 10px 0; }
+.evidence-recording-form { display: grid; gap: 10px; max-width: 640px; margin-top: 15px; }
+.evidence-recording-form label { display: grid; gap: 4px; font-weight: 600; }
+.evidence-recording-form textarea { min-height: 76px; resize: vertical; }
+.code-review-file { border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; overflow: hidden; }
+.code-review-file summary { cursor: pointer; padding: 10px 12px; font-weight: 600; background: var(--accent-soft); }
+.code-review-file pre { max-height: 580px; overflow: auto; padding: 14px; margin: 0; font-size: .8rem;
+  line-height: 1.5; background: #f8fafb; color: var(--ink); }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 :focus-visible { outline: 3px solid #8ab4d8; outline-offset: 2px; }

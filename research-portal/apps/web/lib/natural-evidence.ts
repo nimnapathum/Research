@@ -14,7 +14,8 @@ export const evidenceKinds = {
   screen_recording: 1024 * 1024 * 1024
 } as const;
 export type EvidenceKind = keyof typeof evidenceKinds;
-export const requiredEvidence = Object.keys(evidenceKinds) as EvidenceKind[];
+// Existing uploaded recordings remain readable, but Meet recordings are linked by the researcher.
+export const requiredEvidence = Object.keys(evidenceKinds).filter((kind) => kind !== 'screen_recording') as EvidenceKind[];
 export type EvidenceReceipt = { task_id: string; kind: EvidenceKind; filename: string;
   size_bytes: number; sha256: string; received_at: string };
 
@@ -89,6 +90,9 @@ export async function naturalEvidenceStatus(participantCode: string, taskId: str
     issues.push('Agent export and final snapshot protocol versions differ');
   }
   const ready = missing.length === 0 && issues.length === 0;
+  // Backfill submission for six-file sessions created before video moved to researcher-managed Drive.
+  if (ready) await writeFile(join(folder, 'READY.json'), JSON.stringify({ task_id: taskId,
+    ready_at: new Date().toISOString() }) + '\n', { flag: 'wx', mode: 0o600 }).catch(() => {});
   const warnings = agent_capture?.format === 'study_observer' && agent_capture.status !== 'stopped'
     ? ['Agent conversation capture reported missing records or errors; the researcher must assess coverage before analysis.'] : [];
   return { task_id: taskId, items, missing, issues, ready, rating_ready, agent_capture, warnings };
@@ -171,9 +175,7 @@ export async function saveNaturalEvidence(participantCode: string, taskId: strin
     if (agentSummary) await writeFile(join(folder, 'agent_capture_summary.json'), JSON.stringify(agentSummary, null, 2) + '\n', { mode: 0o600 });
     await writeFile(join(folder, `${kind}.receipt.json`), JSON.stringify(saved, null, 2) + '\n',
       { flag: 'wx', mode: 0o600 });
-    const status = await naturalEvidenceStatus(participantCode, taskId);
-    if (status.ready) await writeFile(join(folder, 'READY.json'), JSON.stringify({ task_id: taskId,
-      ready_at: new Date().toISOString() }) + '\n', { flag: 'wx', mode: 0o600 }).catch(() => {});
+    await naturalEvidenceStatus(participantCode, taskId);
     return saved;
   } finally {
     await handle.close().catch(() => {});

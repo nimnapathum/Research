@@ -145,7 +145,7 @@ with ZipFile(sys.argv[1]) as archive:
     }
   }
   const incomplete = await request(`/api/participant/tasks/${tasks[0].id}/evidence`, {}, cookie);
-  if (incomplete.body.ready || !incomplete.body.missing.includes('screen_recording')) {
+  if (incomplete.body.ready || !incomplete.body.missing.includes('agent_transcript')) {
     throw new Error('Incomplete natural evidence was accepted');
   }
   if (!incomplete.body.rating_ready || !after) throw new Error('After-task form unavailable after final rating upload');
@@ -167,15 +167,13 @@ with ZipFile(sys.argv[1]) as archive:
     { method: 'PUT', headers: { 'x-filename': 'AGENT_TRANSCRIPT.jsonl' },
       body: observerRecords.slice(0, -1).map((row) => JSON.stringify(row)).join('\n') + '\n' }, cookie);
   if (invalidObserver.response.status !== 400) throw new Error('Incomplete observer export was accepted');
-  const largeRecording = process.env.SMOKE_LARGE_UPLOAD === '1';
-  for (const [kind, content] of [['agent_transcript', observerRecords.map((row) => JSON.stringify(row)).join('\n') + '\n'],
-    ['screen_recording', largeRecording ? Buffer.alloc(9 * 1024 * 1024, 0x5a) : 'Synthetic smoke recording; receipt test only']]) {
-    const response = await request(`/api/participant/tasks/${tasks[0].id}/evidence?kind=${kind}`,
-      { method: 'PUT', headers: { 'x-filename': encodeURIComponent(kind === 'agent_transcript' ? 'AGENT_TRANSCRIPT.jsonl' : `${kind}.txt`) }, body: content }, cookie);
-    if (!response.response.ok || (kind === 'screen_recording' && largeRecording && response.body.size_bytes !== content.length)) {
-      throw new Error(`${kind} receipt failed: ${JSON.stringify(response.body)}`);
-    }
-  }
+  const agentText = observerRecords.map((row) => JSON.stringify(row)).join('\n') + '\n';
+  const agentUpload = await request(`/api/participant/tasks/${tasks[0].id}/evidence?kind=agent_transcript`,
+    { method: 'PUT', headers: { 'x-filename': 'AGENT_TRANSCRIPT.jsonl' }, body: agentText }, cookie);
+  if (!agentUpload.response.ok) throw new Error(`Agent transcript receipt failed: ${JSON.stringify(agentUpload.body)}`);
+  const rejectedVideo = await request(`/api/participant/tasks/${tasks[0].id}/evidence?kind=screen_recording`,
+    { method: 'PUT', headers: { 'x-filename': 'video.txt' }, body: 'no participant video' }, cookie);
+  if (rejectedVideo.response.status !== 400) throw new Error('Participant video upload was not disabled');
   const complete = await request(`/api/participant/tasks/${tasks[0].id}/evidence`, {}, cookie);
   if (!complete.body.ready) throw new Error(`Complete evidence was not recognized: ${JSON.stringify(complete.body)}`);
   if (complete.body.agent_capture?.format !== 'study_observer' || complete.body.agent_capture.transcript_records !== 1) {
@@ -188,9 +186,16 @@ with ZipFile(sys.argv[1]) as archive:
   const researcherCookie = researcherLogin.response.headers.get('set-cookie')?.split(';')[0];
   if (!researcherLogin.response.ok || !researcherCookie) throw new Error('Synthetic researcher login failed');
   const evidencePage = await fetch(`${root}/researcher/evidence`, { headers: { cookie: researcherCookie } });
-  if (!evidencePage.ok || !(await evidencePage.text()).includes(`${code}-T1`)) {
+  if (!evidencePage.ok || !(await evidencePage.text()).includes(code)) {
     throw new Error('Researcher evidence page did not show the uploaded task');
   }
+  const recording = await request(`/api/backend/researcher/recordings/${code}`,
+    json({ driveUrl: `https://drive.google.com/file/d/smoke-${code}/view`, label: 'Synthetic link', notes: 'Task 1 00:00' }), researcherCookie);
+  if (!recording.response.ok) throw new Error(`Researcher recording link failed: ${JSON.stringify(recording.body)}`);
+  const links = await request('/api/backend/researcher/recordings', {}, researcherCookie);
+  if (!links.response.ok || !links.body.some((row) => row.id === recording.body.id)) throw new Error('Recording link not listed');
+  const reviewPage = await fetch(`${root}/researcher/evidence/${code}/${code}-T1`, { headers: { cookie: researcherCookie } });
+  if (!reviewPage.ok || !(await reviewPage.text()).includes('Initial to final code')) throw new Error('Code inspection page unavailable');
   const retrieved = await fetch(`${root}${privateFile}`, { headers: { cookie: researcherCookie } });
   if (!retrieved.ok || retrieved.headers.get('content-disposition')?.includes('attachment') !== true ||
       !Buffer.from(await retrieved.arrayBuffer()).equals(readFileSync(join(final, 'SNAPSHOT_MANIFEST.json')))) {
@@ -260,13 +265,9 @@ with ZipFile(sys.argv[1]) as archive:
   if (!secondAfter.response.ok) throw new Error(`Task 2 after-task form failed: ${JSON.stringify(secondAfter.body)}`);
   const secondObserver = observerRecords.map((row) => ({ ...row, task_id: `${code}-T2` }))
     .map((row) => JSON.stringify(row)).join('\n') + '\n';
-  for (const [kind, content] of [['agent_transcript', secondObserver],
-    ['screen_recording', 'Synthetic smoke recording for Task 2']]) {
-    const response = await request(`/api/participant/tasks/${tasks[1].id}/evidence?kind=${kind}`,
-      { method: 'PUT', headers: { 'x-filename': kind === 'agent_transcript' ? 'AGENT_TRANSCRIPT.jsonl' : 'screen_recording.txt' },
-        body: content }, cookie);
-    if (!response.response.ok) throw new Error(`Task 2 ${kind} failed: ${JSON.stringify(response.body)}`);
-  }
+  const secondAgent = await request(`/api/participant/tasks/${tasks[1].id}/evidence?kind=agent_transcript`,
+    { method: 'PUT', headers: { 'x-filename': 'AGENT_TRANSCRIPT.jsonl' }, body: secondObserver }, cookie);
+  if (!secondAgent.response.ok) throw new Error(`Task 2 agent transcript failed: ${JSON.stringify(secondAgent.body)}`);
   const secondSubmitted = await request(`/api/backend/participant/tasks/${tasks[1].id}/status`,
     json({ status: 'submitted' }, 'PATCH'), cookie);
   if (!secondSubmitted.response.ok) throw new Error(`Task 2 submission failed: ${JSON.stringify(secondSubmitted.body)}`);
@@ -283,7 +284,7 @@ with ZipFile(sys.argv[1]) as archive:
   const audited = spawnSync('python3', ['../study-system/analysis/audit_natural_evidence.py',
     join(evidenceRoot, code, `${code}-T1`)], { encoding: 'utf8' });
   if (audited.status !== 0) throw new Error(`Received archive/hash audit failed: ${audited.stdout}${audited.stderr}`);
-  console.log(`PASS: natural page/commands, frozen ZIPs, seven receipts per task, researcher retrieval, archive/hash audit, both submissions and final form (${code})`);
+  console.log(`PASS: natural page/commands, frozen ZIPs, six receipts per task, Drive link, code inspection, archive/hash audit, both submissions and final form (${code})`);
 } finally {
   if (userId) await pool.query('DELETE FROM users WHERE id=$1', [userId]);
   if (researcherId) await pool.query('DELETE FROM users WHERE id=$1', [researcherId]);
