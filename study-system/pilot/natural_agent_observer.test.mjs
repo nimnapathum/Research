@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync, appendFileSync, symlinkSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, writeFileSync, appendFileSync, symlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { setupObserver, observeHook, TranscriptCollector, validateTranscript } from './natural_agent_observer.mjs';
+import { setupObserver, restartObserver, observeHook, TranscriptCollector, validateTranscript } from './natural_agent_observer.mjs';
 
 const id = '12345678-1234-1234-1234-123456789abc';
 function fixture() {
@@ -62,6 +62,29 @@ test('complete records are captured once, partial lines wait, timestamps are pre
   assert.equal(rows.at(-1).kind, 'capture_health');
 });
 
+test('Antigravity IDE transcript_full.jsonl is captured under the same conversation identity', () => {
+  const f = fixture();
+  const fullPath = join(f.source, '..', 'transcript_full.jsonl');
+  renameSync(f.source, fullPath);
+  writeFileSync(fullPath, '{"type":"user","content":"rehearsal"}\n');
+  observeHook(f.config, 'session_start', { ...f.input, transcriptPath: fullPath }, f.roots);
+  const collector = new TranscriptCollector(f.config, f.roots);
+  collector.poll();
+  assert.equal(collector.finish().transcript_records, 1);
+  assert.throws(() => validateTranscript(fullPath.replace('transcript_full.jsonl', 'other.jsonl'), id, f.roots), /outside/);
+});
+
+test('a stopped degraded watcher can restart into a fresh folder without overwriting evidence', () => {
+  const f = fixture();
+  const collector = new TranscriptCollector(f.config, f.roots);
+  assert.throws(() => restartObserver(f.workspace, join(f.root, 'agent-retry')), /Stop the previous/);
+  collector.finish();
+  const restarted = restartObserver(f.workspace, join(f.root, 'agent-retry'));
+  assert.equal(restarted.previous_output, f.config.output);
+  assert.equal(JSON.parse(readFileSync(join(f.workspace, '.study-observer/config.json'))).output, restarted.output);
+  assert.equal(readFileSync(collector.path, 'utf8').split('\n')[0].includes('study_agent_capture'), true);
+});
+
 test('transcript rewrites are flagged and both revisions remain in the export', () => {
   const f = fixture(); observeHook(f.config, 'session_start', f.input, f.roots);
   const collector = new TranscriptCollector(f.config, f.roots);
@@ -77,6 +100,20 @@ test('missing transcript cannot report successful collection and CLI hook return
   assert.equal(collector.finish().status, 'no_transcript');
   const result = spawnSync(process.execPath, [join(f.workspace, 'study/agent-observer.mjs'), 'hook', 'session_start'], { input: '{}', encoding: 'utf8' });
   assert.equal(result.status, 0); assert.equal(result.stdout, '{}\n');
+});
+
+test('invalid hook path records only private path metadata for diagnosis', () => {
+  const f = fixture();
+  const payload = { ...f.input, transcriptPath: join(f.root, 'outside.jsonl'),
+    userMessage: 'PRIVATE PROMPT MUST NOT BE LOGGED' };
+  const result = spawnSync(process.execPath, [join(f.workspace, 'study/agent-observer.mjs'), 'hook', 'session_start'],
+    { input: JSON.stringify(payload), encoding: 'utf8' });
+  assert.equal(result.status, 0); assert.equal(result.stdout, '{}\n');
+  const errors = readdirSync(join(f.config.output, 'hook-errors'));
+  assert.equal(errors.length, 1);
+  const recorded = readFileSync(join(f.config.output, 'hook-errors', errors[0]), 'utf8');
+  assert.match(recorded, /outside.jsonl/);
+  assert.doesNotMatch(recorded, /PRIVATE PROMPT/);
 });
 
 test('a transcript symlink to a personal file is rejected', () => {

@@ -32,6 +32,16 @@ function outside(workspace, output) {
     throw new Error('Agent capture output must be outside the coding workspace');
   }
 }
+function freshOutput(workspace, outputText) {
+  let output = resolve(outputText);
+  outside(workspace, output);
+  if (existsSync(output)) throw new Error('Use a fresh agent capture directory; existing evidence will not be overwritten');
+  privateDirectory(output);
+  output = realpathSync(output);
+  outside(workspace, output);
+  for (const folder of ['events', 'registry', 'hook-errors', 'conversations']) privateDirectory(join(output, folder));
+  return output;
+}
 function expandHome(path) {
   if (path.startsWith('~/') || path.startsWith('~\\')) return join(homedir(), path.slice(2));
   if (!isAbsolute(path)) throw new Error('Transcript path must be absolute');
@@ -40,11 +50,13 @@ function expandHome(path) {
 export function validateTranscript(path, conversationId, allowedRoots = roots()) {
   if (typeof path !== 'string' || !uuid.test(conversationId || '')) throw new Error('Invalid conversation/transcript identity');
   const expanded = expandHome(path);
-  const expected = allowedRoots.map((root) => join(resolve(root), 'brain', conversationId, '.system_generated', 'logs', 'transcript.jsonl'));
+  const expected = allowedRoots.flatMap((root) => ['transcript.jsonl', 'transcript_full.jsonl'].map((filename) =>
+    join(resolve(root), 'brain', conversationId, '.system_generated', 'logs', filename)));
   if (!expected.includes(expanded)) throw new Error('Transcript is outside the registered Antigravity conversation path');
   if (existsSync(expanded)) {
     if (!lstatSync(expanded).isFile() || lstatSync(expanded).isSymbolicLink()) throw new Error('Transcript is not a regular file');
-    const root = allowedRoots.find((candidate) => expanded === join(resolve(candidate), 'brain', conversationId, '.system_generated', 'logs', 'transcript.jsonl'));
+    const root = allowedRoots.find((candidate) => ['transcript.jsonl', 'transcript_full.jsonl'].some((filename) =>
+      expanded === join(resolve(candidate), 'brain', conversationId, '.system_generated', 'logs', filename)));
     const rel = relative(realpathSync(root), realpathSync(expanded));
     if (rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)) throw new Error('Transcript resolves outside its approved root');
   }
@@ -64,10 +76,7 @@ function quote(path) {
 }
 export function setupObserver(workspaceText, outputText, nodePath = process.execPath) {
   const workspace = realpathSync(resolve(workspaceText));
-  let output = resolve(outputText);
-  outside(workspace, output);
   const info = taskInfo(workspace);
-  if (existsSync(output)) throw new Error('Use a fresh agent capture directory; existing evidence will not be overwritten');
   const hooksPath = join(workspace, '.agents', 'hooks.json');
   if (existsSync(join(workspace, '.agents')) && lstatSync(join(workspace, '.agents')).isSymbolicLink()) throw new Error('Hooks directory cannot be a symlink');
   if (existsSync(hooksPath) && lstatSync(hooksPath).isSymbolicLink()) throw new Error('Hooks file cannot be a symlink');
@@ -81,16 +90,32 @@ export function setupObserver(workspaceText, outputText, nodePath = process.exec
     PostInvocation: [command('invocation_end')],
     PostToolUse: [{ matcher: '*', hooks: [command('tool_completed')] }], Stop: [command('agent_stop')]
   };
-  privateDirectory(output);
-  output = realpathSync(output);
-  outside(workspace, output);
-  for (const folder of ['events', 'registry', 'hook-errors', 'conversations']) privateDirectory(join(output, folder));
+  const output = freshOutput(workspace, outputText);
   privateDirectory(join(workspace, '.study-observer'));
   const config = { task_id: info.task_id, protocol_version: info.protocol_version,
     workspace, output, configured_at: now(), capture_scope: 'fresh registered study conversations only' };
   atomicJson(join(workspace, '.study-observer', 'config.json'), config);
   privateDirectory(dirname(hooksPath));
   atomicJson(hooksPath, hooks);
+  return config;
+}
+export function restartObserver(workspaceText, outputText) {
+  const workspace = realpathSync(resolve(workspaceText));
+  const info = taskInfo(workspace);
+  const configPath = join(workspace, '.study-observer', 'config.json');
+  const previous = json(configPath);
+  if (previous.workspace !== workspace || previous.task_id !== info.task_id ||
+      previous.protocol_version !== info.protocol_version) throw new Error('Observer setup does not match this workspace');
+  const healthPath = join(previous.output, 'AGENT_CAPTURE_HEALTH.json');
+  if (!existsSync(healthPath) || json(healthPath).status === 'running') {
+    throw new Error('Stop the previous agent watcher with Ctrl+C before restarting');
+  }
+  const hooks = json(join(workspace, '.agents', 'hooks.json'));
+  if (!hooks['study-natural-observer']) throw new Error('Study observer hook is not configured');
+  const output = freshOutput(workspace, outputText);
+  const config = { ...previous, output, previous_output: previous.output,
+    restarted_at: now(), capture_scope: 'fresh registered study conversations only' };
+  atomicJson(configPath, config);
   return config;
 }
 export function observeHook(config, event, input, allowedRoots = roots()) {
@@ -232,16 +257,31 @@ async function main() {
     const config = setupObserver(workspace, argument);
     console.log(`Observer configured for ${config.task_id}. Confirm study-natural-observer is enabled in Antigravity Hooks, then run node study/agent-observer.mjs watch before starting a fresh conversation.`);
     console.log(`Agent evidence directory: ${config.output}`);
+  } else if (command === 'restart') {
+    if (!argument) throw new Error('Usage: node study/agent-observer.mjs restart ../TASK-ID-agent-retry');
+    const config = restartObserver(workspace, argument);
+    console.log(`Observer restarted with fresh evidence directory: ${config.output}`);
+    console.log('Run node study/agent-observer.mjs watch, then start a fresh Antigravity conversation. Keep the previous evidence directory.');
   } else if (command === 'hook') {
     // Fail open to agent operation; retain diagnostic errors for the researcher.
     let config;
+    let input;
     try {
       config = json(join(workspace, '.study-observer', 'config.json'));
       let text = '';
       for await (const chunk of process.stdin) { text += chunk; if (Buffer.byteLength(text) > 1024 * 1024) throw new Error('Hook input too large'); }
-      observeHook(config, argument, JSON.parse(text));
+      input = JSON.parse(text);
+      observeHook(config, argument, input);
     } catch (error) {
-      if (config) try { atomicJson(join(config.output, 'hook-errors', `${randomUUID()}.json`), { at: now(), message: error.message }); } catch {}
+      if (config) try {
+        const pathDiagnostic = error.message === 'Transcript is outside the registered Antigravity conversation path' &&
+          input && typeof input === 'object' ? {
+            conversation_id: typeof input.conversationId === 'string' ? input.conversationId : null,
+            transcript_path: typeof input.transcriptPath === 'string' ? input.transcriptPath : null
+          } : {};
+        atomicJson(join(config.output, 'hook-errors', `${randomUUID()}.json`),
+          { at: now(), message: error.message, ...pathDiagnostic });
+      } catch {}
     } finally { process.stdout.write('{}\n'); }
   } else if (command === 'watch') {
     const config = json(join(workspace, '.study-observer', 'config.json'));
@@ -254,6 +294,6 @@ async function main() {
   } else if (command === 'status') {
     const config = json(join(workspace, '.study-observer', 'config.json'));
     console.log(JSON.stringify(json(join(config.output, 'AGENT_CAPTURE_HEALTH.json')), null, 2));
-  } else throw new Error('Usage: agent-observer.mjs setup NEW_OUTPUT_DIRECTORY | watch | status');
+  } else throw new Error('Usage: agent-observer.mjs setup NEW_OUTPUT_DIRECTORY | restart NEW_OUTPUT_DIRECTORY | watch | status');
 }
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) await main();
