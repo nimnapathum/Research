@@ -166,11 +166,14 @@ with ZipFile(sys.argv[1]) as archive:
     { method: 'PUT', headers: { 'x-filename': 'AGENT_TRANSCRIPT.jsonl' },
       body: observerRecords.slice(0, -1).map((row) => JSON.stringify(row)).join('\n') + '\n' }, cookie);
   if (invalidObserver.response.status !== 400) throw new Error('Incomplete observer export was accepted');
+  const largeRecording = process.env.SMOKE_LARGE_UPLOAD === '1';
   for (const [kind, content] of [['agent_transcript', observerRecords.map((row) => JSON.stringify(row)).join('\n') + '\n'],
-    ['screen_recording', 'Synthetic smoke recording; receipt test only']]) {
+    ['screen_recording', largeRecording ? Buffer.alloc(9 * 1024 * 1024, 0x5a) : 'Synthetic smoke recording; receipt test only']]) {
     const response = await request(`/api/participant/tasks/${tasks[0].id}/evidence?kind=${kind}`,
       { method: 'PUT', headers: { 'x-filename': encodeURIComponent(kind === 'agent_transcript' ? 'AGENT_TRANSCRIPT.jsonl' : `${kind}.txt`) }, body: content }, cookie);
-    if (!response.response.ok) throw new Error(`${kind} receipt failed: ${JSON.stringify(response.body)}`);
+    if (!response.response.ok || (kind === 'screen_recording' && largeRecording && response.body.size_bytes !== content.length)) {
+      throw new Error(`${kind} receipt failed: ${JSON.stringify(response.body)}`);
+    }
   }
   const complete = await request(`/api/participant/tasks/${tasks[0].id}/evidence`, {}, cookie);
   if (!complete.body.ready) throw new Error(`Complete evidence was not recognized: ${JSON.stringify(complete.body)}`);
