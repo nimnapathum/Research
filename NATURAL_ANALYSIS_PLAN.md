@@ -1,6 +1,6 @@
 # Natural-task evaluation and analysis plan
 
-Working version for natural-2026-10-13-r3. Freeze the main-study version before main recruitment. Rehearsal and feasibility-pilot data remain separate. This plan concerns the two free coding tasks; the old checkpoint export is not its input.
+Proposed main-study analysis for natural-2026-10-13-r3. The feasibility pilot tests whether its measures and assumptions are workable; freeze the main-study version before main recruitment. Rehearsal and pilot data remain separate. This plan concerns the same two free coding tasks in pilot and main; the old checkpoint export is not its input.
 
 ## 1. Units and records
 
@@ -15,6 +15,7 @@ Use the CSV headers in `study-system/analysis/natural-templates/`. Preserve raw 
 | `checks.csv` | One observed check | Task, feature/change, interval, security/generic category, invocation and reviewed result |
 | `exposures.csv` | One confirmed or uncertain agent-origin target weakness | Agent action, code hash, actual exposure, inspection, repair and final survival |
 | `session_log.csv` | One task/session setup | OS, tool/model/version, start/end, interruptions, capture quality and protocol deviations |
+| `coding_status.csv` | One explicit coding state for every task | Whether mode, checks, exposure and interview evidence has been fully reviewed; empty event files mean zero only when coding is complete |
 
 Keep coder 1, coder 2 and adjudicated labels as distinct records. A blank label means not coded yet; `unclear` means examined but insufficient evidence. Record missingness as `not_recorded`, `corrupt`, `declined`, `technical_failure`, `not_implemented`, or `unassessable`, with a note. A missing feature is never silently labelled secure.
 
@@ -37,7 +38,7 @@ The portal now provides a review-record form for entering the two independently 
 
 The rating is the probability that the **exact final feature** meets its stated security requirement, collected after coding and before researcher assessment/debrief. Participants may see their own checks during coding. Convert 0–100 to `p` in [0,1]. For resolved, assessable features use `y=1` for target secure and `y=0` for vulnerable. Compute `Brier=(p-y)^2`; smaller means more accurate probability judgments. Example: 90% on vulnerable code scores .81; 90% on target-secure code scores .01.
 
-Recommended primary estimate: for people with both classes assessable and correctly linked in both tasks, average the two Brier values within each condition, then compute the participant's acceleration minus exploration difference. Report the mean paired difference and a 95% participant-bootstrap interval using a fixed seed and 10,000 resamples. Display individual paired differences and sample counts. This is a conditional estimate for complete assessable pairs; disclose selection if incomplete tasks are common. No significance claim is required for the feasibility pilot.
+Recommended primary estimate: for people with both classes assessable and correctly linked in both tasks, average the two Brier values within each condition, then compute the participant's acceleration minus exploration difference. Report the mean paired difference and, from at least three complete participants, a 95% participant-bootstrap interval using a fixed seed and 10,000 resamples. Display individual paired differences and sample counts. This is a conditional estimate for complete assessable pairs; disclose selection if incomplete tasks are common. No significance claim is required for the feasibility pilot.
 
 Report probability distributions on secure and vulnerable features separately, condition/class counts, and mean `p-y` as a descriptive signed gap. The Brier score combines aspects of probability accuracy; it is not pure calibration or an individual trust trait. With only four judgments per person, avoid person-specific calibration curves and an automatic high/low trust label. Pooled reliability bins, if shown, need counts and broad uncertainty, and may be uninformative with sparse outcomes.
 
@@ -51,7 +52,7 @@ Separately describe **confirmed visible agent-origin vulnerable changes**: ident
 
 ## 5. RQ3 and mode analysis
 
-Use the [natural codebook](study-system/instruments/NATURAL_CODEBOOK.md). Summarise checks per task, security-specific checks per target feature, timing relative to agent application and human inspection, intentional repairs, and evidence-supported final status. Include generic checks separately. Associate checks with final vulnerability status descriptively and explain selected sequences through replay interviews. Checking is not randomised: suspicion, knowledge and difficulty can cause both checks and outcomes.
+Use the [natural codebook](study-system/instruments/NATURAL_CODEBOOK.md). Summarise checks per task, security-specific checks per target feature, timing relative to agent application and human inspection, intentional repairs, and evidence-supported final status. Include generic checks separately. Only count a developer's security check as reviewed when the result was actually inspected; preserve agent-only tests separately. `coding_status.csv` distinguishes fully coded no-check/no-exposure tasks from missing coding. Associate checks with final vulnerability status descriptively and explain selected sequences through replay interviews. Checking is not randomised: suspicion, knowledge and difficulty can cause both checks and outcomes.
 
 Code mode from implementation intent, without using verification intensity, speed, confidence or final security as label criteria. Compare proportions of observable time in acceleration/exploration/mixed/unclear episodes by assigned condition. Exclude agent-wait time and unobservable gaps from active-mode time, and report them separately. Preserve assignments for the primary comparison even when participants switch mode. Do not drop “noncompliant” people to improve the condition difference.
 
@@ -67,7 +68,7 @@ Counterbalance the four project/condition/order sequences, log actual allocation
 
 ## 7. Deliverables and claims
 
-Use `python3 study-system/analysis/natural_summary.py features.csv` for a checked descriptive summary and paired Brier bootstrap. It does not create security labels, mode labels or causal conclusions. Keep outputs with protocol version, source file hashes and script version.
+Download the phase-specific `features.csv` from **Researcher → Analytics** and compare it with raw manifests, ratings and separate reviewer sheets. Record final assessments only after task submission. Use `python3 study-system/analysis/natural_summary.py features.csv` for checked final-feature and paired estimates. Add resolved `episodes.csv`, `checks.csv`, `exposures.csv`, `coding_status.csv` and `session_log.csv`; run `python3 study-system/analysis/natural_behavior_report.py ANALYSIS_FOLDER --phase pilot --markdown-output ANALYSIS_FOLDER/report.md` (or the matching phase) for the linked RQ1–RQ4 report. The script prints provenance-rich JSON and optionally writes a readable Markdown summary. Neither script creates security/mode labels or causal conclusions. Keep raw coder sheets, reconciliation notes, original evidence and generated reports under the approved retention procedure.
 
 Recommended displays: recruitment/coverage flow; feature outcome counts; paired probability-score plot; confidence distributions split by security label; coded check timelines; mode-time proportions; and a joint table combining behavioural evidence with interview explanations. No participant names, raw transcripts or revealing code are published without the approved procedure.
 

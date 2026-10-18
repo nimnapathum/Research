@@ -48,13 +48,28 @@ try {
   if (!(await document.json()).source.includes('RQ1')) throw new Error('Markdown content missing');
   const current = await expectStatus('/api/research/docs?doc=CURRENT_STUDY.md', 'study_sid=researcher', 200);
   if (!(await current.json()).source.includes('work-structure')) throw new Error('Current-study evidence map missing');
+  const guide = await expectStatus('/api/research/docs?doc=STUDY_GUIDE.md', 'study_sid=researcher', 200);
+  const guideSource = (await guide.json()).source;
+  if (!guideSource.includes('main-study procedure') || !guideSource.includes('RQ1') ||
+      !guideSource.includes('SCREEN_RECORDING_EVALUATION_PLAN.md') || !guideSource.includes('REFERENCES.md')) {
+    throw new Error('A–Z study guide missing its evidence and source path');
+  }
   const audit = await expectStatus('/api/research/docs?doc=PORTAL_METHOD_AUDIT.md', 'study_sid=researcher', 200);
   if (!(await audit.json()).source.includes('Portal–methodology inspection')) throw new Error('Portal method audit missing');
+  const workflow = await expectStatus('/api/research/docs?doc=RQ_ANALYTICS_REVIEW.md', 'study_sid=researcher', 200);
+  if (!(await workflow.json()).source.includes('coding_status.csv')) throw new Error('RQ analysis workflow missing');
+  const readiness = await expectStatus('/api/research/docs?doc=PILOT_READINESS_AUDIT_2026-10-18.md', 'study_sid=researcher', 200);
+  if (!(await readiness.json()).source.includes('P0: required before the next real-user pilot')) {
+    throw new Error('Current pilot release gates missing');
+  }
   const page = await expectStatus('/researcher/research?doc=RQ.md', 'study_sid=researcher', 200);
   if (!(await page.text()).includes('Study documents')) throw new Error('Research page missing');
   const landing = await expectStatus('/researcher/research', 'study_sid=researcher', 200);
   const landingSource = await landing.text();
-  if (!landingSource.includes('CURRENT_STUDY.md') || !landingSource.includes('NATURAL_SESSION_RUNBOOK.md')) {
+  if (!landingSource.includes('STUDY_GUIDE.md') || !landingSource.includes('Historical designs and status') ||
+      !landingSource.includes('PILOT_READINESS_AUDIT_2026-10-18.md') ||
+      !landingSource.includes('SCREEN_RECORDING_EVALUATION_PLAN.md') ||
+      !landingSource.includes('NATURAL_ANALYSIS_PLAN.md')) {
     throw new Error('Research landing does not point to the current protocol');
   }
   console.log('PASS: research document loading and access controls');

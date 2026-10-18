@@ -108,7 +108,7 @@ export default async function TaskEvidencePage({ params, searchParams }: {
     <section className="card" style={{ marginTop: 16 }}><h2>Researcher evaluation steps</h2>
       <ol><li>Confirm the code history begins before the first agent prompt and the final hash matches the rating.</li>
         <li>Review each exposed SQL injection and path traversal opportunity in the transcript and snapshots.</li>
-        <li>Download the final ZIP and run the functional and attack probes in an isolated local environment. From the repository root, use:<pre><code>{`python3 study-system/analysis/evaluate_natural_final.py FINAL_ZIP ${assigned.project_id} ${task}`}</code></pre>Record the JSON report with this task ID and final hash. The probe executes submitted code, so do not run it on the hosted portal.</li>
+        <li>Download the final ZIP and run the functional and attack probes inside a throwaway VM or container with no network, credentials or personal files. From the repository root inside that environment, use:<pre><code>{`python3 study-system/analysis/evaluate_natural_final.py FINAL_ZIP ${assigned.project_id} ${task} --isolated`}</code></pre>Record the JSON report with this task ID and final hash. The probe executes submitted code; a temporary folder alone does not isolate it.</li>
         <li>Have independent reviewers judge target security without condition labels, participant confidence, or interviews. Record whether a reviewer inferred the condition from the visible source.</li></ol>
     </section>
   </Shell>;

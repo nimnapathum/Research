@@ -2,10 +2,11 @@
 
 Current working protocol: **natural-2026-10-13-r3**. Each early-career participant completes two free coding tasks, one per encouragement, with SQL and file-access features in both. The researcher confirms ethics approval covers this procedure. The local portal serves the natural tasks and collects evidence receipts. A synthetic portal check is software evidence; real Antigravity capture, review and participant-owned-computer delivery remain release checks. No participant findings exist yet.
 
-Read [RESEARCH_AUDIT.md](RESEARCH_AUDIT.md) first. It lists every stage's difficulty, refinement, source support, implementation status and remaining work.
+Start with the [A–Z study guide](STUDY_GUIDE.md). It explains the intended **main-study** method and every RQ in reading order. The feasibility pilot follows the same two-task structure to validate the materials before they are frozen; its data stay separate from the main study. [RESEARCH_AUDIT.md](RESEARCH_AUDIT.md) is a detailed status and decision record.
 
 | Current document | Purpose |
 | --- | --- |
+| [STUDY_GUIDE.md](STUDY_GUIDE.md) | Canonical introduction: aim, literature, novelty, two-task procedure, evidence, evaluation, pilot/main distinction and limits |
 | [METHODOLOGY_TIMELINE_AND_JUSTIFICATION.md](METHODOLOGY_TIMELINE_AND_JUSTIFICATION.md) | Chronological method, every current questionnaire group and measure, prior-study precedent, original decisions and validation gates |
 | [RQ.md](RQ.md) | Original RQs, natural operational wording, aim and defences |
 | [NATURAL_WORKFLOW_METHOD.md](NATURAL_WORKFLOW_METHOD.md) | Current study design and participant sequence |
@@ -16,6 +17,7 @@ Read [RESEARCH_AUDIT.md](RESEARCH_AUDIT.md) first. It lists every stage's diffic
 | [Agent observer guide](study-system/pilot/AGENT_OBSERVER_GUIDE.md) | Hook setup, transcript capture, timestamps and coverage tests |
 | [Natural session runbook](study-system/pilot/NATURAL_SESSION_RUNBOOK.md) | Researcher preparation, recording, recovery and pilot decisions |
 | [Natural codebook](study-system/instruments/NATURAL_CODEBOOK.md) | Intent, agent application, human inspection and verification coding |
+| [Screen-recording evaluation](SCREEN_RECORDING_EVALUATION_PLAN.md) | How to review video, what metrics follow, and which measures are original adaptations |
 | [Local participant guide](research-portal/LOCAL_NATURAL_REHEARSAL.md) | Portal, download, scripts and upload sequence |
 | [REFERENCES.md](REFERENCES.md) | Prior evidence and limits |
 | [LITERATURE_MAP.md](LITERATURE_MAP.md) | Attached-paper inventory |

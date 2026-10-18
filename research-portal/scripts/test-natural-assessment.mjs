@@ -21,8 +21,9 @@ const previousRoot = process.env.STUDY_EVIDENCE_ROOT;
 process.env.STUDY_PROTOCOL = 'natural';
 process.env.STUDY_EVIDENCE_ROOT = root;
 let inserts = 0;
+let taskStatus = 'submitted';
 const db = {
-  query: async () => ({ rows: [{ external_task_id: task, participant_code: code }] }),
+  query: async () => ({ rows: [{ external_task_id: task, participant_code: code, status: taskStatus }] }),
   transaction: async (action) => action({ query: async (sql) => {
     if (sql.includes('INSERT INTO natural_assessments')) { inserts++; return { rows: [{ id: 'assessment-1' }] }; }
     return { rows: [] };
@@ -35,6 +36,12 @@ const good = { taskId: '12345678-1234-1234-1234-123456789abc', weaknessClass: 's
     { reviewerCode: 'R2', security: 'target_secure', functionality: 'pass', inferredCondition: false }],
   resolvedSecurity: 'target_secure', resolvedFunctionality: 'pass', resolutionNote: 'Probe and source review agree' };
 try {
+  taskStatus = 'in_progress';
+  let prematureRejected = false;
+  try { await controller.recordNaturalAssessment(request, good); }
+  catch { prematureRejected = true; }
+  if (!prematureRejected || inserts !== 0) throw new Error('Pre-submission assessment was accepted');
+  taskStatus = 'submitted';
   const saved = await controller.recordNaturalAssessment(request, good);
   if (saved.id !== 'assessment-1' || inserts !== 1) throw new Error('Valid assessment was not saved');
   for (const changed of [
@@ -49,7 +56,7 @@ try {
     if (!rejected) throw new Error('Invalid assessment was accepted');
   }
   if (inserts !== 1) throw new Error('Rejected assessment reached storage');
-  console.log('PASS: natural assessment requires two reviewer identities, evidence note and matching manifest hash');
+  console.log('PASS: natural assessment requires submitted task, two reviewer identities, evidence note and matching manifest hash');
 } finally {
   if (previousProtocol === undefined) delete process.env.STUDY_PROTOCOL;
   else process.env.STUDY_PROTOCOL = previousProtocol;

@@ -1,5 +1,7 @@
 # Replay interview guide
 
+> **Historical controlled-checkpoint guide.** For the current `-natural.zip` session use the [natural-study replay interview guide](NATURAL_INTERVIEW_GUIDE.md). Its clip rule and questions refer to free agent edits and final-code ratings.
+
 **Timing:** 15–25 minutes after both tasks, before status reveal/debrief. Record with consent. Choose clips by a fixed rule before looking at participant confidence or oracle status where feasible: one SQL review, one path review, one later check/repair, and one episode whose observed behaviour appears different from its assigned condition.
 
 Start each clip with: “What were you trying to accomplish at this moment?” Then use neutral prompts:

@@ -1,6 +1,8 @@
 # Current study: design and evidence map
 
-**Local working revision, 18 October 2026.** Capture format remains `natural-2026-10-13-r3`; new task packages use orientation revision `2026-10-18-v3` and stimulus revision `2026-10-18-api-contrast-v1`. Previously issued ZIPs remain frozen. The [hosted release status](research-portal/HOSTED_REHEARSAL_STATUS.md) describes an older deployed build until a later deployment is verified. No participant findings or preliminary outcome results are established here.
+For a first reading of the complete main-study method, start with the [A–Z study guide](STUDY_GUIDE.md). This file is the shorter status and evidence map.
+
+**Local working revision, 18 October 2026.** Capture format remains `natural-2026-10-13-r3`; new task packages use orientation revision `2026-10-18-v3` and stimulus revision `2026-10-18-api-contrast-v1`. These tasks and the first analytics release are hosted as recorded in [hosted release status](research-portal/HOSTED_REHEARSAL_STATUS.md). The newer local RQ-linked dashboard and coding report are awaiting review before any later deployment. Previously issued ZIPs remain frozen. No participant findings or preliminary outcome results are established here.
 
 ## Study in one paragraph
 
@@ -28,8 +30,10 @@ The full source limits are in [REFERENCES.md](REFERENCES.md). No cited work vali
 
 **Still to verify before using this new revision with real pilot participants:** the four revised packages' feature/security reference cases, actual Antigravity/Meet capture and retrieval on intended hosts, questionnaire comprehension, mode separation, comparable difficulty/completion, reviewer agreement, and the approved data-retention procedure. Local package and baseline tests are engineering checks; they do not establish these research properties. Freeze the task, card, form, codebook and analysis revisions after the feasibility pilot and before the main sample.
 
+The [18 October pilot readiness audit](PILOT_READINESS_AUDIT_2026-10-18.md) gives the current release decision, exact pass evidence and RQ-by-RQ gaps. The [screen-recording evaluation plan](SCREEN_RECORDING_EVALUATION_PLAN.md) maps visible events to mode, verification and exposure measures. The [natural questionnaire map](study-system/instruments/NATURAL_QUESTIONNAIRES.md) and [natural interview guide](study-system/instruments/NATURAL_INTERVIEW_GUIDE.md) replace controlled-checkpoint wording for new sessions.
+
 Documents under **Historical protocols** and legacy checkpoint sections describe earlier designs. They are available for provenance and must not be used as instructions for a `-natural.zip` session.
 
 The [portal–methodology inspection](PORTAL_METHOD_AUDIT.md) maps each current portal step to the evidence it actually saves and lists the remaining pilot gates.
 
-The local portal's **Analytics** page now separates study phases, shows participant/task collection and confidence, and opens intermediate source snapshots as a timeline. Once two independent feature reviews have been completed outside the portal and entered against the final hash, it displays descriptive security counts and paired confidence-accuracy estimates. Agent-origin exposure, human verification and observed mode still require coded evidence; a live chart is not a completed study result.
+The local portal's **Analytics** page now separates study phases and lays out RQ1–RQ4 evidence, denominators and missingness. Once two independent feature reviews have been completed outside the portal and entered against the final hash, it displays descriptive security counts and paired confidence-accuracy estimates. A phase-specific feature CSV can be joined locally with resolved mode, verification and exposure coding. Agent-origin exposure, human verification and observed mode still require coded evidence; a live chart is not a completed study result.

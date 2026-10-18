@@ -18,7 +18,7 @@ export function ResearchLibrary({ docs, initialSelected, initialSource }: {
   const contents = useRef(new Map<string, string>([[initialSelected, initialSource]]));
   const requestId = useRef(0);
   const abort = useRef<AbortController | null>(null);
-  const defaultPath = docs.some((doc) => doc.path === 'CURRENT_STUDY.md') ? 'CURRENT_STUDY.md' : docs[0]?.path;
+  const defaultPath = docs.some((doc) => doc.path === 'STUDY_GUIDE.md') ? 'STUDY_GUIDE.md' : docs[0]?.path;
 
   const load = useCallback(async (path: string) => {
     if (!docs.some((doc) => doc.path === path)) return;
@@ -84,24 +84,32 @@ export function ResearchLibrary({ docs, initialSelected, initialSource }: {
     open(path, url.hash);
   };
   const metadata = docs.find((doc) => doc.path === selected);
+  const historical = metadata?.category.startsWith('99 ') || false;
 
   return <>
     <section className="card research-summary"><h2>Research at a glance</h2>
       <p><strong>Aim:</strong> Examine security judgments, reliance, verification and confidence accuracy when developers use a coding agent under two assigned work structures. Code the interaction modes they actually show.</p>
-      <p className="small">The assigned conditions combine human guidance with a familiar or unfamiliar code interface. They do not isolate a pure cognitive-mode effect. Previously issued participant ZIPs keep their original version.</p>
+      <p className="small">The main study uses two tasks per participant. The feasibility pilot rehearses this same structure before the materials are frozen. Assigned conditions combine human guidance with a familiar or unfamiliar code interface; observed mode is coded separately.</p>
+      <ol className="study-flow" aria-label="Study method at a glance">
+        <li><strong>1</strong><span>Consent and background</span></li>
+        <li><strong>2</strong><span>Two balanced agent tasks</span></li>
+        <li><strong>3</strong><span>Final-code ratings and replay</span></li>
+        <li><strong>4</strong><span>Independent code and video review</span></li>
+        <li><strong>5</strong><span>Paired RQ analysis</span></li>
+      </ol>
       <div className="grid two"><div><strong>Research questions</strong><ol>
         <li>Does security confidence align with assessed code security differently across the two conditions?</li>
         <li>Do target vulnerabilities remain in final code differently across conditions? Describe retention only when an insecure agent change was actually exposed.</li>
         <li>How do security checks before and after observed integration of agent changes relate to final outcomes?</li>
         <li>Do these patterns differ for SQL injection and path traversal?</li>
-      </ol></div><div><strong>Current stage</strong><p>Local task revision and pilot preparation. No adjudicated participant findings are presented in these documents.</p>
-        <p className="small">Start with <a href="/researcher/research?doc=CURRENT_STUDY.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=CURRENT_STUDY.md')}>current study and evidence map</a>, <a href="/researcher/research?doc=TASK_CONTRAST_DESIGN.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=TASK_CONTRAST_DESIGN.md')}>task contrast</a>, <a href="/researcher/research?doc=NATURAL_WORKFLOW_METHOD.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=NATURAL_WORKFLOW_METHOD.md')}>method</a>, <a href="/researcher/research?doc=PORTAL_METHOD_AUDIT.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=PORTAL_METHOD_AUDIT.md')}>portal audit</a>, and <a href="/researcher/research?doc=study-system%2Fpilot%2FNATURAL_SESSION_RUNBOOK.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=study-system%2Fpilot%2FNATURAL_SESSION_RUNBOOK.md')}>session runbook</a>.</p></div></div>
+      </ol></div><div><strong>Read the study in order</strong><p>The <a href="/researcher/research?doc=STUDY_GUIDE.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=STUDY_GUIDE.md')}>A–Z study guide</a> explains the main method, what literature supports, what is new, and how each RQ is evaluated.</p>
+        <p className="small">Then read the <a href="/researcher/research?doc=RQ.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=RQ.md')}>RQs</a>, <a href="/researcher/research?doc=TASK_CONTRAST_DESIGN.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=TASK_CONTRAST_DESIGN.md')}>task contrast</a>, <a href="/researcher/research?doc=SCREEN_RECORDING_EVALUATION_PLAN.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=SCREEN_RECORDING_EVALUATION_PLAN.md')}>recording evaluation</a>, <a href="/researcher/research?doc=NATURAL_ANALYSIS_PLAN.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=NATURAL_ANALYSIS_PLAN.md')}>analysis plan</a>, and <a href="/researcher/research?doc=REFERENCES.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=REFERENCES.md')}>source ledger</a>. The <a href="/researcher/research?doc=PILOT_READINESS_AUDIT_2026-10-18.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=PILOT_READINESS_AUDIT_2026-10-18.md')}>pilot gate</a> records what must be checked before new participant collection.</p></div></div>
     </section>
     <div className="document-layout"><ResearchDocList docs={docs} selected={selected} pending={pending} onOpen={open} />
       <article className="card document-content" aria-busy={pending !== null}>
         <div className="document-meta"><span>{metadata?.category}</span><span>{selected}</span>
           <span>Updated {metadata ? metadata.updatedAt.slice(0, 10) : '—'}</span></div>
-        {selected.startsWith('archive/') && <p className="alert">Historical protocol. Use Current study and the natural-task runbook for active sessions.</p>}
+        {historical && <p className="alert">Historical design or status snapshot. Use the A–Z study guide and current session runbook for active sessions.</p>}
         {pending && <p className="muted" role="status">Opening document…</p>}
         {error && <p role="alert">{error} <button type="button" onClick={() => void load(selected)}>Retry</button></p>}
         {!pending && !error && <div className="markdown-body"><ReactMarkdown remarkPlugins={[remarkGfm]}

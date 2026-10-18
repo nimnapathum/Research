@@ -1,4 +1,6 @@
-# Task contrast for the next pilot
+# Assigned task contrast for the main study
+
+**Current proposed stimulus.** The feasibility pilot tests this same contrast before its main-study version is frozen. The condition is assigned; observed interaction mode is coded separately.
 
 ## What changed
 

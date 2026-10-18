@@ -1,5 +1,7 @@
 # Participant questions and why each is here
 
+> **Historical controlled-checkpoint instrument.** For a `-natural.zip` session use [Natural-study questions and measurement limits](NATURAL_QUESTIONNAIRES.md). The natural portal hides the two direct baseline recognition items, has no exposed-proposal form, and collects final-code probabilities with `study/rate.mjs`.
+
 **Status: pilot wording, not a validated trust or cognitive-state scale.** The machine-readable [forms.json](forms.json) is the version the local app renders. Consent and recruitment screening are separate institutional materials and must be approved before data collection. Avoid names, email addresses and personal repository details in these forms.
 
 ## Order

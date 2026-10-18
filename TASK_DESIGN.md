@@ -1,6 +1,6 @@
 # Current natural-task design
 
-Protocol natural-2026-10-13-r3. Both projects are small JavaScript/Node HTTP services using built-in SQLite and synthetic files. The first timing pilot uses the same provisional 30-minute coding cap for both tasks. Pilot comprehension, workload and completion before freezing the main cap.
+Protocol natural-2026-10-13-r3. Both projects are small JavaScript/Node HTTP services using built-in SQLite and synthetic files. The proposed main-study task cap is the same provisional 30 minutes for both tasks; the feasibility pilot tests comprehension, workload and completion before that cap and the task package are frozen.
 
 | Project | SQL feature | File feature |
 | --- | --- | --- |

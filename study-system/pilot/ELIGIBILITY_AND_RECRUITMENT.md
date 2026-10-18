@@ -1,4 +1,6 @@
-# Pilot cohort and recruitment draft
+# Early-career cohort and recruitment plan
+
+The pilot and main study recruit from the same defined cohort. This is a proposed participant-screening rule; the exact invitation and consent text must match the approved institutional documents.
 
 Check these criteria against the institution's approved protocol before inviting anyone. The cohort supports claims about **early-career JavaScript-capable developers**, not all professional developers or everyone new to AI.
 

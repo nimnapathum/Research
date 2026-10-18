@@ -1,6 +1,6 @@
 # Natural-task data coverage and safety gate
 
-**Status, updated 18 October 2026:** The hosted natural portal has passed a synthetic two-task delivery/upload/retrieval rehearsal, while the new work-structure stimulus remains local. The quality of actual Antigravity, Meet, code-history and interview evidence on intended participant hosts still needs verification. Use this checklist before each real pilot; a blank or missing stream means *missing evidence*, never “the participant did not do it.” The older checkpoint exports measure a different procedure and cannot fill these gaps.
+**Status, updated 18 October 2026:** The hosted natural portal has passed a synthetic two-task delivery/upload/retrieval rehearsal and serves newly generated `2026-10-18-api-contrast-v1` packages. Previously issued ZIPs remain frozen. The newer RQ-linked analytics remain local. The quality of actual Antigravity, Meet, code-history and interview evidence on intended participant hosts still needs verification. Use this checklist before each real pilot; a blank or missing stream means *missing evidence*, never “the participant did not do it.” The older checkpoint exports measure a different procedure and cannot fill these gaps.
 
 ## Minimum linked record for each of the two tasks
 
@@ -29,7 +29,7 @@
 
 ## Pilot release decision
 
-Do **not** claim all measures are safe or collected yet. The hosted portal has passed synthetic ZIP delivery, authenticated size-limited upload, hash/manifest/rating checks and researcher retrieval for its older stimulus revision. A real remote pilot on the **new** revision still needs deployment verification and an end-to-end test of exact IDE/video/transcript capture, researcher retrieval and playback, participant-host access, consented retention/deletion, and final-code security assessment with independent metadata-masked review. Until those pass, researcher self-rehearsal can test feasibility, but new-revision real participant collection remains a **no-go**.
+Do **not** claim all measures are safe or collected yet. The hosted portal has passed synthetic ZIP delivery, authenticated size-limited upload, hash/manifest/rating checks and researcher retrieval. A real remote pilot on the **new** revision still needs an end-to-end test of exact IDE/video/transcript capture, researcher retrieval and playback, participant-host access, consented retention/deletion, and final-code security assessment with independent metadata-masked review. Until those pass, researcher self-rehearsal can test feasibility, but new-revision real participant collection remains a **no-go**. See the [current release gates](../../PILOT_READINESS_AUDIT_2026-10-18.md).
 
 ## r2 changes
 

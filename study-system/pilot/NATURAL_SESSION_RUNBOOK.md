@@ -1,6 +1,12 @@
 # Researcher runbook for natural tasks
 
-Protocol natural-2026-10-13-r3. Follow the institution-approved consent, compensation, retention and withdrawal terms. Ethics coverage has been confirmed by the researcher. This file implements the [current method](../../NATURAL_WORKFLOW_METHOD.md); old checkpoint runbooks do not govern this session.
+Protocol natural-2026-10-13-r3. This is the session procedure intended for both the feasibility pilot and the later frozen main study; the pilot tests it rather than defining a different experiment. Follow the institution-approved consent, compensation, retention and withdrawal terms. Ethics approval has been reported by the researcher; the exact approved wording must be checked against the current flow. This file implements the [current method](../../NATURAL_WORKFLOW_METHOD.md); old checkpoint runbooks do not govern this session.
+
+Before inviting another real participant, clear the documented [pilot readiness gates](../../PILOT_READINESS_AUDIT_2026-10-18.md). Use the [natural questionnaire map](../instruments/NATURAL_QUESTIONNAIRES.md) and [natural replay interview guide](../instruments/NATURAL_INTERVIEW_GUIDE.md); the unqualified questionnaire/interview files describe the earlier controlled protocol.
+
+For post-session video review, follow the [screen-recording evaluation plan](../../SCREEN_RECORDING_EVALUATION_PLAN.md) with the codebook. Preserve the timestamped event inventory before assigning intent or security-purpose labels.
+
+Complete a copy of the [pilot release record](NATURAL_PILOT_GATE_RECORD.md) for the exact portal, package and host revision; do not infer a passed gate from a blank template.
 
 ## Before recruitment
 
@@ -27,7 +33,7 @@ If capture fails after coding starts, preserve what exists and log exact gap/tim
 
 At the finishing point, participant freezes code and rates the exact final hash. Their own coding checks are allowed; no researcher oracle results or debrief are shown. Record whether finishing was voluntary or cap-driven. Wait for agent idle and stop both collectors after rating. Retain the agent folder and upload its AGENT_TRANSCRIPT.jsonl. Upload manifest/rating and complete the after-task form promptly before larger transfers. If an upload is wrong or missing, log it and ask the researcher to resolve; the present portal does not offer a fully audited replacement/waiver flow. Never use synthetic media as a substitute.
 
-After the six evidence receipts and form, take the common break and repeat in the other condition/project, with fresh conversation. Collect after-both questions and conduct replay before feedback. Ask about carryover. Select replay moments by the [natural codebook](../instruments/NATURAL_CODEBOOK.md), including no-check cases. Record interview audio/video under the approved procedure and link its filename/hash to both task IDs; the six task uploads do not include a separate interview receipt.
+After the six evidence receipts and form, take the common break and repeat in the other condition/project, with fresh conversation. Collect after-both questions and conduct replay before feedback. Ask about carryover. Select replay moments by the [natural codebook](../instruments/NATURAL_CODEBOOK.md) and use the [natural interview guide](../instruments/NATURAL_INTERVIEW_GUIDE.md), including no-check cases. Record interview audio/video under the approved procedure and link its filename/hash to both task IDs; the six task uploads do not include a separate interview receipt.
 
 ## Session closure
 

@@ -1,11 +1,13 @@
-"""Run functional and target probes on a submitted final ZIP on an isolated researcher machine.
+"""Run target probes on a submitted ZIP inside an externally isolated throwaway VM/container.
 
-This intentionally executes participant code. Do not invoke it from the hosted portal.
+This executes participant code. A temporary directory and a restricted environment are
+not a sandbox. Never run on the hosted portal or an ordinary researcher workstation.
 """
 import argparse
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 
@@ -13,6 +15,9 @@ from inspect_natural_code import snapshot
 
 
 def evaluate(archive_path, project, task_id, node):
+    node_executable = shutil.which(node)
+    if node_executable is None:
+        raise FileNotFoundError(f'Node executable not found: {node}')
     manifest, files = snapshot(archive_path)
     if manifest.get('workspace') != task_id:
         raise ValueError('Final snapshot belongs to another task')
@@ -26,9 +31,10 @@ def evaluate(archive_path, project, task_id, node):
             target.write_bytes(content)
         for feature in ('Q1', 'F1'):
             try:
-                run = subprocess.run([node, str(probe), directory, project, feature],
+                run = subprocess.run([node_executable, str(probe), directory, project, feature],
                                      text=True, capture_output=True, timeout=45, cwd=directory,
-                                     env={**os.environ, 'STUDY_DATA_DIR': directory})
+                                     env={'PATH': os.defpath, 'HOME': directory,
+                                          'TMPDIR': directory, 'STUDY_DATA_DIR': directory})
                 parsed = json.loads(run.stdout) if run.returncode == 0 else {
                     'error': (run.stderr or run.stdout)[-1200:] or 'Probe failed'}
             except subprocess.TimeoutExpired:
@@ -45,5 +51,10 @@ if __name__ == '__main__':
     parser.add_argument('project', choices=['A', 'B'])
     parser.add_argument('task_id')
     parser.add_argument('--node', default='node')
+    parser.add_argument('--isolated', action='store_true',
+                        help='Confirm this is running inside an externally isolated throwaway environment')
     args = parser.parse_args()
+    if not args.isolated:
+        parser.error('Submitted code must run in an externally isolated throwaway VM/container; '
+                     'pass --isolated only after confirming that environment')
     print(json.dumps(evaluate(args.final_zip, args.project, args.task_id, args.node), indent=2))

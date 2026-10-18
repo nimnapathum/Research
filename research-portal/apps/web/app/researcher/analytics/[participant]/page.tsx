@@ -3,7 +3,9 @@ import { notFound, redirect } from 'next/navigation';
 import { Shell } from '@/components/Shell';
 import { BarChart } from '@/components/BarChart';
 import { AnalysisRefresh } from '@/components/AnalysisRefresh';
-import { naturalTaskSummaries, reviewedFeatures, type AssignedTask, type NaturalAssessment,
+import { CodeChangePlot, PairedBrierPlot } from '@/components/StudyPlots';
+import { naturalCodeMetricsForTasks } from '@/lib/natural-code-metrics';
+import { naturalTaskSummaries, pairedBrierPoints, reviewedFeatures, type AssignedTask, type NaturalAssessment,
   type Recording, type StudyParticipant, type StudyResponse } from '@/lib/natural-analysis';
 import { serverApi } from '@/lib/server-api';
 import type { StudyUser } from '@/lib/types';
@@ -28,18 +30,34 @@ export default async function ParticipantAnalysisPage({ params }: { params: Prom
   const person = data.participants.find((item) => item.participant_code === code);
   if (!person) notFound();
   const tasks = await naturalTaskSummaries([person], data.tasks.filter((item) => item.participant_id === person.id), responses);
+  const codeMetrics = await naturalCodeMetricsForTasks(tasks);
   const judged = reviewedFeatures(tasks, assessments);
+  const paired = pairedBrierPoints(tasks, assessments);
   const video = recordings.filter((item) => item.participant_code === code);
   return <Shell user={user}><div className="hero"><div><p className="eyebrow">Participant analysis · {person.study_phase || 'legacy'}</p>
     <h1>{code}</h1><p>Compare the two assigned tasks, recorded confidence and collection quality before interpreting the coding evidence.</p></div>
     <Link className="button secondary" href={`/researcher/analytics?phase=${person.study_phase || 'legacy'}`}>← Phase overview</Link></div>
     <AnalysisRefresh />
     <div className="notice"><strong>Evidence boundary</strong><p>These numbers describe uploads and participant reports. They are not a security verdict or a measure of observed cognitive mode. Read the code timeline and video before coding developer checks or agent-origin changes.</p></div>
+    <div className="grid two" style={{ marginTop: 16 }}><section className="card"><h2>Paired security-confidence accuracy</h2>
+      <PairedBrierPlot pairs={paired} /><p className="small muted">Brier = (reported probability secure − reviewed secure outcome)². Each task average requires both SQL and path ratings and assessable final-code reviews. This compares two submitted artifacts, not stable personal trust.</p>
+    </section><section className="card"><h2>Source change activity</h2>
+      <CodeChangePlot rows={tasks.flatMap((task) => { const metrics = codeMetrics.get(task.task_id)?.metrics;
+        return metrics ? [{ label: `Task ${task.order}`, condition: task.condition as 'acceleration' | 'exploration',
+          changed: metrics.source_change_snapshots, snapshots: metrics.snapshot_count,
+          added: metrics.source_lines_added, removed: metrics.source_lines_removed }] : []; })} />
+      <p className="small muted">Verified ZIP differences only; a snapshot does not reveal who made a change or whether the developer inspected it.</p>
+    </section></div>
     <div className="grid two" style={{ marginTop: 16 }}>{tasks.map((task) => {
       const after = responses.find((row) => row.participant_code === code && row.stage === 'after_task' && row.external_task_id === task.task_id);
       const outcomes = judged.filter((item) => item.task.task_id === task.task_id);
+      const metrics = codeMetrics.get(task.task_id);
       return <section className="card" key={task.task_id}><p className="eyebrow">Task {task.order} · {task.project === 'A' ? 'Resource catalogue' : 'Support archive'}</p>
         <h2>{task.condition} orientation</h2><p className="small muted">{task.submitted ? 'Submitted' : 'In progress'} · {task.uploaded}/6 files · {task.snapshot_count ?? '—'} code snapshots · {task.agent_records ?? '—'} agent records</p>
+        {metrics?.metrics ? <p className="small"><strong>Code change:</strong> {metrics.metrics.source_files_changed} source files differ from start to finish;
+          {' '}{metrics.metrics.source_lines_added} lines added, {metrics.metrics.source_lines_removed} removed;
+          {' '}{metrics.metrics.source_change_snapshots}/{Math.max(0, metrics.metrics.snapshot_count - 1)} snapshot intervals changed source files.</p>
+          : metrics?.error ? <p className="alert">Code change summary: {metrics.error}</p> : null}
         {(task.sql_probability !== null || task.path_probability !== null) && <BarChart max={100} rows={[
           ...(task.sql_probability === null ? [] : [{ label: 'SQL secure (%)', value: task.sql_probability }]),
           ...(task.path_probability === null ? [] : [{ label: 'Path secure (%)', value: task.path_probability }])]} />}

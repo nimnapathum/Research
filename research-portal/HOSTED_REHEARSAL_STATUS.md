@@ -36,6 +36,8 @@ Do not treat the portal **Analytics** page as the final research analysis. Natur
 
 ## Repeatable hosted checks and rollback
 
+For future pushed releases, use [HOSTED_DEPLOY_SCRIPT.md](HOSTED_DEPLOY_SCRIPT.md) to stage the update, restart the services, and check the hosted login.
+
 Run when no participant is active. The scripts use disposable accounts and remove their evidence; the assignment check briefly reserves and cancels the newest SQLite allocation, so do not create another account concurrently.
 
 ```sh

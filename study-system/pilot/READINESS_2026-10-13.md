@@ -1,5 +1,7 @@
 # Readiness decision — 13 October 2026
 
+> **Historical decision record.** Its seven-file upload counts and earlier hosted status are superseded. See [pilot readiness audit, 18 October](../../PILOT_READINESS_AUDIT_2026-10-18.md) and [hosted rehearsal status](../../research-portal/HOSTED_REHEARSAL_STATUS.md) before planning a new natural pilot.
+
 ## Decision
 
 **Current decision:** The local portal serves natural-task ZIPs and receives seven evidence files per task. A synthetic end-to-end portal check passed on this Mac. A real participant pilot is not yet cleared: the actual Antigravity transcript, playable video, code evidence, security adjudication, and access from a participant-owned computer still require manual verification. The controlled-checkpoint mode remains a separate older protocol.

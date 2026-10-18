@@ -204,6 +204,9 @@ with ZipFile(sys.argv[1]) as archive:
       !reviewHtml.includes('code comparison') || !reviewHtml.includes('Independent review record')) {
     throw new Error(`Code inspection page unavailable (${reviewPage.status})`);
   }
+  const submitted = await request(`/api/backend/participant/tasks/${tasks[0].id}/status`,
+    json({ status: 'submitted' }, 'PATCH'), cookie);
+  if (!submitted.response.ok) throw new Error(`Natural task submission failed: ${JSON.stringify(submitted.body)}`);
   const syntheticReview = await request('/api/backend/researcher/natural-assessments', json({
     taskId: tasks[0].id, weaknessClass: 'sql', finalHash: manifest.snapshot_sha256,
     reviews: [
@@ -234,9 +237,6 @@ with ZipFile(sys.argv[1]) as archive:
       !Buffer.from(await retrieved.arrayBuffer()).equals(readFileSync(join(final, 'SNAPSHOT_MANIFEST.json')))) {
     throw new Error('Researcher could not retrieve the exact uploaded manifest');
   }
-  const submitted = await request(`/api/backend/participant/tasks/${tasks[0].id}/status`,
-    json({ status: 'submitted' }, 'PATCH'), cookie);
-  if (!submitted.response.ok) throw new Error(`Natural task submission failed: ${JSON.stringify(submitted.body)}`);
   const reopening = await request(`/api/backend/participant/tasks/${tasks[0].id}/status`,
     json({ status: 'in_progress' }, 'PATCH'), cookie);
   if (reopening.response.status !== 400) throw new Error('Submitted task could be reopened without a correction record');

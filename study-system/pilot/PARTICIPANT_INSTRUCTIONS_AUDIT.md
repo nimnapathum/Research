@@ -1,5 +1,7 @@
 # Participant instructions audit — 13 October 2026
 
+> **Historical status snapshot.** This audit predates the six-file Google Meet workflow and the new interface/map task contrast. Use [the current natural session runbook](NATURAL_SESSION_RUNBOOK.md), [data coverage](NATURAL_DATA_COVERAGE.md), and [pilot readiness audit](../../PILOT_READINESS_AUDIT_2026-10-18.md) for the next pilot.
+
 Scope: the current natural coding workflow. This checks participant guidance and software progression, not native Antigravity compatibility or study validity by itself.
 
 ## What participants see

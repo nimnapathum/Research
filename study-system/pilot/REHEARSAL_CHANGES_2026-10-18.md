@@ -1,5 +1,7 @@
 # Rehearsal decisions: 18 October 2026
 
+> **Earlier card-only rehearsal note.** The later `2026-10-18-api-contrast-v1` packages also vary the familiar implementation map versus unfamiliar interface. Use [task contrast](../../TASK_CONTRAST_DESIGN.md) and [pilot readiness audit](../../PILOT_READINESS_AUDIT_2026-10-18.md) for the current manipulation.
+
 ## Why the tasks still look similar
 
 Resource Catalogue and Support Archive each ask for one database filter and one restricted file read. They have matching structure, tests, language and target vulnerability classes. This is deliberate: each project appears under both acceleration and exploration across the four balanced sequences. Making one project harder or adding an unfamiliar library only to exploration would mix task difficulty with assigned condition.
@@ -16,7 +18,7 @@ Check project equivalence separately: completion of both features, functional te
 
 The researcher records the consented Google Meet session, stores it under approved Drive permissions, verifies playback, and adds one or more links plus Task 1/Task 2 time notes on the researcher Evidence page. Participants upload six code/agent/rating files per task; they do not upload video. The external link is not a file-integrity receipt, so keep a separate access, clock-alignment and retention check.
 
-The portal's per-task view validates manifest hashes and shows changed files and final source without executing them. For active tests, download the final ZIP and run `python3 study-system/analysis/evaluate_natural_final.py FINAL_ZIP A|B TASK_ID` on an isolated researcher machine. Its JSON reports functional and attack-probe signals for Q1 and F1. The probe executes participant code and is not safe for the 1 GB hosted VM. A scanner or probe result is evidence for, not a substitute for, two independent blinded source reviews. Preserve the JSON, tool version, final hash, reviewer decisions and disagreements.
+The portal's per-task view validates manifest hashes and shows changed files and final source without executing them. For active tests, download the final ZIP and run `python3 study-system/analysis/evaluate_natural_final.py FINAL_ZIP A|B TASK_ID --isolated` **inside a throwaway VM/container without network, credentials or personal files**. Its JSON reports functional and attack-probe signals for Q1 and F1. The flag is an explicit confirmation, not a sandbox; the probe executes participant code and is not safe for the hosted VM or an ordinary researcher workstation. A scanner or probe result is evidence for, not a substitute for, two independent blinded source reviews. Preserve the JSON, tool version, final hash, reviewer decisions and disagreements.
 
 ## Next rehearsal gates
 

@@ -1,6 +1,8 @@
 # Natural-task behaviour codebook
 
-Version natural-2026-10-13-r3. Pilot these rules before freezing main-study coding. Code episodes and changes; do not assign a permanent mode or trust score to a person.
+Proposed main-study coding rules for natural-2026-10-13-r3. Validate them in the feasibility pilot before freezing main-study coding. Code episodes and changes; do not assign a permanent mode or trust score to a person.
+
+For a complete video review sequence, RQ-linked measures, an optional pilot-only specificity rubric and the literature/adaptation boundary, use the [screen-recording evaluation plan](../../SCREEN_RECORDING_EVALUATION_PLAN.md).
 
 ## Mode and boundaries
 
@@ -37,6 +39,8 @@ The r3 observer adds raw conversation records and hook events. Its `observed_at_
 | `documentation_consulted` | A documentation/source page is visibly consulted; record the source, purpose and whether it concerns the target security requirement. Browser navigation alone is insufficient. |
 
 For each check record target class, change ID if known, time, result visibility, issue identified and timing relative to agent application, first human inspection and explicit endorsement/continuation. An agent autonomously running a test is an **agent check**; a developer reading its result is a separate human action. A suggested or promised check is not a performed check. Removal without evidence of identifying the weakness is not automatically detection or intentional repair.
+
+For the resolved `checks.csv`, mark `security_purpose=yes` only when the action targets a security concern supported by the trace or replay. `result_reviewed=yes` means the developer actually saw the relevant code, test output or scanner finding. An invoked but unread check remains in the event table but is excluded from the report's reviewed-security-check count. Use `before_application`, `after_application_before_continuation`, `after_continuation`, `no_integration` or `unclear` for timing; do not infer a keep decision from an agent file edit. Record `coding_status.csv` for every task so an empty checks or exposures file is distinguishable from unfinished coding.
 
 Documentation consultation can support understanding, generic validation or security-specific validation. Preserve that purpose separately; do not count every page visit as a security check. For agent prompts, optionally code known-step execution, approach seeking, API explanation, debugging, security verification, other or unclear, with a transcript/video reference. These are descriptive agent-mode adaptations; Copilot's inline/comment/context/multi-suggestion categories do not map directly to this interface. See [GROUNDED_COPILOT_ALIGNMENT.md](../../GROUNDED_COPILOT_ALIGNMENT.md).
 

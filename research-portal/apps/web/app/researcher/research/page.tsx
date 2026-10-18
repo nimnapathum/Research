@@ -12,12 +12,12 @@ export default async function ResearchPage({ searchParams }: {
   if (user.role !== 'researcher') redirect('/dashboard');
   const docs = await listResearchDocs();
   const requested = (await searchParams).doc;
-  const selected = requested || (docs.some((doc) => doc.path === 'CURRENT_STUDY.md') ? 'CURRENT_STUDY.md' : docs[0]?.path);
+  const selected = requested || (docs.some((doc) => doc.path === 'STUDY_GUIDE.md') ? 'STUDY_GUIDE.md' : docs[0]?.path);
   if (!selected) return <Shell user={user}><div className="empty">No research Markdown files were found. Check RESEARCH_DOCS_ROOT.</div></Shell>;
   const source = await readResearchDoc(selected, docs);
   if (source === null) notFound();
   return <Shell user={user}><div className="hero"><div><p className="eyebrow">Research library</p><h1>Study documents</h1>
-    <p>Read the current methodology, questions, tasks, instruments, and pilot guides from the workspace.</p></div></div>
+    <p>Start with the main-study guide, then open the questions, tasks, instruments, analysis and pilot release checks.</p></div></div>
     <ResearchLibrary docs={docs} initialSelected={selected} initialSource={source} />
   </Shell>;
 }

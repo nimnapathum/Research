@@ -6,7 +6,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from inspect_natural_code import inspect
+from inspect_natural_code import inspect, summarize
 
 
 TASK = 'P12345678-T1'
@@ -42,6 +42,12 @@ class SnapshotInspectionTest(unittest.TestCase):
             self.assertEqual(selected['comparison_label'], 'S0001 → S0002')
             self.assertIn('-export const value = 1;', selected['changed'][0]['diff'])
             self.assertEqual(inspect(str(capture), str(final), TASK, 'S0003')['changed'], [])
+            summary = summarize(str(capture), str(final), TASK)
+            self.assertEqual(summary['snapshot_count'], 3)
+            self.assertEqual(summary['source_change_snapshots'], 1)
+            self.assertEqual(summary['source_files_changed'], 1)
+            self.assertEqual((summary['source_lines_added'], summary['source_lines_removed']), (1, 1))
+            self.assertEqual(summary['final_snapshot_sha256'], manifest(sources[-1], '')['snapshot_sha256'])
             with self.assertRaises(ValueError):
                 inspect(str(capture), str(final), TASK, '../S0002')
 

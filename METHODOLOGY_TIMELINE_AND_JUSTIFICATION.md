@@ -3,7 +3,7 @@
 **Study:** Security judgments and verification during coding-agent use under acceleration and exploration encouragement
 
 **Working protocol:** `natural-2026-10-13-r3`
-**Document status:** Design and pilot plan, 15 October 2026. No participant results are reported here. Freeze a dated main-study version after the feasibility pilot.
+**Document status:** Detailed main-study design, with feasibility-pilot validation pending; revised 18 October 2026 for `2026-10-18-api-contrast-v1` packages and the six-file Google Meet workflow. No adjudicated participant results are reported here. Freeze a dated main-study version after the feasibility pilot. Start with the [A–Z guide](STUDY_GUIDE.md); use the [current release audit](PILOT_READINESS_AUDIT_2026-10-18.md) before the next real-user session.
 
 This is the single, chronological explanation of what happens, what is measured, why each choice was made, and which part comes from earlier research. It describes the **current natural coding study**. The former forced-proposal/checkpoint study in `archive/2026-10-13-controlled/` is historical. Its keep/reject form, preset vulnerable patches, and checkpoint timing are **not** current participant steps. The source papers support components of this design; none validates this entire experiment in advance.
 
@@ -20,7 +20,7 @@ This is the single, chronological explanation of what happens, what is measured,
 
 **Why this question is valid.** [Barke et al.][S1] observed acceleration and exploration as different programmer intentions with Copilot. [Perry et al.][S2] measured both code security and participants' beliefs and found that they can diverge. [Khalid et al.][S3] directly studied how developers choose, evaluate and edit AI-generated code for security. Our question joins these strands in a free-editing agent workflow. The contribution is a **paired condition comparison plus linked belief, interaction and final-code evidence**, not the discovery that developers sometimes miss vulnerabilities. [Lee and See][S4] supply the appropriate-reliance rationale. These are inferential links between separate literatures, not a previously validated “cognitive mode causes vulnerability” theory.
 
-**What is borrowed versus original.** We borrow the *concept* of acceleration/exploration from Barke, the security-belief/outcome pairing from Perry, the attention to evaluation and final edits from Khalid, and contextual replay from [Mozannar][S5] and [Tang][S6]. Our short encouragement cards, paired JavaScript projects, exact final-hash rating, Antigravity capture method, codebook, and estimands are **original adaptations**. Their validity is a pilot question. We do not claim to read an internal mental state from mouse movement, prompt length, speed or an IDE extension.
+**What is borrowed versus original.** We borrow the *concept* of acceleration/exploration from Barke, the security-belief/outcome pairing from Perry, the attention to evaluation and final edits from Khalid, and contextual replay from [Mozannar][S5] and [Tang][S6]. Our encouragement cards, familiar implementation map versus unfamiliar interface, paired JavaScript projects, exact final-hash rating, Antigravity capture method, codebook, and estimands are **original adaptations**. Their validity is a pilot question. We do not claim to read an internal mental state from mouse movement, prompt length, speed or an IDE extension.
 
 ## 2. Timeline at a glance
 
@@ -63,7 +63,7 @@ Keep agent/model version, permissions, review settings, time allowance, tests an
 
 ## 5. Pre-task questionnaire: exactly what each item is for
 
-The natural portal shows **9 background items** from [`forms.json`](study-system/instruments/forms.json). It filters the old `sql_baseline` and `path_baseline` attack-recognition items because they may teach the two target flaws immediately before coding. The questions below are **study-specific descriptive items**, not a validated trust, expertise or cognitive-mode scale. Pilot their wording. Never use the answer to a familiarity item as an objective security-skill score.
+The natural portal shows **9 background items** from [`default-forms.json`](research-portal/data/default-forms.json). It filters the old `sql_baseline` and `path_baseline` attack-recognition items because they may teach the two target flaws immediately before coding. The questions below are **study-specific descriptive items**, not a validated trust, expertise or cognitive-mode scale. Pilot their wording. Never use the answer to a familiarity item as an objective security-skill score.
 
 | Item ID and question topic | Why collect it; source or rationale | Use and limit |
 | --- | --- | --- |
@@ -98,9 +98,9 @@ The small synthetic services, matching feature pairs, Node built-in SQLite and v
 
 ### 7.2 Assigned encouragement versus observed mode
 
-For **acceleration encouragement**, the portal asks the participant to choose the next implementation step and use the agent to carry it out. For **exploration encouragement**, it asks the participant to use the agent to work out or compare an approach and then choose. This is an **original, short manipulation adapted from Barke's observed meanings** [S1]. Both groups can ask questions, inspect, edit, test, reject, repair and change plans. We do not prescribe prompts, rush anyone or suppress review. The card is shown to the **human in the portal**, outside the agent package, so agent-facing instructions are comparable. A participant's own prompt may naturally disclose their goal to the agent.
+For **acceleration encouragement**, the portal asks the participant to choose the next implementation step and use the agent to carry it out; an implementation map points to familiar Node.js functions. For **exploration encouragement**, it asks the participant to use the agent to work out or compare an approach; the routes use a small unfamiliar record/document interface with an operations guide. This **compound work-structure package** is our adaptation of Barke's observed meanings and familiar/unfamiliar components [S1]. Both groups can ask questions, inspect, edit, test, reject, repair and change plans. We do not prescribe prompts, rush anyone or suppress review. The card is shown to the **human in the portal**, outside the agent package. The different interface can independently affect difficulty, so no result isolates the card or mental state. A participant's own prompt may naturally disclose their goal to the agent.
 
-Observed mode is coded later from evidence of **implementation intent**: a specified next step suggests acceleration; working out an approach or unfamiliar API suggests exploration. Mixed and unclear intervals are allowed. Mode is **not** coded from speed, check count, security result, task card or confidence; doing so would make RQ3 circular. [Barke][S1] supplies the conceptual distinction; episode rules and the manipulation check are ours. The pilot must test whether the card changes observable intent at all. If not, the assigned-condition contrast remains an encouragement comparison, and the observational mode analysis is limited.
+Observed mode is coded later from evidence of **implementation intent**: a specified next step suggests acceleration; working out an approach or unfamiliar API suggests exploration. Mixed and unclear intervals are allowed. Mode is **not** coded from speed, check count, security result, task card or confidence; doing so would make RQ3 circular. [Barke][S1] supplies the conceptual distinction; episode rules and the manipulation check are ours. The pilot must test whether the assigned package changes observable intent, and whether difficulty/completion also change. If intent does not separate, the observational mode analysis is limited.
 
 ### 7.3 Capturing work without forcing a proposal decision
 
@@ -149,7 +149,7 @@ The stored `participant_task_id`, `project_id`, `protocol_version`, `final_snaps
 
 After the small manifest and rating are uploaded, the participant answers these before transferring larger video/code files. The form is brief to limit delay between action and account. All seven are **study-authored single items**, not a validated multi-item scale. In particular, difficulty/time-pressure items are **not** a NASA-TLX score, although NASA-TLX's workload dimensions motivate collecting this context [S16].
 
-| `forms.json` item | Why; source | Interpret as |
+| Published after-task item | Why; source | Interpret as |
 | --- | --- | --- |
 | `known_next_step` (1–7): how often they knew the next step before asking | Acceleration manipulation check adapted from [Barke][S1]. | Retrospective task description, cross-checked with coded episodes. |
 | `sought_options` (1–7): how often they sought approaches/unfamiliar API knowledge | Exploration manipulation check adapted from [Barke][S1]. | Retrospective description; may coexist with known steps. |
@@ -159,7 +159,7 @@ After the small manifest and rating are uploaded, the participant answers these 
 | `agent_reliance` (1–7): overall reliance on agent changes | Trust/reliance distinction [Lee and See][S4], developer trust context [Wang][S12]. | Supplement to code-specific confidence and observed behaviour. |
 | `mode_example`: concrete known-plan versus approach-finding part | Elicit a specific episode using [Barke's][S1] definitions; **original open item**. | Candidate replay moment; not final mode label. |
 
-Upload the remaining capture ZIP, capture health JSON, final code ZIP, agent transcript JSONL and screen recording, then mark the task submitted. The **seven-file evidence package** and hash receipts are a study-specific provenance/quality design; file transfer is not a scientific outcome. Keep originals until the researcher validates them. Missing, corrupt or declined evidence gets an explicit reason. Never replace it with a synthetic placeholder.
+Upload the remaining capture ZIP, capture health JSON, final code ZIP and agent transcript JSONL, then mark the task submitted after the after-task form. With the final manifest and rating, these are **six participant-uploaded files** per task. The researcher records the approved Google Meet session separately, verifies playback and enters a restricted Drive link with task time notes. Hash receipts prove file transfer, not evidence quality; the Drive link is not a video integrity receipt. Keep originals until the researcher validates them. Missing, corrupt or declined evidence gets an explicit reason. Never replace it with a synthetic placeholder.
 
 ## 10. Task 2 and after-both questionnaire
 
@@ -176,7 +176,7 @@ After a common short break, the participant receives the **other project and oth
 
 Use a **fixed clip-selection rule**: first material agent change, first verification if present, and a revision or uncertain-intent moment. Include no-check cases; do not choose only dramatic failures or successful repairs. The researcher prepares clips without using the final security label or confidence when practical. Ask the same neutral prompts for each relevant moment: (1) What were you trying to do? (2) Did you already have an approach? (3) What did you expect the agent to do and what did it do? (4) What did you understand about this change? (5) When did you decide to continue with it? (6) What did you inspect or test, and what did the result mean? (7) Did the task guidance match how you worked? (8) Did Task 1 affect Task 2? These probe implementation intent, perceived agent contribution, integration, verification, manipulation fidelity and carryover respectively. [Barke][S1] motivates the intent probes; [Mozannar][S5] supports retrospective session labeling; [Khalid][S3] and [Tang][S6] support asking about evaluation/repair. **The clip rule and exact wording are our instrument**, not a published validated interview set.
 
-Record after both tasks and **before revealing vulnerabilities**. Do not ask “Why did you miss the flaw?” while collecting an unbiased explanation. Link clip time, task, code change and quote. Keep interview recollection separate from contemporaneous evidence because memory and hindsight can disagree with the video. Debrief afterward under the approved procedure. The older [`INTERVIEW_GUIDE.md`](study-system/instruments/INTERVIEW_GUIDE.md) contains controlled-proposal wording; the **natural codebook's replay questions** govern this protocol.
+Record after both tasks and **before revealing vulnerabilities**. Do not ask “Why did you miss the flaw?” while collecting an unbiased explanation. Link clip time, task, code change and quote. Keep interview recollection separate from contemporaneous evidence because memory and hindsight can disagree with the video. Debrief afterward under the approved procedure. Use the [natural interview guide](study-system/instruments/NATURAL_INTERVIEW_GUIDE.md); the older [`INTERVIEW_GUIDE.md`](study-system/instruments/INTERVIEW_GUIDE.md) contains controlled-proposal wording.
 
 ## 12. Evidence audit and independent outcome assessment
 
@@ -207,7 +207,7 @@ The target is **30 completed people**, not 120 independent observations: each pe
 
 | Original element | Strong design reason | What the pilot must show |
 | --- | --- | --- |
-| Human-only acceleration/exploration cards | Keeps agent-facing requirements common; compares work orientation rather than tying “easy task” to acceleration and “hard task” to exploration. | Participants understand cards and observable intent differs enough to interpret the manipulation. |
+| Human cards plus implementation map/interface | Gives a known-step route in one assigned condition and an approach-seeking opportunity in the other, adapted from Barke. This is a compound package, not an isolated card or mental-state manipulation. | Participants understand both; observed intent differs; completion, familiarity and difficulty remain interpretable. |
 | Two parallel JS projects, each with both weaknesses | Supports a paired, bounded security assessment and balances class across condition. | Similar completion time/difficulty and understandable features; record any project asymmetry. |
 | Explicit security requirements | Makes target criteria fair and assessable in both conditions. | Participants understand them without being handed exploit recipes; recognise that results are security-salient. |
 | Natural agent editing, no forced insecure patch | Preserves participant-agent workflow and lets verification occur naturally. | Capture can identify origin/exposure; if insecure exposures are rare, limit retention claims. |
@@ -215,7 +215,7 @@ The target is **30 completed people**, not 120 independent observations: each pe
 | Multistream observer + snapshots + video + replay | Each source covers a different blind spot in reconstructing intent, visible checking and changes. | Actual prompts/replies/tools, visible actions, final files and clocks are sufficiently captured. |
 | Intent-only mode codebook and check taxonomy | Avoids defining mode using the outcome being tested; separates agent action from human decision. | Acceptable inter-coder agreement; uncertainty categories are used honestly. |
 | SQL/path attack fixtures plus blinded dual review | Reduces dependence on scanners and task-provided functional tests. | Known secure/vulnerable references are classified correctly and arbitrary agent output can be reviewed. |
-| Seven-file portal evidence transfer and hashes | Keeps task evidence tied to ID/version/final snapshot and reveals gaps. | Exact-host upload/retrieval/playback works; missing or corrected files are handled without false receipts. |
+| Six participant-uploaded files, researcher Meet link and hashes | Keeps code/agent/rating evidence tied to ID/version/final snapshot; the video link is separately restricted and checked. | Exact-host upload/retrieval and real video playback work; missing or corrected files are handled without false receipts. |
 
 **Stop/go rule.** A supervised real-user pilot follows a successful exact-host capture, transfer/retrieval and security-assessment rehearsal. The pilot itself determines whether the cards, coding and natural exposure frequency work; they are **not** assumed successes. Before the main study, freeze all task sheets, cards, form wording, agent settings, codebook, security oracle, allocation, missingness and analysis. Keep rehearsal, pilot and main datasets separate. See [`RESEARCH_AUDIT.md`](RESEARCH_AUDIT.md) for the current implementation gaps; this document does not declare the hosted route validated.
 
@@ -225,7 +225,7 @@ The target is **30 completed people**, not 120 independent observations: each pe
 2. **Why juniors if they may not know security?** Early-career developers are a defined, relevant population, not a deficient control group. We record programming, security and agent experience; supply the same explicit security requirements; allow ordinary checks; and analyse verification and code outcomes separately. We will not interpret every missed flaw as overtrust. [Danilova][S10] and [Kaur][S11] support careful participant characterization.
 3. **Why SQL and path only?** MITRE's 2024 ranking [S7] shows both are important, and both admit distinct, testable source-to-sink failures [S8]. Limiting classes permits two parallel features per task and credible manual review. It is a **scope choice**, not a claim of highest LLM prevalence.
 4. **Why not plant a vulnerability in `AGENTS.md`?** That would change agent input and make vulnerability exposure a second treatment. The present aim compares human orientation during natural agent coding. A separate randomized poisoned-workspace study could guarantee/estimate exposure with explicit provenance, but its causal question and dataset differ. Controlled insecure-suggestion studies already exist, including [Oh][S19] and [Serafini][S20].
-5. **Can you claim acceleration causes insecure code?** Only an assigned-card contrast is randomized/counterbalanced; observed mode is not. We can estimate a condition difference under this task and tool setup, then describe whether observed intent and checks are consistent with the mechanism. Skill, agent output, task order, project and sparse vulnerabilities limit stronger claims.
+5. **Can you claim acceleration causes insecure code?** The assigned comparison is a counterbalanced card-plus-interface package; observed mode is not randomized, and card versus interface effects are not separable. We can estimate a condition difference under this task and tool setup, then describe whether observed intent and checks are consistent with the proposed mechanism. Skill, difficulty, agent output, task order, project and sparse vulnerabilities limit stronger claims.
 6. **What if the agent writes secure code every time?** Report that outcome. RQ2 final security remains describable, but conditional insecure-exposure survival and confidence on vulnerable final code may be unestimable. Do not insert a flaw after seeing results or score an absent feature as secure.
 
 ## Sources used in this timeline
@@ -259,7 +259,7 @@ The titles below link to primary papers or official technical/security reference
 
 - Current procedure: [`NATURAL_WORKFLOW_METHOD.md`](NATURAL_WORKFLOW_METHOD.md), [`NATURAL_SESSION_RUNBOOK.md`](study-system/pilot/NATURAL_SESSION_RUNBOOK.md).
 - Task/package definition: [`TASK_DESIGN.md`](TASK_DESIGN.md), [`natural_kit.mjs`](study-system/pilot/natural_kit.mjs), [`NATURAL_PRACTICE.md`](study-system/pilot/NATURAL_PRACTICE.md).
-- Exact forms and rating: [`forms.json`](study-system/instruments/forms.json), [`natural_rate.mjs`](study-system/pilot/natural_rate.mjs). `forms.json` also retains historical checkpoint fields, which are excluded from the natural workflow.
+- Exact forms and rating: [`default-forms.json`](research-portal/data/default-forms.json), [`natural_rate.mjs`](study-system/pilot/natural_rate.mjs). The form file also retains historical checkpoint fields, which are excluded from the natural workflow.
 - Behaviour and capture: [`NATURAL_CODEBOOK.md`](study-system/instruments/NATURAL_CODEBOOK.md), [`NATURAL_DATA_COVERAGE.md`](study-system/pilot/NATURAL_DATA_COVERAGE.md).
 - Outcome tables and statistics: [`NATURAL_ANALYSIS_PLAN.md`](NATURAL_ANALYSIS_PLAN.md), [`natural-templates/`](study-system/analysis/natural-templates/).
 

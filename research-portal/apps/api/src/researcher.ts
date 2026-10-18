@@ -335,12 +335,15 @@ export class ResearcherController {
         (!disagreement && (body.resolvedSecurity !== reviews[0].security || body.resolvedFunctionality !== reviews[0].functionality))) {
       throw new BadRequestException('Record review evidence, explain disagreements, and retain agreed labels when both reviews match');
     }
-    const task = await this.db.query<{ external_task_id: string; participant_code: string }>(`SELECT t.external_task_id,u.participant_code
+    const task = await this.db.query<{ external_task_id: string; participant_code: string; status: string }>(`SELECT t.external_task_id,t.status,u.participant_code
       FROM study_tasks t JOIN users u ON u.id=t.participant_id WHERE t.id=$1`, [body.taskId]);
     if (!task.rows[0] || !/^P\d{8}$/.test(task.rows[0].participant_code) ||
         !/^P\d{8}-T[12]$/.test(task.rows[0].external_task_id) ||
         !task.rows[0].external_task_id.startsWith(`${task.rows[0].participant_code}-`)) {
       throw new NotFoundException('Natural task not found');
+    }
+    if (task.rows[0].status !== 'submitted') {
+      throw new BadRequestException('Submit the task before recording final-code assessments');
     }
     const root = process.env.STUDY_EVIDENCE_ROOT;
     if (!root) throw new BadRequestException('Evidence storage is unavailable');

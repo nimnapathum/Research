@@ -168,11 +168,46 @@ def inspect(initial_zip, final_zip, task_id, selected=None):
             'note': 'Read-only diff and hash check. No functional or security verdict; review the code and independent probes.'}
 
 
+def summarize(initial_zip, final_zip, task_id):
+    """Bounded, hash-checked edit counts; these are activity measures, not review or security scores."""
+    timeline = capture_timeline(initial_zip, task_id)
+    if not timeline or timeline[0]['id'] != 'S0001':
+        raise ValueError('Initial snapshot is missing')
+    first, before = snapshot(initial_zip, initial=True)
+    last, after = snapshot(final_zip)
+    if first.get('workspace') != task_id or last.get('workspace') != task_id:
+        raise ValueError('Snapshot belongs to a different task')
+    source = lambda path: path.startswith(('src/', 'lib/'))
+    paths = sorted(path for path in before.keys() | after.keys()
+                   if source(path) and before.get(path) != after.get(path))
+    added = removed = 0
+    for path in paths:
+        old = before.get(path, b'')
+        new = after.get(path, b'')
+        if b'\0' in old or b'\0' in new:
+            continue
+        left = old.decode('utf-8', 'replace').splitlines()
+        right = new.decode('utf-8', 'replace').splitlines()
+        for operation, start_old, end_old, start_new, end_new in difflib.SequenceMatcher(
+                None, left, right, autojunk=False).get_opcodes():
+            if operation != 'equal':
+                removed += end_old - start_old
+                added += end_new - start_new
+    changed_snapshots = sum(any(source(path) for path in row['changed_files']) for row in timeline[1:])
+    return {'task_id': task_id, 'initial_snapshot_sha256': first['snapshot_sha256'],
+            'final_snapshot_sha256': last['snapshot_sha256'], 'snapshot_count': len(timeline),
+            'source_change_snapshots': changed_snapshots, 'source_files_changed': len(paths),
+            'source_lines_added': added, 'source_lines_removed': removed,
+            'source_paths': paths,
+            'note': 'Snapshot intervals and initial-to-final source-line differences; no attribution, security verdict, or verification inference.'}
+
+
 if __name__ == '__main__':
     if len(sys.argv) not in (4, 5) or not sys.argv[3].startswith('P'):
-        raise SystemExit('Usage: inspect_natural_code.py CAPTURE_ZIP FINAL_ZIP TASK_ID [SNAPSHOT_ID]')
+        raise SystemExit('Usage: inspect_natural_code.py CAPTURE_ZIP FINAL_ZIP TASK_ID [SNAPSHOT_ID|--summary]')
     try:
-        print(json.dumps(inspect(*sys.argv[1:]), ensure_ascii=False))
+        result = summarize(*sys.argv[1:4]) if len(sys.argv) == 5 and sys.argv[4] == '--summary' else inspect(*sys.argv[1:])
+        print(json.dumps(result, ensure_ascii=False))
     except (ValueError, KeyError, TypeError, OSError, zipfile.BadZipFile) as error:
         print(json.dumps({'error': str(error)}))
         raise SystemExit(1)

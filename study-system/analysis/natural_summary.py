@@ -3,7 +3,6 @@ import argparse
 import csv
 import hashlib
 import json
-import random
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -37,12 +36,21 @@ def analyse(path, resamples=10000, seed=20261013):
         metadata = (row['condition'], row['project_id'], row['task_order'])
         if task_metadata.setdefault((who, task), metadata) != metadata:
             raise ValueError(f'Row {number}: inconsistent task metadata')
-        if row['security_status'] not in ['target_secure', 'vulnerable', 'not_implemented', 'unassessable']:
-            raise ValueError(f'Row {number}: security review label missing or invalid')
-        if row['functionality_status'] not in ['pass', 'fail', 'not_implemented', 'unassessable']:
-            raise ValueError(f'Row {number}: functionality label missing or invalid')
         if row['review_status'] not in ['resolved', 'unreviewed', 'disagreement']:
             raise ValueError(f'Row {number}: invalid review status')
+        security_labels = ['target_secure', 'vulnerable', 'not_implemented', 'unassessable']
+        function_labels = ['pass', 'fail', 'not_implemented', 'unassessable']
+        if row['security_status'] not in security_labels + ['']:
+            raise ValueError(f'Row {number}: invalid security review label')
+        if row['functionality_status'] not in function_labels + ['']:
+            raise ValueError(f'Row {number}: invalid functionality label')
+        if row['review_status'] == 'resolved' and (row['security_status'] not in security_labels or
+                                                  row['functionality_status'] not in function_labels):
+            raise ValueError(f'Row {number}: resolved review needs both labels')
+        if row['review_status'] != 'resolved' and (row['security_status'] or row['functionality_status']):
+            raise ValueError(f'Row {number}: unresolved review must not carry outcome labels')
+        if (row['security_status'] == 'not_implemented') != (row['functionality_status'] == 'not_implemented'):
+            raise ValueError(f'Row {number}: implementation labels disagree')
         probability = None
         if row['probability_secure_pct'].strip():
             probability = float(row['probability_secure_pct']) / 100
@@ -63,6 +71,8 @@ def analyse(path, resamples=10000, seed=20261013):
 
     differences = []
     complete_ids = []
+    vulnerable_differences = []
+    vulnerable_ids = []
     by_label = defaultdict(list)
     for row in rows:
         if row['_brier'] is not None:
@@ -71,6 +81,18 @@ def analyse(path, resamples=10000, seed=20261013):
         tasks = {(row['task_id'], row['condition'], row['project_id'], row['task_order']) for row in items}
         valid_assignment = (len(tasks) == 2 and len({x[1] for x in tasks}) == 2 and
                             len({x[2] for x in tasks}) == 2 and len({x[3] for x in tasks}) == 2)
+        full_structure = (valid_assignment and len(items) == 4 and
+                          {(row['condition'], row['vulnerability_class']) for row in items} ==
+                          {(condition, kind) for condition in ['acceleration', 'exploration']
+                           for kind in ['sql', 'path']})
+        complete_security = full_structure and all(row['review_status'] == 'resolved' and
+                                                    row['security_status'] in ['target_secure', 'vulnerable']
+                                                    for row in items)
+        if complete_security:
+            counts = {condition: sum(row['condition'] == condition and row['security_status'] == 'vulnerable'
+                                     for row in items) for condition in ['acceleration', 'exploration']}
+            vulnerable_differences.append(counts['acceleration'] - counts['exploration'])
+            vulnerable_ids.append(who)
         complete = (valid_assignment and len(items) == 4 and
                     {(row['condition'], row['vulnerability_class']) for row in items} ==
                     {(condition, kind) for condition in ['acceleration', 'exploration'] for kind in ['sql', 'path']} and
@@ -82,11 +104,20 @@ def analyse(path, resamples=10000, seed=20261013):
                   for condition in ['acceleration', 'exploration']}
         differences.append(scores['acceleration'] - scores['exploration'])
         complete_ids.append(who)
-    interval = None
-    if len(differences) >= 2:
-        rng = random.Random(seed)
-        draws = sorted(mean(rng.choices(differences, k=len(differences))) for _ in range(resamples))
-        interval = [draws[int(.025 * (resamples - 1))], draws[int(.975 * (resamples - 1))]]
+    def interval(values, local_seed):
+        if len(values) < 3:
+            return None
+        state = local_seed
+        def next_index():
+            nonlocal state
+            state ^= (state << 13) & 0xffffffff
+            state &= 0xffffffff
+            state ^= state >> 17
+            state ^= (state << 5) & 0xffffffff
+            state &= 0xffffffff
+            return state % len(values)
+        draws = sorted(mean([values[next_index()] for _ in values]) for _ in range(resamples))
+        return [draws[int(.025 * resamples)], draws[int(.975 * resamples)]]
     if rows and len({r['security_status'] for r in rows if r['review_status'] == 'resolved' and
                     r['security_status'] in ['target_secure', 'vulnerable']}) < 2:
         warnings.append('Outcome labels lack diversity; score accuracy alone cannot establish discrimination or general calibration')
@@ -101,8 +132,19 @@ def analyse(path, resamples=10000, seed=20261013):
                                     n=len(v), mean_probability=mean(v)) for k, v in sorted(by_label.items())],
         'paired_brier': {'n_complete_participants': len(differences),
                         'mean_acceleration_minus_exploration': mean(differences) if differences else None,
-                        'bootstrap_95_percent_interval': interval, 'resamples': resamples, 'seed': seed,
+                        'bootstrap_95_percent_interval': interval(differences, seed),
+                        'resamples': resamples, 'seed': seed,
                         'participant_differences': dict(zip(complete_ids, differences))},
+        'paired_vulnerable_count': {'n_complete_participants': len(vulnerable_differences),
+                                    'mean_acceleration_minus_exploration': (
+                                        mean(vulnerable_differences) if vulnerable_differences else None),
+                                    'bootstrap_95_percent_interval': interval(vulnerable_differences, seed + 1),
+                                    'resamples': resamples, 'seed': seed + 1,
+                                    'participant_differences': dict(zip(vulnerable_ids, vulnerable_differences))},
+        'joint_functional_secure_by_condition': {condition: sum(
+            row['condition'] == condition and row['review_status'] == 'resolved' and
+            row['security_status'] == 'target_secure' and row['functionality_status'] == 'pass'
+            for row in rows) for condition in ['acceleration', 'exploration']},
         'warnings': warnings,
         'limitations': 'Descriptive probability accuracy on complete assessable pairs. Human labels and causal interpretation are not generated.'
     }
