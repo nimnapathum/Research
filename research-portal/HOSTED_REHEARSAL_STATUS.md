@@ -1,14 +1,14 @@
 # Hosted natural-study rehearsal and pilot gate
 
-Updated 18 October 2026. The hosted portal at **https://nimnapathum.tech** is running the natural-task protocol (`natural-2026-10-13-r3`) from isolated release `/srv/security-trust/releases/2115b65` (commit `2115b65`). Newly generated task packages use work-orientation revision `2026-10-18-v2`; previously downloaded packages remain frozen. The older checkout at `/srv/security-trust/Research` was left untouched.
+Updated 18 October 2026. The hosted portal at **https://nimnapathum.tech** is running the natural-task protocol (`natural-2026-10-13-r3`) from isolated release `/srv/security-trust/releases/f83c14b-r1` (application commit `f83c14b`). Newly generated task packages use work-orientation revision `2026-10-18-v3` and stimulus revision `2026-10-18-api-contrast-v1`; previously downloaded packages remain frozen. The older checkout at `/srv/security-trust/Research` and prior release `/srv/security-trust/releases/2115b65` remain available.
 
-**Local research revision:** This workspace now contains orientation revision `2026-10-18-v3` and stimulus revision `2026-10-18-api-contrast-v1`, with a distinct implementation route for each condition. Those changes have **not** been deployed to the hosted release. Use a new participant assignment only after deploying and verifying the revision; an existing cached ZIP cannot change. See [CURRENT_STUDY.md](../CURRENT_STUDY.md).
+The current release includes the revised task contrast, researcher code timeline, phase-specific cohort analytics, participant analysis, and append-only reviewed security outcomes. Existing participant accounts were labelled `legacy` by migration `004`; new accounts choose `rehearsal`, `pilot`, or `main`. Migration `005` stores reviewed outcomes. Use a new participant assignment to receive the revised package; an existing cached ZIP cannot change. See [CURRENT_STUDY.md](../CURRENT_STUDY.md).
 
 ## What is working now
 
-The API and web services are active. Public login returns HTTP 200 and private researcher routes redirect without a session. A disposable hosted test passed both task ZIP downloads, package freezing, both after-task forms, **six evidence receipts per task**, both submissions, the final form, researcher Drive-link entry, code-inspection page, and archive/hash audits. The portal did not execute participant code. The test does not establish the quality of a real Google Meet recording or actual Antigravity capture.
+The API and web services are active. Public login returns HTTP 200 and private researcher routes redirect without a session. A disposable hosted test passed both task ZIP downloads, package freezing, both after-task forms, **six evidence receipts per task**, both submissions, the final form, researcher Drive-link entry, code-inspection page, cohort and participant analytics pages, and archive/hash audits. The assessment API is registered and local validation tests pass; no real reviewed outcomes have been entered for hosted participants. The portal did not execute participant code. The test does not establish the quality of a real Google Meet recording or actual Antigravity capture.
 
-The services use private directories `/srv/security-trust/study-data`, `/srv/security-trust/evidence`, and `/srv/security-trust/packages` owned by `studyapp`. The fresh pre-deployment PostgreSQL dump, private data archive, and service overrides are in `/srv/security-trust/backups/20261018-rehearsal-predeploy` (root-only). Evidence and SQLite state must be included in later backups; the database dump alone is incomplete.
+The services use private directories `/srv/security-trust/study-data`, `/srv/security-trust/evidence`, and `/srv/security-trust/packages` owned by `studyapp`. The latest pre-deployment PostgreSQL dump, private data archive, environment file, and service overrides are in `/srv/security-trust/backups/20261018-analytics-predeploy` (root-only). Evidence and SQLite state must be included in later backups; the database dump alone is incomplete.
 
 ## Your self-rehearsal on the real participant computer
 
@@ -39,7 +39,7 @@ Do not treat the portal **Analytics** page as the final research analysis. Natur
 Run when no participant is active. The scripts use disposable accounts and remove their evidence; the assignment check briefly reserves and cancels the newest SQLite allocation, so do not create another account concurrently.
 
 ```sh
-cd /srv/security-trust/releases/2115b65/research-portal
+cd /srv/security-trust/releases/f83c14b-r1/research-portal
 PORTAL_BASE_URL=https://nimnapathum.tech node --env-file=.env scripts/smoke-assignment.mjs
 PORTAL_BASE_URL=https://nimnapathum.tech node --env-file=.env scripts/smoke-natural.mjs
 ```

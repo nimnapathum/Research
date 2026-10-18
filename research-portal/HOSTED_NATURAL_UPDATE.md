@@ -1,6 +1,6 @@
 # Update the hosted portal for natural-task rehearsals
 
-> The 17 October 2026 hosted release is already deployed and tested. See [HOSTED_REHEARSAL_STATUS.md](HOSTED_REHEARSAL_STATUS.md) for the current state and self-rehearsal/pilot gate. The steps below describe how to perform a future deployment; the current release uses a separate checkout instead of overwriting `/srv/security-trust/Research`.
+> The 18 October 2026 analytics release is deployed and tested. See [HOSTED_REHEARSAL_STATUS.md](HOSTED_REHEARSAL_STATUS.md) for the current state and self-rehearsal/pilot gate. The steps below describe future deployments; the current release uses a separate checkout instead of overwriting `/srv/security-trust/Research`.
 
 This is the update path for the existing `nimnapathum.tech` portal. It prepares the two-service Next.js/NestJS site to serve natural-task ZIPs and receive six evidence files per task. Participant code/agent observers still run on the participant computer; the web app receives their outputs. The researcher stores consented Google Meet video in approved Drive storage and links it in the portal. The old checkpoint HTTP page is not part of the natural task, but the server-side assignment bridge still needs its private SQLite data directory.
 
@@ -87,7 +87,7 @@ npm run build
 npm run db:migrate
 ```
 
-The current local revision includes `004_study_phase.sql` and `005_natural_assessments.sql`. The first marks existing participant accounts as `legacy` and requires an explicit rehearsal, pilot or main phase on new accounts. The second stores append-only researcher entries of independent feature reviews. Back up the database before applying them; verify phase labels and review entry after restart. This revision has not been deployed by this document.
+The 18 October 2026 release applied `004_study_phase.sql` and `005_natural_assessments.sql`. The first marks existing participant accounts as `legacy` and requires an explicit rehearsal, pilot or main phase on new accounts. The second stores append-only researcher entries of independent feature reviews. Back up the database before applying future migrations; verify phase labels and review entry after restart.
 
 On a 1 GB VM, a production build may exceed available memory. Check memory and available swap before building; if it fails, build on a larger compatible Linux host and deploy the build artifacts, or increase VM resources. Do not treat a failed build as a deployable release. Once build, environment, storage, and Nginx checks pass, restart `security-trust-api.service` and `security-trust-web.service` using your normal manual procedure. The natural allocation bridge runs as a local CLI from the API; it does not require exposing the old checkpoint HTTP service to participants.
 

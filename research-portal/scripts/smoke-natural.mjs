@@ -199,7 +199,36 @@ with ZipFile(sys.argv[1]) as archive:
   const links = await request('/api/backend/researcher/recordings', {}, researcherCookie);
   if (!links.response.ok || !links.body.some((row) => row.id === recording.body.id)) throw new Error('Recording link not listed');
   const reviewPage = await fetch(`${root}/researcher/evidence/${code}/${code}-T1`, { headers: { cookie: researcherCookie } });
-  if (!reviewPage.ok || !(await reviewPage.text()).includes('Initial to final code')) throw new Error('Code inspection page unavailable');
+  const reviewHtml = await reviewPage.text();
+  if (!reviewPage.ok || !reviewHtml.includes('Code snapshot timeline') ||
+      !reviewHtml.includes('code comparison') || !reviewHtml.includes('Independent review record')) {
+    throw new Error(`Code inspection page unavailable (${reviewPage.status})`);
+  }
+  const syntheticReview = await request('/api/backend/researcher/natural-assessments', json({
+    taskId: tasks[0].id, weaknessClass: 'sql', finalHash: manifest.snapshot_sha256,
+    reviews: [
+      { reviewerCode: 'smoke_a', security: 'unassessable', functionality: 'unassessable', inferredCondition: false },
+      { reviewerCode: 'smoke_b', security: 'unassessable', functionality: 'unassessable', inferredCondition: false }
+    ],
+    resolvedSecurity: 'unassessable', resolvedFunctionality: 'unassessable',
+    resolutionNote: 'Synthetic disposable API check; no participant code was reviewed.'
+  }), researcherCookie);
+  if (!syntheticReview.response.ok) {
+    throw new Error(`Synthetic assessment entry failed: ${JSON.stringify(syntheticReview.body)}`);
+  }
+  const savedReviews = await request('/api/backend/researcher/natural-assessments', {}, researcherCookie);
+  if (!savedReviews.response.ok || !savedReviews.body.some((row) =>
+    row.id === syntheticReview.body.id && row.final_snapshot_sha256 === manifest.snapshot_sha256)) {
+    throw new Error('Synthetic assessment entry was not retrieved with its final hash');
+  }
+  const cohortPage = await fetch(`${root}/researcher/analytics?phase=rehearsal`, { headers: { cookie: researcherCookie } });
+  if (!cohortPage.ok || !(await cohortPage.text()).includes('Study analysis')) {
+    throw new Error(`Researcher cohort analysis unavailable (${cohortPage.status})`);
+  }
+  const participantAnalysis = await fetch(`${root}/researcher/analytics/${code}`, { headers: { cookie: researcherCookie } });
+  if (!participantAnalysis.ok || !(await participantAnalysis.text()).includes('Participant analysis')) {
+    throw new Error(`Participant analysis unavailable (${participantAnalysis.status})`);
+  }
   const retrieved = await fetch(`${root}${privateFile}`, { headers: { cookie: researcherCookie } });
   if (!retrieved.ok || retrieved.headers.get('content-disposition')?.includes('attachment') !== true ||
       !Buffer.from(await retrieved.arrayBuffer()).equals(readFileSync(join(final, 'SNAPSHOT_MANIFEST.json')))) {
@@ -291,7 +320,7 @@ with ZipFile(sys.argv[1]) as archive:
   const audited = spawnSync('python3', ['../study-system/analysis/audit_natural_evidence.py',
     join(evidenceRoot, code, `${code}-T1`)], { encoding: 'utf8' });
   if (audited.status !== 0) throw new Error(`Received archive/hash audit failed: ${audited.stdout}${audited.stderr}`);
-  console.log(`PASS: natural page/commands, frozen ZIPs, six receipts per task, Drive link, code inspection, archive/hash audit, both submissions and final form (${code})`);
+  console.log(`PASS: natural page/commands, frozen ZIPs, six receipts per task, Drive link, code and analytics pages, assessment API, archive/hash audit, both submissions and final form (${code})`);
 } finally {
   if (userId) await pool.query('DELETE FROM users WHERE id=$1', [userId]);
   if (researcherId) await pool.query('DELETE FROM users WHERE id=$1', [researcherId]);
