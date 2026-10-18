@@ -17,7 +17,7 @@ Optional environment overrides:
   DB_NAME          default security_trust_portal (local PostgreSQL)
   NODE_BIN         default /usr/local/bin/node (must be Node 24)
   PUBLIC_URL       default https://nimnapathum.tech; set to empty to skip public check
-  PORTAL_ENV_FILE  default the active API release's .env
+  PORTAL_ENV_FILE  default the API service's effective EnvironmentFile
 
 The script never pushes work or changes the private evidence/assignment folders.
 HELP
@@ -29,6 +29,10 @@ if [[ $# -gt 1 || ( $# -eq 1 && "$1" != "--dry-run" ) ]]; then
 fi
 DRY_RUN=0
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
+if [[ "$(uname -s)" != Linux ]]; then
+  echo "Run this script on the Oracle Ubuntu VM over SSH, including --dry-run. This computer is not the hosted VM." >&2
+  exit 2
+fi
 if [[ $EUID -eq 0 ]]; then
   echo "Run as the SSH user, not with sudo; the script invokes sudo where needed." >&2
   exit 2
@@ -72,9 +76,19 @@ if [[ "$API_WORKDIR" != */research-portal/apps/api ]]; then
   echo "Unexpected API working directory: $API_WORKDIR" >&2
   exit 2
 fi
-ACTIVE_ENV="${PORTAL_ENV_FILE:-$(dirname "$(dirname "$API_WORKDIR")")/.env}"
-if [[ ! -f "$ACTIVE_ENV" ]]; then
-  echo "Active portal .env not found at $ACTIVE_ENV" >&2
+if [[ -n "${PORTAL_ENV_FILE:-}" ]]; then
+  ACTIVE_ENV="$PORTAL_ENV_FILE"
+else
+  SYSTEMD_ENV_FILES="$(systemctl show -p EnvironmentFiles --value "$API_SERVICE")"
+  ACTIVE_ENV="${SYSTEMD_ENV_FILES%% *}"
+  ACTIVE_ENV="${ACTIVE_ENV:-$(dirname "$(dirname "$API_WORKDIR")")/.env}"
+fi
+if [[ "$ACTIVE_ENV" != /* || "$ACTIVE_ENV" =~ [[:space:]] ]]; then
+  echo "Could not identify a single absolute API EnvironmentFile path. Set PORTAL_ENV_FILE explicitly." >&2
+  exit 2
+fi
+if ! sudo test -f "$ACTIVE_ENV"; then
+  echo "Active portal .env not found at $ACTIVE_ENV; check the API service EnvironmentFile or set PORTAL_ENV_FILE." >&2
   exit 2
 fi
 echo "Source: $SOURCE_CHECKOUT"
