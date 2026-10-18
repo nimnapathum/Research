@@ -95,12 +95,18 @@ echo "Source: $SOURCE_CHECKOUT"
 echo "Active API: $API_WORKDIR"
 echo "Environment: $ACTIVE_ENV (contents are not printed)"
 echo "Target: origin/main"
+if ! sudo -n id -u >/dev/null 2>&1 ||
+   ! sudo -n -u "$APP_USER" id -u >/dev/null 2>&1 ||
+   ! sudo -n -u postgres id -u >/dev/null 2>&1; then
+  echo "Deployment needs passwordless sudo as root, $APP_USER, and postgres. No deployment changes were made." >&2
+  echo "Check with: sudo -n id -u; sudo -n -u $APP_USER id -u; sudo -n -u postgres id -u" >&2
+  exit 2
+fi
 if [[ $DRY_RUN -eq 1 ]]; then
   echo "Dry run: would pull, stage, back up $DB_NAME, stop, build, migrate, switch and health-check."
   exit 0
 fi
 
-sudo -v
 git -C "$SOURCE_CHECKOUT" pull --ff-only origin main
 COMMIT="$(git -C "$SOURCE_CHECKOUT" rev-parse HEAD)"
 REMOTE_COMMIT="$(git -C "$SOURCE_CHECKOUT" rev-parse refs/remotes/origin/main)"

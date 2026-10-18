@@ -12,7 +12,7 @@ bash ~/Research/research-portal/scripts/deploy-hosted.sh --dry-run
 bash ~/Research/research-portal/scripts/deploy-hosted.sh
 ```
 
-For later deployments, the script itself pulls `origin/main`; only the last two commands are needed. `--dry-run` checks the local paths, active release, Git branch, Node version, and the API service's effective environment-file path without changing the server. It may prompt for `sudo` to check a protected `.env` file. The script stops the web and API services during the build, so the site will be briefly unavailable.
+For later deployments, the script itself pulls `origin/main`; only the last two commands are needed. `--dry-run` checks the local paths, active release, Git branch, Node version, the API service's effective environment-file path, and passwordless administrator access without changing the server. The script stops the web and API services during the build, so the site will be briefly unavailable.
 
 The script stages a new release under `/srv/security-trust/releases`, copies the active secret environment file, backs up the local PostgreSQL database and service overrides, runs `npm ci`, the production build and migrations, switches the two systemd services, then checks the local API, web login, and public login. It keeps private study data, evidence, and packages in their existing directories. On a build or startup failure, it restores the previous service settings and tries to restart the earlier release. Database migrations are not automatically reversed.
 
