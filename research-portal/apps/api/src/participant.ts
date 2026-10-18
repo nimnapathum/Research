@@ -143,6 +143,10 @@ export class ParticipantController {
       throw new BadRequestException('This task is already submitted; ask the researcher to record a correction');
     }
     if (body.status === 'submitted' && process.env.STUDY_PROTOCOL === 'natural') {
+      const afterTask = await this.db.query(`SELECT 1 FROM questionnaire_responses r
+        JOIN questionnaires q ON q.id=r.questionnaire_id
+        WHERE r.participant_id=$1 AND r.task_id=$2 AND q.stage='after_task'`, [user.id, id]);
+      if (!afterTask.rowCount) throw new BadRequestException('Complete this task’s after-task questionnaire before submitting');
       const selected = await this.db.query<{ external_task_id: string }>(
         'SELECT external_task_id FROM study_tasks WHERE id=$1 AND participant_id=$2', [id, user.id]);
       if (!selected.rows[0]) throw new NotFoundException('Task not found');

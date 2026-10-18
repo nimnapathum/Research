@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { Shell } from '@/components/Shell';
 import { ResearcherImport } from '@/components/ResearcherImport';
 import { serverApi } from '@/lib/server-api';
@@ -7,6 +8,7 @@ type ImportRow = { id: string; kind: string; original_filename: string; imported
   participant_code: string | null; external_task_id: string | null; created_at: string };
 export default async function ImportsPage() {
   const user = await serverApi<StudyUser>('auth/me');
+  if (process.env.STUDY_PROTOCOL === 'natural') redirect('/researcher/evidence');
   const [imports, data] = await Promise.all([
     serverApi<ImportRow[]>('researcher/imports'),
     serverApi<{ participants: { id: string; participant_code: string }[] }>('researcher/participants')

@@ -145,7 +145,7 @@ def audit(folder):
             'agent_capture_health': agent_capture,
             'manual_checks_required': ['open researcher-linked Meet video and check playback', 'transcript completeness', 'recording/snapshot clock alignment',
                                        'code/file coverage including omitted files', 'rating before researcher feedback',
-                                       'interview linkage', 'blinded functionality/security assessment'],
+                                       'interview linkage', 'independent metadata-masked functionality/security assessment'],
             'note': 'This audit checks linked file integrity. It does not infer participant behaviour or establish code security.'}
 
 

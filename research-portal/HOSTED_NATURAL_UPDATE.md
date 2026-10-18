@@ -87,6 +87,8 @@ npm run build
 npm run db:migrate
 ```
 
+The current local revision includes `004_study_phase.sql` and `005_natural_assessments.sql`. The first marks existing participant accounts as `legacy` and requires an explicit rehearsal, pilot or main phase on new accounts. The second stores append-only researcher entries of independent feature reviews. Back up the database before applying them; verify phase labels and review entry after restart. This revision has not been deployed by this document.
+
 On a 1 GB VM, a production build may exceed available memory. Check memory and available swap before building; if it fails, build on a larger compatible Linux host and deploy the build artifacts, or increase VM resources. Do not treat a failed build as a deployable release. Once build, environment, storage, and Nginx checks pass, restart `security-trust-api.service` and `security-trust-web.service` using your normal manual procedure. The natural allocation bridge runs as a local CLI from the API; it does not require exposing the old checkpoint HTTP service to participants.
 
 ## 5. Verify the hosted release before a participant session
@@ -102,4 +104,4 @@ curl -i https://nimnapathum.tech/api/researcher/evidence/P00000000/P00000000-T1/
 
 The API health JSON must report `"protocol":"natural"`. Both evidence URLs should return JSON `401 Not signed in` without a cookie. A Next.js HTML `404` means the current route is not deployed; a JSON `404` from the participant route means `STUDY_PROTOCOL` is not `natural`. Log in with a disposable synthetic participant, complete pre-task questions, download a `-natural.zip`, and test all six uploads. Then sign in as a researcher, open **Evidence**, add a Drive link, check its access, download the six files, compare SHA-256 hashes, and inspect the agent transcript and code archive. Confirm that a participant cannot open the researcher download URL.
 
-The portal's **Analytics** page remains descriptive and shows historical controlled-checkpoint summaries. Natural mode and security labels require the separate evidence audit, blinded review, and analysis described in `study-system/analysis/README.md`. A successful web upload proves transfer and hash identity, not complete Antigravity capture or valid research data.
+In the current local revision, natural **Analytics** shows phase-specific collection, confidence and snapshot review rather than historical controlled-checkpoint summaries. Security charts appear only after the researcher enters two completed independent reviews and a resolved outcome for the uploaded final hash. Natural mode and agent-origin exposure still require separate video/transcript coding and the analysis described in `study-system/analysis/README.md`. A successful web upload proves transfer and hash identity, not complete Antigravity capture or valid research data.

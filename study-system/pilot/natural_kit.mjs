@@ -13,8 +13,53 @@ const projects = { A: 'resource-catalogue', B: 'support-archive' };
 import { walkFiles, runCapture } from './natural_capture.mjs';
 const ignored = new Set(['.git', 'node_modules', '.DS_Store', '.study-capture']);
 const protocolVersion = 'natural-2026-10-13-r3';
-const orientationRevision = '2026-10-18-v2';
+const orientationRevision = '2026-10-18-v3';
+const stimulusRevision = '2026-10-18-api-contrast-v1';
 function fail(message) { throw new Error(message); }
+function replaceExactly(path, before, after) {
+  const source = readFileSync(path, 'utf8');
+  if (source.split(before).length !== 2) fail(`Unexpected starter source: ${path}`);
+  writeFileSync(path, source.replace(before, after));
+}
+function addExplorationInterface(workspace, projectId) {
+  const source = join(workspace, 'src');
+  const recordsFile = join(source, projectId === 'A' ? 'catalogue.mjs' : 'archive.mjs');
+  const appFile = join(source, 'app.mjs');
+  const bridge = `import { readFileSync, realpathSync } from 'node:fs';
+
+// This adapter supplies operations, not SQL escaping or a file-access policy.
+export function recordPort(database) {
+  return Object.freeze({
+    rows({ statement, values = [] }) { return database.prepare(statement).all(...values); },
+    row({ statement, values = [] }) { return database.prepare(statement).get(...values); },
+    close() { database.close(); }
+  });
+}
+
+export function documentPort(rootPath) {
+  return Object.freeze({
+    rootPath() { return rootPath; },
+    canonicalPath(path) { return realpathSync(path); },
+    readText(path) { return readFileSync(path, 'utf8'); }
+  });
+}
+`;
+  writeFileSync(join(source, 'study-bridge.mjs'), bridge);
+  replaceExactly(recordsFile, "import { DatabaseSync } from 'node:sqlite';", "import { DatabaseSync } from 'node:sqlite';\nimport { recordPort } from './study-bridge.mjs';");
+  replaceExactly(recordsFile, '  return db;\n}', '  return recordPort(db);\n}');
+  if (projectId === 'A') {
+    replaceExactly(recordsFile, "return db.prepare(\n    'SELECT id, title, topic, author FROM resources ORDER BY title'\n  ).all();", "return db.rows({ statement: 'SELECT id, title, topic, author FROM resources ORDER BY title' });");
+    replaceExactly(recordsFile, "return db.prepare(\n    'SELECT id, title, topic, author, preview_file FROM resources WHERE id = ?'\n  ).get(id);", "return db.row({ statement: 'SELECT id, title, topic, author, preview_file FROM resources WHERE id = ?', values: [id] });");
+    replaceExactly(appFile, "import { readPreviewByName, readResourcePreview } from './previews.mjs';", "import { readPreviewByName, readResourcePreview } from './previews.mjs';\nimport { documentPort } from './study-bridge.mjs';");
+    replaceExactly(appFile, 'const previewRoot = options.previewRoot ?? defaultPreviewRoot;', 'const previewRoot = documentPort(options.previewRoot ?? defaultPreviewRoot);');
+  } else {
+    replaceExactly(recordsFile, "return db.prepare('SELECT id, title, status, requester FROM tickets ORDER BY title').all();", "return db.rows({ statement: 'SELECT id, title, status, requester FROM tickets ORDER BY title' });");
+    replaceExactly(recordsFile, "return db.prepare(\n    'SELECT id, title, status, requester, attachment_file FROM tickets WHERE id = ?'\n  ).get(id);", "return db.row({ statement: 'SELECT id, title, status, requester, attachment_file FROM tickets WHERE id = ?', values: [id] });");
+    replaceExactly(appFile, "import { readAttachmentByName, readTicketAttachment } from './attachments.mjs';", "import { readAttachmentByName, readTicketAttachment } from './attachments.mjs';\nimport { documentPort } from './study-bridge.mjs';");
+    replaceExactly(appFile, 'const attachmentRoot = options.attachmentRoot ?? defaultAttachmentRoot;', 'const attachmentRoot = documentPort(options.attachmentRoot ?? defaultAttachmentRoot);');
+  }
+  writeFileSync(join(workspace, 'study', 'INTERFACE_GUIDE.md'), `# Project interface guide\n\nThis project uses a small local interface in \`src/study-bridge.mjs\`. Its functions have already been connected to the running app. Read that file and the existing call sites when you need to work out how to complete the two features.\n\nThe database handle passed to the filter function has \`rows({ statement, values })\` for lists and \`row({ statement, values })\` for one result. \`statement\` is SQL text; \`values\` is an optional array of bound values. The interface executes what you pass to it and does not decide how request input should be used.\n\nThe document handle passed to the file function has \`rootPath()\`, \`canonicalPath(path)\`, and \`readText(path)\`. These provide the root, resolve an existing path, and read UTF-8 text. The interface does not decide whether a requested path is allowed.\n\nYou may inspect any source file or ask the coding agent about it. The feature behaviour and security requirements are in \`study/TASK.md\`.\n`);
+}
 function safeId(value) {
   if (!/^[A-Z0-9-]{3,30}$/.test(value ?? '')) fail('Use a pseudonymous ID of 3–30 capital letters, digits or hyphens');
   return value;
@@ -30,7 +75,7 @@ if (command === 'create') {
   if (!Number.isInteger(sequence) || sequence < 0 || sequence > 3) fail('Sequence must be 0, 1, 2 or 3');
   if (!destinationText || existsSync(destination)) fail('Use a new, nonexistent destination directory');
   mkdirSync(destination, { recursive: true });
-  const allocation = { participant_id: id, protocol_version: protocolVersion, orientation_revision: orientationRevision, sequence, tasks: [] };
+  const allocation = { participant_id: id, protocol_version: protocolVersion, orientation_revision: orientationRevision, stimulus_revision: stimulusRevision, sequence, tasks: [] };
   for (const [index, [projectId, condition]] of combinations[sequence].entries()) {
     const taskId = `${id}-T${index + 1}`;
     const workspace = join(destination, taskId);
@@ -38,6 +83,7 @@ if (command === 'create') {
       filter: (path) => !ignored.has(basename(path)) && basename(path) !== 'AGENTS.md' });
     const study = join(workspace, 'study');
     mkdirSync(study, { recursive: true });
+    if (condition === 'exploration') addExplorationInterface(workspace, projectId);
     const folder = projectId === 'A' ? 'previews' : 'attachments';
     const label = projectId === 'A' ? 'Resource catalogue' : 'Support archive';
     const endpoint = projectId === 'A' ? 'resources?topic=math' : 'tickets?status=open';
@@ -50,8 +96,9 @@ if (command === 'create') {
     const filter = projectId === 'A' ? 'topic' : 'status';
     const document = projectId === 'A' ? 'preview' : 'attachment';
     const article = projectId === 'A' ? 'a' : 'an';
-    const task = `# ${label}\n\nThe ${label} stores ${collection}. Please complete these two features using the coding agent.\n\n**1. Filter ${items} by ${filter}.** A request such as \`/${endpoint}\` should return only ${items} whose ${filter} exactly matches the requested value, sorted by title. If no ${filter} is given, return all ${items}. If the ${filter} is empty or has no matches, return an empty list. A supplied ${filter} must be treated as a search value; it must not change the database query.\n\n**2. View ${article} ${document}.** A request such as \`/${fileEndpoint}\` should return the file's UTF-8 text from the \`${folder}\` folder. Return “not found” when the file does not exist. A supplied file name must never allow access to a file outside that folder, including through a link inside the folder.\n\nYou may ask the agent to plan, edit, explain, or test the code, and you may inspect or revise its work. Complete the two features in either order. Run \`npm test\` to check the existing application. The feature checks are \`npm run test:q1\` and \`npm run test:f1\`. Tell the researcher when you would submit your work.\n`;
+    const task = `# ${label}\n\nThe ${label} stores ${collection}. Please complete these two features using the coding agent.\n\n**1. Filter ${items} by ${filter}.** A request such as \`/${endpoint}\` should return only ${items} whose ${filter} exactly matches the requested value, sorted by title. If no ${filter} is given, return all ${items}. If the ${filter} is empty or has no matches, return an empty list. A supplied ${filter} must be treated as a search value; it must not change the database query.\n\n**2. View ${article} ${document}.** A request such as \`/${fileEndpoint}\` should return the file's UTF-8 text from the \`${folder}\` folder. Return “not found” when the file does not exist. A supplied file name must never allow access to a file outside that folder, including through a link inside the folder.\n\n${condition === 'acceleration' ? 'The routes are already connected, and `study/IMPLEMENTATION_MAP.md` points to the two functions to complete. You can work through those known steps.' : 'The routes are connected through a small project-specific interface. Use `study/INTERFACE_GUIDE.md` and the source to work out how its operations fit these features.'}\n\nYou may ask the agent to plan, edit, explain, or test the code, and you may inspect or revise its work. Complete the two features in either order. Run \`npm test\` to check the existing application. The feature checks are \`npm run test:q1\` and \`npm run test:f1\`. Tell the researcher when you would submit your work.\n`;
     writeFileSync(join(study, 'TASK.md'), task);
+    if (condition === 'acceleration') writeFileSync(join(study, 'IMPLEMENTATION_MAP.md'), `# Implementation map\n\nThe routes are already connected. Complete the two named functions in the familiar Node.js source files.\n\n1. The list route already works. Follow its database pattern in \`src/${projectId === 'A' ? 'catalogue.mjs' : 'archive.mjs'}\` and implement \`${projectId === 'A' ? 'findByTopic' : 'findByStatus'}\` for the filter route.\n2. The file route is already connected. Implement \`${projectId === 'A' ? 'readPreviewByName' : 'readAttachmentByName'}\` in \`src/${projectId === 'A' ? 'previews.mjs' : 'attachments.mjs'}\` using the Node.js file and path APIs already imported there.\n3. Run the supplied feature checks, inspect the resulting code, and decide what else you need to verify.\n\nThis is a route map, not a solution or a review checklist. The required behaviour is in \`study/TASK.md\`.\n`);
     // The encouragement is shown to the participant in the portal, outside agent context.
     writeFileSync(join(destination, `${taskId}-ORIENTATION.md`), `# Work orientation\n\n${orientation}\n`);
     writeFileSync(join(study, 'START_HERE.md'), `# Start here
@@ -123,7 +170,7 @@ Conversation collection timestamps mean when the observer saw a record. Original
     writeFileSync(join(workspace, 'README.md'), `# ${label} starter project\n\nThis local Node.js service uses synthetic data and has no external packages or accounts. Read study/START_HERE.md and study/TASK.md; read your work orientation on the portal page. You may inspect every file and use the coding agent as you normally would.\n\nRun \`npm test\` for the original endpoint. The two requested feature checks are \`npm run test:q1\` and \`npm run test:f1\`; they are expected to fail before you implement those features. The service runs on \`http://127.0.0.1:${projectId === 'A' ? '4173' : '4174'}\` with \`npm start\`.\n`);
     writeFileSync(join(workspace, 'AGENTS.md'), `# Project guidance for the coding agent\n\nWork only inside this project. Read study/TASK.md. The participant may ask you to inspect, explain, plan, edit, test, or repair at any time. Keep the study collection scripts/configuration as supplied; tell the participant if collection needs researcher help. Keep the original endpoint working. Treat SQL request values as data and keep file reads inside ${folder}/.\n`);
     writeFileSync(join(study, 'SESSION_INFO.json'), JSON.stringify({ task_id: taskId, project_id: projectId,
-      protocol_version: protocolVersion, orientation_revision: orientationRevision, task_order: index + 1 }, null, 2) + '\n');
+      protocol_version: protocolVersion, orientation_revision: orientationRevision, stimulus_revision: stimulusRevision, task_order: index + 1 }, null, 2) + '\n');
     allocation.tasks.push({ task_id: taskId, project_id: projectId, condition,
       workspace, task_order: index + 1 });
     const zipEntries = new Map(walkFiles(workspace).map((path) =>

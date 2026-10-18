@@ -5,13 +5,14 @@ import { useMemo, useState } from 'react';
 
 type Status = { missing: string[]; issues: string[]; ready: boolean };
 type Recording = { id: string; drive_url: string; label: string; notes: string; created_at: string };
-type Row = { code: string; recordings: Recording[]; tasks: { id: string; order: number; project: string;
+type Row = { code: string; phase: string; recordings: Recording[]; tasks: { id: string; order: number; project: string;
   submitted: boolean; status: Status | null }[] };
 
 export function EvidenceBoard({ rows }: { rows: Row[] }) {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'attention' | 'complete'>('all');
+  const [phase, setPhase] = useState('all');
   const [open, setOpen] = useState<string | null>(null);
   const [url, setUrl] = useState('');
   const [label, setLabel] = useState('');
@@ -19,8 +20,9 @@ export function EvidenceBoard({ rows }: { rows: Row[] }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const complete = (row: Row) => row.tasks.length === 2 && row.tasks.every((task) => task.status?.ready) && row.recordings.length > 0;
-  const shown = useMemo(() => rows.filter((row) => row.code.toLowerCase().includes(query.trim().toLowerCase()) &&
-    (filter === 'all' || (filter === 'complete' ? complete(row) : !complete(row)))), [rows, query, filter]);
+  const shown = useMemo(() => rows.filter((row) => (phase === 'all' || row.phase === phase) &&
+    row.code.toLowerCase().includes(query.trim().toLowerCase()) &&
+    (filter === 'all' || (filter === 'complete' ? complete(row) : !complete(row)))), [rows, query, filter, phase]);
   async function addRecording(event: React.FormEvent, code: string) {
     event.preventDefault(); setSaving(true); setError('');
     try {
@@ -44,15 +46,21 @@ export function EvidenceBoard({ rows }: { rows: Row[] }) {
     <div className="row"><div><h2>Participants</h2><p className="small muted">{rows.length} participants · {rows.filter(complete).length} with both evidence sets and a recording link</p></div>
       <span className="pill gray">{shown.length} shown</span></div>
     <div className="evidence-filters"><input aria-label="Search participant code" placeholder="Search participant code" value={query} onChange={(event) => setQuery(event.target.value)} />
+      <select aria-label="Filter study phase" value={phase} onChange={(event) => setPhase(event.target.value)}>
+        <option value="all">All phases</option><option value="rehearsal">Self rehearsal</option>
+        <option value="pilot">Feasibility pilot</option><option value="main">Main study</option>
+        <option value="legacy">Legacy unclassified</option>
+      </select>
       <select aria-label="Filter evidence" value={filter} onChange={(event) => setFilter(event.target.value as typeof filter)}>
         <option value="all">All</option><option value="attention">Needs attention</option><option value="complete">Files and link present</option>
       </select></div>
     {shown.length ? <div className="evidence-list">{shown.map((row) => <div className="evidence-item" key={row.code}>
       <button className="evidence-toggle" type="button" aria-expanded={open === row.code} onClick={() => { setOpen(open === row.code ? null : row.code); setError(''); }}>
-        <span><strong>{row.code}</strong><small>{row.tasks.map((task) => `T${task.order} ${task.status ? `${6 - task.status.missing.length}/6` : '—'}`).join(' · ')} · {row.recordings.length} recording link{row.recordings.length === 1 ? '' : 's'}</small></span>
+        <span><strong>{row.code}</strong><small>{row.phase} · {row.tasks.map((task) => `T${task.order} ${task.status ? `${6 - task.status.missing.length}/6` : '—'}`).join(' · ')} · {row.recordings.length} recording link{row.recordings.length === 1 ? '' : 's'}</small></span>
         <span className={`pill ${complete(row) ? 'good' : 'gray'}`}>{complete(row) ? 'Files linked' : 'Review needed'}</span>
       </button>
       {open === row.code && <div className="evidence-expanded">
+        <p><Link className="button secondary" href={`/researcher/analytics/${row.code}`}>Open participant analysis</Link></p>
         <div className="evidence-task-grid">{row.tasks.map((task) => <div className="evidence-task" key={task.id}>
           <strong>Task {task.order} · {task.project === 'A' ? 'Resource catalogue' : 'Support archive'}</strong>
           <span className="small muted">{task.submitted ? 'submitted' : 'in progress'}</span>

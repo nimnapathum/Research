@@ -56,6 +56,16 @@ button { cursor: pointer; }
 .code-review-file summary { cursor: pointer; padding: 10px 12px; font-weight: 600; background: var(--accent-soft); }
 .code-review-file pre { max-height: 580px; overflow: auto; padding: 14px; margin: 0; font-size: .8rem;
   line-height: 1.5; background: #f8fafb; color: var(--ink); }
+.assessment-form { display: grid; gap: 16px; margin-top: 16px; }
+.assessment-form label { display: grid; gap: 5px; font-weight: 600; }
+.assessment-form fieldset { border: 1px solid var(--line); border-radius: 9px; padding: 14px; display: grid; gap: 12px; }
+.assessment-form legend { padding: 0 5px; font-weight: 700; }
+.assessment-form input:not([type="checkbox"]), .assessment-form select, .assessment-form textarea {
+  width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--white); color: var(--ink); }
+.assessment-form textarea { min-height: 94px; }
+.assessment-form .assessment-check { display: flex; align-items: start; gap: 8px; font-weight: 500; }
+.analysis-refresh { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: -8px 0 16px; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 :focus-visible { outline: 3px solid #8ab4d8; outline-offset: 2px; }

@@ -8,10 +8,10 @@ import { fileURLToPath } from 'node:url';
 
 const kit = fileURLToPath(new URL('./natural_kit.mjs', import.meta.url));
 
-test('plain task briefs retain exact behavior and security requirements across both orientations', () => {
+test('task packages keep target requirements while varying the implementation abstraction', () => {
   const root = mkdtempSync(join(tmpdir(), 'natural-task-text-'));
   try {
-    const sheets = { A: [], B: [] };
+    const sheets = { A: {}, B: {} };
     for (const sequence of [0, 1]) {
       const destination = join(root, `pair-${sequence}`);
       const result = spawnSync(process.execPath, [kit, 'create', `P7654321${sequence}`, destination, String(sequence)],
@@ -20,7 +20,7 @@ test('plain task briefs retain exact behavior and security requirements across b
       const allocation = JSON.parse(readFileSync(join(destination, 'RESEARCHER_ALLOCATION.json'), 'utf8'));
       for (const task of allocation.tasks) {
         const brief = readFileSync(join(task.workspace, 'study/TASK.md'), 'utf8');
-        sheets[task.project_id].push(brief);
+        sheets[task.project_id][task.condition] = brief;
         assert.match(brief, /sorted by title/);
         assert.match(brief, /empty or has no matches, return an empty list/);
         assert.match(brief, /If no (topic|status) is given, return all/);
@@ -30,13 +30,23 @@ test('plain task briefs retain exact behavior and security requirements across b
         assert.match(brief, /npm run test:q1/);
         assert.match(brief, /npm run test:f1/);
         assert.doesNotMatch(brief, /acceleration|exploration|Q2 and F2/);
+        if (task.condition === 'acceleration') {
+          assert.match(brief, /IMPLEMENTATION_MAP/);
+          assert.match(readFileSync(join(task.workspace, 'study/IMPLEMENTATION_MAP.md'), 'utf8'), /two named functions/);
+          assert.doesNotMatch(readFileSync(join(task.workspace, 'src/app.mjs'), 'utf8'), /documentPort/);
+        } else {
+          assert.match(brief, /INTERFACE_GUIDE/);
+          assert.match(readFileSync(join(task.workspace, 'study/INTERFACE_GUIDE.md'), 'utf8'), /rows\(\{ statement, values \}\)/);
+          assert.match(readFileSync(join(task.workspace, 'src/app.mjs'), 'utf8'), /documentPort/);
+          assert.match(readFileSync(join(task.workspace, 'src/study-bridge.mjs'), 'utf8'), /recordPort/);
+        }
       }
     }
-    assert.equal(sheets.A[0], sheets.A[1]);
-    assert.equal(sheets.B[0], sheets.B[1]);
-    assert.match(sheets.A[0], /resources\?topic=math/);
-    assert.match(sheets.B[0], /tickets\?status=open/);
-    assert.match(sheets.A[0], /previews\?name=algebra\.txt/);
-    assert.match(sheets.B[0], /attachments\?name=account\.txt/);
+    assert.notEqual(sheets.A.acceleration, sheets.A.exploration);
+    assert.notEqual(sheets.B.acceleration, sheets.B.exploration);
+    assert.match(sheets.A.acceleration, /resources\?topic=math/);
+    assert.match(sheets.B.acceleration, /tickets\?status=open/);
+    assert.match(sheets.A.exploration, /previews\?name=algebra\.txt/);
+    assert.match(sheets.B.exploration, /attachments\?name=account\.txt/);
   } finally { rmSync(root, { recursive: true, force: true }); }
 });

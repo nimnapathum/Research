@@ -5,19 +5,21 @@ import { useState } from 'react';
 
 type Assignment = { task_id: string; project_id: 'A' | 'B'; condition: 'acceleration' | 'exploration';
   task_order: number; checkpoint_order: string[] };
-type Created = { username: string; participant_code: string; temporary_password: string; tasks: Assignment[] };
+type Created = { username: string; participant_code: string; study_phase: string;
+  temporary_password: string; tasks: Assignment[] };
 
-export function CreateParticipant() {
+export function CreateParticipant({ natural = false }: { natural?: boolean }) {
   const router = useRouter();
   const [created, setCreated] = useState<Created | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [studyPhase, setStudyPhase] = useState('');
   async function submit(event: React.FormEvent) {
     event.preventDefault(); setBusy(true); setError(''); setCreated(null);
     try {
       const response = await fetch('/api/backend/researcher/participants', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
+        body: JSON.stringify({ studyPhase })
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Could not create participant');
@@ -30,17 +32,26 @@ export function CreateParticipant() {
       <p>Create a pseudonymous username, password, and two balanced task assignments in one step.</p></div>
       <div className="creation-badge">2 tasks<br/><small>1 of each condition</small></div></div>
     <form className="creation-form" onSubmit={submit}>
+      <label className="form-field">Study phase
+        <select required value={studyPhase} onChange={(event) => setStudyPhase(event.target.value)}>
+          <option value="">Choose the data group</option>
+          <option value="rehearsal">Self rehearsal</option>
+          <option value="pilot">Feasibility pilot</option>
+          <option value="main">Main study</option>
+        </select></label>
+      <p className="small muted">Choose “Main study” only after freezing the pilot task, forms, codebook and analysis plan. The phase is saved with this account.</p>
       <button className="button" disabled={busy}>{busy ? 'Creating assignment…' : 'Create participant and tasks'}</button>
     </form>
     {error && <p className="alert error" role="alert">{error}</p>}
     {created && <div className="credential-panel" role="status">
       <div><p className="eyebrow">Give these details privately</p><h3>{created.participant_code} is ready</h3>
+        <p>Study phase: <strong>{created.study_phase}</strong>. Keep this account in that analysis group.</p>
         <p>The password is shown once. Save it before leaving this page.</p></div>
       <div className="credential-grid"><div><span>Username</span><strong className="code">{created.username}</strong></div>
         <div><span>Temporary password</span><strong className="code">{created.temporary_password}</strong></div></div>
       <div className="assignment-preview">{created.tasks.map((task) => <div key={task.task_id}>
         <strong>Task {task.task_order}</strong><span>Project {task.project_id} · {task.condition}</span>
-        <small>Checkpoint order: {task.checkpoint_order.join(' → ')}</small></div>)}</div>
+        {!natural && <small>Checkpoint order: {task.checkpoint_order.join(' → ')}</small>}</div>)}</div>
     </div>}
   </section>;
 }

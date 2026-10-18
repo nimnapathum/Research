@@ -18,7 +18,7 @@ export function ResearchLibrary({ docs, initialSelected, initialSource }: {
   const contents = useRef(new Map<string, string>([[initialSelected, initialSource]]));
   const requestId = useRef(0);
   const abort = useRef<AbortController | null>(null);
-  const defaultPath = docs.some((doc) => doc.path === 'RQ.md') ? 'RQ.md' : docs[0]?.path;
+  const defaultPath = docs.some((doc) => doc.path === 'CURRENT_STUDY.md') ? 'CURRENT_STUDY.md' : docs[0]?.path;
 
   const load = useCallback(async (path: string) => {
     if (!docs.some((doc) => doc.path === path)) return;
@@ -87,19 +87,21 @@ export function ResearchLibrary({ docs, initialSelected, initialSource }: {
 
   return <>
     <section className="card research-summary"><h2>Research at a glance</h2>
-      <p><strong>Aim:</strong> Examine whether developers working with a coding agent in acceleration and exploration episodes differ in security judgments, reliance on generated changes, verification, and security trust calibration.</p>
+      <p><strong>Aim:</strong> Examine security judgments, reliance, verification and confidence accuracy when developers use a coding agent under two assigned work structures. Code the interaction modes they actually show.</p>
+      <p className="small">The assigned conditions combine human guidance with a familiar or unfamiliar code interface. They do not isolate a pure cognitive-mode effect. Previously issued participant ZIPs keep their original version.</p>
       <div className="grid two"><div><strong>Research questions</strong><ol>
         <li>Does security confidence align with assessed code security differently across the two conditions?</li>
-        <li>Do exposed vulnerabilities remain in final code differently across conditions?</li>
-        <li>How do security checks before and after provisional retention relate to repair or retention?</li>
+        <li>Do target vulnerabilities remain in final code differently across conditions? Describe retention only when an insecure agent change was actually exposed.</li>
+        <li>How do security checks before and after observed integration of agent changes relate to final outcomes?</li>
         <li>Do these patterns differ for SQL injection and path traversal?</li>
-      </ol></div><div><strong>Current stage</strong><p>Pilot preparation. Participant outcomes and preliminary results are not yet available.</p>
-        <p className="small">Start with <a href="/researcher/research?doc=RQ.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=RQ.md')}>RQs and rationale</a>, <a href="/researcher/research?doc=METHODOLOGY.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=METHODOLOGY.md')}>methodology</a>, and <a href="/researcher/research?doc=study-system%2Fpilot%2FSESSION_RUNBOOK.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=study-system%2Fpilot%2FSESSION_RUNBOOK.md')}>session runbook</a>.</p></div></div>
+      </ol></div><div><strong>Current stage</strong><p>Local task revision and pilot preparation. No adjudicated participant findings are presented in these documents.</p>
+        <p className="small">Start with <a href="/researcher/research?doc=CURRENT_STUDY.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=CURRENT_STUDY.md')}>current study and evidence map</a>, <a href="/researcher/research?doc=TASK_CONTRAST_DESIGN.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=TASK_CONTRAST_DESIGN.md')}>task contrast</a>, <a href="/researcher/research?doc=NATURAL_WORKFLOW_METHOD.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=NATURAL_WORKFLOW_METHOD.md')}>method</a>, <a href="/researcher/research?doc=PORTAL_METHOD_AUDIT.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=PORTAL_METHOD_AUDIT.md')}>portal audit</a>, and <a href="/researcher/research?doc=study-system%2Fpilot%2FNATURAL_SESSION_RUNBOOK.md" onClick={(event) => handleLocalLink(event, '/researcher/research?doc=study-system%2Fpilot%2FNATURAL_SESSION_RUNBOOK.md')}>session runbook</a>.</p></div></div>
     </section>
     <div className="document-layout"><ResearchDocList docs={docs} selected={selected} pending={pending} onOpen={open} />
       <article className="card document-content" aria-busy={pending !== null}>
         <div className="document-meta"><span>{metadata?.category}</span><span>{selected}</span>
           <span>Updated {metadata ? metadata.updatedAt.slice(0, 10) : '—'}</span></div>
+        {selected.startsWith('archive/') && <p className="alert">Historical protocol. Use Current study and the natural-task runbook for active sessions.</p>}
         {pending && <p className="muted" role="status">Opening document…</p>}
         {error && <p role="alert">{error} <button type="button" onClick={() => void load(selected)}>Retry</button></p>}
         {!pending && !error && <div className="markdown-body"><ReactMarkdown remarkPlugins={[remarkGfm]}

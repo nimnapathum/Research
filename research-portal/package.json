@@ -13,6 +13,8 @@
     "admin:create": "node --env-file=.env scripts/create-admin.mjs",
     "admin:reset-password": "node --env-file=.env scripts/reset-researcher-password.mjs",
     "test:research-docs": "node scripts/test-research-docs.mjs",
+    "test:natural-analytics": "node scripts/test-natural-analytics.mjs",
+    "test:natural-assessment": "node scripts/test-natural-assessment.mjs",
     "test:participant-materials": "node scripts/test-participant-materials.mjs",
     "test:checkpoint-bridge": "node scripts/test-checkpoint-bridge.mjs"
   },

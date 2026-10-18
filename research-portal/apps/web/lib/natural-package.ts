@@ -11,7 +11,7 @@ const studyRoot = resolve(/* turbopackIgnore: true */ process.env.STUDY_MATERIAL
 const packageRoot = resolve(/* turbopackIgnore: true */ process.env.STUDY_PACKAGE_ROOT ||
   join(process.cwd(), '../../.local-packages'));
 type StoredPackage = { taskId: string; projectId: string; condition: string; taskOrder: number;
-  protocolVersion: string; orientationRevision?: string; packageSha256: string; zipBase64: string; taskSheet: string; orientation: string; startHere: string };
+  protocolVersion: string; orientationRevision?: string; stimulusRevision?: string; packageSha256: string; zipBase64: string; taskSheet: string; orientation: string; startHere: string };
 function loadPackage(path: string, task: StudyTask) {
   const stored = JSON.parse(readFileSync(path, 'utf8')) as StoredPackage;
   const zip = Buffer.from(stored.zipBase64, 'base64');
@@ -49,7 +49,7 @@ export function naturalTaskMaterials(task: StudyTask, tasks: StudyTask[]) {
     if (result.error || result.status !== 0) throw new Error(result.error?.message || result.stderr.trim() || 'Natural package generation failed');
     const workspace = join(destination, task.external_task_id);
     const info = JSON.parse(readFileSync(join(workspace, 'study/SESSION_INFO.json'), 'utf8')) as {
-      task_id: string; project_id: string; protocol_version: string; orientation_revision?: string; task_order: number };
+      task_id: string; project_id: string; protocol_version: string; orientation_revision?: string; stimulus_revision?: string; task_order: number };
     const allocation = JSON.parse(readFileSync(join(destination, 'RESEARCHER_ALLOCATION.json'), 'utf8')) as {
       tasks: Array<{ task_id: string; condition: string }> };
     if (info.task_id !== task.external_task_id || info.project_id !== task.project_id ||
@@ -60,7 +60,7 @@ export function naturalTaskMaterials(task: StudyTask, tasks: StudyTask[]) {
     const stored: StoredPackage = { taskId: task.external_task_id, projectId: task.project_id,
       condition: task.condition, taskOrder: task.task_order, zipBase64: zip.toString('base64'),
       packageSha256: createHash('sha256').update(zip).digest('hex'), protocolVersion: info.protocol_version,
-      orientationRevision: info.orientation_revision,
+      orientationRevision: info.orientation_revision, stimulusRevision: info.stimulus_revision,
       taskSheet: readFileSync(join(workspace, 'study/TASK.md'), 'utf8'),
       orientation: readFileSync(join(destination, `${task.external_task_id}-ORIENTATION.md`), 'utf8'),
       startHere: readFileSync(join(workspace, 'study/START_HERE.md'), 'utf8') };

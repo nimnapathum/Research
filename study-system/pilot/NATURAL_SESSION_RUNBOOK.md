@@ -6,7 +6,7 @@ Protocol natural-2026-10-13-r3. Follow the institution-approved consent, compens
 
 1. Complete one synthetic session on the actual route: log in, download/extract, prompt the agent to edit, run a check, make final snapshot/rating, export conversation, upload, retrieve and replay the evidence. Confirm code hashes and conversation/video coverage. Test each intended OS and document unsupported fields.
 2. Rehearse a final-code security assessment on one secure and one vulnerable reference implementation of each class, then an actual rehearsal output. Keep attack fixtures outside participant packages. Record false positives, missed cases and unsupported symlink checks.
-3. Freeze the pilot task/card/form version. Separate pilot allocation/data from rehearsal and main data; real participant IDs must not reuse synthetic accounts. Pin the tested Node/model/IDE/settings and document permitted variation.
+3. Freeze the pilot task/card/interface/form versions, including `orientation_revision` and `stimulus_revision`. Separate pilot allocation/data from rehearsal and main data; real participant IDs must not reuse synthetic accounts. Pin the tested Node/model/IDE/settings and document permitted variation.
 4. Test participant reachability, authentication and isolation from researcher documents/evidence. Local `127.0.0.1` works only on the same machine. Prepare the approved recovery and withdrawal procedure; do not improvise email or third-party transfers.
 
 ## Before each session
@@ -27,7 +27,7 @@ If capture fails after coding starts, preserve what exists and log exact gap/tim
 
 At the finishing point, participant freezes code and rates the exact final hash. Their own coding checks are allowed; no researcher oracle results or debrief are shown. Record whether finishing was voluntary or cap-driven. Wait for agent idle and stop both collectors after rating. Retain the agent folder and upload its AGENT_TRANSCRIPT.jsonl. Upload manifest/rating and complete the after-task form promptly before larger transfers. If an upload is wrong or missing, log it and ask the researcher to resolve; the present portal does not offer a fully audited replacement/waiver flow. Never use synthetic media as a substitute.
 
-After evidence receipts and form, take the common break and repeat in the other condition/project, with fresh conversation. Collect after-both questions and conduct replay before feedback. Ask about carryover. Select replay moments by the [natural codebook](../instruments/NATURAL_CODEBOOK.md), including no-check cases. Record interview audio/video under the approved procedure and link its filename/hash to both task IDs; the seven task uploads do not include a separate interview receipt.
+After the six evidence receipts and form, take the common break and repeat in the other condition/project, with fresh conversation. Collect after-both questions and conduct replay before feedback. Ask about carryover. Select replay moments by the [natural codebook](../instruments/NATURAL_CODEBOOK.md), including no-check cases. Record interview audio/video under the approved procedure and link its filename/hash to both task IDs; the six task uploads do not include a separate interview receipt.
 
 ## Session closure
 
@@ -43,6 +43,6 @@ Run `python3 study-system/analysis/audit_natural_evidence.py EVIDENCE_TASK_FOLDE
 
 ## Pilot decision record
 
-After 4–6 target-cohort sessions, record task completion/timing; participant misunderstandings; setup and missing-data rates by host; observed modes and coding disagreements; secure/vulnerable final counts; actual insecure agent exposures; rating comprehension; and workload for review/coding. Revise instruments before the main sample. The pilot may show that natural retention cannot be estimated or that encouragement does not distinguish behaviour. Report that finding and narrow claims or design a separate controlled study. Do not force a favourable result by selecting participants or deleting inconvenient sessions.
+After 4–6 target-cohort sessions, record task completion/timing; perceived difficulty and familiarity by condition; participant misunderstandings; setup and missing-data rates by host; observed modes and coding disagreements; secure/vulnerable final counts; actual insecure agent exposures; rating comprehension; and workload for review/coding. Revise instruments before the main sample. The pilot may show that natural retention cannot be estimated, that the assigned work structures do not distinguish observed mode, or that the exploration interface mainly increases workload. Report that finding and narrow claims or revise the task before freezing the main study. Do not force a favourable security result by selecting participants or deleting inconvenient sessions.
 
 The durations, pilot count and release checklist are study-specific operational choices. Prior-study support and its limits are in [the research audit](../../RESEARCH_AUDIT.md) and [source ledger](../../REFERENCES.md).

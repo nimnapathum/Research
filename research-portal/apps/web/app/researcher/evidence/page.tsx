@@ -5,7 +5,7 @@ import { naturalEvidenceStatus } from '@/lib/natural-evidence';
 import { serverApi } from '@/lib/server-api';
 import type { StudyTask, StudyUser } from '@/lib/types';
 
-type Participant = { id: string; participant_code: string };
+type Participant = { id: string; participant_code: string; study_phase: string };
 type AssignedTask = StudyTask & { participant_id: string };
 type Recording = { id: string; participant_code: string; drive_url: string; label: string; notes: string; created_at: string };
 
@@ -19,6 +19,7 @@ export default async function ResearcherEvidencePage() {
   ]);
   const rows = await Promise.all(data.participants.map(async (person) => ({
     code: person.participant_code,
+    phase: person.study_phase || 'legacy',
     recordings: recordings.filter((recording) => recording.participant_code === person.participant_code),
     tasks: await Promise.all(data.tasks.filter((task) => task.participant_id === person.id)
       .sort((a, b) => a.task_order - b.task_order).map(async (task) => {

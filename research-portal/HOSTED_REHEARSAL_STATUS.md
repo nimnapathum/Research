@@ -2,6 +2,8 @@
 
 Updated 18 October 2026. The hosted portal at **https://nimnapathum.tech** is running the natural-task protocol (`natural-2026-10-13-r3`) from isolated release `/srv/security-trust/releases/2115b65` (commit `2115b65`). Newly generated task packages use work-orientation revision `2026-10-18-v2`; previously downloaded packages remain frozen. The older checkout at `/srv/security-trust/Research` was left untouched.
 
+**Local research revision:** This workspace now contains orientation revision `2026-10-18-v3` and stimulus revision `2026-10-18-api-contrast-v1`, with a distinct implementation route for each condition. Those changes have **not** been deployed to the hosted release. Use a new participant assignment only after deploying and verifying the revision; an existing cached ZIP cannot change. See [CURRENT_STUDY.md](../CURRENT_STUDY.md).
+
 ## What is working now
 
 The API and web services are active. Public login returns HTTP 200 and private researcher routes redirect without a session. A disposable hosted test passed both task ZIP downloads, package freezing, both after-task forms, **six evidence receipts per task**, both submissions, the final form, researcher Drive-link entry, code-inspection page, and archive/hash audits. The portal did not execute participant code. The test does not establish the quality of a real Google Meet recording or actual Antigravity capture.
@@ -30,7 +32,7 @@ The web path is ready for **self-rehearsal**. Real participant pilots require th
 - Put the hosted VM on a supported security-update path before collecting identifiable recordings: it is Ubuntu 20.04 and `pro status` reports **not attached** to Ubuntu Pro. [Canonical says 20.04 standard security maintenance ended in May 2025](https://ubuntu.com/20-04). Upgrade/rebuild the VM or attach an eligible Ubuntu Pro subscription, then repeat the hosted smoke checks.
 - Establish and test an encrypted backup and restore procedure covering PostgreSQL, `study-data`, `evidence`, `packages`, and the secret environment file under the approved retention rules. A local one-time dump is not a recovery plan.
 
-Do not treat the portal **Analytics** page as the final research analysis. Natural-task outcomes require blinded final-code adjudication and the analysis tables in [study-system/analysis/README.md](../study-system/analysis/README.md). If a recording or upload needs replacement, keep the original and log the correction; the portal has no fully audited replacement/waiver flow yet.
+Do not treat the portal **Analytics** page as the final research analysis. Natural-task outcomes require independent, metadata-masked final-code adjudication and the analysis tables in [study-system/analysis/README.md](../study-system/analysis/README.md). If a recording or upload needs replacement, keep the original and log the correction; the portal has no fully audited replacement/waiver flow yet.
 
 ## Repeatable hosted checks and rollback
 

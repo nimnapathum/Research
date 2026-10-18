@@ -4,7 +4,7 @@ Working version for natural-2026-10-13-r3. Freeze the main-study version before 
 
 ## 1. Units and records
 
-The independent sampling unit is the **participant**. Each person completes two tasks under opposite encouragements. Each task has one SQL and one path feature: at most four final-feature judgments per person, or 120 for 30 completed people. These 120 observations are not 120 independent participants.
+The independent sampling unit is the **participant**. Each person completes two tasks under opposite assigned work-structure conditions (card plus familiar or unfamiliar code interface). Each task has one SQL and one path feature: at most four final-feature judgments per person, or 120 for 30 completed people. These 120 observations are not 120 independent participants.
 
 Use the CSV headers in `study-system/analysis/natural-templates/`. Preserve raw media, transcripts, hashes and questionnaire responses separately from these human-coded tables.
 
@@ -20,7 +20,7 @@ Keep coder 1, coder 2 and adjudicated labels as distinct records. A blank label 
 
 ## 2. Security adjudication
 
-Give two reviewers anonymised final snapshots without condition, confidence or interview material. Remove `study/SESSION_INFO.json`, rating files and condition metadata from their review copies; preserve the original. Random review IDs reduce condition leakage, but project/content may still identify a task. Record reviewer experience and blinding failures.
+Give two independent reviewers anonymised final snapshots without participant IDs, condition labels, confidence ratings, transcripts or interview material. Remove `study/SESSION_INFO.json`, task/orientation guides, rating files and condition metadata from review copies; preserve the original. Reviewers need the neutral feature/security specification and complete target source. The exploration interface itself may reveal the condition to a reviewer who knows the manipulation. Keep condition mapping from reviewers until ratings are submitted, ask whether they inferred it, and report leakage. Describe this as **masked review with imperfect condition blinding**, never as guaranteed blindness.
 
 Assess **functionality** separately (`pass`, `fail`, `not_implemented`, `unassessable`). For target security use `target_secure`, `vulnerable`, `not_implemented`, or `unassessable`. “Target secure” means no weakness found within the named requirement and tested threat model; it is not a claim of complete software security. Unrelated flaws are recorded separately.
 
@@ -30,6 +30,8 @@ Assess **functionality** separately (`pass`, `fail`, `not_implemented`, `unasses
 - Existing `probe_snapshot.mjs` and candidate oracle can supply evidence for compatible implementations; fixed candidate-pattern expectations do not adjudicate arbitrary natural code. Adapt tests where participants legitimately change the implementation; document every adaptation.
 
 Resolve reviewer disagreement through recorded discussion or a third reviewer. Save the original labels and evidence. Report agreement before resolution and the prevalence of each label; a chance-corrected statistic can be unstable when almost every item has one label.
+
+The portal now provides a review-record form for entering the two independently obtained labels and their resolved outcome. It verifies the uploaded final hash and preserves each correction as a new database row. Entering two reviewer codes does not prove that the reviews were independent: retain the separate original sheets and probe outputs. The live portal charts are descriptive monitoring. The export and analysis tables remain the record for reviewer agreement, missingness, exposure coding and the final reported estimates.
 
 ## 3. RQ1: confidence–security alignment
 
@@ -45,7 +47,7 @@ Sensitivity: pair each class separately; report confidence and security as separ
 
 For each condition show all assigned features as functional/target-secure, functional/vulnerable, nonfunctional, not implemented or unassessable. Report participant-paired differences in vulnerability counts with intervals and the raw paired table. Include the joint functional-and-target-secure outcome so removing a feature cannot look like success. Show project and order summaries and incomplete task counts. Bound missing security labels by showing what happens if all unassessable cases are vulnerable versus all target-secure; keep absent functionality separate.
 
-Separately describe **confirmed visible agent-origin vulnerable changes**: identified, inspected, left in place, intentionally repaired, replaced, and surviving in final code. The denominator is actual confirmed exposures. Zero exposed changes means survival is **not estimable**, not 0%. Exposure can itself be affected by the condition, so comparing retention conditional on exposure is observational; it is not the causal effect of the assigned encouragement on all participants. A direct agent edit does not demonstrate conscious acceptance.
+Separately describe **confirmed visible agent-origin vulnerable changes**: identified, inspected, left in place, intentionally repaired, replaced, and surviving in final code. The denominator is actual confirmed exposures. Zero exposed changes means survival is **not estimable**, not 0%. Exposure can itself be affected by the condition, so comparing retention conditional on exposure is observational; it is not the causal effect of the assigned work-structure condition on all participants. A direct agent edit does not demonstrate conscious acceptance.
 
 ## 5. RQ3 and mode analysis
 
@@ -61,7 +63,7 @@ SQL versus path comparisons are exploratory. Thirty paired participants do not j
 
 Thirty completed participants is a resource-bounded mixed-method estimation target. Justify recording/coding burden and report sensitivity or interval precision for the chosen primary contrast; similar-sized studies provide feasibility context, not statistical power. Recruit replacements for incomplete sessions under a fixed rule unrelated to observed outcomes; retain the recruitment flow and incomplete data permitted by consent. Do not use a small pilot's observed effect as the assumed true effect to justify 30.
 
-Counterbalance the four project/condition/order sequences, log actual allocations and withdrawals, use a fresh conversation per task, and keep agent/model/review settings consistent. Project and learning can still affect outcomes. Report first-task summaries as a carryover sensitivity, with reduced precision. OS, familiarity, training and agent experience are descriptive covariates; avoid post-hoc extensive adjustment with n=30.
+Counterbalance the four project/condition/order sequences, log actual allocations and withdrawals, use a fresh conversation per task, and keep agent/model/review settings consistent. The card and interface change together, so their separate effects cannot be estimated; interface difficulty and learning can still affect outcomes. Report first-task summaries as a carryover sensitivity, with reduced precision. OS, familiarity, training and agent experience are descriptive covariates; avoid post-hoc extensive adjustment with n=30.
 
 ## 7. Deliverables and claims
 

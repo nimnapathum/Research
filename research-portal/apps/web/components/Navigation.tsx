@@ -24,11 +24,14 @@ const participantLinks = [
 
 export function Navigation({ researcher, natural = false }: { researcher: boolean; natural?: boolean }) {
   const pathname = usePathname();
-  const links = researcher ? researcherLinks.filter((link) => natural || link.href !== '/researcher/evidence')
+  const links = researcher ? researcherLinks.filter((link) => natural
+    ? link.href !== '/researcher/imports' : link.href !== '/researcher/evidence')
     : participantLinks.filter((link) => !natural || link.href !== '/participant/upload');
   return <nav className="nav" aria-label="Main navigation">
     {links.map(({ href, label }) => {
-      const active = pathname === href || (href === '/dashboard' && pathname.startsWith('/forms/'));
+      const active = pathname === href ||
+        (href === '/dashboard' && (pathname.startsWith('/forms/') || pathname.startsWith('/participant/tasks/'))) ||
+        (href === '/researcher/evidence' && pathname.startsWith('/researcher/evidence/'));
       return <Link href={href} key={href} className={active ? 'active' : undefined}
         aria-current={active ? 'page' : undefined}>{label}</Link>;
     })}

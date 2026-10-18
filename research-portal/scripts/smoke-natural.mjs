@@ -39,8 +39,8 @@ try {
   const salt = randomBytes(16).toString('hex');
   const key = await promisify(scryptCallback)(password, Buffer.from(salt, 'hex'), 64,
     { N: 2 ** 17, r: 8, p: 1, maxmem: 256 * 1024 * 1024 });
-  const inserted = await pool.query(`INSERT INTO users(username,password_hash,role,participant_code)
-    VALUES($1,$2,'participant',$3) RETURNING id`, [code.toLowerCase(), `scrypt:17:${salt}:${key.toString('hex')}`, code]);
+  const inserted = await pool.query(`INSERT INTO users(username,password_hash,role,participant_code,study_phase)
+    VALUES($1,$2,'participant',$3,'rehearsal') RETURNING id`, [code.toLowerCase(), `scrypt:17:${salt}:${key.toString('hex')}`, code]);
   userId = inserted.rows[0].id;
   const researcherName = `smoke_${code.toLowerCase()}`;
   researcherId = (await pool.query(`INSERT INTO users(username,password_hash,role)
@@ -185,6 +185,10 @@ with ZipFile(sys.argv[1]) as archive:
   const researcherLogin = await request('/api/auth/login', json({ username: researcherName, password }));
   const researcherCookie = researcherLogin.response.headers.get('set-cookie')?.split(';')[0];
   if (!researcherLogin.response.ok || !researcherCookie) throw new Error('Synthetic researcher login failed');
+  const allocated = await request('/api/backend/researcher/participants', {}, researcherCookie);
+  if (!allocated.response.ok || allocated.body.participants.find((item) => item.participant_code === code)?.study_phase !== 'rehearsal') {
+    throw new Error('Study phase was missing from researcher participant view');
+  }
   const evidencePage = await fetch(`${root}/researcher/evidence`, { headers: { cookie: researcherCookie } });
   if (!evidencePage.ok || !(await evidencePage.text()).includes(code)) {
     throw new Error('Researcher evidence page did not show the uploaded task');
@@ -260,14 +264,17 @@ with ZipFile(sys.argv[1]) as archive:
         body: readFileSync(path) }, cookie);
     if (!response.response.ok) throw new Error(`Task 2 ${kind} failed: ${JSON.stringify(response.body)}`);
   }
-  const secondAfter = await request('/api/backend/participant/responses', json({ questionnaireId: after.id,
-    taskId: tasks[1].id, answers: afterAnswers }), cookie);
-  if (!secondAfter.response.ok) throw new Error(`Task 2 after-task form failed: ${JSON.stringify(secondAfter.body)}`);
   const secondObserver = observerRecords.map((row) => ({ ...row, task_id: `${code}-T2` }))
     .map((row) => JSON.stringify(row)).join('\n') + '\n';
   const secondAgent = await request(`/api/participant/tasks/${tasks[1].id}/evidence?kind=agent_transcript`,
     { method: 'PUT', headers: { 'x-filename': 'AGENT_TRANSCRIPT.jsonl' }, body: secondObserver }, cookie);
   if (!secondAgent.response.ok) throw new Error(`Task 2 agent transcript failed: ${JSON.stringify(secondAgent.body)}`);
+  const secondPremature = await request(`/api/backend/participant/tasks/${tasks[1].id}/status`,
+    json({ status: 'submitted' }, 'PATCH'), cookie);
+  if (secondPremature.response.status !== 400) throw new Error('Task 2 submitted without after-task answers');
+  const secondAfter = await request('/api/backend/participant/responses', json({ questionnaireId: after.id,
+    taskId: tasks[1].id, answers: afterAnswers }), cookie);
+  if (!secondAfter.response.ok) throw new Error(`Task 2 after-task form failed: ${JSON.stringify(secondAfter.body)}`);
   const secondSubmitted = await request(`/api/backend/participant/tasks/${tasks[1].id}/status`,
     json({ status: 'submitted' }, 'PATCH'), cookie);
   if (!secondSubmitted.response.ok) throw new Error(`Task 2 submission failed: ${JSON.stringify(secondSubmitted.body)}`);

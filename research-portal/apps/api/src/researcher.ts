@@ -1,6 +1,8 @@
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException,
   Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { randomBytes, randomInt } from 'node:crypto';
+import { createHash, randomBytes, randomInt } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { DbService } from './db.service';
 import { hashPassword, researcherOnly, SessionGuard, type StudyRequest } from './auth';
 import { validateSchema } from './forms';
@@ -55,6 +57,17 @@ export class ResearcherController {
   @Get('overview')
   async overview(@Req() request: StudyRequest) {
     this.require(request);
+    if (process.env.STUDY_PROTOCOL === 'natural') {
+      const [counts, progress] = await Promise.all([
+        this.db.query(`SELECT
+          (SELECT count(*)::int FROM users WHERE role='participant') AS participants,
+          (SELECT count(*)::int FROM study_tasks) AS tasks,
+          (SELECT count(*)::int FROM questionnaire_responses) AS responses`),
+        this.db.query(`SELECT status,count(*)::int AS count FROM study_tasks GROUP BY status ORDER BY status`)
+      ]);
+      return { counts: { ...counts.rows[0], imports: 0, events: 0 }, progress: progress.rows,
+        eventTypes: [], recentImports: [], latestAnalysis: null };
+    }
     const [counts, progress, eventTypes, recent, newest] = await Promise.all([
       this.db.query(`SELECT
         (SELECT count(*)::int FROM users WHERE role='participant') AS participants,
@@ -75,7 +88,7 @@ export class ResearcherController {
   @Get('participants')
   async participants(@Req() request: StudyRequest) {
     this.require(request);
-    const users = await this.db.query(`SELECT u.id,u.username,u.participant_code,u.display_name,u.created_at,
+    const users = await this.db.query(`SELECT u.id,u.username,u.participant_code,u.display_name,u.study_phase,u.created_at,
       count(t.id)::int AS task_count,count(t.id) FILTER (WHERE t.status='submitted')::int AS submitted_tasks
       FROM users u LEFT JOIN study_tasks t ON t.participant_id=u.id
       WHERE u.role='participant' GROUP BY u.id ORDER BY u.created_at DESC`);
@@ -134,13 +147,17 @@ export class ResearcherController {
 
   @Post('participants')
   async createParticipant(@Req() request: StudyRequest,
-    @Body() body: { displayName?: string }) {
+    @Body() body: { displayName?: string; studyPhase?: string }) {
     this.require(request);
     if (process.env.CHECKPOINT_BRIDGE_ENABLED !== '1') {
-      throw new BadRequestException('Start the checkpoint service before creating participants');
+      throw new BadRequestException('Start the study assignment service before creating participants');
     }
     const displayName = String(body?.displayName || '').trim();
     if (displayName.length > 120) throw new BadRequestException('Name must be at most 120 characters');
+    const studyPhase = body?.studyPhase ?? 'rehearsal';
+    if (!['rehearsal', 'pilot', 'main'].includes(studyPhase)) {
+      throw new BadRequestException('Choose rehearsal, pilot, or main study phase');
+    }
     const password = randomBytes(18).toString('base64url');
     const hash = await hashPassword(password);
     let code = '';
@@ -173,9 +190,9 @@ export class ResearcherController {
               !Array.isArray(task.checkpoint_order) || task.checkpoint_order.length !== 4)) {
           throw new Error('Checkpoint service returned an invalid assignment');
         }
-        const user = await client.query<{ id: string }>(`INSERT INTO users(username,password_hash,role,participant_code,display_name)
-          VALUES($1,$2,'participant',$3,$4) RETURNING id`,
-        [code.toLowerCase(), hash, code, displayName || null]);
+        const user = await client.query<{ id: string }>(`INSERT INTO users(username,password_hash,role,participant_code,display_name,study_phase)
+          VALUES($1,$2,'participant',$3,$4,$5) RETURNING id`,
+        [code.toLowerCase(), hash, code, displayName || null, studyPhase]);
         for (const task of tasks) {
           await client.query(`INSERT INTO study_tasks
             (participant_id,external_task_id,project_id,condition,task_order,checkpoint_order)
@@ -185,10 +202,11 @@ export class ResearcherController {
         }
         await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id,details)
           VALUES($1,'create_participant','user',$2,$3::jsonb)`,
-        [request.studyUser.id, user.rows[0].id, JSON.stringify({ participant_code: code })]);
+        [request.studyUser.id, user.rows[0].id, JSON.stringify({ participant_code: code, study_phase: studyPhase })]);
         return { ...user.rows[0], tasks };
       });
-      return { ...result, username: code.toLowerCase(), participant_code: code, temporary_password: password };
+      return { ...result, username: code.toLowerCase(), participant_code: code,
+        study_phase: studyPhase, temporary_password: password };
     } catch (error) {
       if (reserved) {
         try { callCheckpointBridge({ command: 'cancel-reservation', participant_code: code }); }
@@ -267,13 +285,89 @@ export class ResearcherController {
   @Get('responses')
   async responses(@Req() request: StudyRequest) {
     this.require(request);
-    const result = await this.db.query(`SELECT r.id,u.participant_code,q.title,q.stage,q.version,
+    const result = await this.db.query(`SELECT r.id,u.participant_code,u.study_phase,q.title,q.stage,q.version,
       t.external_task_id,r.answers,r.submitted_at
       FROM questionnaire_responses r JOIN users u ON u.id=r.participant_id
       JOIN questionnaires q ON q.id=r.questionnaire_id
       LEFT JOIN study_tasks t ON t.id=r.task_id
       ORDER BY r.submitted_at DESC LIMIT 1000`);
     return result.rows;
+  }
+
+  @Get('natural-assessments')
+  async naturalAssessments(@Req() request: StudyRequest) {
+    this.require(request);
+    const result = await this.db.query(`SELECT DISTINCT ON (a.task_id,a.weakness_class)
+      a.id,t.external_task_id AS task_id,u.participant_code,a.weakness_class,a.final_snapshot_sha256,
+      a.review_data,a.resolved_security,a.resolved_functionality,a.resolution_note,a.created_at
+      FROM natural_assessments a JOIN study_tasks t ON t.id=a.task_id
+      JOIN users u ON u.id=t.participant_id
+      ORDER BY a.task_id,a.weakness_class,a.created_at DESC,a.id DESC`);
+    return result.rows;
+  }
+
+  @Post('natural-assessments')
+  async recordNaturalAssessment(@Req() request: StudyRequest, @Body() body: {
+    taskId?: string; weaknessClass?: string; finalHash?: string;
+    reviews?: { reviewerCode?: string; security?: string; functionality?: string; inferredCondition?: boolean }[];
+    resolvedSecurity?: string; resolvedFunctionality?: string; resolutionNote?: string
+  }) {
+    this.require(request);
+    if (process.env.STUDY_PROTOCOL !== 'natural') throw new BadRequestException('Natural assessment is disabled');
+    if (!/^[0-9a-f-]{36}$/.test(String(body?.taskId)) || !['sql','path'].includes(String(body?.weaknessClass)) ||
+        !/^sha256:[a-f0-9]{64}$/.test(String(body?.finalHash))) throw new BadRequestException('Invalid task, class, or final hash');
+    const securityLabels = ['target_secure','vulnerable','not_implemented','unassessable'];
+    const functionLabels = ['pass','fail','not_implemented','unassessable'];
+    const reviews = body.reviews;
+    if (!Array.isArray(reviews) || reviews.length !== 2 || reviews.some((item) =>
+      !/^[A-Za-z0-9_-]{2,50}$/.test(String(item.reviewerCode)) ||
+      !securityLabels.includes(String(item.security)) || !functionLabels.includes(String(item.functionality)) ||
+      (item.security === 'not_implemented') !== (item.functionality === 'not_implemented') ||
+      typeof item.inferredCondition !== 'boolean') ||
+      reviews[0].reviewerCode === reviews[1].reviewerCode ||
+      !securityLabels.includes(String(body.resolvedSecurity)) || !functionLabels.includes(String(body.resolvedFunctionality)) ||
+      (body.resolvedSecurity === 'not_implemented') !== (body.resolvedFunctionality === 'not_implemented')) {
+      throw new BadRequestException('Enter two distinct reviewer codes and complete security/functionality labels');
+    }
+    const note = String(body.resolutionNote || '').trim();
+    const disagreement = reviews[0].security !== reviews[1].security || reviews[0].functionality !== reviews[1].functionality;
+    if (note.length < 10 || note.length > 2000 ||
+        (!disagreement && (body.resolvedSecurity !== reviews[0].security || body.resolvedFunctionality !== reviews[0].functionality))) {
+      throw new BadRequestException('Record review evidence, explain disagreements, and retain agreed labels when both reviews match');
+    }
+    const task = await this.db.query<{ external_task_id: string; participant_code: string }>(`SELECT t.external_task_id,u.participant_code
+      FROM study_tasks t JOIN users u ON u.id=t.participant_id WHERE t.id=$1`, [body.taskId]);
+    if (!task.rows[0] || !/^P\d{8}$/.test(task.rows[0].participant_code) ||
+        !/^P\d{8}-T[12]$/.test(task.rows[0].external_task_id) ||
+        !task.rows[0].external_task_id.startsWith(`${task.rows[0].participant_code}-`)) {
+      throw new NotFoundException('Natural task not found');
+    }
+    const root = process.env.STUDY_EVIDENCE_ROOT;
+    if (!root) throw new BadRequestException('Evidence storage is unavailable');
+    let storedHash = '';
+    try {
+      const folder = join(root, task.rows[0].participant_code, task.rows[0].external_task_id);
+      const bytes = readFileSync(join(folder, 'final_manifest.data'));
+      const receipt = JSON.parse(readFileSync(join(folder, 'final_manifest.receipt.json'), 'utf8'));
+      if (receipt.task_id !== task.rows[0].external_task_id || receipt.kind !== 'final_manifest' ||
+          receipt.size_bytes !== bytes.length || receipt.sha256 !== createHash('sha256').update(bytes).digest('hex')) {
+        throw new Error('Manifest receipt mismatch');
+      }
+      storedHash = JSON.parse(bytes.toString('utf8')).snapshot_sha256;
+    } catch { throw new BadRequestException('Final snapshot manifest must be uploaded first'); }
+    if (storedHash !== body.finalHash) throw new BadRequestException('Review hash does not match the uploaded final snapshot');
+    return this.db.transaction(async (client) => {
+      const saved = await client.query<{ id: string }>(`INSERT INTO natural_assessments
+        (task_id,weakness_class,final_snapshot_sha256,review_data,resolved_security,resolved_functionality,resolution_note,recorded_by)
+        VALUES($1,$2,$3,$4::jsonb,$5,$6,$7,$8) RETURNING id`,
+      [body.taskId, body.weaknessClass, body.finalHash, JSON.stringify(reviews),
+        body.resolvedSecurity, body.resolvedFunctionality, note, request.studyUser.id]);
+      await client.query(`INSERT INTO audit_actions(actor_id,action,target_type,target_id,details)
+        VALUES($1,'record_natural_assessment','natural_assessment',$2,$3::jsonb)`,
+      [request.studyUser.id, saved.rows[0].id, JSON.stringify({ task_id: task.rows[0].external_task_id,
+        weakness_class: body.weaknessClass, final_hash: body.finalHash, disagreement })]);
+      return { id: saved.rows[0].id, task_id: task.rows[0].external_task_id, weakness_class: body.weaknessClass };
+    });
   }
 
   @Post('imports')
@@ -322,8 +416,8 @@ export class ResearcherController {
   @Get('export')
   async export(@Req() request: StudyRequest) {
     this.require(request);
-    const [users, tasks, questionnaires, responses, imports, events, summaries, opportunities, recordings] = await Promise.all([
-      this.db.query(`SELECT id,username,role,participant_code,display_name,created_at FROM users ORDER BY created_at`),
+    const [users, tasks, questionnaires, responses, imports, events, summaries, opportunities, recordings, naturalAssessments] = await Promise.all([
+      this.db.query(`SELECT id,username,role,participant_code,study_phase,display_name,created_at FROM users ORDER BY created_at`),
       this.db.query('SELECT * FROM study_tasks ORDER BY created_at'),
       this.db.query('SELECT * FROM questionnaires ORDER BY created_at'),
       this.db.query('SELECT * FROM questionnaire_responses ORDER BY submitted_at'),
@@ -332,11 +426,13 @@ export class ResearcherController {
       this.db.query('SELECT * FROM captured_events ORDER BY occurred_at'),
       this.db.query('SELECT * FROM analysis_runs ORDER BY created_at'),
       this.db.query('SELECT * FROM analysis_opportunities ORDER BY import_id,row_number'),
-      this.db.query('SELECT id,participant_id,drive_url,label,notes,created_by,created_at FROM session_recordings ORDER BY created_at')
+      this.db.query('SELECT id,participant_id,drive_url,label,notes,created_by,created_at FROM session_recordings ORDER BY created_at'),
+      this.db.query('SELECT * FROM natural_assessments ORDER BY created_at')
     ]);
-    return { exported_at_utc: new Date().toISOString(), schema_version: 'portal-2',
+    return { exported_at_utc: new Date().toISOString(), schema_version: 'portal-4',
       users: users.rows, tasks: tasks.rows, questionnaires: questionnaires.rows,
       responses: responses.rows, imports: imports.rows, events: events.rows,
-      summaries: summaries.rows, opportunities: opportunities.rows, recordings: recordings.rows };
+      summaries: summaries.rows, opportunities: opportunities.rows, recordings: recordings.rows,
+      natural_assessments: naturalAssessments.rows };
   }
 }

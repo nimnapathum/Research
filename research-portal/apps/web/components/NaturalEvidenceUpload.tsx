@@ -54,7 +54,7 @@ export function NaturalEvidenceUpload({ taskId, externalTaskId, afterTaskFormId,
     {status.agent_capture?.format === 'study_observer' && <p className="small">Agent observer: {status.agent_capture.status} · {status.agent_capture.transcript_records} transcript records · {status.agent_capture.hook_events} hook events. Record counts are not necessarily prompt counts.</p>}
     {status.warnings?.map((warning) => <div className="alert" role="status" key={warning}>{warning}</div>)}
     <div className={`alert ${status.ready ? 'success' : ''}`} role="status">
-      {status.ready ? 'All six task evidence files were received and the final rating matches the final snapshot hash.'
+      {status.ready ? 'All six files were received. The rating matches the separately uploaded final manifest; the researcher must still verify the ZIP contents and evidence quality.'
         : `Evidence incomplete: ${status.missing.length ? status.missing.map(labelFor).join(', ') : 'check issues below'}.`}
       {status.issues.map((issue) => <p key={issue}>{issue}</p>)}
     </div>

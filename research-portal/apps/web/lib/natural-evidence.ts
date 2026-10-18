@@ -34,7 +34,11 @@ function taskFolder(participantCode: string, taskId: string) {
 async function receipt(folder: string, kind: EvidenceKind): Promise<EvidenceReceipt | null> {
   try {
     const parsed = JSON.parse(await readFile(join(folder, `${kind}.receipt.json`), 'utf8')) as EvidenceReceipt;
-    return parsed.kind === kind ? parsed : null;
+    if (parsed.kind !== kind || parsed.task_id !== basename(folder) ||
+        !Number.isSafeInteger(parsed.size_bytes) || parsed.size_bytes <= 0 ||
+        !/^[a-f0-9]{64}$/.test(parsed.sha256)) return null;
+    const file = await stat(join(folder, `${kind}.data`));
+    return file.isFile() && file.size === parsed.size_bytes ? parsed : null;
   } catch { return null; }
 }
 async function structured(folder: string, kind: EvidenceKind) {

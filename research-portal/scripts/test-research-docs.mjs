@@ -46,8 +46,17 @@ try {
   await expectStatus('/api/research/docs?doc=../.env', 'study_sid=researcher', 404);
   const document = await expectStatus('/api/research/docs?doc=RQ.md', 'study_sid=researcher', 200);
   if (!(await document.json()).source.includes('RQ1')) throw new Error('Markdown content missing');
+  const current = await expectStatus('/api/research/docs?doc=CURRENT_STUDY.md', 'study_sid=researcher', 200);
+  if (!(await current.json()).source.includes('work-structure')) throw new Error('Current-study evidence map missing');
+  const audit = await expectStatus('/api/research/docs?doc=PORTAL_METHOD_AUDIT.md', 'study_sid=researcher', 200);
+  if (!(await audit.json()).source.includes('Portal–methodology inspection')) throw new Error('Portal method audit missing');
   const page = await expectStatus('/researcher/research?doc=RQ.md', 'study_sid=researcher', 200);
   if (!(await page.text()).includes('Study documents')) throw new Error('Research page missing');
+  const landing = await expectStatus('/researcher/research', 'study_sid=researcher', 200);
+  const landingSource = await landing.text();
+  if (!landingSource.includes('CURRENT_STUDY.md') || !landingSource.includes('NATURAL_SESSION_RUNBOOK.md')) {
+    throw new Error('Research landing does not point to the current protocol');
+  }
   console.log('PASS: research document loading and access controls');
 } finally {
   web.kill('SIGTERM');

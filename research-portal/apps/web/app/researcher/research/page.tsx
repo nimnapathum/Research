@@ -12,7 +12,7 @@ export default async function ResearchPage({ searchParams }: {
   if (user.role !== 'researcher') redirect('/dashboard');
   const docs = await listResearchDocs();
   const requested = (await searchParams).doc;
-  const selected = requested || (docs.some((doc) => doc.path === 'RESEARCH_AUDIT.md') ? 'RESEARCH_AUDIT.md' : docs[0]?.path);
+  const selected = requested || (docs.some((doc) => doc.path === 'CURRENT_STUDY.md') ? 'CURRENT_STUDY.md' : docs[0]?.path);
   if (!selected) return <Shell user={user}><div className="empty">No research Markdown files were found. Check RESEARCH_DOCS_ROOT.</div></Shell>;
   const source = await readResearchDoc(selected, docs);
   if (source === null) notFound();

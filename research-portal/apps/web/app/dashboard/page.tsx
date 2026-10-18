@@ -10,27 +10,34 @@ export default async function DashboardPage() {
   const user = await serverApi<StudyUser>('auth/me');
   if (user.role === 'researcher') {
     const data = await serverApi<ResearcherOverview>('researcher/overview');
-    const metrics = [['Participants', data.counts.participants], ['Assigned tasks', data.counts.tasks],
-      ['Form responses', data.counts.responses], ['Import files', data.counts.imports], ['Captured events', data.counts.events]] as const;
+    const natural = process.env.STUDY_PROTOCOL === 'natural';
+    const metrics = natural
+      ? [['Participants', data.counts.participants], ['Assigned tasks', data.counts.tasks],
+        ['Form responses', data.counts.responses]] as const
+      : [['Participants', data.counts.participants], ['Assigned tasks', data.counts.tasks],
+        ['Form responses', data.counts.responses], ['Import files', data.counts.imports], ['Captured events', data.counts.events]] as const;
     return <Shell user={user}><div className="hero"><div><p className="eyebrow">Researcher overview</p><h1>Study operations</h1>
-      <p>Track recruitment, questionnaire completion, imported IDE events, and analysis readiness.</p></div>
+      <p>{natural ? 'Track study phase, task progress, questionnaires and evidence review.' : 'Track recruitment, questionnaire completion, imported IDE events, and analysis readiness.'}</p></div>
       <Link className="button" href="/researcher/participants">Add participant</Link></div>
-      {process.env.STUDY_PROTOCOL === 'natural' && <div className="notice"><strong>Natural-task collection is active</strong>
-        <p>Evidence files and frozen task packages are stored separately from legacy event/opportunity imports. Use the natural evidence audit and analysis plan after manual review; the legacy analysis figures below do not summarise current natural tasks.</p></div>}
-      <div className="grid five">{metrics.map(([label, value]) => <div className="card" key={label}><div className="metric">{value}</div><div className="metric-label">{label}</div></div>)}</div>
+      {natural && <div className="notice"><strong>Natural-task collection</strong>
+        <p>Choose the study phase when creating an account. <Link href="/researcher/evidence">Review evidence and recording links</Link>, then use the documented independent security assessment and natural analysis tables. Counts here are operational; they do not measure cognitive mode or security outcomes.</p></div>}
+      <div className={natural ? 'grid three' : 'grid five'}>{metrics.map(([label, value]) => <div className="card" key={label}><div className="metric">{value}</div><div className="metric-label">{label}</div></div>)}</div>
       <div className="grid two" style={{ marginTop: 16 }}><section className="card"><h2>Task progress</h2>
         <BarChart rows={data.progress.map((row) => ({ label: row.status.replace('_', ' '), value: row.count }))} /></section>
+        {natural ? <section className="card"><h2>Review next</h2><p>Open the evidence list to check receipts, transcript health and recording links. Use Analytics for phase-specific collection, code timelines and entered review outcomes. Submitted does not mean security adjudication is complete.</p>
+          <div className="row"><Link className="button secondary" href="/researcher/evidence">Open evidence</Link>
+            <Link className="button secondary" href="/researcher/analytics">Open analytics</Link></div></section> :
         <section className="card"><h2>Captured event types</h2>
           <BarChart rows={data.eventTypes.map((row) => ({ label: row.event_type, value: row.count }))} />
-          <div className="chart-caption">Counts reflect imported event files; they do not infer cognitive mode.</div></section></div>
-      <div className="grid two" style={{ marginTop: 16 }}><section className="card"><h2>Latest adjudicated analysis</h2>
+          <div className="chart-caption">Counts reflect imported event files; they do not infer cognitive mode.</div></section>}</div>
+      {!natural && <div className="grid two" style={{ marginTop: 16 }}><section className="card"><h2>Latest adjudicated analysis</h2>
         {data.latestAnalysis ? <><div className="metric">{String(data.latestAnalysis.summary.exposed_opportunities ?? '—')}</div>
           <div className="metric-label">Exposed opportunities in the imported summary</div>
           <p className="small">Imported {new Date(data.latestAnalysis.created_at).toLocaleString()}. <Link href="/researcher/analytics">View analysis</Link></p></>
           : <div className="empty">No study analysis summary imported yet. Upload the analysis pipeline’s <span className="code">summary.json</span> when adjudication is complete.</div>}</section>
         <section className="card"><h2>Recent imports</h2>{data.recentImports.length ? <div className="stack">
           {data.recentImports.map((item) => <div className="row small" key={item.id}><span>{item.original_filename}<br/><span className="muted">{item.kind} · {item.participant_code || 'study-wide'}</span></span><strong>{item.imported_count}</strong></div>)}
-        </div> : <div className="empty">No files imported yet.</div>}</section></div>
+        </div> : <div className="empty">No files imported yet.</div>}</section></div>}
     </Shell>;
   }
   const data = await serverApi<ParticipantDashboard>('participant/dashboard');
