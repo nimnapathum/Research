@@ -1,5 +1,7 @@
 # Research and implementation audit — updated 18 October 2026
 
+> Historical audit of `2026-10-18-api-contrast-v1`. The locally proposed `2026-10-19-abstract-brief-v2` adds unequal brief detail; [TASK_CONTRAST_DESIGN.md](TASK_CONTRAST_DESIGN.md) gives the updated design and required pilot checks.
+
 The research aim remains security confidence, reliance and verification during coding-agent use under acceleration-oriented and exploration-oriented task conditions. The capture protocol is **natural-2026-10-13-r3**; newly generated local packages use stimulus revision `2026-10-18-api-contrast-v1`. This audit covers recruitment, allocation, tasks, capture, forms, interviews, security assessment, analysis and the participant portal. It does not report participant results. Start with [CURRENT_STUDY.md](CURRENT_STUDY.md) for the active design and local-versus-hosted version distinction.
 
 ## Findings and refinements

@@ -6,7 +6,7 @@ Current operational protocol: natural-2026-10-13-r3. The exact researcher-suppli
 
 > Examine whether developers working with a coding agent in acceleration and exploration episodes differ in their security judgments, reliance on generated changes, verification, and Trust calibration on security.
 
-The current assigned comparison is a **work-structure condition**: a human orientation card plus a familiar, mapped implementation route or a small unfamiliar code interface. This strengthens the intended contrast but cannot separate the effect of the card from interface familiarity or identify a pure cognitive-mode effect. Observed mode is coded implementation intent, not an automatically detected mental state. Security confidence is a probability about the exact final feature. Trust is interpreted with stated reliance, inspection and interview evidence; final confidence alone is not agent trust. See [the task contrast](TASK_CONTRAST_DESIGN.md).
+The current assigned comparison is a **work-structure package**: a human orientation card, concrete endpoint brief and familiar mapped route versus an abstract product brief and small unfamiliar code interface. The visible briefs differ in functional detail while retaining the same SQL and file safety boundaries. This cannot separate brief specificity, card or interface familiarity effects or identify a pure cognitive-mode effect. Observed mode is coded implementation intent, not an automatically detected mental state. Security confidence is a probability about the exact final feature. Trust is interpreted with stated reliance, inspection and interview evidence; final confidence alone is not agent trust. See [the task contrast](TASK_CONTRAST_DESIGN.md).
 
 ## Researcher-supplied wording
 

@@ -52,6 +52,7 @@ Attach a private reference-case sheet listing project A/B, familiar/unfamiliar p
 | --- | --- | --- |
 | Four sequence allocations, equal cap/break and facilitator wording recorded | | |
 | Task/card/interface, forms, rating, codebook, interview and review rubric versions saved | | |
+| Both briefs understood without facilitator implementation hints; ambiguity and functional completion recorded by condition | | |
 | Researcher and participant accounts use the intended study phase; old cached ZIPs excluded | | |
 
 **Decision:** self-rehearsal only / supervised pilot cleared / blocked.  

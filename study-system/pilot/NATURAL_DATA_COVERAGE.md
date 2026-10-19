@@ -1,6 +1,6 @@
 # Natural-task data coverage and safety gate
 
-**Status, updated 18 October 2026:** The hosted natural portal has passed a synthetic two-task delivery/upload/retrieval rehearsal and serves newly generated `2026-10-18-api-contrast-v1` packages. Previously issued ZIPs remain frozen. The newer RQ-linked analytics remain local. The quality of actual Antigravity, Meet, code-history and interview evidence on intended participant hosts still needs verification. Use this checklist before each real pilot; a blank or missing stream means *missing evidence*, never “the participant did not do it.” The older checkpoint exports measure a different procedure and cannot fill these gaps.
+**Status, updated 19 October 2026:** The hosted natural portal has passed a synthetic two-task delivery/upload/retrieval rehearsal for the earlier `2026-10-18-api-contrast-v1` packages. The proposed `2026-10-19-abstract-brief-v2` stimulus is local only and needs a new rehearsal before a real pilot. Previously issued ZIPs remain frozen. The quality of actual Antigravity, Meet, code-history and interview evidence on intended participant hosts still needs verification. Use this checklist before each real pilot; a blank or missing stream means *missing evidence*, never “the participant did not do it.” The older checkpoint exports measure a different procedure and cannot fill these gaps.
 
 ## Minimum linked record for each of the two tasks
 

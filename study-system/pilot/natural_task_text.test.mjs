@@ -8,11 +8,11 @@ import { fileURLToPath } from 'node:url';
 
 const kit = fileURLToPath(new URL('./natural_kit.mjs', import.meta.url));
 
-test('task packages keep target requirements while varying the implementation abstraction', () => {
+test('task packages vary brief detail but keep the same target and safety boundaries', () => {
   const root = mkdtempSync(join(tmpdir(), 'natural-task-text-'));
   try {
     const sheets = { A: {}, B: {} };
-    for (const sequence of [0, 1]) {
+    for (const sequence of [0, 1, 2, 3]) {
       const destination = join(root, `pair-${sequence}`);
       const result = spawnSync(process.execPath, [kit, 'create', `P7654321${sequence}`, destination, String(sequence)],
         { encoding: 'utf8' });
@@ -21,20 +21,26 @@ test('task packages keep target requirements while varying the implementation ab
       for (const task of allocation.tasks) {
         const brief = readFileSync(join(task.workspace, 'study/TASK.md'), 'utf8');
         sheets[task.project_id][task.condition] = brief;
-        assert.match(brief, /sorted by title/);
-        assert.match(brief, /empty or has no matches, return an empty list/);
-        assert.match(brief, /If no (topic|status) is given, return all/);
-        assert.match(brief, /must not change the database query/);
-        assert.match(brief, /UTF-8 text/);
-        assert.match(brief, /outside that folder, including through a link/);
+        assert.match(brief, /Safety boundaries for both features/);
+        assert.match(brief, /not part of the database query itself/);
+        assert.match(brief, /outside the `(previews|attachments)` folder, including through a link/);
         assert.match(brief, /npm run test:q1/);
         assert.match(brief, /npm run test:f1/);
         assert.doesNotMatch(brief, /acceleration|exploration|Q2 and F2/);
         if (task.condition === 'acceleration') {
+          assert.match(brief, /sorted by title/);
+          assert.match(brief, /empty or has no matches, return an empty list/);
+          assert.match(brief, /If no (topic|status) is given, return all/);
+          assert.match(brief, /UTF-8 text/);
+          assert.match(brief, /Return “not found”/);
           assert.match(brief, /IMPLEMENTATION_MAP/);
           assert.match(readFileSync(join(task.workspace, 'study/IMPLEMENTATION_MAP.md'), 'utf8'), /two named functions/);
           assert.doesNotMatch(readFileSync(join(task.workspace, 'src/app.mjs'), 'utf8'), /documentPort/);
         } else {
+          assert.match(brief, /team wants users to find/);
+          assert.doesNotMatch(brief, /sorted by title|empty or has no matches|return all|not found/);
+          assert.doesNotMatch(brief, /\/(resources|tickets|previews|attachments)\?/);
+          assert.doesNotMatch(brief, /IMPLEMENTATION_MAP|findByTopic|findByStatus|readPreviewByName|readAttachmentByName/);
           assert.match(brief, /INTERFACE_GUIDE/);
           assert.match(readFileSync(join(task.workspace, 'study/INTERFACE_GUIDE.md'), 'utf8'), /rows\(\{ statement, values \}\)/);
           assert.match(readFileSync(join(task.workspace, 'src/app.mjs'), 'utf8'), /documentPort/);
@@ -44,9 +50,14 @@ test('task packages keep target requirements while varying the implementation ab
     }
     assert.notEqual(sheets.A.acceleration, sheets.A.exploration);
     assert.notEqual(sheets.B.acceleration, sheets.B.exploration);
+    for (const project of ['A', 'B']) {
+      const safety = (condition) => sheets[project][condition].split('**Safety boundaries for both features.** ')[1]
+        .split('\n\nYou may ask')[0];
+      assert.equal(safety('acceleration'), safety('exploration'));
+    }
     assert.match(sheets.A.acceleration, /resources\?topic=math/);
     assert.match(sheets.B.acceleration, /tickets\?status=open/);
-    assert.match(sheets.A.exploration, /previews\?name=algebra\.txt/);
-    assert.match(sheets.B.exploration, /attachments\?name=account\.txt/);
+    assert.doesNotMatch(sheets.A.exploration, /resources\?topic=math|previews\?name=algebra\.txt/);
+    assert.doesNotMatch(sheets.B.exploration, /tickets\?status=open|attachments\?name=account\.txt/);
   } finally { rmSync(root, { recursive: true, force: true }); }
 });

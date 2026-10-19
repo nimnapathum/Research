@@ -1,5 +1,7 @@
 # Portal–methodology inspection, 18 October 2026
 
+> Historical inspection of the `2026-10-18-api-contrast-v1` package. The proposed abstract-brief revision is local and has not undergone the checks below; see [TASK_CONTRAST_DESIGN.md](TASK_CONTRAST_DESIGN.md).
+
 This is a code and workflow inspection, **not a real-participant validation**. The 18 October hosted release passed disposable authenticated delivery, upload, assessment-API and analytics-page checks; the newer RQ-linked analysis changes remain local. The current natural study uses protocol `natural-2026-10-13-r3`; newly generated task packages use orientation revision `2026-10-18-v3` and stimulus revision `2026-10-18-api-contrast-v1`. Previously issued ZIPs stay frozen. See [CURRENT_STUDY.md](CURRENT_STUDY.md) for the research design and [the researcher runbook](study-system/pilot/NATURAL_SESSION_RUNBOOK.md) for session procedure.
 
 | Method step | Portal support and evidence | Limit or check still required |

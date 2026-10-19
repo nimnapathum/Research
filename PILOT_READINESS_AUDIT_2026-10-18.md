@@ -1,5 +1,7 @@
 # Pilot readiness audit: natural agent-coding study
 
+> Historical release audit for `2026-10-18-api-contrast-v1`. The locally proposed `2026-10-19-abstract-brief-v2` changes brief specificity as well as interface familiarity; repeat the comprehension, balance and security-reference checks in [TASK_CONTRAST_DESIGN.md](TASK_CONTRAST_DESIGN.md) before using it with participants.
+
 **Operational release gate for the feasibility phase.** The main-study method is explained in the [A–Z study guide](STUDY_GUIDE.md). The pilot uses its same two-task structure and tests the materials before main recruitment; this audit is not an alternative research protocol.
 
 **18 October 2026 — local working audit. No participant findings.** This checks the current `natural-2026-10-13-r3` workflow and the new `2026-10-18-api-contrast-v1` task packages. The hosted portal has a prior synthetic two-task check; the RQ-linked analytics and this audit are local and have not been deployed. Previously issued ZIPs remain frozen. The initial proposal and controlled-checkpoint files are historical, not instructions for this pilot.
